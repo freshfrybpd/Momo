@@ -3,78 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Menu Update</title>
+    <title>Freshfry | Crunchy Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; }
-        .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
-        .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+        .card-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1); }
+        /* Image fallback background */
+        .img-container { background-color: #f1f5f9; position: relative; overflow: hidden; }
     </style>
 </head>
-<body class="bg-slate-50 text-gray-800">
+<body>
 
-    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
-        <div class="text-3xl font-extrabold tracking-tight text-orange-500">
+    <nav class="flex items-center justify-between px-6 py-4 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-2xl font-black text-orange-500">
             Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
-        <div class="relative bg-orange-100 p-2 rounded-full cursor-pointer">
-            <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
+        <div class="relative bg-orange-100 p-2 rounded-full">
+            <i class="fa-solid fa-bag-shopping text-orange-600 text-lg"></i>
             <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
         </div>
     </nav>
 
-    <section class="px-6 py-10 max-w-7xl mx-auto">
-        <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Our Special Menu</h2>
-        <p class="text-gray-500 mb-10">Garama-garam momos, seedha aapke liye!</p>
+    <section class="px-6 py-8 max-w-2xl mx-auto">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-1">Our Special Menu</h2>
+        <p class="text-gray-500 mb-8">Garama-garam momos, seedha aapke liye!</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="space-y-8">
             
-            <div class="bg-white rounded-[2.5rem] p-4 card-shadow border border-gray-100 flex flex-col sm:flex-row gap-6 hover:scale-[1.02] transition-transform">
-                <div class="sm:w-48 h-48 flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?auto=format&fit=crop&w=400&q=80" alt="Fried Momos" class="w-full h-full object-cover rounded-[2rem]">
+            <div class="bg-white rounded-[2rem] overflow-hidden card-shadow border border-gray-100">
+                <div class="img-container h-56">
+                    <img src="https://images.unsplash.com/photo-1523905330026-6a7bd9efda21?auto=format&fit=crop&w=800&q=80" 
+                         alt="Freshfry Fried Momos" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Hot & Crispy</div>
                 </div>
-                <div class="flex-grow flex flex-col justify-between py-2">
-                    <div>
-                        <div class="flex justify-between">
-                            <h3 class="text-xl font-bold text-gray-900">Freshfry Fried Momos</h3>
-                            <span class="text-green-600 text-sm font-bold"><i class="fa-solid fa-circle-dot mr-1"></i>Veg/Non-Veg</span>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-2xl font-bold text-gray-900">Freshfry Fried Momos</h3>
+                        <div class="flex items-center text-green-600 font-bold text-xs border border-green-200 px-2 py-1 rounded">
+                            <i class="fa-solid fa-circle-dot mr-1"></i> VEG/NON-VEG
                         </div>
-                        <p class="text-gray-500 text-sm mt-1">Crispy, golden-fried perfection served with spicy red chutney.</p>
                     </div>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Crispy, golden-fried perfection served with our signature spicy red chutney and mayo.</p>
                     
-                    <div class="mt-4 flex items-center justify-between">
-                        <select id="fried-size" class="bg-gray-100 border-none rounded-lg px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-orange-500">
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-2xl">
+                        <select id="fried-size" class="bg-transparent border-none text-gray-900 font-bold focus:ring-0 cursor-pointer">
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="addToCart('Fried Momos', 'fried-size')" class="bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg">
+                        <button onclick="addToCart('Fried Momos', 'fried-size')" class="bg-orange-500 text-white px-8 py-3 rounded-xl font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-md">
                             Add +
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-[2.5rem] p-4 card-shadow border border-gray-100 flex flex-col sm:flex-row gap-6 hover:scale-[1.02] transition-transform">
-                <div class="sm:w-48 h-48 flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=400&q=80" alt="Steamed Momos" class="w-full h-full object-cover rounded-[2rem]">
+            <div class="bg-white rounded-[2rem] overflow-hidden card-shadow border border-gray-100">
+                <div class="img-container h-56">
+                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=800&q=80" 
+                         alt="Freshfry Steamed Momos" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Fresh & Juicy</div>
                 </div>
-                <div class="flex-grow flex flex-col justify-between py-2">
-                    <div>
-                        <div class="flex justify-between">
-                            <h3 class="text-xl font-bold text-gray-900">Freshfry Steamed Momos</h3>
-                            <span class="text-green-600 text-sm font-bold"><i class="fa-solid fa-circle-dot mr-1"></i>Veg/Non-Veg</span>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-2xl font-bold text-gray-900">Freshfry Steamed Momos</h3>
+                        <div class="flex items-center text-green-600 font-bold text-xs border border-green-200 px-2 py-1 rounded">
+                            <i class="fa-solid fa-circle-dot mr-1"></i> VEG/NON-VEG
                         </div>
-                        <p class="text-gray-500 text-sm mt-1">Soft, juicy, and healthy steamed delight with classic fillings.</p>
                     </div>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Traditional steamed delight, thin wrapper with juicy fillings. Healthy and delicious!</p>
                     
-                    <div class="mt-4 flex items-center justify-between">
-                        <select id="steamed-size" class="bg-gray-100 border-none rounded-lg px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-orange-500">
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-2xl">
+                        <select id="steamed-size" class="bg-transparent border-none text-gray-900 font-bold focus:ring-0 cursor-pointer">
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="addToCart('Steamed Momos', 'steamed-size')" class="bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg">
+                        <button onclick="addToCart('Steamed Momos', 'steamed-size')" class="bg-orange-500 text-white px-8 py-3 rounded-xl font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-md">
                             Add +
                         </button>
                     </div>
@@ -84,13 +91,23 @@
         </div>
     </section>
 
+    <div class="h-10"></div>
+
     <script>
         let count = 0;
         function addToCart(name, selectId) {
             const price = document.getElementById(selectId).value;
+            const size = price == "100" ? "Half" : "Full";
             count++;
             document.getElementById('cart-count').innerText = count;
-            alert(name + " (₹" + price + ") added to cart!");
+            
+            // Notification toast instead of annoying alert
+            const notification = document.createElement('div');
+            notification.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl z-50 animate-bounce";
+            notification.innerText = `✅ ${size} ${name} added!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 2000);
         }
     </script>
 
