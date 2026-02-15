@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshfry | Master Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .sidebar-link:hover { background-color: #f8fafc; border-right: 4px solid #f97316; }
+    </style>
+</head>
+<body class="bg-slate-50 flex">
+
+    <aside class="w-64 h-screen bg-white border-r border-gray-200 sticky top-0 hidden lg:block">
+        <div class="p-6">
+            <div class="text-2xl font-black text-orange-500 mb-10">Freshfry Admin</div>
+            <nav class="space-y-2">
+                <a href="#" class="sidebar-link flex items-center p-3 text-orange-600 font-bold bg-orange-50 transition rounded-lg">
+                    <i class="fa-solid fa-chart-pie mr-3"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 text-gray-500 hover:text-orange-600 transition">
+                    <i class="fa-solid fa-utensils mr-3"></i> Manage Menu
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 text-gray-500 hover:text-orange-600 transition">
+                    <i class="fa-solid fa-truck-ramp-box mr-3"></i> Orders
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 text-gray-500 hover:text-orange-600 transition">
+                    <i class="fa-solid fa-motorcycle mr-3"></i> Riders Fleet
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 text-gray-500 hover:text-orange-600 transition">
+                    <i class="fa-solid fa-users mr-3"></i> Customers
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 text-gray-500 hover:text-orange-600 transition">
+                    <i class="fa-solid fa-gear mr-3"></i> Settings
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Business Overview</h1>
+                <p class="text-gray-500 text-sm">Welcome back, Boss! Here's what's happening today.</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="bg-white p-2 rounded-lg border border-gray-200 relative">
+                    <i class="fa-solid fa-bell text-gray-400"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <img src="https://ui-avatars.com/api/?name=Admin&background=f97316&color=fff" class="w-10 h-10 rounded-full shadow-sm">
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-sm font-semibold">Total Revenue</p>
+                <h3 class="text-3xl font-bold text-gray-800">₹45,280</h3>
+                <span class="text-green-500 text-xs font-bold"><i class="fa-solid fa-arrow-up"></i> +12.5%</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-sm font-semibold">Active Orders</p>
+                <h3 class="text-3xl font-bold text-gray-800">24</h3>
+                <span class="text-orange-500 text-xs font-bold">In progress</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-sm font-semibold">Online Riders</p>
+                <h3 class="text-3xl font-bold text-gray-800">18</h3>
+                <span class="text-blue-500 text-xs font-bold">8 on delivery</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-sm font-semibold">Top Dish</p>
+                <h3 class="text-xl font-bold text-gray-800 leading-tight">Kurkure Momo</h3>
+                <span class="text-gray-400 text-xs">85 portions sold</span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-50 flex justify-between items-center">
+                <h2 class="font-bold text-lg text-gray-800">Live Orders</h2>
+                <button class="text-orange-500 text-sm font-bold">Refresh List</button>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-bold">
+                    <tr>
+                        <th class="px-6 py-4">Order ID</th>
+                        <th class="px-6 py-4">Customer</th>
+                        <th class="px-6 py-4">Items</th>
+                        <th class="px-6 py-4">Rider</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-50 font-medium">
+                    <tr>
+                        <td class="px-6 py-4 text-orange-600 font-bold">#ORD-9902</td>
+                        <td class="px-6 py-4">Amit Verma</td>
+                        <td class="px-6 py-4">2x Fried, 1x Coke</td>
+                        <td class="px-6 py-4">Sunil K.</td>
+                        <td class="px-6 py-4">
+                            <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-[11px]">Preparing</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <i class="fa-solid fa-ellipsis-vertical text-gray-300 cursor-pointer"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 text-orange-600 font-bold">#ORD-9901</td>
+                        <td class="px-6 py-4">Priya Rai</td>
+                        <td class="px-6 py-4">1x Steam Platter</td>
+                        <td class="px-6 py-4">Mahesh B.</td>
+                        <td class="px-6 py-4">
+                            <span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-[11px]">On the way</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <i class="fa-solid fa-ellipsis-vertical text-gray-300 cursor-pointer"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>
