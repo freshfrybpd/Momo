@@ -3,72 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Master Admin Panel</title>
+    <title>Freshfry | Baripada's Premium Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }
-        .food-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 12px; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        
+        .page-active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bike-anim { animation: bikeDrive 3s infinite linear; }
+        @keyframes bikeDrive {
+            0% { transform: translateX(-20px); opacity: 0; }
+            100% { transform: translateX(100px); opacity: 0; }
+        }
+
+        #cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cart-open { transform: translateX(0); }
+        .cart-closed { transform: translateX(100%); }
+        .food-img { width: 100%; height: 200px; object-fit: cover; border-radius: 1.5rem; }
     </style>
 </head>
-<body class="flex">
+<body class="bg-slate-50">
 
-    <aside class="w-64 h-screen bg-white border-r sticky top-0 hidden lg:block p-6">
-        <div class="text-2xl font-black text-orange-500 mb-10">Freshfry<span class="text-gray-900">.</span></div>
-        <nav class="space-y-2">
-            <div class="p-3 text-orange-600 font-bold bg-orange-50 rounded-xl"><i class="fa-solid fa-grid-2 mr-3"></i> Dashboard</div>
-            <div class="p-3 text-gray-400 font-semibold"><i class="fa-solid fa-utensils mr-3"></i> Menu Management</div>
-        </nav>
-    </aside>
-
-    <main class="flex-1 p-8">
-        <header class="flex justify-between items-center mb-10">
-            <h1 class="text-2xl font-extrabold">Master Console</h1>
-            <div class="flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full text-green-700 font-bold text-xs animate-pulse">
-                ● Store Online
+    <div id="login-overlay" class="fixed inset-0 bg-white z-[200] flex items-center justify-center p-6">
+        <div class="w-full max-w-sm text-center">
+            <div class="text-4xl font-black text-orange-500 mb-2">Freshfry<span class="text-gray-900">.</span></div>
+            <p class="text-gray-400 font-medium mb-10">Authentic Momos, Baripada</p>
+            <div class="space-y-4">
+                <input type="text" id="login-name" placeholder="Full Name" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-[2rem] focus:border-orange-500 outline-none font-bold">
+                <input type="tel" id="login-phone" placeholder="Phone Number" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-[2rem] focus:border-orange-500 outline-none font-bold">
+                <button onclick="handleUserLogin()" class="w-full bg-gray-900 text-white py-5 rounded-[2.5rem] font-black shadow-xl active:scale-95 transition-all">START ORDERING</button>
             </div>
-        </header>
+        </div>
+    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 h-fit">
-                <h3 class="font-bold mb-4">Add Food Item</h3>
-                <div class="space-y-4">
-                    <input type="text" id="foodName" placeholder="Item Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
-                    <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
-                    <input type="text" id="foodImage" placeholder="Image URL (Unsplash/Imgur)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
-                    <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-xs font-bold">
-                        <option value="veg">Veg</option>
-                        <option value="non-veg">Non-Veg</option>
-                    </select>
-                    <button onclick="saveFood()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">UPLOAD TO FIREBASE</button>
+    <nav class="flex items-center justify-between px-6 py-5 bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+        <div class="text-2xl font-black text-orange-500">Freshfry<span class="text-gray-900">.</span></div>
+        <div class="flex items-center space-x-4">
+            <div onclick="toggleCart(true)" class="relative bg-orange-100 p-2.5 rounded-full cursor-pointer">
+                <i class="fa-solid fa-bag-shopping text-orange-600"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <div id="live-order-status" class="hidden mx-6 mt-4 p-6 bg-gray-900 rounded-[2.5rem] text-white relative overflow-hidden shadow-2xl">
+        <div class="relative z-10">
+            <div class="flex justify-between items-start">
+                <div>
+                    <span class="bg-orange-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Order On The Way</span>
+                    <h2 class="text-3xl font-black mt-2"><span id="display-eta">--</span> mins</h2>
                 </div>
+                <i class="fa-solid fa-motorcycle text-3xl text-orange-500 bike-anim"></i>
             </div>
-
-            <div class="lg:col-span-3 bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-6 border-b font-bold">Live Menu Items</div>
-                <div class="max-h-[500px] overflow-y-auto custom-scrollbar">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-[10px] uppercase font-black text-gray-400">
-                            <tr>
-                                <th class="px-6 py-4">Item Info</th>
-                                <th class="px-6 py-4">Badge</th>
-                                <th class="px-6 py-4">Price</th>
-                                <th class="px-6 py-4">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="menuTableBody"></tbody>
-                    </table>
+            <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"><i class="fa-solid fa-user-ninja text-orange-400"></i></div>
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Rider</p>
+                    <p id="display-rider-name" class="font-black text-sm">Assigning...</p>
                 </div>
             </div>
         </div>
+    </div>
+
+    <main class="px-6 py-8 max-w-2xl mx-auto mb-24">
+        <h2 class="text-2xl font-black mb-6">Explore <span class="text-orange-500">Menu</span></h2>
+        <div id="menu-container" class="grid grid-cols-1 gap-8">
+            <div class="text-center py-20 opacity-50"><i class="fa-solid fa-spinner fa-spin text-3xl"></i></div>
+        </div>
     </main>
+
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white z-[100] shadow-2xl cart-closed flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-black">Your Cart</h2>
+            <button onclick="toggleCart(false)" class="bg-gray-100 p-2 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 font-bold"></div>
+        <div class="p-6 bg-gray-50 border-t">
+            <div class="flex justify-between mb-4 font-black text-xl"><span>Total</span><span id="cart-total" class="text-orange-500">₹0</span></div>
+            <button onclick="checkout()" class="w-full bg-gray-900 text-white py-5 rounded-3xl font-black shadow-xl active:scale-95 transition-all">PLACE ORDER</button>
+        </div>
+    </div>
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 z-[90] hidden"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -82,51 +107,108 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // SAVE FOOD TO FIREBASE
-        window.saveFood = async () => {
-            const name = document.getElementById('foodName').value;
-            const price = document.getElementById('foodPrice').value;
-            const image = document.getElementById('foodImage').value;
-            const type = document.getElementById('foodType').value;
+        let currentUser = JSON.parse(localStorage.getItem('freshfry_user')) || null;
+        let cart = [];
 
-            if(!name || !price || !image) return alert("Pura details bhariye!");
+        if(currentUser) document.getElementById('login-overlay').classList.add('hidden');
 
-            try {
-                await addDoc(collection(db, "menu"), { name, price, image, type });
-                alert("Menu Updated!");
-                document.getElementById('foodName').value = '';
-                document.getElementById('foodPrice').value = '';
-                document.getElementById('foodImage').value = '';
-            } catch (e) { alert("Error: " + e.message); }
+        window.handleUserLogin = () => {
+            const name = document.getElementById('login-name').value;
+            const phone = document.getElementById('login-phone').value;
+            if(name && phone.length === 10) {
+                localStorage.setItem('freshfry_user', JSON.stringify({name, phone}));
+                location.reload();
+            } else { alert("Enter valid details!"); }
         };
 
-        // RENDER MENU IN REAL-TIME
+        // FETCH MENU
         onSnapshot(collection(db, "menu"), (snap) => {
-            const tbody = document.getElementById('menuTableBody');
-            tbody.innerHTML = '';
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+            if(snap.empty) container.innerHTML = '<p class="text-center font-bold opacity-30">Menu is empty. Add from Admin.</p>';
             snap.forEach(d => {
                 const item = d.data();
-                tbody.innerHTML += `
-                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 flex items-center gap-3">
-                            <img src="${item.image}" class="food-preview" onerror="this.src='https://via.placeholder.com/50'">
-                            <span class="font-bold text-gray-800">${item.name}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${item.type === 'veg' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}">${item.type}</span>
-                        </td>
-                        <td class="px-6 py-4 font-black">₹${item.price}</td>
-                        <td class="px-6 py-4">
-                            <button onclick="deleteItem('${d.id}')" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
+                container.innerHTML += `
+                    <div class="bg-white p-4 rounded-[2rem] shadow-sm border border-gray-100">
+                        <img src="${item.image}" class="food-img mb-4 shadow-md">
+                        <div class="px-2">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="text-xl font-black">${item.name}</h3>
+                                    <span class="text-[10px] font-black uppercase tracking-widest ${item.type==='veg'?'text-green-500':'text-red-500'}">${item.type}</span>
+                                </div>
+                                <span class="text-xl font-black">₹${item.price}</span>
+                            </div>
+                            <button onclick="addToCart('${item.name}', ${item.price})" class="w-full bg-gray-100 hover:bg-orange-500 hover:text-white py-3 rounded-2xl font-black transition-all mt-2">Add to Cart +</button>
+                        </div>
+                    </div>`;
             });
         });
 
-        window.deleteItem = async (id) => {
-            if(confirm("Item delete karein?")) await deleteDoc(doc(db, "menu", id));
+        window.addToCart = (name, price) => {
+            cart.push({name, price});
+            updateCartUI();
         };
+
+        window.updateCartUI = () => {
+            const list = document.getElementById('cart-items');
+            document.getElementById('cart-badge').innerText = cart.length;
+            let total = 0;
+            list.innerHTML = cart.map((i, idx) => {
+                total += parseInt(i.price);
+                return `<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl mb-2">
+                    <span>${i.name}</span>
+                    <div class="flex items-center gap-4"><span>₹${i.price}</span>
+                    <i onclick="removeFromCart(${idx})" class="fa-solid fa-trash text-red-300"></i></div>
+                </div>`;
+            }).join('');
+            document.getElementById('cart-total').innerText = "₹" + total;
+        };
+
+        window.removeFromCart = (idx) => { cart.splice(idx,1); updateCartUI(); };
+
+        window.toggleCart = (open) => {
+            const sb = document.getElementById('cart-sidebar');
+            const ov = document.getElementById('cart-overlay');
+            if(open) { sb.classList.replace('cart-closed', 'cart-open'); ov.classList.remove('hidden'); }
+            else { sb.classList.replace('cart-open', 'cart-closed'); ov.classList.add('hidden'); }
+        };
+
+        window.checkout = async () => {
+            if(!cart.length) return alert("Cart empty!");
+            const btn = event.target; btn.disabled = true; btn.innerText = "Placing...";
+            try {
+                const docRef = await addDoc(collection(db, "orders"), {
+                    customerName: currentUser.name,
+                    customerPhone: currentUser.phone,
+                    items: cart,
+                    status: 'pending',
+                    timestamp: serverTimestamp(),
+                    total: document.getElementById('cart-total').innerText
+                });
+                alert("Order Placed!");
+                toggleCart(false);
+                startTracking(docRef.id);
+                cart = []; updateCartUI();
+            } catch(e) { alert("Error!"); }
+            btn.disabled = false; btn.innerText = "PLACE ORDER";
+        };
+
+        function startTracking(id) {
+            const card = document.getElementById('live-order-status');
+            onSnapshot(doc(db, "orders", id), (doc) => {
+                const data = doc.data();
+                if(data.status === 'accepted') {
+                    card.classList.remove('hidden');
+                    document.getElementById('display-rider-name').innerText = data.riderName || "Rider Assigned";
+                    document.getElementById('display-eta').innerText = data.eta || "20";
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if(data.status === 'delivered') {
+                    card.classList.add('hidden');
+                    alert("Delivered! Enjoy your Freshfry Momos 🥟");
+                }
+            });
+        }
     </script>
 </body>
 </html>
