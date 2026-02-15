@@ -3,148 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Premium Menu</title>
+    <title>Freshfry | My Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
-        
-        .premium-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .premium-card:hover { transform: translateY(-10px); }
-        
-        /* Premium Veg/Non-Veg Badge Styles */
-        .badge-veg { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
-        .badge-nonveg { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+        .page-transition { transition: transform 0.4s ease-in-out; }
+        .hidden-page { display: none; }
+        .active-dot { width: 8px; height: 8px; background: #f97316; border-radius: 50%; display: inline-block; margin-right: 8px; }
     </style>
 </head>
 <body>
 
     <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
-        <div class="text-2xl font-black tracking-tighter text-orange-500">
+        <div class="text-2xl font-black tracking-tighter text-orange-500 cursor-pointer" onclick="showPage('menu-page')">
             Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
-        <div class="relative bg-orange-100 p-2.5 rounded-full cursor-pointer hover:scale-110 transition">
-            <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
-            <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        <div class="flex items-center space-x-4">
+            <div onclick="showPage('profile-page')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
+                <i class="fa-solid fa-user text-gray-700 group-hover:text-orange-600"></i>
+            </div>
+            <div class="relative bg-orange-100 p-2.5 rounded-full cursor-pointer">
+                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            </div>
         </div>
     </nav>
 
-    <section class="px-6 py-10 max-w-2xl mx-auto">
-        <div class="mb-10">
-            <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Special Menu</h2>
-            <div class="h-1.5 w-20 bg-orange-500 mt-2 rounded-full"></div>
+    <main id="menu-page" class="px-6 py-8 max-w-2xl mx-auto">
+        <div class="mb-8">
+            <h2 class="text-3xl font-extrabold text-gray-900">Our Special Menu</h2>
+            <p class="text-gray-500">Baripada's favorite momo spot!</p>
         </div>
 
-        <div class="grid gap-12">
+        <div class="grid gap-8">
+            <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg border border-gray-100">
+                <div class="h-52 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
+                    <span class="absolute top-4 left-4 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">Fried</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Freshfry Fried</h3>
+                        <div class="flex bg-gray-100 p-1 rounded-lg">
+                            <button onclick="setType(this, 'veg')" class="px-3 py-1 rounded-md text-[10px] font-bold bg-white text-green-600 shadow-sm">Veg</button>
+                            <button onclick="setType(this, 'non-veg')" class="px-3 py-1 rounded-md text-[10px] font-bold text-gray-400">Non-Veg</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t pt-4">
+                        <select id="price-1" class="font-bold text-gray-900 focus:outline-none bg-transparent">
+                            <option value="100">Half - ₹100</option>
+                            <option value="150">Full - ₹150</option>
+                        </select>
+                        <button onclick="addToCart()" class="bg-gray-900 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-500 transition shadow-md active:scale-95">Add +</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="profile-page" class="hidden-page px-6 py-8 max-w-2xl mx-auto">
+        <div class="flex items-center space-x-4 mb-10">
+            <div class="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center border-2 border-white shadow-xl relative">
+                <i class="fa-solid fa-user-ninja text-4xl text-orange-500"></i>
+                <div class="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-4 border-white"></div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-black text-gray-900">Foodie User</h2>
+                <p class="text-gray-500 text-sm font-medium">+91 98765 43210</p>
+                <button class="text-orange-500 text-xs font-bold mt-1 hover:underline">Edit Profile</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Total Orders</p>
+                <h4 class="text-2xl font-black mt-1">12</h4>
+            </div>
+            <div class="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Saved</p>
+                <h4 class="text-2xl font-black mt-1">5 Items</h4>
+            </div>
+        </div>
+
+        <div class="space-y-3">
+            <h3 class="text-lg font-extrabold mb-4">Account Settings</h3>
             
-            <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-gray-200 border border-gray-100">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=1000&auto=format&fit=crop" 
-                         alt="Fried Momos" 
-                         class="w-full h-full object-cover">
-                    <div class="absolute top-5 left-5">
-                        <span class="bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">Crunchy Gold</span>
-                    </div>
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <span class="font-bold text-gray-700">Order History</span>
                 </div>
-                
-                <div class="p-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-2xl font-extrabold text-gray-900">Freshfry Fried</h3>
-                        <div class="flex bg-gray-100 p-1 rounded-xl">
-                            <button onclick="setType(this, 'veg')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-green-600 shadow-sm">Veg</button>
-                            <button onclick="setType(this, 'non-veg')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-400">Non-Veg</button>
-                        </div>
-                    </div>
-
-                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Deep-fried to a perfect golden crisp. Served with our signature Baripada-special spicy garlic chutney.</p>
-
-                    <div class="flex items-center justify-between pt-6 border-t border-gray-50">
-                        <div>
-                            <select id="fried-price" class="bg-transparent text-2xl font-black text-gray-900 focus:outline-none cursor-pointer">
-                                <option value="100">₹100 (Half)</option>
-                                <option value="150">₹150 (Full)</option>
-                            </select>
-                        </div>
-                        <button onclick="addEffect('Fried')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all shadow-xl active:scale-95">
-                            Add +
-                        </button>
-                    </div>
-                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
             </div>
 
-            <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-gray-200 border border-gray-100">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=1000&auto=format&fit=crop" 
-                         alt="Steamed Momos" 
-                         class="w-full h-full object-cover">
-                    <div class="absolute top-5 left-5">
-                        <span class="bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">Steamy Fresh</span>
-                    </div>
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-purple-50 p-2.5 rounded-xl text-purple-600"><i class="fa-solid fa-location-arrow"></i></div>
+                    <span class="font-bold text-gray-700">My Addresses</span>
                 </div>
-                
-                <div class="p-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-2xl font-extrabold text-gray-900">Freshfry Steam</h3>
-                        <div class="flex bg-gray-100 p-1 rounded-xl">
-                            <button onclick="setType(this, 'veg')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-green-600 shadow-sm">Veg</button>
-                            <button onclick="setType(this, 'non-veg')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-400">Non-Veg</button>
-                        </div>
-                    </div>
-
-                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Authentic Himalayan style steamed momos with extra-thin skin and juicy fillings inside.</p>
-
-                    <div class="flex items-center justify-between pt-6 border-t border-gray-50">
-                        <div>
-                            <select id="steam-price" class="bg-transparent text-2xl font-black text-gray-900 focus:outline-none cursor-pointer">
-                                <option value="100">₹100 (Half)</option>
-                                <option value="150">₹150 (Full)</option>
-                            </select>
-                        </div>
-                        <button onclick="addEffect('Steamed')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all shadow-xl active:scale-95">
-                            Add +
-                        </button>
-                    </div>
-                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
             </div>
 
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-green-50 p-2.5 rounded-xl text-green-600"><i class="fa-solid fa-wallet"></i></div>
+                    <span class="font-bold text-gray-700">Payment Methods</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+            </div>
+
+            <button onclick="showPage('menu-page')" class="w-full mt-10 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold hover:bg-red-50 hover:text-red-500 transition">
+                Logout
+            </button>
         </div>
-    </section>
+    </main>
+
+    <nav class="md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-8 rounded-3xl flex justify-between items-center shadow-2xl z-50">
+        <i onclick="showPage('menu-page')" class="fa-solid fa-house text-orange-400 cursor-pointer"></i>
+        <i class="fa-solid fa-fire-flame-curved opacity-50"></i>
+        <div class="bg-orange-500 p-3 rounded-full -mt-12 border-4 border-slate-50 shadow-lg cursor-pointer">
+            <i class="fa-solid fa-plus text-white"></i>
+        </div>
+        <i class="fa-solid fa-heart opacity-50"></i>
+        <i onclick="showPage('profile-page')" class="fa-solid fa-user opacity-50 cursor-pointer"></i>
+    </nav>
 
     <script>
-        let cart = 0;
+        // Function to switch between Menu and Profile
+        function showPage(pageId) {
+            document.getElementById('menu-page').classList.add('hidden-page');
+            document.getElementById('profile-page').classList.add('hidden-page');
+            
+            document.getElementById(pageId).classList.remove('hidden-page');
+            window.scrollTo(0,0);
+        }
 
-        // Veg/Non-Veg Toggle Function
+        let cartCount = 0;
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+        }
+
         function setType(btn, type) {
             const parent = btn.parentElement;
-            const buttons = parent.querySelectorAll('button');
-            buttons.forEach(b => {
+            parent.querySelectorAll('button').forEach(b => {
                 b.classList.remove('bg-white', 'text-green-600', 'text-red-600', 'shadow-sm');
                 b.classList.add('text-gray-400');
             });
-            
             btn.classList.add('bg-white', 'shadow-sm');
             btn.classList.remove('text-gray-400');
             btn.classList.add(type === 'veg' ? 'text-green-600' : 'text-red-600');
         }
-
-        // Add to Cart with feedback
-        function addEffect(name) {
-            cart++;
-            document.getElementById('cart-count').innerText = cart;
-            
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "Added! ✓";
-            btn.classList.replace('bg-gray-900', 'bg-green-600');
-            
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.replace('bg-green-600', 'bg-gray-900');
-            }, 1000);
-        }
     </script>
+
 </body>
 </html>
