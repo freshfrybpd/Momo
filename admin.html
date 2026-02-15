@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Admin Console</title>
+    <title>Freshfry | Master Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .food-preview { width: 45px; height: 45px; object-fit: cover; border-radius: 12px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        #main-content { display: none; } /* Login se pehle hide rahega */
+        #main-content { display: none; }
+        .order-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="bg-slate-50">
 
-    <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6 transition-opacity duration-500">
+    <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
         <div class="w-full max-w-md bg-white rounded-[3rem] p-10 shadow-2xl text-center">
-            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-inner">
+            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-3xl font-900 text-slate-800 mb-2 italic tracking-tighter">Freshfry<span class="text-orange-500 text-xl font-bold">Admin</span></h2>
-            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Baripada Unit Access</p>
+            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-8">Authorized Access Only</p>
             <div class="space-y-4">
-                <input type="password" id="adminPassInput" placeholder="Enter Master Password" 
+                <input type="password" id="adminPassInput" placeholder="Master Password" 
                     class="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center text-lg transition-all">
-                <button onclick="checkAdminLogin()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-xl shadow-orange-100 hover:bg-orange-600 active:scale-95 transition-all uppercase tracking-widest text-xs">
-                    Unlock Dashboard
+                <button onclick="checkAdminLogin()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-xl hover:bg-orange-600 transition-all uppercase tracking-widest text-xs">
+                    Unlock Console
                 </button>
             </div>
         </div>
@@ -35,87 +35,56 @@
 
     <div id="main-content" class="p-4 lg:p-10 max-w-7xl mx-auto">
         
-        <header class="mb-10 flex justify-between items-center">
+        <header class="flex justify-between items-center mb-10">
             <div>
-                <h1 class="text-3xl font-800 text-slate-900 italic tracking-tighter">Console<span class="text-orange-500">.</span></h1>
-                <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Managing Freshfry Baripada</p>
+                <h1 class="text-3xl font-800 text-slate-900 italic tracking-tighter">Command Centre<span class="text-orange-500">.</span></h1>
+                <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Baripada Unit Management</p>
             </div>
-            <button onclick="logoutAdmin()" class="bg-white px-4 py-2 rounded-xl shadow-sm border text-[10px] font-black text-red-500 uppercase">Logout</button>
+            <button onclick="logout()" class="bg-white p-4 rounded-2xl shadow-sm border text-red-500 hover:bg-red-50 transition-all">
+                <i class="fa-solid fa-power-off"></i>
+            </button>
         </header>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Total Items</p>
-                <h3 id="stat-total" class="text-2xl font-800">0</h3>
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <h2 class="text-xl font-800 text-slate-800">Order Management</h2>
+                <span id="order-count" class="bg-orange-500 text-white text-[10px] px-3 py-1 rounded-full font-black animate-pulse">0 ACTIVE</span>
             </div>
-            <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-                <p class="text-[10px] font-black text-green-500 uppercase mb-1">Veg Menu</p>
-                <h3 id="stat-veg" class="text-2xl font-800 text-green-600">0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-                <p class="text-[10px] font-black text-red-500 uppercase mb-1">Non-Veg</p>
-                <h3 id="stat-non" class="text-2xl font-800 text-red-600">0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-                <p class="text-[10px] font-black text-orange-500 uppercase mb-1">Live Orders</p>
-                <h3 id="stat-orders" class="text-2xl font-800 text-orange-600">0</h3>
-            </div>
-        </div>
+            <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="space-y-6">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                    <h3 id="form-title" class="font-800 text-slate-800 mb-6 uppercase text-xs tracking-widest">Item Editor</h3>
+            <div class="lg:col-span-1">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 sticky top-10">
+                    <h3 id="form-title" class="font-800 text-slate-800 mb-6 uppercase text-xs tracking-widest text-orange-500">Add New Dish</h3>
                     <div class="space-y-4">
-                        <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border border-transparent focus:border-orange-500">
-                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border border-transparent focus:border-orange-500">
-                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border border-transparent focus:border-orange-500">
-                        
-                        <div class="flex gap-2">
-                            <select id="foodType" class="flex-1 p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
-                                <option value="veg">Veg</option>
-                                <option value="non-veg">Non-Veg</option>
-                            </select>
-                            <label class="bg-slate-50 px-4 rounded-2xl flex items-center gap-2 cursor-pointer border border-transparent">
-                                <input type="checkbox" id="foodBest" class="accent-orange-500 w-4 h-4">
-                                <span class="text-[10px] font-black text-slate-400">BEST</span>
-                            </label>
-                        </div>
-                        
-                        <button id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-lg active:scale-95 transition-all">UPLOAD ITEM</button>
-                    </div>
-                </div>
-
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                    <h3 class="font-800 text-slate-800 mb-6 uppercase text-[10px] tracking-widest">Recent Activity</h3>
-                    <div id="live-orders-list" class="space-y-3 max-h-[300px] overflow-y-auto no-scrollbar">
-                        <p class="text-slate-300 text-xs italic">No recent orders...</p>
+                        <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
+                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
+                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
+                        <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
+                            <option value="veg">Veg</option>
+                            <option value="non-veg">Non-Veg</option>
+                        </select>
+                        <button id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-lg hover:bg-black transition-all">UPLOAD MENU</button>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex items-center px-6">
-                    <i class="fa-solid fa-magnifying-glass text-slate-300 mr-4"></i>
-                    <input type="text" id="menuSearch" onkeyup="searchMenu()" placeholder="Search your menu..." class="w-full outline-none font-bold text-sm">
-                </div>
-
+            <div class="lg:col-span-2">
                 <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
                             <tr>
-                                <th class="px-6 py-5">Dish</th>
+                                <th class="px-6 py-5">Dish Info</th>
                                 <th class="px-6 py-5">Availability</th>
-                                <th class="px-6 py-5">Price</th>
-                                <th class="px-6 py-5 text-right">Actions</th>
+                                <th class="px-6 py-5 text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="menuTableBody" class="text-sm font-bold divide-y divide-slate-50"></tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -134,132 +103,131 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let editModeId = null;
+        let editId = null;
 
-        // --- 1. Security Check ---
+        // --- Auth Logic ---
         window.checkAdminLogin = () => {
             const pass = document.getElementById('adminPassInput').value;
             if(pass === "admin5") {
-                document.getElementById('admin-login-screen').classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => {
-                    document.getElementById('admin-login-screen').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block';
-                }, 500);
-                sessionStorage.setItem('adminActive', 'true');
-            } else {
-                alert("Incorrect Password!");
-            }
+                document.getElementById('admin-login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                sessionStorage.setItem('admin_auth', 'true');
+            } else { alert("Incorrect Password!"); }
         };
 
-        window.logoutAdmin = () => {
-            sessionStorage.removeItem('adminActive');
-            location.reload();
-        };
+        window.logout = () => { sessionStorage.clear(); location.reload(); };
 
-        // --- 2. Add / Edit Menu ---
+        // --- Order Flow System ---
+        onSnapshot(query(collection(db, "orders"), orderBy("time", "desc")), (snap) => {
+            const grid = document.getElementById('admin-orders-grid');
+            grid.innerHTML = '';
+            let count = 0;
+
+            snap.forEach(d => {
+                const order = d.data();
+                const id = d.id;
+                const status = order.status || 'pending';
+
+                if(status !== 'delivered') {
+                    count++;
+                    grid.innerHTML += `
+                    <div class="bg-white p-6 rounded-[2.5rem] border-2 ${status === 'pending' ? 'border-orange-400' : 'border-slate-100'} order-card shadow-xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[9px] font-black px-3 py-1 rounded-full uppercase ${status === 'pending' ? 'bg-yellow-100 text-yellow-600' : 'bg-blue-100 text-blue-600'}">
+                                ${status.replace('_', ' ')}
+                            </span>
+                            <p class="text-[10px] font-black text-slate-300 italic">#${id.slice(-4)}</p>
+                        </div>
+                        <h4 class="font-800 text-slate-900">${order.customer}</h4>
+                        <p class="text-xs text-slate-400 font-bold mb-4">${order.location}</p>
+                        
+                        <div class="bg-slate-50 p-4 rounded-2xl mb-6 text-xs font-bold text-slate-600">
+                            ${order.items.map(i => `<p>${i.qty} x ${i.name}</p>`).join('')}
+                        </div>
+
+                        <div class="flex gap-2">
+                            ${status === 'pending' ? `
+                                <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase">Accept</button>
+                                <button onclick="rejectOrder('${id}')" class="flex-1 bg-slate-100 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase">Reject</button>
+                            ` : status === 'accepted' ? `
+                                <button onclick="updateStatus('${id}', 'out_for_delivery')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Assign Rider 🛵</button>
+                            ` : `
+                                <div class="w-full py-4 text-center text-blue-500 font-black text-[10px] uppercase animate-pulse italic">Rider is Delivering...</div>
+                            `}
+                        </div>
+                    </div>`;
+                }
+            });
+            document.getElementById('order-count').innerText = `${count} ACTIVE`;
+        });
+
+        // --- Menu Logic ---
+        onSnapshot(collection(db, "menu"), (snap) => {
+            const tbody = document.getElementById('menuTableBody');
+            tbody.innerHTML = '';
+            snap.forEach(d => {
+                const item = d.data();
+                tbody.innerHTML += `
+                <tr class="${item.inStock ? '' : 'opacity-40'}">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image}" class="w-10 h-10 object-cover rounded-xl">
+                            <div>
+                                <p class="text-slate-900 font-800">${item.name}</p>
+                                <p class="text-[10px] text-orange-500 uppercase font-black">₹${item.price}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button onclick="toggleStock('${d.id}', ${item.inStock})" class="text-[10px] font-black px-3 py-1.5 rounded-full border ${item.inStock ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}">
+                            ${item.inStock ? 'AVAILABLE' : 'SOLD OUT'}
+                        </button>
+                    </td>
+                    <td class="px-6 py-4 text-right flex gap-2 justify-end">
+                        <button onclick="editItem('${d.id}', '${item.name}', ${item.price}, '${item.image}', '${item.type}')" class="p-2 text-blue-500 bg-blue-50 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteItem('${d.id}')" class="p-2 text-red-500 bg-red-50 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        });
+
+        // Functions
+        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
+        window.rejectOrder = async (id) => { if(confirm("Reject this order?")) await deleteDoc(doc(db, "orders", id)); };
+        window.toggleStock = async (id, s) => { await updateDoc(doc(db, "menu", id), { inStock: !s }); };
+        window.deleteItem = async (id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, "menu", id)); };
+
         document.getElementById('submitBtn').addEventListener('click', async () => {
             const data = {
                 name: document.getElementById('foodName').value,
                 price: parseInt(document.getElementById('foodPrice').value),
                 image: document.getElementById('foodImage').value,
                 type: document.getElementById('foodType').value,
-                isBestseller: document.getElementById('foodBest').checked,
                 inStock: true
             };
-
             if(!data.name || !data.price) return alert("Fill Name & Price!");
-
-            if(editModeId) {
-                await updateDoc(doc(db, "menu", editModeId), data);
-                editModeId = null;
-                document.getElementById('submitBtn').innerText = "UPLOAD ITEM";
+            
+            if(editId) {
+                await updateDoc(doc(db, "menu", editId), data);
+                editId = null;
+                document.getElementById('submitBtn').innerText = "UPLOAD MENU";
             } else {
                 await addDoc(collection(db, "menu"), data);
             }
-            resetForm();
+            document.querySelectorAll('input').forEach(i => i.value = '');
         });
 
-        // --- 3. Live Menu & Stats ---
-        onSnapshot(collection(db, "menu"), (snap) => {
-            const tbody = document.getElementById('menuTableBody');
-            tbody.innerHTML = '';
-            let stats = { total: 0, veg: 0, non: 0 };
-
-            snap.forEach(d => {
-                const item = d.data();
-                stats.total++;
-                item.type === 'veg' ? stats.veg++ : stats.non++;
-
-                tbody.innerHTML += `
-                    <tr class="${item.inStock ? '' : 'opacity-40'}">
-                        <td class="px-6 py-4 flex items-center gap-3">
-                            <img src="${item.image}" class="food-preview">
-                            <div>
-                                <p class="leading-none mb-1">${item.name}</p>
-                                <span class="text-[8px] uppercase font-black ${item.type === 'veg' ? 'text-green-500' : 'text-red-500'}">${item.type}</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button onclick="toggleStock('${d.id}', ${item.inStock})" class="px-3 py-1.5 rounded-full text-[9px] font-black border ${item.inStock ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'}">
-                                ${item.inStock ? 'IN STOCK' : 'SOLD OUT'}
-                            </button>
-                        </td>
-                        <td class="px-6 py-4 text-slate-900">₹${item.price}</td>
-                        <td class="px-6 py-4 text-right flex justify-end gap-2">
-                            <button onclick="editItem('${d.id}','${item.name}',${item.price},'${item.image}','${item.type}',${item.isBestseller})" class="p-2 text-blue-500 bg-blue-50 rounded-lg"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteItem('${d.id}')" class="p-2 text-red-500 bg-red-50 rounded-lg"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>`;
-            });
-            document.getElementById('stat-total').innerText = stats.total;
-            document.getElementById('stat-veg').innerText = stats.veg;
-            document.getElementById('stat-non').innerText = stats.non;
-        });
-
-        // --- 4. Live Orders Activity ---
-        const qOrders = query(collection(db, "orders"), orderBy("time", "desc"));
-        onSnapshot(qOrders, (snap) => {
-            const list = document.getElementById('live-orders-list');
-            document.getElementById('stat-orders').innerText = snap.size;
-            list.innerHTML = '';
-            snap.forEach(d => {
-                const order = d.data();
-                list.innerHTML += `
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div class="flex justify-between items-center mb-1">
-                            <p class="font-black text-xs text-slate-800">${order.customer}</p>
-                            <span class="text-[8px] font-black text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">LIVE</span>
-                        </div>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">${order.location} • ${order.total}</p>
-                    </div>`;
-            });
-        });
-
-        // --- Helper Functions ---
-        window.toggleStock = async (id, status) => { await updateDoc(doc(db, "menu", id), { inStock: !status }); };
-        window.deleteItem = async (id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, "menu", id)); };
-        window.editItem = (id, n, p, img, t, b) => {
-            editModeId = id;
+        window.editItem = (id, n, p, img, t) => {
+            editId = id;
             document.getElementById('foodName').value = n;
             document.getElementById('foodPrice').value = p;
             document.getElementById('foodImage').value = img;
             document.getElementById('foodType').value = t;
-            document.getElementById('foodBest').checked = b;
             document.getElementById('submitBtn').innerText = "SAVE CHANGES";
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
-        window.searchMenu = () => {
-            let val = document.getElementById('menuSearch').value.toLowerCase();
-            let rows = document.querySelectorAll('tbody tr');
-            rows.forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
-        };
-        const resetForm = () => {
-            document.querySelectorAll('input').forEach(i => i.value = '');
-            document.getElementById('foodBest').checked = false;
-        };
 
-        // Session check
-        if(sessionStorage.getItem('adminActive') === 'true') {
+        if(sessionStorage.getItem('admin_auth') === 'true') {
             document.getElementById('admin-login-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
         }
