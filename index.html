@@ -18,10 +18,24 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .premium-card { transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); }
-        .active-nav { color: #f97316 !important; opacity: 1 !important; }
+        /* Order Animation Styles */
+        .bike-anim { animation: bikeDrive 3s infinite linear; }
+        @keyframes bikeDrive {
+            0% { transform: translateX(-20px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100px); opacity: 0; }
+        }
 
-        /* Cart Sidebar */
+        #progress-shimmer {
+            background: linear-gradient(90deg, #f97316 0%, #fbbf24 50%, #f97316 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         #cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .cart-open { transform: translateX(0); }
         .cart-closed { transform: translateX(100%); }
@@ -32,33 +46,19 @@
     <div id="login-overlay" class="fixed inset-0 bg-white z-[200] flex items-center justify-center p-6 transition-all duration-500">
         <div class="w-full max-w-sm text-center">
             <div class="text-4xl font-black text-orange-500 mb-2">Fresh<span class="text-gray-900">fry</span>.</div>
-            <p class="text-gray-400 font-medium mb-10 tracking-tight">Order the best Momos in Baripada</p>
-            
+            <p class="text-gray-400 font-medium mb-10">Authentic Momos, Baripada</p>
             <div class="space-y-4">
-                <input type="text" id="login-name" placeholder="Your Full Name" 
-                       class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-[2rem] focus:border-orange-500 outline-none font-bold">
-                
-                <div class="relative">
-                    <span class="absolute left-6 top-5 font-bold text-gray-400">+91</span>
-                    <input type="tel" id="login-phone" placeholder="Phone Number" 
-                           class="w-full bg-gray-50 border-2 border-gray-100 p-5 pl-16 rounded-[2rem] focus:border-orange-500 outline-none font-bold">
-                </div>
-
-                <button onclick="handleUserLogin()" class="w-full bg-gray-900 text-white py-5 rounded-[2.5rem] font-black tracking-widest shadow-xl active:scale-95 transition-all">
-                    START ORDERING
-                </button>
+                <input type="text" id="login-name" placeholder="Full Name" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-[2rem] focus:border-orange-500 outline-none font-bold">
+                <input type="tel" id="login-phone" placeholder="Phone Number" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-[2rem] focus:border-orange-500 outline-none font-bold">
+                <button onclick="handleUserLogin()" class="w-full bg-gray-900 text-white py-5 rounded-[2.5rem] font-black shadow-xl active:scale-95 transition-all">START ORDERING</button>
             </div>
         </div>
     </div>
 
     <nav class="flex items-center justify-between px-6 py-5 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <div class="text-2xl font-black text-orange-500 cursor-pointer" onclick="showPage('home')">
-            Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
-        </div>
+        <div class="text-2xl font-black text-orange-500" onclick="showPage('home')">Freshfry<span class="text-gray-900">.</span></div>
         <div class="flex items-center space-x-4">
-            <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
-                <i class="fa-solid fa-user text-gray-700 group-hover:text-orange-600"></i>
-            </div>
+            <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer"><i class="fa-solid fa-user text-gray-700"></i></div>
             <div onclick="toggleCart(true)" class="relative bg-orange-100 p-2.5 rounded-full cursor-pointer">
                 <i class="fa-solid fa-bag-shopping text-orange-600"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
@@ -66,39 +66,42 @@
         </div>
     </nav>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white z-[100] shadow-2xl cart-closed flex flex-col">
-        <div class="p-6 border-b flex justify-between items-center">
-            <h2 class="text-2xl font-black">Your Cart</h2>
-            <button onclick="toggleCart(false)" class="bg-gray-100 p-2 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <p class="text-center text-gray-400 mt-10">Cart is empty</p>
-        </div>
-        <div class="p-6 bg-gray-50 border-t">
-            <div class="flex justify-between mb-4 font-black text-xl">
-                <span>Total</span>
-                <span id="cart-total" class="text-orange-500">₹0</span>
+    <div id="live-order-status" class="hidden mx-6 mt-4 p-6 bg-gray-900 rounded-[2.5rem] text-white relative overflow-hidden shadow-2xl border-2 border-orange-500/20">
+        <div class="relative z-10">
+            <div class="flex justify-between items-start">
+                <div>
+                    <span class="bg-orange-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Order Accepted</span>
+                    <h2 class="text-3xl font-black mt-2">Arriving in <span id="display-eta" class="text-orange-500">--</span>m</h2>
+                </div>
+                <div class="text-right">
+                    <i class="fa-solid fa-motorcycle text-3xl text-orange-500 bike-anim"></i>
+                </div>
             </div>
-            <button onclick="checkout()" class="w-full bg-gray-900 text-white py-5 rounded-3xl font-black tracking-widest hover:bg-orange-600 transition shadow-xl active:scale-95">
-                PLACE ORDER
-            </button>
+            
+            <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-id-badge text-orange-400"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Your Rider</p>
+                    <p id="display-rider-name" class="font-black text-sm">Assigning...</p>
+                </div>
+            </div>
+
+            <div class="mt-6 h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                <div id="progress-shimmer" class="h-full w-full rounded-full" style="width: 45%;"></div>
+            </div>
         </div>
     </div>
-    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 z-[90] hidden transition-opacity"></div>
 
     <main id="page-home" class="page-active px-6 py-6 max-w-2xl mx-auto mb-28">
-        <div class="mb-10 text-center">
-            <h2 class="text-3xl font-black text-gray-900">Delicious Momos</h2>
-            <p class="text-gray-500 font-medium">Authentic taste of Baripada 🔥</p>
-        </div>
-
         <div class="space-y-8">
             <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100">
                 <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=1000&auto=format&fit=crop" class="w-full h-56 object-cover">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-black text-gray-900">Fried Momos</h3>
-                        <div class="flex bg-gray-100 p-1 rounded-xl" id="type-fried">
+                        <div id="type-fried" class="flex bg-gray-100 p-1 rounded-xl">
                             <button onclick="toggleType(this, 'veg')" class="px-4 py-1 rounded-lg text-xs font-bold bg-white text-green-600 shadow-sm">Veg</button>
                             <button onclick="toggleType(this, 'nonveg')" class="px-4 py-1 rounded-lg text-xs font-bold text-gray-400">Non</button>
                         </div>
@@ -108,34 +111,28 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black hover:bg-orange-500 transition-all">Add +</button>
+                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black hover:bg-orange-500">Add +</button>
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
     </main>
 
-    <main id="page-profile" class="page-hidden px-6 py-10 max-w-2xl mx-auto mb-28 text-center">
-        <div class="w-24 h-24 bg-orange-100 rounded-[2rem] flex items-center justify-center text-orange-500 text-3xl mx-auto mb-4 border-4 border-white shadow-lg">
-            <i class="fa-solid fa-user-ninja"></i>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white z-[100] shadow-2xl cart-closed flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-black">Your Cart</h2>
+            <button onclick="toggleCart(false)" class="bg-gray-100 p-2 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <h2 id="display-name" class="text-2xl font-black text-gray-900">User Name</h2>
-        <p id="display-phone" class="text-gray-400 font-bold mb-8">+91 0000000000</p>
-        
-        <button onclick="logout()" class="w-full bg-red-50 text-red-500 py-5 rounded-3xl font-black tracking-widest hover:bg-red-100 transition">LOGOUT</button>
-    </main>
-
-    <nav class="fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-10 rounded-full flex justify-between items-center shadow-2xl z-50">
-        <i onclick="showPage('home')" id="nav-home" class="fa-solid fa-house cursor-pointer active-nav"></i>
-        <div onclick="showPage('home')" class="bg-orange-500 p-3.5 rounded-full -mt-14 border-4 border-slate-50 shadow-lg cursor-pointer">
-            <i class="fa-solid fa-plus text-white"></i>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-6 bg-gray-50 border-t">
+            <button onclick="checkout()" class="w-full bg-gray-900 text-white py-5 rounded-3xl font-black tracking-widest shadow-xl active:scale-95">PLACE ORDER</button>
         </div>
-        <i onclick="showPage('profile')" id="nav-profile" class="fa-solid fa-user cursor-pointer opacity-40"></i>
-    </nav>
+    </div>
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 z-[90] hidden transition-opacity"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -149,99 +146,76 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // LOGIN & SESSION LOGIC
         let currentUser = JSON.parse(localStorage.getItem('freshfry_user')) || null;
+        let cart = [];
+
+        // AUTH CHECK
+        if(currentUser) document.getElementById('login-overlay').classList.add('hidden');
 
         window.handleUserLogin = () => {
-            const name = document.getElementById('login-name').value.trim();
-            const phone = document.getElementById('login-phone').value.trim();
-            if(name.length < 2 || phone.length !== 10) return alert("Enter valid Name & 10-digit Phone");
-            
-            currentUser = { name, phone };
-            localStorage.setItem('freshfry_user', JSON.stringify(currentUser));
-            location.reload();
+            const name = document.getElementById('login-name').value;
+            const phone = document.getElementById('login-phone').value;
+            if(name && phone.length === 10) {
+                localStorage.setItem('freshfry_user', JSON.stringify({name, phone}));
+                location.reload();
+            }
         };
 
-        window.logout = () => {
-            localStorage.removeItem('freshfry_user');
-            location.reload();
-        };
+        // REAL-TIME ORDER TRACKING
+        function startTracking(orderId) {
+            const statusCard = document.getElementById('live-order-status');
+            const riderText = document.getElementById('display-rider-name');
+            const etaText = document.getElementById('display-eta');
 
-        if(currentUser) {
-            document.getElementById('login-overlay').classList.add('hidden');
-            document.getElementById('display-name').innerText = currentUser.name;
-            document.getElementById('display-phone').innerText = "+91 " + currentUser.phone;
+            onSnapshot(doc(db, "orders", orderId), (doc) => {
+                const data = doc.data();
+                if(data.status === 'accepted') {
+                    statusCard.classList.remove('hidden');
+                    riderText.innerText = data.riderName || "Rider Assigned";
+                    etaText.innerText = data.eta || "--";
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (data.status === 'delivered') {
+                    statusCard.classList.add('hidden');
+                    alert("Order Delivered! 🥟 Enjoy your momos.");
+                }
+            });
         }
 
-        // CART LOGIC
-        window.cart = [];
+        window.checkout = async () => {
+            const btn = event.target;
+            btn.innerText = "Placing...";
+            btn.disabled = true;
 
-        window.handleOrder = (name, priceId, typeId) => {
-            const price = parseInt(document.getElementById(priceId).value);
-            const type = document.querySelector(`#${typeId} .bg-white`).innerText;
-            window.cart.push({ name, price, type });
+            try {
+                const docRef = await addDoc(collection(db, "orders"), {
+                    customerName: currentUser.name,
+                    customerPhone: currentUser.phone,
+                    items: cart,
+                    status: 'pending',
+                    timestamp: serverTimestamp()
+                });
+                alert("Order Sent! 🥟");
+                toggleCart(false);
+                startTracking(docRef.id); // Track this order
+                cart = [];
+                updateCartUI();
+            } catch (e) { alert("Error!"); }
+            btn.innerText = "PLACE ORDER"; btn.disabled = false;
+        };
+
+        // UI FUNCTIONS (Simplified)
+        window.handleOrder = (name, pId, tId) => {
+            const price = document.getElementById(pId).value;
+            const type = document.querySelector(`#${tId} .bg-white`).innerText;
+            cart.push({name, price, type});
             updateCartUI();
         };
 
         window.updateCartUI = () => {
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
             const list = document.getElementById('cart-items');
-            const totalEl = document.getElementById('cart-total');
-            document.getElementById('cart-badge').innerText = window.cart.length;
-
-            if(window.cart.length === 0) {
-                list.innerHTML = `<p class="text-center text-gray-400 mt-10">Cart is empty</p>`;
-                totalEl.innerText = "₹0";
-                return;
-            }
-
-            let total = 0;
-            list.innerHTML = window.cart.map((item, idx) => {
-                total += item.price;
-                return `<div class="bg-gray-50 p-4 rounded-2xl flex justify-between items-center">
-                    <div><p class="font-black text-sm">${item.name}</p><p class="text-orange-500 font-bold text-xs">₹${item.price} • ${item.type}</p></div>
-                    <button onclick="removeFromCart(${idx})" class="text-red-400 p-2"><i class="fa-solid fa-trash-can"></i></button>
-                </div>`;
-            }).join('');
-            totalEl.innerText = "₹" + total;
-        };
-
-        window.removeFromCart = (idx) => {
-            window.cart.splice(idx, 1);
-            updateCartUI();
-        };
-
-        window.checkout = async () => {
-            if(window.cart.length === 0) return alert("Cart empty!");
-            const btn = event.target;
-            btn.innerText = "Placing Order...";
-            btn.disabled = true;
-
-            try {
-                await addDoc(collection(db, "orders"), {
-                    customerName: currentUser.name,
-                    customerPhone: currentUser.phone,
-                    items: window.cart,
-                    total: document.getElementById('cart-total').innerText,
-                    status: 'pending',
-                    timestamp: serverTimestamp()
-                });
-                alert("Order Placed Successfully! 🥟");
-                window.cart = [];
-                updateCartUI();
-                toggleCart(false);
-            } catch (e) {
-                alert("Error placing order. Try again.");
-            }
-            btn.innerText = "PLACE ORDER";
-            btn.disabled = false;
-        };
-
-        // UI HELPERS
-        window.showPage = (p) => {
-            document.getElementById('page-home').className = p==='home'?'page-active px-6 py-6 max-w-2xl mx-auto mb-28':'page-hidden';
-            document.getElementById('page-profile').className = p==='profile'?'page-active px-6 py-10 max-w-2xl mx-auto mb-28 text-center':'page-hidden';
-            document.getElementById('nav-home').className = `fa-solid fa-house cursor-pointer ${p==='home'?'active-nav':''}`;
-            document.getElementById('nav-profile').className = `fa-solid fa-user cursor-pointer ${p==='profile'?'active-nav':'opacity-40'}`;
+            list.innerHTML = cart.map(i => `<div class="bg-gray-50 p-4 rounded-xl flex justify-between font-bold text-sm"><span>${i.name}</span><span>₹${i.price}</span></div>`).join('');
         };
 
         window.toggleCart = (open) => {
@@ -255,6 +229,16 @@
             const btns = btn.parentElement.querySelectorAll('button');
             btns.forEach(b => b.className = "px-4 py-1 rounded-lg text-xs font-bold text-gray-400");
             btn.className = `px-4 py-1 rounded-lg text-xs font-bold bg-white shadow-sm ${type==='veg'?'text-green-600':'text-red-600'}`;
+        };
+
+        window.showPage = (p) => {
+            if(p === 'profile') {
+                document.getElementById('page-home').classList.add('page-hidden');
+                document.getElementById('page-home').classList.remove('page-active');
+                // Profile view logic can be added similarly
+            } else {
+                location.reload(); // Quick home reset
+            }
         };
     </script>
 </body>
