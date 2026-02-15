@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | My Profile</title>
+    <title>Freshfry | Edit Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #f8fafc; 
-            color: #1e293b;
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+        .profile-input {
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .profile-gradient {
-            background: linear-gradient(135deg, #f97316 0%, #fbbf24 100%);
+        .profile-input:focus {
+            border-color: #f97316;
+            outline: none;
+            background-color: white;
         }
     </style>
 </head>
@@ -29,108 +26,88 @@
         <div class="text-2xl font-black text-orange-500 cursor-pointer">
             Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
-        <div class="bg-gray-100 p-2 rounded-full">
-            <i class="fa-solid fa-bell text-gray-500"></i>
-        </div>
+        <button onclick="saveProfile()" class="text-sm font-bold text-orange-600 bg-orange-50 px-4 py-2 rounded-xl">Save</button>
     </nav>
 
     <main class="max-w-2xl mx-auto px-6 py-10 mb-24">
         
         <div class="flex flex-col items-center text-center mb-10">
-            <div class="relative mb-4">
-                <div class="w-32 h-32 profile-gradient rounded-[3rem] flex items-center justify-center text-white text-5xl shadow-2xl shadow-orange-200 border-4 border-white transition-transform hover:rotate-3">
-                    <i class="fa-solid fa-user-ninja"></i>
+            <div class="relative group">
+                <div class="w-32 h-32 bg-orange-100 rounded-[3rem] overflow-hidden border-4 border-white shadow-2xl">
+                    <img id="profile-preview" src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="w-full h-full object-cover">
                 </div>
-                <div class="absolute bottom-2 right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white shadow-lg"></div>
+                <label for="photo-upload" class="absolute bottom-0 right-0 bg-gray-900 text-white p-3 rounded-2xl cursor-pointer hover:bg-orange-500 transition-colors shadow-lg border-4 border-white">
+                    <i class="fa-solid fa-camera text-sm"></i>
+                    <input type="file" id="photo-upload" class="hidden" accept="image/*" onchange="previewImage(event)">
+                </label>
             </div>
-            <h2 class="text-3xl font-black text-gray-900 tracking-tight">Foodie Admin</h2>
-            <p class="text-gray-500 font-medium tracking-wide">Premium Member • Baripada, OR</p>
-            
-            <div class="flex gap-3 mt-5">
-                <span class="px-4 py-1.5 bg-white shadow-sm border border-gray-100 rounded-2xl text-[10px] font-black text-gray-600 tracking-widest uppercase">Verified</span>
-                <span class="px-4 py-1.5 bg-orange-100 rounded-2xl text-[10px] font-black text-orange-600 tracking-widest uppercase">Level 12</span>
-            </div>
+            <p class="text-xs font-bold text-gray-400 mt-4 uppercase tracking-widest">Tap camera to change photo</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-10">
-            <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center">
-                <p class="text-[10px] font-black uppercase text-gray-400 tracking-tighter mb-1">Momo Points</p>
-                <h4 class="text-3xl font-black text-orange-500 tracking-tight">1,250</h4>
-            </div>
-            <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center">
-                <p class="text-[10px] font-black uppercase text-gray-400 tracking-tighter mb-1">Orders Done</p>
-                <h4 class="text-3xl font-black text-gray-900 tracking-tight">48</h4>
-            </div>
-        </div>
+        <div class="space-y-6">
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                <h3 class="text-lg font-black text-gray-900 mb-6">Personal Details</h3>
+                
+                <div class="space-y-2 mb-6">
+                    <label class="text-xs font-black text-gray-400 uppercase ml-1">Your Full Name</label>
+                    <input type="text" id="user-name-input" value="Foodie Admin" 
+                           class="w-full profile-input bg-slate-50 p-4 rounded-2xl font-bold text-gray-800">
+                </div>
 
-        <div class="space-y-4">
-            <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-4 mb-4">Account Features</h3>
-            
-            <div class="group bg-white p-5 rounded-[2rem] flex items-center justify-between border border-gray-100 hover:bg-orange-50 hover:border-orange-200 transition-all cursor-pointer">
-                <div class="flex items-center space-x-5">
-                    <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-clock-rotate-left text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-gray-800">Order History</span>
-                        <span class="text-xs text-gray-400">View your last 10 orders</span>
+                <div class="space-y-2 mb-6">
+                    <label class="text-xs font-black text-gray-400 uppercase ml-1">Phone Number</label>
+                    <div class="flex items-center bg-slate-100 p-4 rounded-2xl font-bold text-gray-400 cursor-not-allowed">
+                        <span class="mr-2">+91</span>
+                        <input type="text" value="98765 43210" disabled class="bg-transparent w-full outline-none">
+                        <i class="fa-solid fa-lock text-[10px]"></i>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-orange-500 transition-transform group-hover:translate-x-1"></i>
-            </div>
 
-            <div class="group bg-white p-5 rounded-[2rem] flex items-center justify-between border border-gray-100 hover:bg-blue-50 hover:border-blue-200 transition-all cursor-pointer">
-                <div class="flex items-center space-x-5">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-location-dot text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-gray-800">My Addresses</span>
-                        <span class="text-xs text-gray-400">2 Saved Locations</span>
-                    </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-gray-400 uppercase ml-1">Primary Address</label>
+                    <textarea id="user-address-input" rows="2" 
+                              class="w-full profile-input bg-slate-50 p-4 rounded-2xl font-bold text-gray-800">Station Road, Baripada, Odisha</textarea>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-blue-500 transition-transform group-hover:translate-x-1"></i>
             </div>
 
-            <div class="group bg-white p-5 rounded-[2rem] flex items-center justify-between border border-gray-100 hover:bg-green-50 hover:border-green-200 transition-all cursor-pointer">
-                <div class="flex items-center space-x-5">
-                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center group-hover:bg-green-500 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-credit-card text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-gray-800">Payments</span>
-                        <span class="text-xs text-gray-400">Saved Cards & UPI</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-green-500 transition-transform group-hover:translate-x-1"></i>
-            </div>
-
-            <div class="group bg-white p-5 rounded-[2rem] flex items-center justify-between border border-gray-100 hover:bg-purple-50 hover:border-purple-200 transition-all cursor-pointer">
-                <div class="flex items-center space-x-5">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-headset text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-gray-800">Support</span>
-                        <span class="text-xs text-gray-400">Chat with us (24/7)</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-purple-500 transition-transform group-hover:translate-x-1"></i>
-            </div>
-
-            <button onclick="window.location.reload()" class="w-full mt-10 bg-red-50 text-red-500 py-6 rounded-[2.5rem] font-black tracking-widest text-xs hover:bg-red-500 hover:text-white transition-all shadow-sm uppercase border-2 border-transparent hover:border-red-100 active:scale-95">
-                Logout Account
+            <button onclick="saveProfile()" class="w-full bg-gray-900 text-white py-6 rounded-[2.5rem] font-black tracking-widest text-sm hover:bg-orange-500 transition-all shadow-xl active:scale-95">
+                UPDATE PROFILE
             </button>
         </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-10 rounded-full flex justify-between items-center shadow-2xl z-50">
-        <i class="fa-solid fa-house opacity-40 text-xl cursor-pointer"></i>
-        <div class="bg-orange-500 p-4 rounded-full -mt-14 border-4 border-slate-50 shadow-lg cursor-pointer">
-            <i class="fa-solid fa-plus text-white text-xl"></i>
-        </div>
-        <i class="fa-solid fa-user text-orange-500 text-xl cursor-pointer"></i>
-    </nav>
+    <script>
+        // Photo Preview Function
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('profile-preview');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // Save Functionality (Local Feedback)
+        function saveProfile() {
+            const name = document.getElementById('user-name-input').value;
+            const address = document.getElementById('user-address-input').value;
+
+            // Visual Success Feedback
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = "SAVING... <i class='fa-solid fa-spinner fa-spin ml-2'></i>";
+            btn.classList.replace('bg-gray-900', 'bg-green-600');
+
+            setTimeout(() => {
+                alert(`Success! Profile updated for ${name}`);
+                btn.innerHTML = originalText;
+                btn.classList.replace('bg-green-600', 'bg-gray-900');
+            }, 1000);
+
+            // Note: Firebase update logic can be added here
+        }
+    </script>
 
 </body>
 </html>
