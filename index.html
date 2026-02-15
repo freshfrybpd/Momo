@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
         
         .page-active { display: block; animation: slideUp 0.4s ease-out; }
         .page-hidden { display: none; }
@@ -24,6 +24,11 @@
         .active-nav { color: #f97316 !important; opacity: 1 !important; }
         .profile-input { border: 2px solid #f1f5f9; transition: all 0.3s ease; }
         .profile-input:focus { border-color: #f97316; outline: none; background-color: white; }
+
+        /* Cart Sidebar Animation */
+        #cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cart-open { transform: translateX(0); }
+        .cart-closed { transform: translateX(100%); }
     </style>
 </head>
 <body>
@@ -63,12 +68,44 @@
             <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
                 <i id="top-user-icon" class="fa-solid fa-user text-gray-700 group-hover:text-orange-600 text-lg"></i>
             </div>
-            <div class="relative bg-orange-100 p-2.5 rounded-full">
+            <div onclick="toggleCart(true)" class="relative bg-orange-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-200 transition">
                 <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
             </div>
         </div>
     </nav>
+
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white z-[100] shadow-2xl cart-closed flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-black tracking-tight">Your Cart</h2>
+            <button onclick="toggleCart(false)" class="bg-gray-100 p-2 rounded-xl hover:bg-red-50 hover:text-red-500 transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+            <div class="text-center py-20 text-gray-300">
+                <i class="fa-solid fa-basket-shopping text-5xl mb-4"></i>
+                <p class="font-bold">Cart is empty</p>
+            </div>
+        </div>
+
+        <div class="p-6 bg-gray-50 border-t border-gray-100">
+            <div class="flex justify-between mb-2 font-bold text-gray-500 text-sm">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">₹0</span>
+            </div>
+            <div class="flex justify-between mb-4 font-black text-xl text-gray-900">
+                <span>Total</span>
+                <span id="cart-total" class="text-orange-500">₹0</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-gray-900 text-white py-5 rounded-3xl font-black tracking-widest hover:bg-orange-600 transition shadow-xl active:scale-95">
+                PLACE ORDER
+            </button>
+        </div>
+    </div>
+
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 z-[90] hidden opacity-0 transition-opacity"></div>
 
     <main id="page-home" class="page-active px-6 py-6 max-w-2xl mx-auto mb-28">
         <div class="mb-10 text-center">
@@ -92,7 +129,7 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
+                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-orange-500 transition-all shadow-lg">Add +</button>
                     </div>
                 </div>
             </div>
@@ -112,7 +149,7 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleOrder('Stream Momos', 'price-stream', 'type-stream')" class="bg-gray-900 text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
+                        <button onclick="handleOrder('Stream Momos', 'price-stream', 'type-stream')" class="bg-gray-900 text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-orange-500 transition-all shadow-lg">Add +</button>
                     </div>
                 </div>
             </div>
@@ -140,18 +177,6 @@
                 <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Edit Name</label>
                 <input type="text" id="user-name-input" oninput="updateDisplayName(this.value)" value="Freshfry Admin" class="w-full profile-input bg-slate-50 p-4 rounded-2xl font-bold text-gray-800 mt-1">
             </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm text-center">
-                    <span class="text-[10px] font-black uppercase text-gray-400 block mb-1">Orders</span>
-                    <p class="text-3xl font-black">14</p>
-                </div>
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm text-center">
-                    <span class="text-[10px] font-black uppercase text-gray-400 block mb-1">Wallet</span>
-                    <p class="text-3xl font-black text-orange-500">₹450</p>
-                </div>
-            </div>
-
             <button onclick="saveProfile()" class="w-full bg-gray-900 text-white py-5 rounded-3xl font-black tracking-widest hover:bg-orange-500 transition shadow-lg active:scale-95">SAVE CHANGES</button>
             <button onclick="location.reload()" class="w-full bg-red-50 text-red-500 py-5 rounded-3xl font-black tracking-widest hover:bg-red-100 transition">LOGOUT</button>
         </div>
@@ -166,72 +191,128 @@
     </nav>
 
     <script>
-        let cartCount = 0;
+        let cart = [];
 
         function showPage(pageName) {
-            const home = document.getElementById('page-home');
-            const profile = document.getElementById('page-profile');
-            const navHome = document.getElementById('nav-home');
-            const navProfile = document.getElementById('nav-profile');
-            const topUser = document.getElementById('top-user-icon');
-
-            if (pageName === 'home') {
-                home.className = 'page-active px-6 py-6 max-w-2xl mx-auto mb-28';
-                profile.className = 'page-hidden';
-                navHome.classList.add('active-nav');
-                navProfile.classList.remove('active-nav');
-                topUser.classList.remove('text-orange-600');
-            } else {
-                profile.className = 'page-active px-6 py-10 max-w-2xl mx-auto mb-28';
-                home.className = 'page-hidden';
-                navProfile.classList.add('active-nav');
-                navHome.classList.remove('active-nav');
-                topUser.classList.add('text-orange-600');
-            }
+            document.getElementById('page-home').className = pageName === 'home' ? 'page-active px-6 py-6 max-w-2xl mx-auto mb-28' : 'page-hidden';
+            document.getElementById('page-profile').className = pageName === 'profile' ? 'page-active px-6 py-10 max-w-2xl mx-auto mb-28' : 'page-hidden';
+            
+            document.getElementById('nav-home').classList.toggle('active-nav', pageName === 'home');
+            document.getElementById('nav-profile').classList.toggle('active-nav', pageName === 'profile');
+            document.getElementById('nav-profile').classList.toggle('opacity-40', pageName !== 'profile');
             window.scrollTo(0, 0);
         }
 
+        function toggleCart(open) {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            if(open) {
+                sidebar.classList.replace('cart-closed', 'cart-open');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            } else {
+                sidebar.classList.replace('cart-open', 'cart-closed');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 400);
+            }
+        }
+
+        async function handleOrder(name, priceId, typeId) {
+            const price = parseInt(document.getElementById(priceId).value);
+            const type = document.querySelector(`#${typeId} .bg-white`).innerText;
+            
+            cart.push({ name, price, type });
+            updateCartUI();
+
+            const btn = event.target;
+            btn.innerText = "Added ✓";
+            btn.classList.replace('bg-gray-900', 'bg-green-600');
+            setTimeout(() => {
+                btn.innerText = "Add +";
+                btn.classList.replace('bg-green-600', 'bg-gray-900');
+            }, 1000);
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cart-items');
+            const badge = document.getElementById('cart-badge');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            badge.innerText = cart.length;
+
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="text-center py-20 text-gray-300"><i class="fa-solid fa-basket-shopping text-5xl mb-4"></i><p class="font-bold">Cart is empty</p></div>`;
+                subtotalEl.innerText = "₹0";
+                totalEl.innerText = "₹0";
+                return;
+            }
+
+            let total = 0;
+            list.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="flex items-center justify-between bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <div>
+                            <p class="font-black text-gray-800">${item.name} (${item.type})</p>
+                            <p class="text-orange-500 font-bold text-sm">₹${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalEl.innerText = `₹${total}`;
+            totalEl.innerText = `₹${total}`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        async function checkout() {
+            if(cart.length === 0) return alert("Your cart is empty!");
+            
+            const btn = event.target;
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            const success = await window.sendOrderToFirebase({
+                items: cart,
+                totalAmount: document.getElementById('cart-total').innerText,
+                status: 'pending'
+            });
+
+            if(success) {
+                alert("Order Placed Successfully! 🥟");
+                cart = [];
+                updateCartUI();
+                toggleCart(false);
+            } else {
+                alert("Order failed. Please try again.");
+            }
+            btn.innerText = "PLACE ORDER";
+            btn.disabled = false;
+        }
+
+        // Profile Helper Functions
         function previewImage(event) {
             const reader = new FileReader();
-            reader.onload = function() {
+            reader.onload = () => {
                 const img = document.getElementById('profile-preview');
-                const icon = document.getElementById('profile-icon');
                 img.src = reader.result;
                 img.classList.remove('hidden');
-                icon.classList.add('hidden');
+                document.getElementById('profile-icon').classList.add('hidden');
             }
             reader.readAsDataURL(event.target.files[0]);
         }
-
-        function updateDisplayName(val) {
-            document.getElementById('display-name').innerText = val || "Freshfry Admin";
-        }
-
-        function saveProfile() {
-            alert("Profile settings updated locally!");
-            showPage('home');
-        }
-
+        function updateDisplayName(val) { document.getElementById('display-name').innerText = val || "Freshfry Admin"; }
+        function saveProfile() { alert("Profile saved!"); showPage('home'); }
         function toggleType(btn, type) {
             const btns = btn.parentElement.querySelectorAll('button');
             btns.forEach(b => b.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400");
             btn.className = `px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm ${type === 'veg' ? 'text-green-600' : 'text-red-600'}`;
-        }
-
-        async function handleOrder(name, priceId, typeId) {
-            const price = document.getElementById(priceId).value;
-            const type = document.querySelector(`#${typeId} .bg-white`).innerText;
-            const btn = event.target;
-            cartCount++;
-            document.getElementById('cart-badge').innerText = cartCount;
-            const originalText = btn.innerText;
-            btn.innerText = "Added ✓";
-            btn.classList.replace('bg-gray-900', 'bg-green-600');
-            await window.sendOrderToFirebase({ itemName: name, price: `₹${price}`, category: type, status: 'pending' });
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.replace('bg-green-600', 'bg-gray-900');
-            }, 1000);
         }
     </script>
 </body>
