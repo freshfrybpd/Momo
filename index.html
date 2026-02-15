@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Baripada's Best Momos</title>
+    <title>Freshfry | Baripada's Premium Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
-        .page-active { display: block; animation: fadeIn 0.3s ease-in; }
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        
+        .page-active { display: block; animation: slideUp 0.4s ease-out; }
         .page-hidden { display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .premium-shadow { box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1); }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .premium-card { transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); }
+        .premium-card:hover { transform: translateY(-5px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+        
+        .active-nav { color: #f97316; opacity: 1 !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -33,48 +43,47 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Global function to add orders to Firebase
-        window.placeOrder = async (item, price, type) => {
+        // Function to push order to Firebase
+        window.sendOrderToFirebase = async (orderDetails) => {
             try {
                 await addDoc(collection(db, "orders"), {
-                    item: item,
-                    price: price,
-                    type: type,
-                    timestamp: new Date()
+                    ...orderDetails,
+                    timestamp: serverTimestamp()
                 });
-                console.log("Order saved to Firebase!");
+                return true;
             } catch (e) {
-                console.error("Error adding document: ", e);
+                console.error("Firebase Error:", e);
+                return false;
             }
-        }
+        };
     </script>
 
-    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
+    <nav class="flex items-center justify-between px-6 py-5 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div class="text-2xl font-black text-orange-500 cursor-pointer" onclick="showPage('home')">
             Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
         <div class="flex items-center space-x-4">
-            <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition">
-                <i class="fa-solid fa-user text-gray-700"></i>
+            <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
+                <i class="fa-solid fa-user text-gray-700 group-hover:text-orange-600 text-lg"></i>
             </div>
             <div class="relative bg-orange-100 p-2.5 rounded-full">
                 <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
-                <span id="cart-total" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
             </div>
         </div>
     </nav>
 
-    <main id="page-home" class="page-active px-6 py-8 max-w-2xl mx-auto mb-24">
-        <header class="mb-10 text-center">
-            <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Our Special Menu</h2>
-            <p class="text-gray-500 mt-2">Authentic taste, freshly prepared.</p>
-        </header>
+    <main id="page-home" class="page-active px-6 py-6 max-w-2xl mx-auto mb-28">
+        <div class="mb-10">
+            <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Our Menu</h2>
+            <p class="text-gray-500 font-medium">Freshly made, Baripada style! 🔥</p>
+        </div>
 
         <div class="space-y-12">
-            <div class="bg-white rounded-[2.5rem] overflow-hidden premium-shadow border border-gray-100">
-                <div class="relative h-64">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
-                    <div class="absolute top-5 right-5 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-600">Bestseller</div>
+            <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-sm">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
+                    <div class="absolute top-5 left-5 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">CRUNCHY GOLD</div>
                 </div>
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
@@ -89,15 +98,15 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleAddToCart('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95">Add +</button>
+                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-[2.5rem] overflow-hidden premium-shadow border border-gray-100">
-                <div class="relative h-64">
-                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
-                    <div class="absolute top-5 right-5 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-blue-600">Fresh & Light</div>
+            <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-sm">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
+                    <div class="absolute top-5 left-5 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">STEAMY FRESH</div>
                 </div>
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
@@ -112,84 +121,124 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleAddToCart('Stream Momos', 'price-stream', 'type-stream')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95">Add +</button>
+                        <button onclick="handleOrder('Stream Momos', 'price-stream', 'type-stream')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <main id="page-profile" class="page-hidden px-6 py-8 max-w-2xl mx-auto">
-        <div class="flex items-center space-x-6 mb-10">
-            <div class="w-24 h-24 bg-orange-500 rounded-[2rem] flex items-center justify-center text-white text-4xl shadow-xl shadow-orange-200">
-                <i class="fa-solid fa-user-check"></i>
+    <main id="page-profile" class="page-hidden px-6 py-10 max-w-2xl mx-auto">
+        <div class="flex items-center space-x-6 mb-12">
+            <div class="w-24 h-24 bg-orange-500 rounded-[2.2rem] flex items-center justify-center text-white text-4xl shadow-xl shadow-orange-200 border-4 border-white">
+                <i class="fa-solid fa-user-ninja"></i>
             </div>
             <div>
                 <h2 class="text-3xl font-black text-gray-900">Freshfry Admin</h2>
-                <p class="text-gray-500 font-medium">Baripada, Odisha</p>
+                <p class="text-gray-500 font-medium">Verified Foodie • Baripada</p>
             </div>
         </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
+                <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Total Orders</span>
+                <p class="text-3xl font-black mt-1">14</p>
+            </div>
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
+                <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Wallet</span>
+                <p class="text-3xl font-black mt-1">₹450</p>
+            </div>
+        </div>
+
         <div class="space-y-4">
-            <div class="bg-white p-6 rounded-3xl flex items-center justify-between border border-gray-100 shadow-sm hover:bg-gray-50 cursor-pointer">
+            <div class="bg-white p-6 rounded-3xl flex items-center justify-between border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
                 <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-orange-50 text-orange-500 rounded-2xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div class="p-3 bg-blue-50 text-blue-500 rounded-2xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
                     <span class="font-bold text-gray-700">Order History</span>
                 </div>
                 <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </div>
-            <div class="bg-white p-6 rounded-3xl flex items-center justify-between border border-gray-100 shadow-sm hover:bg-gray-50 cursor-pointer">
+            <div class="bg-white p-6 rounded-3xl flex items-center justify-between border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
                 <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-green-50 text-green-500 rounded-2xl"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="p-3 bg-green-50 text-green-500 rounded-2xl"><i class="fa-solid fa-map-location-dot"></i></div>
                     <span class="font-bold text-gray-700">Manage Address</span>
                 </div>
                 <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </div>
-            <button onclick="showPage('home')" class="w-full bg-red-50 text-red-500 py-5 rounded-3xl font-black tracking-wide mt-10">LOGOUT</button>
+            <button onclick="showPage('home')" class="w-full bg-red-50 text-red-500 py-5 rounded-3xl font-black tracking-widest mt-6 hover:bg-red-100 transition">LOGOUT</button>
         </div>
     </main>
 
-    <nav class="fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-12 rounded-full flex justify-between items-center shadow-2xl z-50 md:hidden">
-        <i onclick="showPage('home')" class="fa-solid fa-house cursor-pointer"></i>
-        <div onclick="showPage('home')" class="bg-orange-500 p-3.5 rounded-full -mt-14 border-4 border-slate-50 shadow-lg">
-            <i class="fa-solid fa-plus text-white"></i>
+    <nav class="md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-10 rounded-full flex justify-between items-center shadow-2xl z-50">
+        <i onclick="showPage('home')" id="nav-home" class="fa-solid fa-house cursor-pointer active-nav text-xl"></i>
+        <div onclick="showPage('home')" class="bg-orange-500 p-3.5 rounded-full -mt-14 border-4 border-slate-50 shadow-lg cursor-pointer">
+            <i class="fa-solid fa-plus text-white text-xl"></i>
         </div>
-        <i onclick="showPage('profile')" class="fa-solid fa-user cursor-pointer opacity-50 hover:opacity-100"></i>
+        <i onclick="showPage('profile')" id="nav-profile" class="fa-solid fa-user cursor-pointer opacity-40 text-xl"></i>
     </nav>
 
     <script>
         let cartCount = 0;
 
-        function showPage(page) {
-            document.getElementById('page-home').className = page === 'home' ? 'page-active px-6 py-8 max-w-2xl mx-auto mb-24' : 'page-hidden';
-            document.getElementById('page-profile').className = page === 'profile' ? 'page-active px-6 py-8 max-w-2xl mx-auto' : 'page-hidden';
-            window.scrollTo(0,0);
+        // Navigation Switcher
+        function showPage(pageName) {
+            const home = document.getElementById('page-home');
+            const profile = document.getElementById('page-profile');
+            const navHome = document.getElementById('nav-home');
+            const navProfile = document.getElementById('nav-profile');
+
+            if (pageName === 'home') {
+                home.className = 'page-active px-6 py-6 max-w-2xl mx-auto mb-28';
+                profile.className = 'page-hidden';
+                navHome.classList.add('active-nav');
+                navProfile.classList.remove('active-nav');
+                navProfile.classList.add('opacity-40');
+            } else {
+                profile.className = 'page-active px-6 py-10 max-w-2xl mx-auto';
+                home.className = 'page-hidden';
+                navProfile.classList.add('active-nav');
+                navProfile.classList.remove('opacity-40');
+                navHome.classList.remove('active-nav');
+            }
+            window.scrollTo(0, 0);
         }
 
+        // Veg/Non-Veg Toggle Logic
         function toggleType(btn, type) {
             const btns = btn.parentElement.querySelectorAll('button');
-            btns.forEach(b => b.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400");
+            btns.forEach(b => {
+                b.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400";
+            });
             btn.className = `px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm ${type === 'veg' ? 'text-green-600' : 'text-red-600'}`;
         }
 
-        async function handleAddToCart(name, selectId, typeContainerId) {
-            const price = document.getElementById(selectId).value;
-            const activeBtn = document.querySelector(`#${typeContainerId} .bg-white`);
-            const type = activeBtn.innerText;
-            
-            cartCount++;
-            document.getElementById('cart-total').innerText = cartCount;
-
-            // Save to Firebase
-            if(window.placeOrder) {
-                await window.placeOrder(name, price, type);
-            }
-
-            // Button Feedback
+        // Order Handler
+        async function handleOrder(name, priceId, typeId) {
+            const price = document.getElementById(priceId).value;
+            const type = document.querySelector(`#${typeId} .bg-white`).innerText;
             const btn = event.target;
+
+            // Update UI
+            cartCount++;
+            document.getElementById('cart-badge').innerText = cartCount;
+            
+            // Visual Feedback
+            const originalText = btn.innerText;
             btn.innerText = "Added ✓";
             btn.classList.replace('bg-gray-900', 'bg-green-600');
+
+            // Send to Firebase
+            const success = await window.sendOrderToFirebase({
+                itemName: name,
+                price: `₹${price}`,
+                category: type,
+                status: 'pending'
+            });
+
+            if(!success) console.warn("Firebase save failed, check Rules.");
+
             setTimeout(() => {
-                btn.innerText = "Add +";
+                btn.innerText = originalText;
                 btn.classList.replace('bg-green-600', 'bg-gray-900');
             }, 1000);
         }
