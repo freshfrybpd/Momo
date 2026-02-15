@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momo Dash | Steamed to Perfection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .momo-gradient { background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <nav class="flex items-center justify-between px-6 py-4 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-2xl font-bold text-orange-600">Momo<span class="text-gray-800">Dash</span></div>
+        <div class="hidden md:flex space-x-8 font-medium text-gray-600">
+            <a href="#" class="hover:text-orange-600">Home</a>
+            <a href="#" class="hover:text-orange-600">Menu</a>
+            <a href="#" class="hover:text-orange-600">Offers</a>
+            <a href="#" class="hover:text-orange-600">Cart</a>
+        </div>
+        <div class="flex items-center space-x-4">
+            <i class="fa-solid fa-magnifying-glass text-gray-500 cursor-pointer"></i>
+            <div class="relative">
+                <i class="fa-solid fa-cart-shopping text-gray-800 text-xl cursor-pointer"></i>
+                <span class="absolute -top-2 -right-2 bg-orange-600 text-white text-[10px] rounded-full px-1.5">3</span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="momo-gradient px-6 py-12 md:py-20 text-white text-center rounded-b-[40px]">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Garma Garam Momos! 🥟</h1>
+        <p class="text-lg opacity-90 mb-8">Authentic Himalayan taste, delivered to your door in 20 mins.</p>
+        <div class="max-w-md mx-auto relative">
+            <input type="text" placeholder="Enter delivery location..." class="w-full py-4 px-6 rounded-full text-gray-800 focus:outline-none shadow-xl">
+            <button class="absolute right-2 top-2 bg-gray-900 text-white px-6 py-2 rounded-full font-semibold hover:bg-black transition">
+                Find
+            </button>
+        </div>
+    </section>
+
+    <section class="px-6 py-10">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Popular Categories</h2>
+        <div class="flex space-x-4 overflow-x-auto pb-4 no-scrollbar">
+            <div class="flex-shrink-0 bg-white shadow-md p-4 rounded-2xl text-center border-2 border-orange-100 w-28">
+                <span class="text-3xl">🥟</span>
+                <p class="mt-2 font-semibold text-sm">Steamed</p>
+            </div>
+            <div class="flex-shrink-0 bg-white shadow-md p-4 rounded-2xl text-center w-28">
+                <span class="text-3xl">🔥</span>
+                <p class="mt-2 font-semibold text-sm">Fried</p>
+            </div>
+            <div class="flex-shrink-0 bg-white shadow-md p-4 rounded-2xl text-center w-28">
+                <span class="text-3xl">🍲</span>
+                <p class="mt-2 font-semibold text-sm">Jhol</p>
+            </div>
+            <div class="flex-shrink-0 bg-white shadow-md p-4 rounded-2xl text-center w-28">
+                <span class="text-3xl">🍱</span>
+                <p class="mt-2 font-semibold text-sm">Platters</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 py-6 mb-20">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Best Sellers</h2>
+            <a href="#" class="text-orange-600 font-semibold">View All</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=800&q=80" alt="Chicken Momo" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Classic Chicken Steamed</h3>
+                            <p class="text-gray-500 text-sm">Served with Spicy Chutney</p>
+                        </div>
+                        <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Veg</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xl font-bold text-gray-900">₹149</span>
+                        <button class="bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 shadow-md">Add +</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?auto=format&fit=crop&w=800&q=80" alt="Pan Fried Momo" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Kurkure Paneer Momo</h3>
+                            <p class="text-gray-500 text-sm">Extra Crunchy & Spicy</p>
+                        </div>
+                        <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Veg</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xl font-bold text-gray-900">₹189</span>
+                        <button class="bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 shadow-md">Add +</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around py-3">
+        <div class="flex flex-col items-center text-orange-600">
+            <i class="fa-solid fa-house"></i>
+            <span class="text-[10px] mt-1">Home</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-utensils"></i>
+            <span class="text-[10px] mt-1">Menu</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span class="text-[10px] mt-1">Orders</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-user"></i>
+            <span class="text-[10px] mt-1">Profile</span>
+        </div>
+    </div>
+
+</body>
+</html>
