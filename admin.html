@@ -12,7 +12,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .sidebar-link:hover { background-color: #fff7ed; border-right: 4px solid #f97316; color: #f97316; }
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }
         .food-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 12px; }
     </style>
@@ -23,14 +22,11 @@
         <div class="p-6">
             <div class="text-2xl font-black text-orange-500 mb-10 tracking-tighter">Freshfry<span class="text-gray-900">.</span></div>
             <nav class="space-y-2">
-                <a href="#dashboard" class="sidebar-link flex items-center p-3 text-orange-600 font-bold bg-orange-50 rounded-xl transition-all">
+                <a href="#" class="sidebar-link flex items-center p-3 text-orange-600 font-bold bg-orange-50 rounded-xl transition-all">
                     <i class="fa-solid fa-chart-pie mr-3"></i> Dashboard
                 </a>
                 <a href="#menu-section" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
                     <i class="fa-solid fa-utensils mr-3"></i> Manage Menu
-                </a>
-                <a href="#riders-section" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
-                    <i class="fa-solid fa-motorcycle mr-3"></i> Rider Fleet
                 </a>
             </nav>
         </div>
@@ -41,24 +37,19 @@
         <header class="flex justify-between items-center mb-10">
             <div>
                 <h1 class="text-2xl font-extrabold text-gray-900">Master Console</h1>
-                <p class="text-gray-500 text-sm font-medium">Store Control & Menu Management</p>
+                <p class="text-gray-500 text-sm font-medium">Cloud Database Connected</p>
             </div>
-            <div class="flex items-center space-x-4">
-                <img src="https://ui-avatars.com/api/?name=Admin&background=f97316&color=fff" class="w-10 h-10 rounded-2xl shadow-lg">
-            </div>
+            <div class="bg-green-100 px-4 py-2 rounded-full text-green-700 font-bold text-xs">Live Sync: ON</div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <div class="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-64">
-                <h3 class="font-bold text-gray-800 mb-4 text-sm">Revenue Analytics</h3>
                 <canvas id="revenueChart"></canvas>
             </div>
-            <div class="bg-gray-900 p-8 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden">
-                <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Total Sales Today</p>
-                <h3 class="text-4xl font-black mt-2 text-orange-500">₹45,280</h3>
-                <div class="mt-12 flex items-center text-[10px] font-black bg-white/10 w-fit px-4 py-2 rounded-full uppercase">
-                    Live from Baripada
-                </div>
+            <div class="bg-gray-900 p-8 rounded-[2.5rem] shadow-xl text-white">
+                <p class="text-gray-400 text-xs font-bold uppercase">Store Status</p>
+                <h3 class="text-4xl font-black mt-2 text-orange-500">Active</h3>
+                <div class="mt-12 text-[10px] font-black bg-white/10 w-fit px-4 py-2 rounded-full uppercase">Baripada, Odisha</div>
             </div>
         </div>
 
@@ -70,15 +61,15 @@
                 <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-fit">
                     <h3 class="font-bold text-gray-800 mb-4 text-sm">Add New Food</h3>
                     <div class="space-y-4">
-                        <input type="text" id="foodName" placeholder="Item Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
-                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
-                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
-                        <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                        <input type="text" id="foodName" placeholder="Item Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
+                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
+                        <input type="text" id="foodImage" placeholder="Image URL (Unsplash/Imgur)" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
+                        <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold">
                             <option value="veg">Veg</option>
                             <option value="non-veg">Non-Veg</option>
                         </select>
-                        <button onclick="addFoodItem()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg shadow-orange-200 active:scale-95 transition-all">
-                            SAVE TO MENU
+                        <button id="addBtn" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">
+                            UPLOAD TO CLOUD
                         </button>
                     </div>
                 </div>
@@ -93,156 +84,90 @@
                                 <th class="px-6 py-4 text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="menuTableBody" class="divide-y divide-gray-50 text-sm">
+                        <tbody id="menuTableBody" class="divide-y divide-gray-50 text-sm font-bold">
                             </tbody>
                     </table>
                 </div>
             </div>
         </section>
-
-        <section id="riders-section">
-            <h2 class="text-xl font-black text-gray-800 mb-6 flex items-center">
-                <i class="fa-solid fa-motorcycle mr-3 text-orange-500"></i> Rider Fleet
-            </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-fit">
-                    <h3 class="font-bold text-gray-800 mb-4 text-sm">Register Rider</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="riderName" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
-                        <input type="tel" id="riderPhone" placeholder="Phone" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
-                        <button onclick="addNewRider()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">
-                            ADD RIDER
-                        </button>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-3 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                            <tr>
-                                <th class="px-6 py-4">Rider</th>
-                                <th class="px-6 py-4">Phone</th>
-                                <th class="px-6 py-4 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="riderTableBody" class="divide-y divide-gray-50 text-sm">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
     </main>
 
-    <script>
-        // --- Revenue Chart ---
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM'],
-                datasets: [{
-                    label: 'Sales',
-                    data: [2000, 8000, 15000, 12000, 28000, 45280],
-                    borderColor: '#f97316',
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(249, 115, 22, 0.05)',
-                    borderWidth: 4,
-                    pointRadius: 0
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
-        });
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- Food Menu Logic ---
-        let menuItems = JSON.parse(localStorage.getItem('freshfry_menu')) || [
-            { id: 1, name: "Freshfry Fried", price: "150", type: "veg", image: "https://images.unsplash.com/photo-1534422298391-e4f8c170db06?w=200" },
-            { id: 2, name: "Stream Momos", price: "120", type: "non-veg", image: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=200" }
-        ];
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+            authDomain: "freshfry-39a10.firebaseapp.com",
+            projectId: "freshfry-39a10",
+            storageBucket: "freshfry-39a10.firebasestorage.app",
+            messagingSenderId: "928483976893",
+            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+        };
 
-        function renderMenu() {
-            const container = document.getElementById('menuTableBody');
-            container.innerHTML = '';
-            menuItems.forEach(item => {
-                const badgeColor = item.type === 'veg' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
-                container.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 flex items-center space-x-3">
-                            <img src="${item.image}" class="food-preview shadow-sm" onerror="this.src='https://via.placeholder.com/50'">
-                            <span class="font-bold text-gray-800">${item.name}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${badgeColor}">${item.type}</span>
-                        </td>
-                        <td class="px-6 py-4 font-black text-gray-900">₹${item.price}</td>
-                        <td class="px-6 py-4 text-right">
-                            <button onclick="removeFood(${item.id})" class="text-red-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
-            localStorage.setItem('freshfry_menu', JSON.stringify(menuItems));
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        function addFoodItem() {
+        // --- ADD ITEM TO FIREBASE ---
+        document.getElementById('addBtn').addEventListener('click', async () => {
             const name = document.getElementById('foodName').value;
             const price = document.getElementById('foodPrice').value;
             const image = document.getElementById('foodImage').value;
             const type = document.getElementById('foodType').value;
 
-            if(!name || !price || !image) return alert("Poori details bhariye!");
+            if(!name || !price || !image) return alert("Pura details bhariye!");
 
-            menuItems.unshift({ id: Date.now(), name, price, image, type });
-            renderMenu();
-            document.getElementById('foodName').value = '';
-            document.getElementById('foodPrice').value = '';
-            document.getElementById('foodImage').value = '';
-        }
+            try {
+                await addDoc(collection(db, "menu"), { name, price, image, type });
+                alert("Success! Item added to Index Page.");
+                document.getElementById('foodName').value = '';
+                document.getElementById('foodPrice').value = '';
+                document.getElementById('foodImage').value = '';
+            } catch (e) { alert("Error: " + e.message); }
+        });
 
-        function removeFood(id) {
-            menuItems = menuItems.filter(i => i.id !== id);
-            renderMenu();
-        }
-
-        // --- Rider Logic ---
-        let riders = JSON.parse(localStorage.getItem('freshfry_riders')) || [];
-
-        function renderRiders() {
-            const container = document.getElementById('riderTableBody');
+        // --- REAL-TIME LISTENER ---
+        onSnapshot(collection(db, "menu"), (snap) => {
+            const container = document.getElementById('menuTableBody');
             container.innerHTML = '';
-            riders.forEach(rider => {
+            snap.forEach(d => {
+                const item = d.data();
+                const badgeColor = item.type === 'veg' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
                 container.innerHTML += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="px-6 py-4 font-bold text-gray-800">${rider.name}</td>
-                        <td class="px-6 py-4 text-gray-500 font-semibold">${rider.phone}</td>
+                    <tr>
+                        <td class="px-6 py-4 flex items-center space-x-3">
+                            <img src="${item.image}" class="food-preview" onerror="this.src='https://via.placeholder.com/50'">
+                            <span>${item.name}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 rounded-full text-[9px] uppercase ${badgeColor}">${item.type}</span>
+                        </td>
+                        <td class="px-6 py-4">₹${item.price}</td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="removeRider(${rider.id})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="deleteFoodItem('${d.id}')" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
             });
-            localStorage.setItem('freshfry_riders', JSON.stringify(riders));
-        }
+        });
 
-        function addNewRider() {
-            const name = document.getElementById('riderName').value;
-            const phone = document.getElementById('riderPhone').value;
-            if(!name || !phone) return alert("Rider detail bhariye!");
-            riders.unshift({ id: Date.now(), name, phone });
-            renderRiders();
-            document.getElementById('riderName').value = '';
-            document.getElementById('riderPhone').value = '';
-        }
+        // Delete Function
+        window.deleteFoodItem = async (id) => {
+            if(confirm("Delete this item?")) {
+                await deleteDoc(doc(db, "menu", id));
+            }
+        };
 
-        function removeRider(id) {
-            riders = riders.filter(r => r.id !== id);
-            renderRiders();
-        }
-
-        // Init
-        renderMenu();
-        renderRiders();
+        // Static Chart
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['6AM', '12PM', '6PM', '9PM'],
+                datasets: [{ label: 'Sales', data: [5000, 15000, 25000, 45000], borderColor: '#f97316', tension: 0.4, fill: true, backgroundColor: 'rgba(249, 115, 22, 0.05)' }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
     </script>
 </body>
 </html>
