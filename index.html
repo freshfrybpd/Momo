@@ -21,8 +21,9 @@
         .premium-card { transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); }
         .premium-card:hover { transform: translateY(-5px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
         
-        .active-nav { color: #f97316; opacity: 1 !important; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .active-nav { color: #f97316 !important; opacity: 1 !important; }
+        .profile-input { border: 2px solid #f1f5f9; transition: all 0.3s ease; }
+        .profile-input:focus { border-color: #f97316; outline: none; background-color: white; }
     </style>
 </head>
 <body>
@@ -43,7 +44,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Function to push order to Firebase
         window.sendOrderToFirebase = async (orderDetails) => {
             try {
                 await addDoc(collection(db, "orders"), {
@@ -51,10 +51,7 @@
                     timestamp: serverTimestamp()
                 });
                 return true;
-            } catch (e) {
-                console.error("Firebase Error:", e);
-                return false;
-            }
+            } catch (e) { return false; }
         };
     </script>
 
@@ -64,7 +61,7 @@
         </div>
         <div class="flex items-center space-x-4">
             <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
-                <i class="fa-solid fa-user text-gray-700 group-hover:text-orange-600 text-lg"></i>
+                <i id="top-user-icon" class="fa-solid fa-user text-gray-700 group-hover:text-orange-600 text-lg"></i>
             </div>
             <div class="relative bg-orange-100 p-2.5 rounded-full">
                 <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
@@ -74,17 +71,14 @@
     </nav>
 
     <main id="page-home" class="page-active px-6 py-6 max-w-2xl mx-auto mb-28">
-        <div class="mb-10">
+        <div class="mb-10 text-center">
             <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Our Menu</h2>
             <p class="text-gray-500 font-medium">Freshly made, Baripada style! 🔥</p>
         </div>
 
         <div class="space-y-12">
             <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-sm">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
-                    <div class="absolute top-5 left-5 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">CRUNCHY GOLD</div>
-                </div>
+                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=1000&auto=format&fit=crop" class="w-full h-64 object-cover">
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-2xl font-black text-gray-900">Freshfry Fried</h3>
@@ -98,16 +92,13 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
+                        <button onclick="handleOrder('Fried Momos', 'price-fried', 'type-fried')" class="bg-gray-900 text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
                     </div>
                 </div>
             </div>
 
             <div class="premium-card bg-white rounded-[2.5rem] overflow-hidden shadow-sm">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
-                    <div class="absolute top-5 left-5 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">STEAMY FRESH</div>
-                </div>
+                <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=1000&auto=format&fit=crop" class="w-full h-64 object-cover">
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-2xl font-black text-gray-900">Freshfry Stream</h3>
@@ -121,7 +112,7 @@
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="handleOrder('Stream Momos', 'price-stream', 'type-stream')" class="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
+                        <button onclick="handleOrder('Stream Momos', 'price-stream', 'type-stream')" class="bg-gray-900 text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-orange-500 transition-all active:scale-95 shadow-lg">Add +</button>
                     </div>
                 </div>
             </div>
@@ -129,43 +120,40 @@
     </main>
 
     <main id="page-profile" class="page-hidden px-6 py-10 max-w-2xl mx-auto">
-        <div class="flex items-center space-x-6 mb-12">
-            <div class="w-24 h-24 bg-orange-500 rounded-[2.2rem] flex items-center justify-center text-white text-4xl shadow-xl shadow-orange-200 border-4 border-white">
-                <i class="fa-solid fa-user-ninja"></i>
+        <div class="flex flex-col items-center mb-10">
+            <div class="relative group">
+                <div class="w-32 h-32 bg-orange-500 rounded-[2.5rem] flex items-center justify-center text-white text-5xl shadow-xl border-4 border-white overflow-hidden">
+                    <img id="profile-preview" src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="w-full h-full object-cover hidden">
+                    <i id="profile-icon" class="fa-solid fa-user-ninja"></i>
+                </div>
+                <label for="photo-upload" class="absolute bottom-0 right-0 bg-gray-900 text-white p-3 rounded-2xl cursor-pointer hover:bg-orange-500 shadow-lg border-4 border-white transition">
+                    <i class="fa-solid fa-camera text-xs"></i>
+                    <input type="file" id="photo-upload" class="hidden" accept="image/*" onchange="previewImage(event)">
+                </label>
             </div>
-            <div>
-                <h2 class="text-3xl font-black text-gray-900">Freshfry Admin</h2>
-                <p class="text-gray-500 font-medium">Verified Foodie • Baripada</p>
-            </div>
+            <h2 id="display-name" class="text-3xl font-black text-gray-900 mt-4">Freshfry Admin</h2>
+            <p class="text-gray-500 font-medium italic">Verified Foodie • Baripada</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="space-y-6">
             <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-                <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Total Orders</span>
-                <p class="text-3xl font-black mt-1">14</p>
+                <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Edit Name</label>
+                <input type="text" id="user-name-input" oninput="updateDisplayName(this.value)" value="Freshfry Admin" class="w-full profile-input bg-slate-50 p-4 rounded-2xl font-bold text-gray-800 mt-1">
             </div>
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-                <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest">Wallet</span>
-                <p class="text-3xl font-black mt-1">₹450</p>
-            </div>
-        </div>
 
-        <div class="space-y-4">
-            <div class="bg-white p-6 rounded-3xl flex items-center justify-between border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
-                <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-blue-50 text-blue-500 rounded-2xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                    <span class="font-bold text-gray-700">Order History</span>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm text-center">
+                    <span class="text-[10px] font-black uppercase text-gray-400 block mb-1">Orders</span>
+                    <p class="text-3xl font-black">14</p>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-300"></i>
-            </div>
-            <div class="bg-white p-6 rounded-3xl flex items-center justify-between border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
-                <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-green-50 text-green-500 rounded-2xl"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <span class="font-bold text-gray-700">Manage Address</span>
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm text-center">
+                    <span class="text-[10px] font-black uppercase text-gray-400 block mb-1">Wallet</span>
+                    <p class="text-3xl font-black text-orange-500">₹450</p>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </div>
-            <button onclick="showPage('home')" class="w-full bg-red-50 text-red-500 py-5 rounded-3xl font-black tracking-widest mt-6 hover:bg-red-100 transition">LOGOUT</button>
+
+            <button onclick="saveProfile()" class="w-full bg-gray-900 text-white py-5 rounded-3xl font-black tracking-widest hover:bg-orange-500 transition shadow-lg active:scale-95">SAVE CHANGES</button>
+            <button onclick="location.reload()" class="w-full bg-red-50 text-red-500 py-5 rounded-3xl font-black tracking-widest hover:bg-red-100 transition">LOGOUT</button>
         </div>
     </main>
 
@@ -180,63 +168,66 @@
     <script>
         let cartCount = 0;
 
-        // Navigation Switcher
         function showPage(pageName) {
             const home = document.getElementById('page-home');
             const profile = document.getElementById('page-profile');
             const navHome = document.getElementById('nav-home');
             const navProfile = document.getElementById('nav-profile');
+            const topUser = document.getElementById('top-user-icon');
 
             if (pageName === 'home') {
                 home.className = 'page-active px-6 py-6 max-w-2xl mx-auto mb-28';
                 profile.className = 'page-hidden';
                 navHome.classList.add('active-nav');
                 navProfile.classList.remove('active-nav');
-                navProfile.classList.add('opacity-40');
+                topUser.classList.remove('text-orange-600');
             } else {
-                profile.className = 'page-active px-6 py-10 max-w-2xl mx-auto';
+                profile.className = 'page-active px-6 py-10 max-w-2xl mx-auto mb-28';
                 home.className = 'page-hidden';
                 navProfile.classList.add('active-nav');
-                navProfile.classList.remove('opacity-40');
                 navHome.classList.remove('active-nav');
+                topUser.classList.add('text-orange-600');
             }
             window.scrollTo(0, 0);
         }
 
-        // Veg/Non-Veg Toggle Logic
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById('profile-preview');
+                const icon = document.getElementById('profile-icon');
+                img.src = reader.result;
+                img.classList.remove('hidden');
+                icon.classList.add('hidden');
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function updateDisplayName(val) {
+            document.getElementById('display-name').innerText = val || "Freshfry Admin";
+        }
+
+        function saveProfile() {
+            alert("Profile settings updated locally!");
+            showPage('home');
+        }
+
         function toggleType(btn, type) {
             const btns = btn.parentElement.querySelectorAll('button');
-            btns.forEach(b => {
-                b.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400";
-            });
+            btns.forEach(b => b.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400");
             btn.className = `px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm ${type === 'veg' ? 'text-green-600' : 'text-red-600'}`;
         }
 
-        // Order Handler
         async function handleOrder(name, priceId, typeId) {
             const price = document.getElementById(priceId).value;
             const type = document.querySelector(`#${typeId} .bg-white`).innerText;
             const btn = event.target;
-
-            // Update UI
             cartCount++;
             document.getElementById('cart-badge').innerText = cartCount;
-            
-            // Visual Feedback
             const originalText = btn.innerText;
             btn.innerText = "Added ✓";
             btn.classList.replace('bg-gray-900', 'bg-green-600');
-
-            // Send to Firebase
-            const success = await window.sendOrderToFirebase({
-                itemName: name,
-                price: `₹${price}`,
-                category: type,
-                status: 'pending'
-            });
-
-            if(!success) console.warn("Firebase save failed, check Rules.");
-
+            await window.sendOrderToFirebase({ itemName: name, price: `₹${price}`, category: type, status: 'pending' });
             setTimeout(() => {
                 btn.innerText = originalText;
                 btn.classList.replace('bg-green-600', 'bg-gray-900');
