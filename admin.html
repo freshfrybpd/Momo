@@ -14,6 +14,7 @@
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }
+        .food-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 12px; }
     </style>
 </head>
 <body class="bg-slate-50 flex">
@@ -22,16 +23,13 @@
         <div class="p-6">
             <div class="text-2xl font-black text-orange-500 mb-10 tracking-tighter">Freshfry<span class="text-gray-900">.</span></div>
             <nav class="space-y-2">
-                <a href="#" class="sidebar-link flex items-center p-3 text-orange-600 font-bold bg-orange-50 rounded-xl transition-all">
+                <a href="#dashboard" class="sidebar-link flex items-center p-3 text-orange-600 font-bold bg-orange-50 rounded-xl transition-all">
                     <i class="fa-solid fa-chart-pie mr-3"></i> Dashboard
                 </a>
-                <a href="#" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
+                <a href="#menu-section" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
                     <i class="fa-solid fa-utensils mr-3"></i> Manage Menu
                 </a>
-                <a href="#" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
-                    <i class="fa-solid fa-truck-fast mr-3"></i> Live Orders
-                </a>
-                <a href="#" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
+                <a href="#riders-section" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
                     <i class="fa-solid fa-motorcycle mr-3"></i> Rider Fleet
                 </a>
             </nav>
@@ -43,66 +41,96 @@
         <header class="flex justify-between items-center mb-10">
             <div>
                 <h1 class="text-2xl font-extrabold text-gray-900">Master Console</h1>
-                <p class="text-gray-500 text-sm font-medium">Monitoring business in real-time.</p>
+                <p class="text-gray-500 text-sm font-medium">Store Control & Menu Management</p>
             </div>
             <div class="flex items-center space-x-4">
-                <div class="bg-white px-4 py-2 rounded-2xl border border-gray-100 shadow-sm flex items-center space-x-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-xs font-bold text-gray-600">Store Online</span>
-                </div>
                 <img src="https://ui-avatars.com/api/?name=Admin&background=f97316&color=fff" class="w-10 h-10 rounded-2xl shadow-lg">
             </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-            <div class="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-                <h3 class="font-bold text-gray-800 mb-4">Revenue Analytics</h3>
-                <div class="h-48">
-                    <canvas id="revenueChart"></canvas>
-                </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+            <div class="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-64">
+                <h3 class="font-bold text-gray-800 mb-4 text-sm">Revenue Analytics</h3>
+                <canvas id="revenueChart"></canvas>
             </div>
-            <div class="bg-orange-500 p-8 rounded-[2rem] shadow-xl shadow-orange-200 text-white relative overflow-hidden">
-                <i class="fa-solid fa-bag-shopping absolute -right-4 -bottom-4 text-white/10 text-9xl"></i>
-                <p class="text-orange-100 text-sm font-bold uppercase tracking-wider">Total Sales Today</p>
-                <h3 class="text-4xl font-black mt-2">₹45,280</h3>
-                <div class="mt-8 flex items-center text-xs font-bold bg-white/20 backdrop-blur-md w-fit px-4 py-2 rounded-xl">
-                    <i class="fa-solid fa-arrow-up mr-2"></i> 12% Better than yesterday
+            <div class="bg-gray-900 p-8 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden">
+                <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Total Sales Today</p>
+                <h3 class="text-4xl font-black mt-2 text-orange-500">₹45,280</h3>
+                <div class="mt-12 flex items-center text-[10px] font-black bg-white/10 w-fit px-4 py-2 rounded-full uppercase">
+                    Live from Baripada
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-            
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm">
-                <h3 class="font-bold text-gray-800 mb-6">Register New Rider</h3>
-                <div class="space-y-4">
-                    <input type="text" id="riderName" placeholder="Rider Full Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-sm font-bold">
-                    <input type="tel" id="riderPhone" placeholder="Phone Number" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-sm font-bold">
-                    <button onclick="addNewRider()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black tracking-widest text-xs hover:bg-orange-500 transition-all shadow-lg active:scale-95">
-                        ADD TO FLEET
-                    </button>
+        <section id="menu-section" class="mb-12">
+            <h2 class="text-xl font-black text-gray-800 mb-6 flex items-center">
+                <i class="fa-solid fa-utensils mr-3 text-orange-500"></i> Manage Menu
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-fit">
+                    <h3 class="font-bold text-gray-800 mb-4 text-sm">Add New Food</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="foodName" placeholder="Item Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                        <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                            <option value="veg">Veg</option>
+                            <option value="non-veg">Non-Veg</option>
+                        </select>
+                        <button onclick="addFoodItem()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg shadow-orange-200 active:scale-95 transition-all">
+                            SAVE TO MENU
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-white">
-                    <h2 class="font-bold text-gray-800">Riders Management</h2>
-                    <span id="riderCountBadge" class="bg-orange-100 text-orange-600 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase">0 Total</span>
-                </div>
-                <div class="max-h-64 overflow-y-auto custom-scrollbar">
+                <div class="lg:col-span-3 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                             <tr>
-                                <th class="px-6 py-4">Rider Info</th>
-                                <th class="px-6 py-4 text-right">Actions</th>
+                                <th class="px-6 py-4">Item</th>
+                                <th class="px-6 py-4">Badge</th>
+                                <th class="px-6 py-4">Price</th>
+                                <th class="px-6 py-4 text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="riderTableBody" class="divide-y divide-gray-50">
+                        <tbody id="menuTableBody" class="divide-y divide-gray-50 text-sm">
                             </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section id="riders-section">
+            <h2 class="text-xl font-black text-gray-800 mb-6 flex items-center">
+                <i class="fa-solid fa-motorcycle mr-3 text-orange-500"></i> Rider Fleet
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-fit">
+                    <h3 class="font-bold text-gray-800 mb-4 text-sm">Register Rider</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="riderName" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                        <input type="tel" id="riderPhone" placeholder="Phone" class="w-full p-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 outline-none text-xs font-bold">
+                        <button onclick="addNewRider()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">
+                            ADD RIDER
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            <tr>
+                                <th class="px-6 py-4">Rider</th>
+                                <th class="px-6 py-4">Phone</th>
+                                <th class="px-6 py-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riderTableBody" class="divide-y divide-gray-50 text-sm">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -127,45 +155,82 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
         });
 
-        // --- Rider Management Logic ---
-        let riders = JSON.parse(localStorage.getItem('freshfry_riders')) || [
-            { id: 101, name: "Mahesh Singh", phone: "9876543210" },
-            { id: 102, name: "Sunil Kumar", phone: "9900887766" }
+        // --- Food Menu Logic ---
+        let menuItems = JSON.parse(localStorage.getItem('freshfry_menu')) || [
+            { id: 1, name: "Freshfry Fried", price: "150", type: "veg", image: "https://images.unsplash.com/photo-1534422298391-e4f8c170db06?w=200" },
+            { id: 2, name: "Stream Momos", price: "120", type: "non-veg", image: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=200" }
         ];
 
-        function renderRiders() {
-            const container = document.getElementById('riderTableBody');
-            const badge = document.getElementById('riderCountBadge');
+        function renderMenu() {
+            const container = document.getElementById('menuTableBody');
             container.innerHTML = '';
-            
-            riders.forEach(rider => {
+            menuItems.forEach(item => {
+                const badgeColor = item.type === 'veg' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
                 container.innerHTML += `
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-gray-800">${rider.name}</div>
-                            <div class="text-[11px] text-gray-400 font-bold tracking-tight">${rider.phone}</div>
+                        <td class="px-6 py-4 flex items-center space-x-3">
+                            <img src="${item.image}" class="food-preview shadow-sm" onerror="this.src='https://via.placeholder.com/50'">
+                            <span class="font-bold text-gray-800">${item.name}</span>
                         </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${badgeColor}">${item.type}</span>
+                        </td>
+                        <td class="px-6 py-4 font-black text-gray-900">₹${item.price}</td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="removeRider(${rider.id})" class="text-red-100 hover:text-red-500 bg-red-500/5 hover:bg-red-500/10 p-2.5 rounded-xl transition-all">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
+                            <button onclick="removeFood(${item.id})" class="text-red-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
             });
-            badge.innerText = `${riders.length} Riders`;
+            localStorage.setItem('freshfry_menu', JSON.stringify(menuItems));
+        }
+
+        function addFoodItem() {
+            const name = document.getElementById('foodName').value;
+            const price = document.getElementById('foodPrice').value;
+            const image = document.getElementById('foodImage').value;
+            const type = document.getElementById('foodType').value;
+
+            if(!name || !price || !image) return alert("Poori details bhariye!");
+
+            menuItems.unshift({ id: Date.now(), name, price, image, type });
+            renderMenu();
+            document.getElementById('foodName').value = '';
+            document.getElementById('foodPrice').value = '';
+            document.getElementById('foodImage').value = '';
+        }
+
+        function removeFood(id) {
+            menuItems = menuItems.filter(i => i.id !== id);
+            renderMenu();
+        }
+
+        // --- Rider Logic ---
+        let riders = JSON.parse(localStorage.getItem('freshfry_riders')) || [];
+
+        function renderRiders() {
+            const container = document.getElementById('riderTableBody');
+            container.innerHTML = '';
+            riders.forEach(rider => {
+                container.innerHTML += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-6 py-4 font-bold text-gray-800">${rider.name}</td>
+                        <td class="px-6 py-4 text-gray-500 font-semibold">${rider.phone}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="removeRider(${rider.id})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
             localStorage.setItem('freshfry_riders', JSON.stringify(riders));
         }
 
         function addNewRider() {
             const name = document.getElementById('riderName').value;
             const phone = document.getElementById('riderPhone').value;
-
-            if(!name || !phone) return alert("Details bhariye, Boss!");
-
+            if(!name || !phone) return alert("Rider detail bhariye!");
             riders.unshift({ id: Date.now(), name, phone });
             renderRiders();
-            
             document.getElementById('riderName').value = '';
             document.getElementById('riderPhone').value = '';
         }
@@ -175,7 +240,8 @@
             renderRiders();
         }
 
-        // Initialize
+        // Init
+        renderMenu();
         renderRiders();
     </script>
 </body>
