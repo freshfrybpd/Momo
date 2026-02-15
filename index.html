@@ -3,160 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | My Profile</title>
+    <title>Freshfry | Crunchy & Steamy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-        .page-transition { transition: transform 0.4s ease-in-out; }
-        .hidden-page { display: none; }
-        .active-dot { width: 8px; height: 8px; background: #f97316; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+        .page-active { display: block; animation: fadeIn 0.3s ease-in; }
+        .page-hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
-        <div class="text-2xl font-black tracking-tighter text-orange-500 cursor-pointer" onclick="showPage('menu-page')">
+        <div class="text-2xl font-black text-orange-500 cursor-pointer" onclick="showPage('home')">
             Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
         <div class="flex items-center space-x-4">
-            <div onclick="showPage('profile-page')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
+            <div onclick="showPage('profile')" class="bg-gray-100 p-2.5 rounded-full cursor-pointer hover:bg-orange-100 transition group">
                 <i class="fa-solid fa-user text-gray-700 group-hover:text-orange-600"></i>
             </div>
-            <div class="relative bg-orange-100 p-2.5 rounded-full cursor-pointer">
+            <div class="relative bg-orange-100 p-2.5 rounded-full">
                 <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                <span id="cart-total" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
             </div>
         </div>
     </nav>
 
-    <main id="menu-page" class="px-6 py-8 max-w-2xl mx-auto">
-        <div class="mb-8">
-            <h2 class="text-3xl font-extrabold text-gray-900">Our Special Menu</h2>
-            <p class="text-gray-500">Baripada's favorite momo spot!</p>
-        </div>
+    <main id="page-home" class="page-active px-6 py-8 max-w-2xl mx-auto mb-20">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Our Special Menu</h2>
+        <p class="text-gray-500 mb-8">Baripada's most loved momos are here!</p>
 
-        <div class="grid gap-8">
-            <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg border border-gray-100">
-                <div class="h-52 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
-                    <span class="absolute top-4 left-4 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">Fried</span>
-                </div>
-                <div class="p-6">
+        <div class="space-y-10">
+            
+            <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-gray-200 border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=1000&auto=format&fit=crop" class="w-full h-60 object-cover">
+                <div class="p-8">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold">Freshfry Fried</h3>
-                        <div class="flex bg-gray-100 p-1 rounded-lg">
-                            <button onclick="setType(this, 'veg')" class="px-3 py-1 rounded-md text-[10px] font-bold bg-white text-green-600 shadow-sm">Veg</button>
-                            <button onclick="setType(this, 'non-veg')" class="px-3 py-1 rounded-md text-[10px] font-bold text-gray-400">Non-Veg</button>
+                        <h3 class="text-2xl font-black text-gray-900">Freshfry Fried</h3>
+                        <div class="flex bg-gray-100 p-1 rounded-xl">
+                            <button onclick="toggleType(this, 'veg')" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-white text-green-600 shadow-sm">Veg</button>
+                            <button onclick="toggleType(this, 'nonveg')" class="px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400">Non-Veg</button>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between border-t pt-4">
-                        <select id="price-1" class="font-bold text-gray-900 focus:outline-none bg-transparent">
+                    <p class="text-gray-500 text-sm mb-6">Crispy on the outside, juicy on the inside. Served with spicy chutney.</p>
+                    <div class="flex items-center justify-between border-t pt-6">
+                        <select id="price-fried" class="text-xl font-bold bg-transparent outline-none">
                             <option value="100">Half - ₹100</option>
                             <option value="150">Full - ₹150</option>
                         </select>
-                        <button onclick="addToCart()" class="bg-gray-900 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-500 transition shadow-md active:scale-95">Add +</button>
+                        <button onclick="addToCart('Fried')" class="bg-gray-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-orange-500 active:scale-95 transition">Add +</button>
                     </div>
                 </div>
             </div>
+
+            <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-gray-200 border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=1000&auto=format&fit=crop" class="w-full h-60 object-cover">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-black text-gray-900">Freshfry Stream</h3>
+                        <div class="flex bg-gray-100 p-1 rounded-xl">
+                            <button onclick="toggleType(this, 'veg')" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-white text-green-600 shadow-sm">Veg</button>
+                            <button onclick="toggleType(this, 'nonveg')" class="px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400">Non-Veg</button>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-6">Classic Himalayan style steamed momos. Healthy and super soft.</p>
+                    <div class="flex items-center justify-between border-t pt-6">
+                        <select id="price-stream" class="text-xl font-bold bg-transparent outline-none">
+                            <option value="100">Half - ₹100</option>
+                            <option value="150">Full - ₹150</option>
+                        </select>
+                        <button onclick="addToCart('Stream')" class="bg-gray-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-orange-500 active:scale-95 transition">Add +</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <main id="profile-page" class="hidden-page px-6 py-8 max-w-2xl mx-auto">
-        <div class="flex items-center space-x-4 mb-10">
-            <div class="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center border-2 border-white shadow-xl relative">
-                <i class="fa-solid fa-user-ninja text-4xl text-orange-500"></i>
-                <div class="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-4 border-white"></div>
+    <main id="page-profile" class="page-hidden px-6 py-8 max-w-2xl mx-auto">
+        <div class="flex items-center space-x-6 mb-10">
+            <div class="w-24 h-24 bg-orange-500 rounded-[2rem] flex items-center justify-center text-white text-4xl shadow-lg shadow-orange-200">
+                <i class="fa-solid fa-user-astronaut"></i>
             </div>
             <div>
-                <h2 class="text-2xl font-black text-gray-900">Foodie User</h2>
-                <p class="text-gray-500 text-sm font-medium">+91 98765 43210</p>
-                <button class="text-orange-500 text-xs font-bold mt-1 hover:underline">Edit Profile</button>
+                <h2 class="text-3xl font-black text-gray-900">Freshfry Lover</h2>
+                <p class="text-gray-500 font-medium">Baripada, Odisha</p>
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Total Orders</p>
-                <h4 class="text-2xl font-black mt-1">12</h4>
-            </div>
-            <div class="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Saved</p>
-                <h4 class="text-2xl font-black mt-1">5 Items</h4>
-            </div>
-        </div>
-
-        <div class="space-y-3">
-            <h3 class="text-lg font-extrabold mb-4">Account Settings</h3>
-            
-            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50">
+        <div class="space-y-4">
+            <div class="bg-white p-5 rounded-3xl flex items-center justify-between border border-gray-100 shadow-sm">
                 <div class="flex items-center space-x-4">
-                    <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                    <span class="font-bold text-gray-700">Order History</span>
+                    <div class="p-3 bg-orange-50 text-orange-500 rounded-2xl"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span class="font-bold text-gray-700">My Orders</span>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+                <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </div>
-
-            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50">
+            <div class="bg-white p-5 rounded-3xl flex items-center justify-between border border-gray-100 shadow-sm">
                 <div class="flex items-center space-x-4">
-                    <div class="bg-purple-50 p-2.5 rounded-xl text-purple-600"><i class="fa-solid fa-location-arrow"></i></div>
-                    <span class="font-bold text-gray-700">My Addresses</span>
+                    <div class="p-3 bg-blue-50 text-blue-500 rounded-2xl"><i class="fa-solid fa-location-dot"></i></div>
+                    <span class="font-bold text-gray-700">Manage Address</span>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+                <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </div>
-
-            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50">
-                <div class="flex items-center space-x-4">
-                    <div class="bg-green-50 p-2.5 rounded-xl text-green-600"><i class="fa-solid fa-wallet"></i></div>
-                    <span class="font-bold text-gray-700">Payment Methods</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-            </div>
-
-            <button onclick="showPage('menu-page')" class="w-full mt-10 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold hover:bg-red-50 hover:text-red-500 transition">
+            <div onclick="showPage('home')" class="bg-red-50 p-5 rounded-3xl text-center font-bold text-red-500 cursor-pointer">
                 Logout
-            </button>
+            </div>
         </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-8 rounded-3xl flex justify-between items-center shadow-2xl z-50">
-        <i onclick="showPage('menu-page')" class="fa-solid fa-house text-orange-400 cursor-pointer"></i>
-        <i class="fa-solid fa-fire-flame-curved opacity-50"></i>
-        <div class="bg-orange-500 p-3 rounded-full -mt-12 border-4 border-slate-50 shadow-lg cursor-pointer">
+    <nav class="fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-10 rounded-full flex justify-between items-center shadow-2xl z-50 md:hidden">
+        <i onclick="showPage('home')" class="fa-solid fa-house cursor-pointer hover:text-orange-500 transition"></i>
+        <div class="bg-orange-500 p-3 rounded-full -mt-12 border-4 border-slate-50 shadow-lg" onclick="showPage('home')">
             <i class="fa-solid fa-plus text-white"></i>
         </div>
-        <i class="fa-solid fa-heart opacity-50"></i>
-        <i onclick="showPage('profile-page')" class="fa-solid fa-user opacity-50 cursor-pointer"></i>
+        <i onclick="showPage('profile')" class="fa-solid fa-user cursor-pointer hover:text-orange-500 transition"></i>
     </nav>
 
     <script>
-        // Function to switch between Menu and Profile
-        function showPage(pageId) {
-            document.getElementById('menu-page').classList.add('hidden-page');
-            document.getElementById('profile-page').classList.add('hidden-page');
-            
-            document.getElementById(pageId).classList.remove('hidden-page');
+        let cart = 0;
+
+        function showPage(page) {
+            document.getElementById('page-home').className = page === 'home' ? 'page-active px-6 py-8 max-w-2xl mx-auto mb-20' : 'page-hidden';
+            document.getElementById('page-profile').className = page === 'profile' ? 'page-active px-6 py-8 max-w-2xl mx-auto' : 'page-hidden';
             window.scrollTo(0,0);
         }
 
-        let cartCount = 0;
-        function addToCart() {
-            cartCount++;
-            document.getElementById('cart-count').innerText = cartCount;
+        function toggleType(btn, type) {
+            const btns = btn.parentElement.querySelectorAll('button');
+            btns.forEach(b => {
+                b.className = "px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400";
+            });
+            btn.className = `px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm ${type === 'veg' ? 'text-green-600' : 'text-red-600'}`;
         }
 
-        function setType(btn, type) {
-            const parent = btn.parentElement;
-            parent.querySelectorAll('button').forEach(b => {
-                b.classList.remove('bg-white', 'text-green-600', 'text-red-600', 'shadow-sm');
-                b.classList.add('text-gray-400');
-            });
-            btn.classList.add('bg-white', 'shadow-sm');
-            btn.classList.remove('text-gray-400');
-            btn.classList.add(type === 'veg' ? 'text-green-600' : 'text-red-600');
+        function addToCart(name) {
+            cart++;
+            document.getElementById('cart-total').innerText = cart;
+            const btn = event.target;
+            btn.innerText = "Added ✓";
+            btn.className = "bg-green-600 text-white px-8 py-3 rounded-2xl font-bold transition";
+            setTimeout(() => {
+                btn.innerText = "Add +";
+                btn.className = "bg-gray-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-orange-500 transition";
+            }, 1000);
         }
     </script>
-
 </body>
 </html>
