@@ -12,9 +12,61 @@
         .order-card { background: #1e293b; border-radius: 24px; border: 1px solid #334155; transition: 0.3s; }
         .active-glow { box-shadow: 0 0 20px rgba(249, 115, 22, 0.2); border: 1px solid #f97316; }
         .btn-call { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        /* Glassmorphism for Login */
+        .login-screen { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
+
+    <div id="login-modal" class="fixed inset-0 z-[100] login-screen flex items-center justify-center p-6">
+        <div class="w-full max-w-sm bg-slate-800 border border-slate-700 p-8 rounded-[2.5rem] shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/20">
+                    <i class="fa-solid fa-motorcycle text-3xl text-white"></i>
+                </div>
+                <h1 class="text-2xl font-black text-white">Rider Login</h1>
+                <p class="text-slate-400 text-sm mt-1">Enter your details to go online</p>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="login-name" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none font-bold">
+                <input type="tel" id="login-phone" placeholder="Phone Number" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none font-bold">
+                <button onclick="handleLogin()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black shadow-xl active:scale-95 transition-transform uppercase tracking-wider">Start Duty</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-content" class="hidden">
+        <nav class="p-6 bg-slate-900 border-b border-slate-800 flex justify-between items-center sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div id="rider-initial" class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center font-black">?</div>
+                <div>
+                    <p id="display-rider-id" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">RIDER #ID</p>
+                    <p id="display-rider-name" class="text-sm font-bold">Name</p>
+                </div>
+            </div>
+            <div class="bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-green-500 text-[10px] font-bold uppercase">Online</span>
+            </div>
+        </nav>
+
+        <main class="p-6 pb-24">
+            <div id="active-order-container"></div>
+            <h3 class="text-sm font-black text-slate-500 uppercase tracking-widest mb-4">Nearby Requests</h3>
+            <div id="orders-list">
+                <div class="text-center py-10 opacity-50">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2"></i>
+                    <p class="text-xs">Searching for orders...</p>
+                </div>
+            </div>
+        </main>
+
+        <div class="fixed bottom-0 w-full bg-slate-900/80 backdrop-blur-md border-t border-slate-800 p-4 flex justify-around items-center">
+            <i class="fa-solid fa-motorcycle text-orange-500 text-xl"></i>
+            <i class="fa-solid fa-wallet text-slate-500 text-xl"></i>
+            <button onclick="logout()" class="fa-solid fa-right-from-bracket text-slate-500 text-xl"></button>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -31,103 +83,110 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const riderId = "FF992";
 
-        // Real-time Listeners
-        const ordersList = document.getElementById('orders-list');
-        const activeContainer = document.getElementById('active-order-container');
+        // Global State
+        let riderData = JSON.parse(localStorage.getItem('rider_session')) || null;
 
-        // 1. Listen for Pending Orders
-        onSnapshot(query(collection(db, "orders"), where("status", "==", "pending")), (snap) => {
-            ordersList.innerHTML = '';
-            if(snap.empty) ordersList.innerHTML = '<div class="text-center py-10 opacity-30 text-sm italic">Waiting for new orders...</div>';
-            snap.forEach(d => renderNewOrder(d.id, d.data()));
-        });
+        window.handleLogin = () => {
+            const name = document.getElementById('login-name').value;
+            const phone = document.getElementById('login-phone').value;
 
-        // 2. Listen for My Active Order
-        onSnapshot(query(collection(db, "orders"), where("riderId", "==", riderId), where("status", "==", "accepted")), (snap) => {
-            activeContainer.innerHTML = '';
-            snap.forEach(d => renderActiveOrder(d.id, d.data()));
-        });
+            if(name && phone.length >= 10) {
+                riderData = {
+                    name: name,
+                    phone: phone,
+                    id: "FF" + phone.slice(-4) // Making a random ID from phone
+                };
+                localStorage.setItem('rider_session', JSON.stringify(riderData));
+                startApp();
+            } else {
+                alert("Please enter valid name and 10-digit number");
+            }
+        };
+
+        window.logout = () => {
+            localStorage.removeItem('rider_session');
+            location.reload();
+        };
+
+        function startApp() {
+            if(!riderData) return;
+            
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('dashboard-content').classList.remove('hidden');
+            
+            document.getElementById('display-rider-name').innerText = riderData.name;
+            document.getElementById('display-rider-id').innerText = "RIDER #" + riderData.id;
+            document.getElementById('rider-initial').innerText = riderData.name[0];
+
+            initRealtimeListeners();
+        }
+
+        function initRealtimeListeners() {
+            const ordersList = document.getElementById('orders-list');
+            const activeContainer = document.getElementById('active-order-container');
+
+            // Listen for Pending Orders
+            onSnapshot(query(collection(db, "orders"), where("status", "==", "pending")), (snap) => {
+                ordersList.innerHTML = '';
+                if(snap.empty) ordersList.innerHTML = '<div class="text-center py-10 opacity-30 text-sm italic">Waiting for new orders...</div>';
+                snap.forEach(d => renderNewOrder(d.id, d.data()));
+            });
+
+            // Listen for My Active Order
+            onSnapshot(query(collection(db, "orders"), where("riderId", "==", riderData.id), where("status", "==", "accepted")), (snap) => {
+                activeContainer.innerHTML = '';
+                snap.forEach(d => renderActiveOrder(d.id, d.data()));
+            });
+        }
 
         function renderNewOrder(id, data) {
-            ordersList.innerHTML += `
-                <div class="order-card p-5 mb-4 animate-pulse">
+            const list = document.getElementById('orders-list');
+            list.innerHTML += `
+                <div class="order-card p-5 mb-4 border-l-4 border-l-orange-500">
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-[10px] bg-slate-700 px-2 py-1 rounded text-slate-400 font-bold tracking-widest">NEW REQUEST</span>
-                        <span class="text-orange-500 font-black">${data.price || '₹100'}</span>
+                        <span class="text-[10px] bg-slate-700 px-2 py-1 rounded text-slate-400 font-black tracking-widest">NEW REQUEST</span>
+                        <span class="text-orange-500 font-black">₹${data.price || '80'}</span>
                     </div>
                     <p class="font-bold text-white mb-4">📍 ${data.itemName || 'Momo Combo'}</p>
-                    <div class="flex gap-2">
-                        <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-orange-500 text-white py-3 rounded-xl font-bold">Accept Order</button>
-                    </div>
+                    <button onclick="updateStatus('${id}', 'accepted')" class="w-full bg-orange-500 text-white py-3 rounded-xl font-black">Accept Order</button>
                 </div>`;
         }
 
         function renderActiveOrder(id, data) {
-            activeContainer.innerHTML = `
+            const container = document.getElementById('active-order-container');
+            container.innerHTML = `
                 <div class="order-card active-glow p-6 mb-8 bg-slate-800/50">
                     <div class="flex justify-between items-start mb-6">
                         <div>
-                            <p class="text-xs text-orange-500 font-black uppercase tracking-tighter">On Delivery</p>
+                            <p class="text-[10px] text-orange-500 font-black uppercase tracking-widest">Ongoing Mission</p>
                             <h2 class="text-xl font-black text-white">Order #${id.slice(-4)}</h2>
                         </div>
-                        <a href="tel:9199999999" class="btn-call w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg">
+                        <a href="tel:${data.customerPhone || '999999999'}" class="btn-call w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg">
                             <i class="fa-solid fa-phone"></i>
                         </a>
                     </div>
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-start gap-3">
-                            <i class="fa-solid fa-circle-dot text-orange-500 mt-1 text-xs"></i>
-                            <p class="text-sm">Pickup: <span class="text-slate-400">Freshfry Kitchen</span></p>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <i class="fa-solid fa-location-arrow text-blue-500 mt-1 text-xs"></i>
-                            <p class="text-sm">Customer: <span class="text-white font-bold">${data.category || 'Baripada User'}</span></p>
-                        </div>
+                    <div class="space-y-4 mb-6 text-slate-300">
+                        <p class="text-sm"><i class="fa-solid fa-utensils mr-2 text-orange-500"></i> Freshfry Kitchen</p>
+                        <p class="text-sm font-bold text-white"><i class="fa-solid fa-location-dot mr-2 text-blue-500"></i> ${data.address || 'Baripada'}</p>
                     </div>
-                    <button onclick="updateStatus('${id}', 'delivered')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black shadow-xl">MARK AS DELIVERED</button>
+                    <button onclick="updateStatus('${id}', 'delivered')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black shadow-xl uppercase">Complete Delivery</button>
                 </div>`;
         }
 
         window.updateStatus = async (id, status) => {
             const ref = doc(db, "orders", id);
-            await updateDoc(ref, { status, riderId });
-            if(status === 'delivered') alert("Good Job! Earnings added to wallet.");
+            await updateDoc(ref, { 
+                status: status, 
+                riderId: riderData.id,
+                riderName: riderData.name 
+            });
+            if(status === 'delivered') alert("Payment Received! Wallet Updated.");
         };
+
+        // Check for existing session on load
+        if(riderData) startApp();
+
     </script>
-
-    <nav class="p-6 bg-slate-900 border-b border-slate-800 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center font-black">R</div>
-            <div>
-                <p class="text-[10px] text-slate-500 font-bold">RIDER #FF992</p>
-                <p class="text-sm font-bold">Rahul Sharma</p>
-            </div>
-        </div>
-        <div class="bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full flex items-center gap-2">
-            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span class="text-green-500 text-[10px] font-bold">ONLINE</span>
-        </div>
-    </nav>
-
-    <main class="p-6">
-        <div id="active-order-container"></div>
-
-        <h3 class="text-sm font-black text-slate-500 uppercase tracking-widest mb-4">Nearby Requests</h3>
-        <div id="orders-list">
-            <div class="text-center py-10 opacity-50">
-                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2"></i>
-                <p class="text-xs">Searching for orders...</p>
-            </div>
-        </div>
-    </main>
-
-    <div class="fixed bottom-0 w-full bg-slate-900/80 backdrop-blur-md border-t border-slate-800 p-4 flex justify-around items-center">
-        <i class="fa-solid fa-motorcycle text-orange-500 text-xl"></i>
-        <i class="fa-solid fa-wallet text-slate-500 text-xl"></i>
-        <i class="fa-solid fa-user text-slate-500 text-xl"></i>
-    </div>
-
 </body>
 </html>
