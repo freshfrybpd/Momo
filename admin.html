@@ -3,98 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Master Admin Panel</title>
+    <title>Freshfry | Master Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .sidebar-link:hover { background-color: #fff7ed; border-right: 4px solid #f97316; color: #f97316; }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }
-        .food-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 12px; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .food-preview { width: 45px; height: 45px; object-fit: cover; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 flex">
+<body class="p-4 lg:p-10">
 
-    <aside class="w-64 h-screen bg-white border-r border-gray-200 sticky top-0 hidden lg:block shadow-sm">
-        <div class="p-6">
-            <div class="text-2xl font-black text-orange-500 mb-10 tracking-tighter">Freshfry<span class="text-gray-900">.</span></div>
-            <nav class="space-y-2">
-                <a href="#" class="sidebar-link flex items-center p-3 text-orange-600 font-bold bg-orange-50 rounded-xl transition-all">
-                    <i class="fa-solid fa-chart-pie mr-3"></i> Dashboard
-                </a>
-                <a href="#menu-section" class="sidebar-link flex items-center p-3 text-gray-400 font-semibold transition-all">
-                    <i class="fa-solid fa-utensils mr-3"></i> Manage Menu
-                </a>
-            </nav>
-        </div>
-    </aside>
-
-    <main class="flex-1 p-8 h-screen overflow-y-auto custom-scrollbar">
-        
-        <header class="flex justify-between items-center mb-10">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-10 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-extrabold text-gray-900">Master Console</h1>
-                <p class="text-gray-500 text-sm font-medium">Cloud Database Connected</p>
+                <h1 class="text-3xl font-800 text-gray-900">Console<span class="text-orange-500">.</span></h1>
+                <p class="text-gray-500 font-medium">Manage Menu & Offers</p>
             </div>
-            <div class="bg-green-100 px-4 py-2 rounded-full text-green-700 font-bold text-xs">Live Sync: ON</div>
+            <div class="bg-green-500 h-3 w-3 rounded-full animate-pulse"></div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-            <div class="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-64">
-                <canvas id="revenueChart"></canvas>
-            </div>
-            <div class="bg-gray-900 p-8 rounded-[2.5rem] shadow-xl text-white">
-                <p class="text-gray-400 text-xs font-bold uppercase">Store Status</p>
-                <h3 class="text-4xl font-black mt-2 text-orange-500">Active</h3>
-                <div class="mt-12 text-[10px] font-black bg-white/10 w-fit px-4 py-2 rounded-full uppercase">Baripada, Odisha</div>
-            </div>
-        </div>
-
-        <section id="menu-section" class="mb-12">
-            <h2 class="text-xl font-black text-gray-800 mb-6 flex items-center">
-                <i class="fa-solid fa-utensils mr-3 text-orange-500"></i> Manage Menu
-            </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm h-fit">
-                    <h3 class="font-bold text-gray-800 mb-4 text-sm">Add New Food</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="foodName" placeholder="Item Name" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
-                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
-                        <input type="text" id="foodImage" placeholder="Image URL (Unsplash/Imgur)" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold focus:ring-2 focus:ring-orange-500">
-                        <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none text-xs font-bold">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                    <h3 id="form-title" class="font-800 text-gray-800 mb-4 uppercase text-xs tracking-widest">Add New Item</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="foodName" placeholder="Item Name" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm">
+                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm">
+                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm">
+                        <select id="foodType" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm">
                             <option value="veg">Veg</option>
                             <option value="non-veg">Non-Veg</option>
                         </select>
-                        <button id="addBtn" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">
-                            UPLOAD TO CLOUD
-                        </button>
+                        <button id="submitBtn" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black shadow-lg active:scale-95 transition-all">UPLOAD ITEM</button>
                     </div>
                 </div>
 
-                <div class="lg:col-span-3 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                            <tr>
-                                <th class="px-6 py-4">Item</th>
-                                <th class="px-6 py-4">Badge</th>
-                                <th class="px-6 py-4">Price</th>
-                                <th class="px-6 py-4 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="menuTableBody" class="divide-y divide-gray-50 text-sm font-bold">
-                            </tbody>
-                    </table>
+                <div class="bg-gray-900 p-6 rounded-[2rem] shadow-xl text-white">
+                    <h3 class="font-800 mb-4 uppercase text-xs tracking-widest text-orange-500">Live Coupon</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="cpCode" placeholder="Code (FRESH50)" class="w-full p-4 bg-white/10 rounded-2xl outline-none font-bold text-sm">
+                        <input type="text" id="cpText" placeholder="Offer (20% OFF)" class="w-full p-4 bg-white/10 rounded-2xl outline-none font-bold text-sm">
+                        <button onclick="updateCoupon()" class="w-full bg-white text-gray-900 py-3 rounded-2xl font-black text-sm">UPDATE HOME</button>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+
+            <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase">
+                        <tr>
+                            <th class="px-6 py-4">Dish</th>
+                            <th class="px-6 py-4">Price</th>
+                            <th class="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="menuTableBody" class="text-sm font-bold divide-y divide-gray-50"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -107,67 +79,68 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        let editModeId = null;
 
-        // --- ADD ITEM TO FIREBASE ---
-        document.getElementById('addBtn').addEventListener('click', async () => {
-            const name = document.getElementById('foodName').value;
-            const price = document.getElementById('foodPrice').value;
-            const image = document.getElementById('foodImage').value;
-            const type = document.getElementById('foodType').value;
+        // --- MANAGE MENU ---
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            const data = {
+                name: document.getElementById('foodName').value,
+                price: document.getElementById('foodPrice').value,
+                image: document.getElementById('foodImage').value,
+                type: document.getElementById('foodType').value
+            };
 
-            if(!name || !price || !image) return alert("Pura details bhariye!");
+            if(!data.name || !data.price) return alert("Details bhariye");
 
             try {
-                await addDoc(collection(db, "menu"), { name, price, image, type });
-                alert("Success! Item added to Index Page.");
-                document.getElementById('foodName').value = '';
-                document.getElementById('foodPrice').value = '';
-                document.getElementById('foodImage').value = '';
-            } catch (e) { alert("Error: " + e.message); }
+                if(editModeId) {
+                    await updateDoc(doc(db, "menu", editModeId), data);
+                    editModeId = null;
+                    document.getElementById('submitBtn').innerText = "UPLOAD ITEM";
+                } else {
+                    await addDoc(collection(db, "menu"), data);
+                }
+                document.querySelectorAll('input').forEach(i => i.value = '');
+            } catch(e) { alert(e.message); }
         });
 
-        // --- REAL-TIME LISTENER ---
         onSnapshot(collection(db, "menu"), (snap) => {
-            const container = document.getElementById('menuTableBody');
-            container.innerHTML = '';
+            const tbody = document.getElementById('menuTableBody');
+            tbody.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
-                const badgeColor = item.type === 'veg' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
-                container.innerHTML += `
+                tbody.innerHTML += `
                     <tr>
-                        <td class="px-6 py-4 flex items-center space-x-3">
-                            <img src="${item.image}" class="food-preview" onerror="this.src='https://via.placeholder.com/50'">
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <img src="${item.image}" class="food-preview">
                             <span>${item.name}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1 rounded-full text-[9px] uppercase ${badgeColor}">${item.type}</span>
                         </td>
                         <td class="px-6 py-4">₹${item.price}</td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="deleteFoodItem('${d.id}')" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editItem('${d.id}','${item.name}','${item.price}','${item.image}')" class="text-blue-500 mr-3"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteItem('${d.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             });
         });
 
-        // Delete Function
-        window.deleteFoodItem = async (id) => {
-            if(confirm("Delete this item?")) {
-                await deleteDoc(doc(db, "menu", id));
-            }
+        window.editItem = (id, n, p, img) => {
+            editModeId = id;
+            document.getElementById('foodName').value = n;
+            document.getElementById('foodPrice').value = p;
+            document.getElementById('foodImage').value = img;
+            document.getElementById('submitBtn').innerText = "CONFIRM EDIT";
         };
 
-        // Static Chart
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['6AM', '12PM', '6PM', '9PM'],
-                datasets: [{ label: 'Sales', data: [5000, 15000, 25000, 45000], borderColor: '#f97316', tension: 0.4, fill: true, backgroundColor: 'rgba(249, 115, 22, 0.05)' }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-        });
+        window.deleteItem = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "menu", id)); };
+
+        // --- COUPON ---
+        window.updateCoupon = async () => {
+            const code = document.getElementById('cpCode').value;
+            const text = document.getElementById('cpText').value;
+            await setDoc(doc(db, "settings", "promo"), { code, text });
+            alert("Coupon Live!");
+        };
     </script>
 </body>
 </html>
