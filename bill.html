@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshfry | Your Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #f8fafc; }
+        .receipt-paper {
+            background: white;
+            position: relative;
+            border-radius: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+        /* Zigzag bottom edge effect */
+        .receipt-paper::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(-135deg, #fff 5px, transparent 0) 0 5px, 
+                        linear-gradient(135deg, #fff 5px, #f8fafc 0) 0 5px;
+            background-size: 10px 10px;
+        }
+    </style>
+</head>
+<body class="p-6 flex flex-col items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-sm receipt-paper p-8 overflow-hidden">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-900 italic tracking-tighter">Fresh<span class="text-orange-500">fry.</span></h1>
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mt-1">Baripada, Odisha</p>
+        </div>
+
+        <hr class="border-dashed border-gray-200 mb-6">
+
+        <div class="flex justify-between text-[11px] font-black text-gray-400 uppercase mb-6">
+            <div>
+                <p>Date</p>
+                <p id="bill-date" class="text-gray-900 mt-1">--/--/--</p>
+            </div>
+            <div class="text-right">
+                <p>Order ID</p>
+                <p id="bill-id" class="text-gray-900 mt-1">#FF--</p>
+            </div>
+        </div>
+
+        <div class="space-y-4 mb-8" id="bill-items">
+            </div>
+
+        <hr class="border-dashed border-gray-200 mb-6">
+
+        <div class="space-y-2 mb-8">
+            <div class="flex justify-between text-sm font-bold text-gray-500">
+                <span>Subtotal</span>
+                <span id="sub-total">₹0</span>
+            </div>
+            <div class="flex justify-between text-sm font-bold text-gray-500">
+                <span>Delivery Fee</span>
+                <span class="text-green-500">FREE</span>
+            </div>
+            <div class="flex justify-between text-xl font-900 text-gray-900 pt-2">
+                <span>Total</span>
+                <span id="grand-total" class="text-orange-600">₹0</span>
+            </div>
+        </div>
+
+        <div class="text-center bg-gray-50 p-4 rounded-2xl mb-4">
+            <p class="text-[11px] font-bold text-gray-500 leading-relaxed italic">
+                "Thanks for ordering from Freshfry! Don't forget to tag us on Instagram."
+            </p>
+        </div>
+
+        <button onclick="window.print()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest no-print">
+            Download PDF <i class="fa-solid fa-download ml-2"></i>
+        </button>
+    </div>
+
+    <p class="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-widest no-print">Powered by Freshfry Digital</p>
+
+    <script>
+        // Data fetch from LocalStorage (Jo humne Index.html mein save kiya tha)
+        const loadBill = () => {
+            const cart = JSON.parse(localStorage.getItem('lastOrder')) || [];
+            const phone = localStorage.getItem('customerPhone') || 'Guest';
+            
+            const itemsList = document.getElementById('bill-items');
+            let total = 0;
+
+            if(cart.length === 0) {
+                itemsList.innerHTML = "<p class='text-center text-gray-400 font-bold'>No recent order found.</p>";
+                return;
+            }
+
+            itemsList.innerHTML = cart.map(item => {
+                total += (item.price * item.qty);
+                return `
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-sm font-900 text-gray-800">${item.name}</p>
+                        <p class="text-[10px] font-bold text-gray-400 italic">${item.qty} unit x ₹${item.price}</p>
+                    </div>
+                    <span class="text-sm font-bold text-gray-700">₹${item.price * item.qty}</span>
+                </div>`;
+            }).join('');
+
+            document.getElementById('sub-total').innerText = "₹" + total;
+            document.getElementById('grand-total').innerText = "₹" + total;
+            
+            // Random Bill ID & Date
+            document.getElementById('bill-id').innerText = "#FF" + Math.floor(Math.random() * 9000 + 1000);
+            document.getElementById('bill-date').innerText = new Date().toLocaleDateString();
+        };
+
+        window.onload = loadBill;
+    </script>
+
+    <style>
+        @media print {
+            .no-print { display: none; }
+            body { background: white; padding: 0; }
+            .receipt-paper { box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</body>
+</html>
