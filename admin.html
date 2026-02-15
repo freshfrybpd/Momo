@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Master Admin</title>
+    <title>Freshfry Admin | Command Centre</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
         #main-content { display: none; }
-        .order-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .order-card { transition: all 0.3s ease; border-radius: 2rem; }
+        .order-card:hover { transform: translateY(-5px); }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -19,36 +19,31 @@
     <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
         <div class="w-full max-w-md bg-white rounded-[3rem] p-10 shadow-2xl text-center">
             <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6">
-                <i class="fa-solid fa-shield-halved"></i>
+                <i class="fa-solid fa-shield-check"></i>
             </div>
-            <h2 class="text-3xl font-900 text-slate-800 mb-2 italic tracking-tighter">Freshfry<span class="text-orange-500 text-xl font-bold">Admin</span></h2>
-            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-8">Authorized Access Only</p>
+            <h2 class="text-3xl font-900 text-slate-800 mb-2 italic tracking-tighter">Freshfry<span class="text-orange-500">Admin.</span></h2>
             <div class="space-y-4">
-                <input type="password" id="adminPassInput" placeholder="Master Password" 
-                    class="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center text-lg transition-all">
-                <button onclick="checkAdminLogin()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-xl hover:bg-orange-600 transition-all uppercase tracking-widest text-xs">
-                    Unlock Console
-                </button>
+                <input type="password" id="adminPassInput" placeholder="Master Password" class="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center">
+                <button onclick="checkAdminLogin()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-xs">Unlock Console</button>
             </div>
         </div>
     </div>
 
     <div id="main-content" class="p-4 lg:p-10 max-w-7xl mx-auto">
-        
         <header class="flex justify-between items-center mb-10">
             <div>
                 <h1 class="text-3xl font-800 text-slate-900 italic tracking-tighter">Command Centre<span class="text-orange-500">.</span></h1>
-                <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Baripada Unit Management</p>
+                <p id="live-indicator" class="text-green-500 font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> System Live & Connected
+                </p>
             </div>
-            <button onclick="logout()" class="bg-white p-4 rounded-2xl shadow-sm border text-red-500 hover:bg-red-50 transition-all">
-                <i class="fa-solid fa-power-off"></i>
-            </button>
+            <button onclick="logout()" class="bg-white p-4 rounded-2xl shadow-sm border text-red-500"><i class="fa-solid fa-power-off"></i></button>
         </header>
 
         <section class="mb-12">
             <div class="flex items-center gap-3 mb-6">
-                <h2 class="text-xl font-800 text-slate-800">Order Management</h2>
-                <span id="order-count" class="bg-orange-500 text-white text-[10px] px-3 py-1 rounded-full font-black animate-pulse">0 ACTIVE</span>
+                <h2 class="text-xl font-800 text-slate-800">Active Deliveries</h2>
+                <span id="order-count" class="bg-slate-900 text-white text-[10px] px-3 py-1 rounded-full font-black">0</span>
             </div>
             <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 </div>
@@ -56,30 +51,21 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-1">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 sticky top-10">
-                    <h3 id="form-title" class="font-800 text-slate-800 mb-6 uppercase text-xs tracking-widest text-orange-500">Add New Dish</h3>
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                    <h3 class="font-800 text-slate-800 mb-6 uppercase text-xs tracking-widest text-orange-500">Add New Item</h3>
                     <div class="space-y-4">
-                        <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
-                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
-                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
-                        <select id="foodType" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm border-2 border-transparent focus:border-orange-500">
-                            <option value="veg">Veg</option>
-                            <option value="non-veg">Non-Veg</option>
-                        </select>
-                        <button id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-lg hover:bg-black transition-all">UPLOAD MENU</button>
+                        <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
+                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
+                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
+                        <button id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-lg">UPLOAD TO MENU</button>
                     </div>
                 </div>
             </div>
-
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
-                            <tr>
-                                <th class="px-6 py-5">Dish Info</th>
-                                <th class="px-6 py-5">Availability</th>
-                                <th class="px-6 py-5 text-right">Action</th>
-                            </tr>
+                            <tr><th class="px-6 py-5">Dish</th><th class="px-6 py-5">Status</th><th class="px-6 py-5 text-right">Action</th></tr>
                         </thead>
                         <tbody id="menuTableBody" class="text-sm font-bold divide-y divide-slate-50"></tbody>
                     </table>
@@ -90,7 +76,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -103,21 +89,18 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let editId = null;
 
-        // --- Auth Logic ---
+        // --- AUTH ---
         window.checkAdminLogin = () => {
-            const pass = document.getElementById('adminPassInput').value;
-            if(pass === "admin5") {
+            if(document.getElementById('adminPassInput').value === "admin5") {
                 document.getElementById('admin-login-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                sessionStorage.setItem('admin_auth', 'true');
-            } else { alert("Incorrect Password!"); }
+                sessionStorage.setItem('isAdmin', 'true');
+            } else alert("Wrong Password!");
         };
-
         window.logout = () => { sessionStorage.clear(); location.reload(); };
 
-        // --- Order Flow System ---
+        // --- ORDER MANAGEMENT ---
         onSnapshot(query(collection(db, "orders"), orderBy("time", "desc")), (snap) => {
             const grid = document.getElementById('admin-orders-grid');
             grid.innerHTML = '';
@@ -127,107 +110,94 @@
                 const order = d.data();
                 const id = d.id;
                 const status = order.status || 'pending';
+                if(status === 'delivered') return;
 
-                if(status !== 'delivered') {
-                    count++;
-                    grid.innerHTML += `
-                    <div class="bg-white p-6 rounded-[2.5rem] border-2 ${status === 'pending' ? 'border-orange-400' : 'border-slate-100'} order-card shadow-xl">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[9px] font-black px-3 py-1 rounded-full uppercase ${status === 'pending' ? 'bg-yellow-100 text-yellow-600' : 'bg-blue-100 text-blue-600'}">
-                                ${status.replace('_', ' ')}
-                            </span>
-                            <p class="text-[10px] font-black text-slate-300 italic">#${id.slice(-4)}</p>
-                        </div>
-                        <h4 class="font-800 text-slate-900">${order.customer}</h4>
-                        <p class="text-xs text-slate-400 font-bold mb-4">${order.location}</p>
-                        
-                        <div class="bg-slate-50 p-4 rounded-2xl mb-6 text-xs font-bold text-slate-600">
-                            ${order.items.map(i => `<p>${i.qty} x ${i.name}</p>`).join('')}
-                        </div>
+                count++;
+                grid.innerHTML += `
+                <div class="bg-white p-6 order-card shadow-lg border border-slate-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${status==='pending'?'bg-orange-100 text-orange-600':'bg-blue-100 text-blue-600'}">${status}</span>
+                        <p class="text-[10px] text-slate-300 font-bold">#${id.slice(-5)}</p>
+                    </div>
+                    <h4 class="font-800 text-slate-900">${order.customer}</h4>
+                    <p class="text-[10px] text-slate-400 font-bold mb-4 uppercase tracking-tighter italic">${order.location}</p>
+                    
+                    <div class="bg-slate-50 p-3 rounded-xl mb-4 text-xs font-bold text-slate-600">
+                        ${order.items.map(i => `<div>${i.qty} x ${i.name}</div>`).join('')}
+                    </div>
 
-                        <div class="flex gap-2">
-                            ${status === 'pending' ? `
-                                <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase">Accept</button>
-                                <button onclick="rejectOrder('${id}')" class="flex-1 bg-slate-100 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase">Reject</button>
-                            ` : status === 'accepted' ? `
-                                <button onclick="updateStatus('${id}', 'out_for_delivery')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Assign Rider 🛵</button>
-                            ` : `
-                                <div class="w-full py-4 text-center text-blue-500 font-black text-[10px] uppercase animate-pulse italic">Rider is Delivering...</div>
-                            `}
+                    ${status === 'out_for_delivery' ? `
+                        <div class="mb-4 text-[10px] font-black text-blue-600 bg-blue-50 p-2 rounded-lg flex items-center gap-2 uppercase">
+                            <i class="fa-solid fa-motorcycle"></i> Assigned to: ${order.riderName}
                         </div>
-                    </div>`;
-                }
+                    ` : ''}
+
+                    <div class="flex gap-2">
+                        ${status === 'pending' ? `
+                            <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-black text-[10px] uppercase">Accept</button>
+                            <button onclick="rejectOrder('${id}')" class="flex-1 bg-red-50 text-red-500 py-3 rounded-xl font-black text-[10px] uppercase">Reject</button>
+                        ` : status === 'accepted' ? `
+                            <button onclick="assignRider('${id}')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest">Assign Rider 🛵</button>
+                        ` : `
+                            <div class="w-full text-center text-blue-500 font-black text-[10px] uppercase italic py-2">On the Way...</div>
+                        `}
+                    </div>
+                </div>`;
             });
-            document.getElementById('order-count').innerText = `${count} ACTIVE`;
+            document.getElementById('order-count').innerText = count;
         });
 
-        // --- Menu Logic ---
+        // --- FUNCTIONS ---
+        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
+        window.rejectOrder = async (id) => { if(confirm("Reject?")) await deleteDoc(doc(db, "orders", id)); };
+        
+        window.assignRider = async (id) => {
+            const rName = prompt("Enter Delivery Boy Name:");
+            if(rName) {
+                await updateDoc(doc(db, "orders", id), { 
+                    status: 'out_for_delivery', 
+                    riderName: rName.toUpperCase() 
+                });
+            }
+        };
+
+        // --- MENU LOGIC ---
         onSnapshot(collection(db, "menu"), (snap) => {
-            const tbody = document.getElementById('menuTableBody');
-            tbody.innerHTML = '';
+            const body = document.getElementById('menuTableBody');
+            body.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
-                tbody.innerHTML += `
-                <tr class="${item.inStock ? '' : 'opacity-40'}">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <img src="${item.image}" class="w-10 h-10 object-cover rounded-xl">
-                            <div>
-                                <p class="text-slate-900 font-800">${item.name}</p>
-                                <p class="text-[10px] text-orange-500 uppercase font-black">₹${item.price}</p>
-                            </div>
-                        </div>
+                body.innerHTML += `
+                <tr>
+                    <td class="px-6 py-4 flex items-center gap-3">
+                        <img src="${item.image}" class="w-8 h-8 rounded-lg object-cover">
+                        <div><p class="text-slate-900">${item.name}</p><p class="text-[10px] text-orange-500">₹${item.price}</p></div>
                     </td>
                     <td class="px-6 py-4">
-                        <button onclick="toggleStock('${d.id}', ${item.inStock})" class="text-[10px] font-black px-3 py-1.5 rounded-full border ${item.inStock ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}">
-                            ${item.inStock ? 'AVAILABLE' : 'SOLD OUT'}
+                        <button onclick="toggleStock('${d.id}', ${item.inStock})" class="text-[9px] px-2 py-1 rounded-md font-black ${item.inStock?'bg-green-100 text-green-600':'bg-red-100 text-red-600'}">
+                            ${item.inStock ? 'STOCK' : 'OUT'}
                         </button>
                     </td>
-                    <td class="px-6 py-4 text-right flex gap-2 justify-end">
-                        <button onclick="editItem('${d.id}', '${item.name}', ${item.price}, '${item.image}', '${item.type}')" class="p-2 text-blue-500 bg-blue-50 rounded-lg"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteItem('${d.id}')" class="p-2 text-red-500 bg-red-50 rounded-lg"><i class="fa-solid fa-trash"></i></button>
-                    </td>
+                    <td class="px-6 py-4 text-right"><button onclick="deleteItem('${d.id}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button></td>
                 </tr>`;
             });
         });
 
-        // Functions
-        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
-        window.rejectOrder = async (id) => { if(confirm("Reject this order?")) await deleteDoc(doc(db, "orders", id)); };
         window.toggleStock = async (id, s) => { await updateDoc(doc(db, "menu", id), { inStock: !s }); };
-        window.deleteItem = async (id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, "menu", id)); };
+        window.deleteItem = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "menu", id)); };
 
         document.getElementById('submitBtn').addEventListener('click', async () => {
-            const data = {
-                name: document.getElementById('foodName').value,
-                price: parseInt(document.getElementById('foodPrice').value),
-                image: document.getElementById('foodImage').value,
-                type: document.getElementById('foodType').value,
-                inStock: true
-            };
-            if(!data.name || !data.price) return alert("Fill Name & Price!");
-            
-            if(editId) {
-                await updateDoc(doc(db, "menu", editId), data);
-                editId = null;
-                document.getElementById('submitBtn').innerText = "UPLOAD MENU";
-            } else {
-                await addDoc(collection(db, "menu"), data);
+            const name = document.getElementById('foodName').value;
+            const price = document.getElementById('foodPrice').value;
+            const image = document.getElementById('foodImage').value;
+            if(name && price) {
+                await addDoc(collection(db, "menu"), { name, price: parseInt(price), image, inStock: true });
+                alert("Dish Added!");
+                document.querySelectorAll('input').forEach(i => i.value = '');
             }
-            document.querySelectorAll('input').forEach(i => i.value = '');
         });
 
-        window.editItem = (id, n, p, img, t) => {
-            editId = id;
-            document.getElementById('foodName').value = n;
-            document.getElementById('foodPrice').value = p;
-            document.getElementById('foodImage').value = img;
-            document.getElementById('foodType').value = t;
-            document.getElementById('submitBtn').innerText = "SAVE CHANGES";
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
-
-        if(sessionStorage.getItem('admin_auth') === 'true') {
+        if(sessionStorage.getItem('isAdmin') === 'true') {
             document.getElementById('admin-login-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
         }
