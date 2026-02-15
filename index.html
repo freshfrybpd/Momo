@@ -11,7 +11,6 @@
         body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: #0f172a; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid #f1f5f9; position: relative; }
-        .momo-card:hover { transform: translateY(-8px); shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
         .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
         .cart-closed { transform: translateX(100%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -67,15 +66,6 @@
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-    <footer class="mt-20 px-8 py-12 bg-white border-t border-gray-100 text-center">
-        <div class="inline-flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-full text-orange-600 font-bold text-xs mb-4">
-            <i class="fa-solid fa-heart animate-pulse"></i> Handcrafted with love in Baripada
-        </div>
-        <p class="text-gray-400 text-sm font-medium leading-relaxed max-w-xs mx-auto">
-            We use <span class="text-gray-800 font-bold">100% fresh ingredients</span> daily to ensure you get the best taste.
-        </p>
-    </footer>
-
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white z-50 shadow-2xl cart-closed flex flex-col">
         <div class="p-6 border-b flex justify-between items-center">
             <h2 class="text-2xl font-900 italic">Your Box</h2>
@@ -84,36 +74,19 @@
         
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
 
-        <div class="mx-6 p-4 bg-orange-50 rounded-2xl border border-orange-100 mb-4">
-            <p class="text-[10px] font-black text-orange-600 uppercase mb-3 tracking-widest">Personalize Your Box (Free)</p>
-            <div class="space-y-3">
-                <label class="flex items-center justify-between cursor-pointer">
-                    <span class="text-sm font-bold text-gray-700">🌶️ Extra Spicy Chutney</span>
-                    <input type="checkbox" id="extra-spicy" class="w-5 h-5 accent-orange-500 rounded-lg">
-                </label>
-                <label class="flex items-center justify-between cursor-pointer">
-                    <span class="text-sm font-bold text-gray-700">🤍 Classic Mayo</span>
-                    <input type="checkbox" id="extra-mayo" class="w-5 h-5 accent-orange-500 rounded-lg">
-                </label>
-            </div>
-        </div>
-
         <div class="p-6 bg-white border-t space-y-4">
             <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500">
             <div class="flex justify-between font-900 text-xl px-2">
                 <span>Total</span>
-                <span id="cart-total" class="text-orange-600 font-900">₹0</span>
+                <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="finalCheckout()" class="w-full bg-orange-500 text-white py-5 rounded-[2rem] font-black shadow-xl shadow-orange-100 active:scale-95 transition-all">CONFIRM ORDER</button>
+            <button onclick="finalCheckout()" class="w-full bg-orange-500 text-white py-5 rounded-[2rem] font-black shadow-xl active:scale-95 transition-all">CONFIRM ORDER</button>
         </div>
     </div>
 
-    <div id="order-success" class="fixed inset-0 z-[100] bg-orange-600 text-white hidden flex flex-col items-center justify-center p-10 text-center">
-        <div class="w-24 h-24 bg-white text-orange-600 rounded-full flex items-center justify-center text-4xl mb-6 shadow-2xl animate-bounce">
-            <i class="fa-check"></i>
-        </div>
-        <h2 class="text-3xl font-900 mb-2 tracking-tighter">Order Processing!</h2>
-        <p class="font-bold opacity-80">Opening WhatsApp to confirm your box...</p>
+    <div id="order-success" class="fixed inset-0 z-[100] bg-orange-600 text-white hidden flex flex-col items-center justify-center p-10 text-center text-4xl font-900">
+        <i class="fa-solid fa-circle-check mb-4 animate-bounce"></i>
+        <p>Sending to Kitchen...</p>
     </div>
 
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 z-40 hidden backdrop-blur-sm"></div>
@@ -142,6 +115,7 @@
             const ph = document.getElementById('phone-input').value;
             if(ph.length < 10) return alert("Enter 10-digit number");
             userData.phone = ph;
+            localStorage.setItem('customerPhone', ph); // Save for tracking
             document.getElementById('login-modal').classList.add('hidden');
             showLocationPicker();
         };
@@ -150,6 +124,7 @@
 
         window.setLoc = (loc) => {
             userData.location = loc;
+            localStorage.setItem('customerLoc', loc);
             document.getElementById('current-loc').innerText = loc;
             document.getElementById('loc-modal').classList.add('hidden');
         };
@@ -167,48 +142,26 @@
             
             items.forEach(item => {
                 const isStock = item.inStock !== false;
-                const bestTag = item.isBestseller ? `<div class="absolute top-4 right-4 bg-yellow-400 text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg z-10 animate-bounce text-black">🔥 BESTSELLER</div>` : '';
-                
                 list.innerHTML += `
                 <div class="momo-card p-4 ${isStock ? '' : 'opacity-60 grayscale'}">
-                    ${bestTag}
-                    <div class="relative overflow-hidden rounded-[2rem] mb-4">
-                        <img src="${item.image}" class="w-full h-52 object-cover">
-                    </div>
-                    <div class="flex justify-between items-center mb-1 px-1">
-                        <h4 class="font-900 text-lg">${item.name}</h4>
-                        <span class="font-900 text-orange-500 font-bold">₹${item.price}</span>
-                    </div>
-                    <div class="flex items-center gap-2 mb-4 px-1 text-[10px] font-black uppercase text-gray-400">
-                        <span class="w-2 h-2 rounded-full ${item.type === 'veg' ? 'bg-green-500' : 'bg-red-500'}"></span>
-                        ${item.type}
+                    ${item.isBestseller ? '<span class="absolute top-4 right-4 bg-yellow-400 text-[8px] font-black px-2 py-1 rounded-full z-10">BESTSELLER</span>' : ''}
+                    <img src="${item.image}" class="w-full h-48 object-cover rounded-[1.5rem] mb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-900">${item.name}</h4>
+                        <span class="text-orange-500 font-900">₹${item.price}</span>
                     </div>
                     <button onclick="${isStock ? `addToCart('${item.name}', ${item.price}, '${item.image}')` : ''}" 
-                        class="w-full ${isStock ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'} py-4 rounded-2xl font-black active:scale-95 transition-all">
-                        ${isStock ? 'ADD TO BOX +' : 'SOLD OUT ❌'}
+                        class="w-full ${isStock ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-400'} py-4 rounded-2xl font-black">
+                        ${isStock ? 'ADD TO BOX +' : 'SOLD OUT'}
                     </button>
                 </div>`;
             });
-        };
-
-        window.filterMenu = (type) => {
-            document.querySelectorAll('.filter-btn').forEach(b => {
-                b.classList.replace('bg-gray-900', 'bg-white');
-                b.classList.replace('text-white', 'text-gray-400');
-                b.classList.remove('shadow-lg');
-            });
-            const active = document.getElementById('btn-' + type);
-            active.classList.replace('bg-white', 'bg-gray-900');
-            active.classList.replace('text-gray-400', 'text-white');
-            active.classList.add('shadow-lg');
-            renderMenu(type);
         };
 
         window.addToCart = (name, price, image) => {
             const item = cart.find(i => i.name === name);
             if(item) item.qty++; else cart.push({name, price, image, qty: 1});
             updateCartUI();
-            if(cart.length === 1) toggleCart(true);
         };
 
         window.updateCartUI = () => {
@@ -217,22 +170,13 @@
             document.getElementById('cart-badge').innerText = cart.reduce((a, b) => a + b.qty, 0);
             list.innerHTML = cart.map((item, i) => {
                 total += (item.price * item.qty);
-                return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl border border-gray-100">
-                    <img src="${item.image}" class="w-16 h-16 object-cover rounded-xl">
-                    <div class="flex-1 text-sm font-900">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
-                    <div class="flex gap-2">
-                        <button onclick="changeQty(${i}, -1)" class="w-7 h-7 bg-white rounded-lg border font-bold">-</button>
-                        <button onclick="changeQty(${i}, 1)" class="w-7 h-7 bg-white rounded-lg border font-bold">+</button>
-                    </div>
+                return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
+                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
+                    <div class="flex-1 text-xs font-900">${item.name} (x${item.qty})</div>
+                    <div class="font-900 text-xs">₹${item.price * item.qty}</div>
                 </div>`;
             }).join('');
             document.getElementById('cart-total').innerText = "₹" + total;
-        };
-
-        window.changeQty = (i, d) => {
-            cart[i].qty += d;
-            if(cart[i].qty < 1) cart.splice(i, 1);
-            updateCartUI();
         };
 
         window.toggleCart = (o) => {
@@ -240,15 +184,18 @@
             document.getElementById('cart-overlay').classList.toggle('hidden', !o);
         };
 
+        // --- FINAL CHECKOUT WITH TRACKING REDIRECT ---
         window.finalCheckout = async () => {
             const addr = document.getElementById('exact-address').value;
-            const spicy = document.getElementById('extra-spicy').checked ? "YES ✅" : "NO";
-            const mayo = document.getElementById('extra-mayo').checked ? "YES ✅" : "NO";
-
             if(cart.length === 0 || !addr) return alert("Fill address & cart!");
 
-            // 1. Save order to Admin Dashboard
+            // WhatsApp Message Build
+            let msg = `*🍱 NEW ORDER - FRESHFRY*%0A------------------%0A*Phone:* ${userData.phone}%0A*Address:* ${addr}%0A------------------%0A`;
+            cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
+            msg += `------------------%0A*TOTAL: ${document.getElementById('cart-total').innerText}*`;
+
             try {
+                // 1. Save to Database for Admin/Delivery
                 await addDoc(collection(db, "orders"), {
                     customer: userData.phone,
                     location: userData.location,
@@ -257,18 +204,22 @@
                     items: cart,
                     time: serverTimestamp()
                 });
-            } catch(e) { console.error("History failed but continuing..."); }
 
-            // 2. Open WhatsApp
-            let msg = `*🍱 NEW ORDER - FRESHFRY BARIPADA*%0A--------------------------%0A*Phone:* ${userData.phone}%0A*Area:* ${userData.location}%0A*Address:* ${addr}%0A--------------------------%0A*🌶️ Spicy:* ${spicy}%0A*🤍 Mayo:* ${mayo}%0A--------------------------%0A`;
-            cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-            msg += `--------------------------%0A*TOTAL: ${document.getElementById('cart-total').innerText}*`;
+                // 2. Save Order Details for Tracking Page
+                localStorage.setItem('lastOrder', JSON.stringify(cart));
+                localStorage.setItem('waMessage', msg);
 
-            document.getElementById('order-success').classList.remove('hidden');
-            setTimeout(() => {
-                window.open(`https://wa.me/917008186187?text=${msg}`);
-                location.reload(); 
-            }, 2000);
+                // 3. Show Success & Redirect
+                document.getElementById('order-success').classList.remove('hidden');
+                setTimeout(() => {
+                    window.location.href = "tracking.html"; 
+                }, 2000);
+
+            } catch(e) { alert("Error placing order. Check connection."); }
+        };
+        
+        window.filterMenu = (type) => {
+            renderMenu(type);
         };
     </script>
 </body>
