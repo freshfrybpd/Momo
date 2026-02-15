@@ -3,41 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Rider Dashboard</title>
+    <title>Freshfry Rider | Duty App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
-        .rider-card { border-radius: 2.5rem; transition: transform 0.2s; border: 1px solid rgba(255,255,255,0.1); }
+        .rider-card { border-radius: 2.5rem; border: 1px solid rgba(0,0,0,0.05); }
+        #main-app { display: none; }
         .pulse-green { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.5; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.5; } }
-        #main-app { display: none; } 
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-10">
 
     <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6">
         <div class="w-full max-w-sm bg-white rounded-[3rem] p-8 shadow-2xl text-center relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange-100 rounded-full opacity-50"></div>
-            
             <div class="relative w-20 h-20 bg-slate-900 text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-xl border-4 border-white">
                 <i class="fa-solid fa-motorcycle"></i>
             </div>
+            <h2 class="text-2xl font-900 text-slate-800 mb-1 italic tracking-tighter">Rider<span class="text-orange-500">Connect.</span></h2>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8">Baripada Delivery Unit</p>
             
-            <h2 class="text-2xl font-900 text-slate-800 mb-1 italic">Rider<span class="text-orange-500">Connect.</span></h2>
-            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-8">Enter your details to start</p>
-            
-            <div class="space-y-3 relative z-10">
-                <input type="text" id="riderNameInput" placeholder="Enter Your Full Name" 
-                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center text-sm transition-all text-slate-700 uppercase">
+            <div class="space-y-3">
+                <input type="text" id="riderNameInput" placeholder="Enter Your Name (e.g. Rakesh)" 
+                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center text-sm uppercase">
                 
-                <input type="password" id="riderPassInput" placeholder="Enter Rider Key" 
-                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center text-sm transition-all text-slate-700">
+                <input type="password" id="riderPassInput" placeholder="Pass Key" 
+                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center text-sm">
                 
-                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl active:scale-95 transition-all uppercase tracking-[0.2em] text-[10px]">
-                    Start My Shift 🚀
-                </button>
+                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px]">Start My Duty 🚀</button>
             </div>
         </div>
     </div>
@@ -45,17 +40,18 @@
     <div id="main-app">
         <nav class="bg-white p-6 sticky top-0 z-50 shadow-sm flex justify-between items-center rounded-b-[2.5rem]">
             <div>
-                <p class="text-[9px] font-black text-orange-500 uppercase tracking-[0.2em]">Rider Active</p>
-                <h1 id="activeRiderName" class="text-xl font-800 italic text-slate-900">Rider Name</h1>
+                <p class="text-[9px] font-black text-orange-500 uppercase tracking-[0.2em]">On Duty</p>
+                <h1 id="displayRiderName" class="text-xl font-800 italic text-slate-900">Rider</h1>
             </div>
-            <div class="bg-slate-900 text-white px-4 py-2 rounded-2xl text-center">
-                <p class="text-[8px] font-black text-slate-400 uppercase">Shift Deliveries</p>
-                <p id="delivery-count" class="text-lg font-800 leading-none">0</p>
-            </div>
+            <button onclick="logoutRider()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fa-solid fa-right-from-bracket"></i></button>
         </nav>
 
-        <main class="p-4 space-y-4 max-w-lg mx-auto mt-4">
-            <h2 class="text-xs font-900 text-slate-400 uppercase tracking-widest px-2">Tasks Assigned to You</h2>
+        <main class="p-4 max-w-lg mx-auto mt-4">
+            <div class="flex items-center gap-2 mb-6 px-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full pulse-green"></div>
+                <h2 class="text-xs font-900 text-slate-400 uppercase tracking-widest">Orders Assigned to You</h2>
+            </div>
+
             <div id="rider-orders-list" class="space-y-4">
                 </div>
         </main>
@@ -76,86 +72,80 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        let previousCount = 0;
-        let deliveriesDone = localStorage.getItem('rider_deliveries') || 0;
-        document.getElementById('delivery-count').innerText = deliveriesDone;
 
-        const unlockUI = (name) => {
-            document.getElementById('rider-login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('activeRiderName').innerText = name;
-            startListening();
-        };
-
+        // --- Auth & Filter Logic ---
         window.checkRiderLogin = () => {
-            const name = document.getElementById('riderNameInput').value.trim();
+            const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
             const pass = document.getElementById('riderPassInput').value;
-            
-            if(!name) {
-                alert("Please enter your name first! 📛");
-                return;
-            }
-            
+
+            if(!name) { alert("Please enter your name!"); return; }
             if(pass === "freshfry2026") {
                 sessionStorage.setItem('rider_auth', 'true');
                 sessionStorage.setItem('rider_name', name);
                 unlockUI(name);
-            } else {
-                alert("Wrong Rider Key! ❌");
-            }
+            } else { alert("Incorrect Key!"); }
         };
 
-        function startListening() {
+        window.logoutRider = () => { sessionStorage.clear(); location.reload(); };
+
+        function unlockUI(name) {
+            document.getElementById('rider-login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('displayRiderName').innerText = name;
+            loadMyOrders(name);
+        }
+
+        // --- Fetch Orders specifically for THIS Rider ---
+        function loadMyOrders(riderName) {
             const q = query(
                 collection(db, "orders"), 
                 where("status", "==", "out_for_delivery"),
+                where("riderName", "==", riderName), // 🔥 Admin wale naam se match karega
                 orderBy("time", "desc")
             );
 
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('rider-orders-list');
                 list.innerHTML = '';
-                
+
                 if(snap.empty) {
-                    list.innerHTML = `<div class="text-center py-20 bg-white rounded-[3rem] text-gray-400 font-bold border-2 border-dashed border-slate-200">Waiting for Admin to assign...</div>`;
+                    list.innerHTML = `<div class="text-center py-20 bg-white rounded-[3rem] text-slate-300 font-bold border-2 border-dashed border-slate-100">No tasks assigned to ${riderName} yet.</div>`;
                     return;
                 }
 
                 snap.forEach(d => {
                     const order = d.data();
                     list.innerHTML += `
-                    <div class="bg-white p-6 rider-card shadow-xl border border-slate-100">
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="bg-blue-100 text-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase italic">Deliver ASAP</span>
-                            <p class="text-lg font-900 text-orange-600">${order.total}</p>
+                    <div class="bg-white p-6 rider-card shadow-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="bg-orange-50 text-orange-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">New Delivery</span>
+                            <p class="text-lg font-900 text-slate-800 italic">₹${order.total}</p>
                         </div>
-                        <h3 class="text-xl font-800 text-slate-900 mb-1">${order.location}</h3>
-                        <p class="text-xs font-bold text-slate-400 mb-6 truncate">${order.address}</p>
+                        <h3 class="text-xl font-800 text-slate-900 mb-1 leading-tight">${order.location}</h3>
+                        <p class="text-xs font-bold text-slate-400 mb-6">${order.address}</p>
                         
                         <div class="flex gap-2 mb-6">
-                            <a href="tel:${order.customer}" class="flex-1 bg-green-500 text-white py-4 rounded-2xl flex items-center justify-center gap-2 font-black text-xs shadow-lg shadow-green-100 italic"><i class="fa-solid fa-phone"></i> CALL CLIENT</a>
-                            <button onclick="markDelivered('${d.id}')" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg shadow-slate-200">Complete ✅</button>
+                            <a href="tel:${order.customer}" class="flex-1 bg-green-500 text-white py-4 rounded-2xl flex items-center justify-center gap-2 font-black text-xs shadow-lg shadow-green-100"><i class="fa-solid fa-phone"></i> CALL</a>
+                            <button onclick="completeOrder('${d.id}')" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg shadow-slate-200">Delivered ✅</button>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <p class="text-[9px] font-black text-slate-300 uppercase mb-2">Order Items:</p>
+                            ${order.items.map(i => `<p class="text-xs font-bold text-slate-600">${i.qty} x ${i.name}</p>`).join('')}
                         </div>
                     </div>`;
                 });
             });
         }
 
-        window.markDelivered = async (id) => {
-            if(confirm("Confirm delivery? Payment collected?")) {
-                const name = sessionStorage.getItem('rider_name');
-                await updateDoc(doc(db, "orders", id), { 
-                    status: 'delivered',
-                    deliveredBy: name // Isse Admin ko pata chalega kisne deliver kiya
-                });
-                deliveriesDone++;
-                localStorage.setItem('rider_deliveries', deliveriesDone);
-                document.getElementById('delivery-count').innerText = deliveriesDone;
+        window.completeOrder = async (id) => {
+            if(confirm("Confirm delivery? Payment received?")) {
+                await updateDoc(doc(db, "orders", id), { status: 'delivered' });
+                alert("Order Completed! Well done. 🚀");
             }
         };
 
-        // On Load check
+        // Persistent Login
         if(sessionStorage.getItem('rider_auth') === 'true') {
             unlockUI(sessionStorage.getItem('rider_name'));
         }
