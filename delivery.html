@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshfry Rider | Delivery Partner Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
+        .status-online { color: #22c55e; }
+        .order-card { background: #1e293b; border-left: 4px solid #f97316; }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <nav class="flex items-center justify-between px-6 py-4 bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white">R</div>
+            <div>
+                <p class="text-xs text-slate-400 leading-none">Rider ID: #FF992</p>
+                <p class="font-bold text-sm">Rahul Sharma</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 bg-green-500/10 px-3 py-1 rounded-full">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span class="text-green-500 text-xs font-bold uppercase tracking-wider">Online</span>
+        </div>
+    </nav>
+
+    <section class="p-6">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate-800 p-4 rounded-2xl shadow-lg border border-slate-700">
+                <p class="text-slate-400 text-xs mb-1">Today's Pay</p>
+                <h2 class="text-2xl font-black text-white">₹840.50</h2>
+            </div>
+            <div class="bg-slate-800 p-4 rounded-2xl shadow-lg border border-slate-700">
+                <p class="text-slate-400 text-xs mb-1">Orders Done</p>
+                <h2 class="text-2xl font-black text-white">12</h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 pb-24">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold">New Delivery Requests</h2>
+            <span class="bg-orange-500 text-white text-[10px] px-2 py-0.5 rounded-md font-bold">2 NEW</span>
+        </div>
+
+        <div class="order-card p-5 rounded-2xl mb-6 shadow-xl">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white">Order #5521</h3>
+                    <p class="text-slate-400 text-xs">Pickup: Freshfry Kitchen, Sector 4</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-orange-500 font-bold">₹65.00</p>
+                    <p class="text-[10px] text-slate-400">2.4 km away</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-6 bg-slate-900/50 p-3 rounded-xl">
+                <i class="fa-solid fa-location-dot text-red-500"></i>
+                <p class="text-sm font-medium">B-12, Green Apartments, Rohini</p>
+            </div>
+
+            <div class="flex space-x-3">
+                <button class="flex-1 bg-slate-700 text-white py-3 rounded-xl font-bold hover:bg-slate-600 transition">Decline</button>
+                <button class="flex-[2] bg-orange-500 text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg shadow-orange-500/20">
+                    Accept Order
+                </button>
+            </div>
+        </div>
+
+        <h2 class="text-lg font-bold mb-4 opacity-60">Past Deliveries</h2>
+        <div class="bg-slate-800/50 p-4 rounded-2xl border border-slate-700/50 flex justify-between items-center opacity-60">
+            <div class="flex items-center space-x-4">
+                <div class="bg-green-500/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-check text-green-500"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Order #5518</p>
+                    <p class="text-xs">Delivered at 2:15 PM</p>
+                </div>
+            </div>
+            <p class="font-bold text-sm">₹42.00</p>
+        </div>
+    </section>
+
+    <div class="fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 flex justify-around py-4 shadow-2xl">
+        <div class="flex flex-col items-center text-orange-500">
+            <i class="fa-solid fa-motorcycle text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Deliveries</span>
+        </div>
+        <div class="flex flex-col items-center text-slate-500">
+            <i class="fa-solid fa-chart-simple text-xl"></i>
+            <span class="text-[10px] mt-1">Earnings</span>
+        </div>
+        <div class="flex flex-col items-center text-slate-500">
+            <i class="fa-solid fa-map text-xl"></i>
+            <span class="text-[10px] mt-1">Hotspots</span>
+        </div>
+        <div class="flex flex-col items-center text-slate-500">
+            <i class="fa-solid fa-gear text-xl"></i>
+            <span class="text-[10px] mt-1">Settings</span>
+        </div>
+    </div>
+
+</body>
+</html>
