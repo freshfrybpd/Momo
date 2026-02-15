@@ -57,12 +57,10 @@
 
     <main class="px-6 mt-8">
         <div class="flex gap-3 mb-8 overflow-x-auto no-scrollbar py-2">
-            <button onclick="filterMenu('all')" id="btn-all" class="filter-btn bg-gray-900 text-white px-6 py-2.5 rounded-2xl font-black text-xs transition-all shadow-lg">ALL</button>
-            <button onclick="filterMenu('veg')" id="btn-veg" class="filter-btn bg-white text-gray-400 border border-gray-100 px-6 py-2.5 rounded-2xl font-black text-xs transition-all">🥦 VEG</button>
-            <button onclick="filterMenu('non-veg')" id="btn-non-veg" class="filter-btn bg-white text-gray-400 border border-gray-100 px-6 py-2.5 rounded-2xl font-black text-xs transition-all">🍗 NON-VEG</button>
+            <button onclick="filterMenu('all')" class="bg-gray-900 text-white px-6 py-2.5 rounded-2xl font-black text-xs">ALL</button>
+            <button onclick="filterMenu('veg')" class="bg-white border px-6 py-2.5 rounded-2xl font-black text-xs">🥦 VEG</button>
+            <button onclick="filterMenu('non-veg')" class="bg-white border px-6 py-2.5 rounded-2xl font-black text-xs">🍗 NON-VEG</button>
         </div>
-
-        <h2 class="text-2xl font-900 mb-6 italic">Hot & Fresh 🔥</h2>
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
@@ -71,22 +69,20 @@
             <h2 class="text-2xl font-900 italic">Your Box</h2>
             <button onclick="toggleCart(false)" class="bg-gray-50 p-3 rounded-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-
         <div class="p-6 bg-white border-t space-y-4">
-            <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500">
+            <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold text-sm outline-none">
             <div class="flex justify-between font-900 text-xl px-2">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="finalCheckout()" class="w-full bg-orange-500 text-white py-5 rounded-[2rem] font-black shadow-xl active:scale-95 transition-all">CONFIRM ORDER</button>
+            <button onclick="finalCheckout()" class="w-full bg-orange-500 text-white py-5 rounded-[2rem] font-black shadow-xl active:scale-95 transition-all uppercase tracking-widest text-xs">Confirm Order</button>
         </div>
     </div>
 
     <div id="order-success" class="fixed inset-0 z-[100] bg-orange-600 text-white hidden flex flex-col items-center justify-center p-10 text-center text-4xl font-900">
         <i class="fa-solid fa-circle-check mb-4 animate-bounce"></i>
-        <p>Sending to Kitchen...</p>
+        <p>Booking Order...</p>
     </div>
 
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 z-40 hidden backdrop-blur-sm"></div>
@@ -109,13 +105,22 @@
 
         let cart = [];
         let allMenuItems = [];
-        let userData = { phone: '', location: '' };
+        let userData = { 
+            phone: localStorage.getItem('customerPhone') || '', 
+            location: localStorage.getItem('customerLoc') || '' 
+        };
+
+        // If user already logged in
+        if(userData.phone) {
+            document.getElementById('login-modal').classList.add('hidden');
+            if(userData.location) document.getElementById('current-loc').innerText = userData.location;
+        }
 
         window.saveUser = () => {
             const ph = document.getElementById('phone-input').value;
             if(ph.length < 10) return alert("Enter 10-digit number");
             userData.phone = ph;
-            localStorage.setItem('customerPhone', ph); // Save for tracking
+            localStorage.setItem('customerPhone', ph);
             document.getElementById('login-modal').classList.add('hidden');
             showLocationPicker();
         };
@@ -139,19 +144,17 @@
             const list = document.getElementById('menu-list');
             list.innerHTML = '';
             const items = filter === 'all' ? allMenuItems : allMenuItems.filter(i => i.type === filter);
-            
             items.forEach(item => {
                 const isStock = item.inStock !== false;
                 list.innerHTML += `
                 <div class="momo-card p-4 ${isStock ? '' : 'opacity-60 grayscale'}">
-                    ${item.isBestseller ? '<span class="absolute top-4 right-4 bg-yellow-400 text-[8px] font-black px-2 py-1 rounded-full z-10">BESTSELLER</span>' : ''}
                     <img src="${item.image}" class="w-full h-48 object-cover rounded-[1.5rem] mb-4">
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="font-900">${item.name}</h4>
                         <span class="text-orange-500 font-900">₹${item.price}</span>
                     </div>
                     <button onclick="${isStock ? `addToCart('${item.name}', ${item.price}, '${item.image}')` : ''}" 
-                        class="w-full ${isStock ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-400'} py-4 rounded-2xl font-black">
+                        class="w-full ${isStock ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-400'} py-4 rounded-2xl font-black text-xs">
                         ${isStock ? 'ADD TO BOX +' : 'SOLD OUT'}
                     </button>
                 </div>`;
@@ -168,7 +171,7 @@
             const list = document.getElementById('cart-items-list');
             let total = 0;
             document.getElementById('cart-badge').innerText = cart.reduce((a, b) => a + b.qty, 0);
-            list.innerHTML = cart.map((item, i) => {
+            list.innerHTML = cart.map(item => {
                 total += (item.price * item.qty);
                 return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
                     <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
@@ -184,43 +187,37 @@
             document.getElementById('cart-overlay').classList.toggle('hidden', !o);
         };
 
-        // --- FINAL CHECKOUT WITH TRACKING REDIRECT ---
+        // --- FINAL CHECKOUT WITH TRACKING SYNC ---
         window.finalCheckout = async () => {
             const addr = document.getElementById('exact-address').value;
             if(cart.length === 0 || !addr) return alert("Fill address & cart!");
 
-            // WhatsApp Message Build
-            let msg = `*🍱 NEW ORDER - FRESHFRY*%0A------------------%0A*Phone:* ${userData.phone}%0A*Address:* ${addr}%0A------------------%0A`;
-            cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-            msg += `------------------%0A*TOTAL: ${document.getElementById('cart-total').innerText}*`;
-
             try {
-                // 1. Save to Database for Admin/Delivery
-                await addDoc(collection(db, "orders"), {
+                // 1. Create Order in Firebase
+                const docRef = await addDoc(collection(db, "orders"), {
                     customer: userData.phone,
                     location: userData.location,
                     address: addr,
                     total: document.getElementById('cart-total').innerText,
                     items: cart,
+                    status: 'pending',
+                    riderName: '', // Will be updated by Admin
                     time: serverTimestamp()
                 });
 
-                // 2. Save Order Details for Tracking Page
-                localStorage.setItem('lastOrder', JSON.stringify(cart));
-                localStorage.setItem('waMessage', msg);
+                // 2. Save Order ID for Tracking Page
+                localStorage.setItem('currentOrderId', docRef.id);
 
-                // 3. Show Success & Redirect
+                // 3. Animation and Redirect
                 document.getElementById('order-success').classList.remove('hidden');
                 setTimeout(() => {
                     window.location.href = "tracking.html"; 
                 }, 2000);
 
-            } catch(e) { alert("Error placing order. Check connection."); }
+            } catch(e) { alert("Error placing order."); }
         };
         
-        window.filterMenu = (type) => {
-            renderMenu(type);
-        };
+        window.filterMenu = (t) => renderMenu(t);
     </script>
 </body>
 </html>
