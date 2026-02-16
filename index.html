@@ -3,100 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Crunchy & Steamy Momos</title>
+    <title>Freshfry | Premium Momos Baripada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; }
-        .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .active-scale:active { transform: scale(0.95); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        
+        :root { --primary: #ff5e00; --dark: #0f172a; }
+        body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); }
+        
+        .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); }
+        .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
+        
+        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .cart-open { transform: translateX(0); }
+        .cart-closed { transform: translateX(100%); }
+
+        .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 text-gray-800">
+<body class="pb-10">
 
-    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
-        <div class="text-3xl font-extrabold tracking-tight text-orange-500">
-            Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
+    <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-900 tracking-tighter flex items-center gap-1">
+                <span class="text-orange-500"><i class="fa-solid fa-dumpling"></i></span>
+                Fresh<span class="text-orange-600">fry.</span>
+            </h1>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Finest</p>
         </div>
-        <div class="flex items-center space-x-5">
-            <div id="cart-btn" onclick="toggleCart()" class="relative bg-orange-100 p-2 rounded-full cursor-pointer active-scale">
-                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
-            </div>
+        <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 active:scale-90 transition-all shadow-lg shadow-gray-200">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white animate-bounce">0</span>
         </div>
     </nav>
 
-    <section id="login-section" class="px-6 py-10 max-w-lg mx-auto">
-        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
-            <h2 class="text-2xl font-extrabold mb-2">Login to Freshfry 🥟</h2>
-            <p class="text-gray-400 mb-6 text-sm">Enter details to start ordering in Baripada.</p>
-            <div class="space-y-4">
-                <input type="text" id="custName" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
-                <input type="tel" id="custPhone" placeholder="Phone Number" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
-                <select id="custArea" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none font-semibold text-gray-700">
-                    <option>Badbazar</option>
-                    <option>Station Bazar</option>
-                    <option>Bhanjpur</option>
-                    <option>Baghra Road</option>
-                    <option>Near Ambika Temple</option>
-                    <option>Near Jagganath Temple</option>
-                </select>
-                <button onclick="handleLogin()" class="w-full freshfry-gradient text-white py-4 rounded-2xl font-bold text-lg shadow-lg active-scale transition">
-                    Start Eating
-                </button>
+    <div id="promo-banner" class="hidden mx-6 mt-6 p-6 btn-gradient rounded-[2.5rem] text-white shadow-2xl shadow-orange-200 relative overflow-hidden">
+        <div class="relative z-10">
+            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Limited Offer</span>
+            <h3 id="p-title" class="text-2xl font-900 mt-2 leading-tight">--</h3>
+            <div class="mt-4 inline-flex items-center gap-2 bg-black/10 px-4 py-2 rounded-xl border border-white/20">
+                <span class="text-[10px] opacity-70">USE CODE:</span>
+                <span id="p-code" class="font-900 tracking-widest">--</span>
             </div>
         </div>
-    </section>
+        <i class="fa-solid fa-fire-amber absolute -right-4 -bottom-4 text-9xl opacity-10"></i>
+    </div>
 
-    <section id="menu-section" class="hidden px-6 py-8 max-w-4xl mx-auto">
-        <div class="flex justify-between items-end mb-8">
-            <div>
-                <h2 class="text-3xl font-extrabold">Popular Momos</h2>
-                <p class="text-gray-400">Best in Baripada, delivered fast.</p>
+    <div class="flex gap-3 px-6 mt-8 overflow-x-auto no-scrollbar">
+        <button class="bg-gray-900 text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-md">All</button>
+        <button class="bg-white border border-gray-100 px-6 py-3 rounded-2xl text-sm font-bold text-gray-500">Veg</button>
+        <button class="bg-white border border-gray-100 px-6 py-3 rounded-2xl text-sm font-bold text-gray-500">Non-Veg</button>
+    </div>
+
+    <main class="px-6 mt-8">
+        <h2 class="text-2xl font-900 mb-6">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
+        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full py-20 text-center">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
             </div>
+        </div>
+    </main>
+
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-50 shadow-2xl cart-closed flex flex-col cart-sidebar">
+        <div class="p-6 flex justify-between items-center border-b">
+            <div>
+                <h2 class="text-2xl font-900 italic">Your Box</h2>
+                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Freshfry Baripada</p>
+            </div>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
         </div>
         
-        <div id="momo-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5">
             </div>
-    </section>
 
-    <div id="cart-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-end">
-        <div class="bg-white w-full rounded-t-[2.5rem] p-8 animate-slide-up shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold">Your Bag 🛍️</h3>
-                <button onclick="toggleCart()" class="text-gray-400 text-3xl">&times;</button>
-            </div>
-            <div id="cart-items" class="space-y-4 max-h-60 overflow-y-auto mb-6"></div>
-            <div class="border-t pt-6">
-                <div class="flex justify-between text-xl font-bold mb-6">
-                    <span>Total Bill:</span>
-                    <span id="total-price" class="text-orange-500">₹0</span>
+        <div class="p-8 bg-white border-t space-y-6">
+            <div class="space-y-2">
+                <div class="flex justify-between text-gray-400 font-bold text-sm">
+                    <span>Subtotal</span>
+                    <span id="subtotal">₹0</span>
                 </div>
-                <button onclick="placeOrder()" id="order-btn" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-bold text-lg active-scale shadow-xl">
-                    Confirm Order (COD)
-                </button>
+                <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-orange-600">₹0</span>
+                </div>
             </div>
+            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl shadow-orange-100 active:scale-95 transition-all flex items-center justify-center gap-3">
+                PLACE ORDER <i class="fa-solid fa-arrow-right"></i>
+            </button>
         </div>
     </div>
 
-    <nav id="bottom-nav" class="hidden md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-8 rounded-3xl flex justify-between items-center shadow-2xl z-50">
-        <i class="fa-solid fa-house text-orange-400"></i>
-        <i class="fa-solid fa-fire-flame-curved opacity-50"></i>
-        <div onclick="toggleCart()" class="bg-orange-500 p-3 rounded-full -mt-12 border-4 border-slate-50 shadow-lg active-scale">
-            <i class="fa-solid fa-plus text-white"></i>
-        </div>
-        <i class="fa-solid fa-heart opacity-50"></i>
-        <i class="fa-solid fa-clock-rotate-left opacity-50"></i>
-    </nav>
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-md"></div>
 
-    <script>
-        // 1. YOUR FIREBASE CONFIG
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
             authDomain: "freshfry-39a10.firebaseapp.com",
@@ -105,116 +115,151 @@
             messagingSenderId: "928483976893",
             appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
 
-        // 2. DATA & STATE
-        let currentUser = null;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         let cart = [];
-        const menu = [
-            { id: 1, name: "Veg Steamed", h: 60, f: 110, img: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=300" },
-            { id: 2, name: "Paneer Fried", h: 80, f: 150, img: "https://images.unsplash.com/photo-1534422298391-e4f8c170db06?w=300" },
-            { id: 3, name: "Chicken Steamed", h: 90, f: 170, img: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=300" },
-            { id: 4, name: "Freshfry Special", h: 120, f: 220, img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=300" }
-        ];
 
-        // 3. LOGIN LOGIC
-        async function handleLogin() {
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const area = document.getElementById('custArea').value;
+        onSnapshot(doc(db, "settings", "promo"), (d) => {
+            if(d.exists()) {
+                const data = d.data();
+                document.getElementById('promo-banner').classList.remove('hidden');
+                document.getElementById('p-title').innerText = data.text;
+                document.getElementById('p-code').innerText = data.code;
+            }
+        });
 
-            if(!name || !phone) return alert("Bhai, Details dalo!");
-
-            currentUser = { name, phone, area };
-            
-            // Save user to Firebase
-            await db.collection("users").doc(phone).set({ ...currentUser, date: new Date() });
-
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('menu-section').classList.remove('hidden');
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            renderMenu();
-        }
-
-        // 4. RENDER MENU
-        function renderMenu() {
-            const container = document.getElementById('momo-container');
-            container.innerHTML = menu.map(m => `
-                <div class="bg-white p-4 rounded-[2rem] shadow-sm flex items-center border border-gray-100">
-                    <img src="${m.img}" class="w-24 h-24 rounded-2xl object-cover">
-                    <div class="ml-4 flex-1">
-                        <h3 class="font-bold text-lg">${m.name}</h3>
-                        <div class="flex items-center justify-between mt-2">
-                            <select id="size-${m.id}" class="text-xs bg-gray-50 p-1 rounded font-bold outline-none border-none">
-                                <option value="Half" data-price="${m.h}">Half - ₹${m.h}</option>
-                                <option value="Full" data-price="${m.f}">Full - ₹${m.f}</option>
-                            </select>
-                            <button onclick="addToCart('${m.name}', ${m.id})" class="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md active-scale transition">
-                                Add +
+        onSnapshot(collection(db, "menu"), (snap) => {
+            const list = document.getElementById('menu-list');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                const item = d.data();
+                list.innerHTML += `
+                    <div class="momo-card p-4">
+                        <div class="relative group cursor-pointer overflow-hidden rounded-[2rem]">
+                            <img src="${item.image}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=1000&auto=format&fit=crop'">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
+                                <p class="text-[10px] font-black uppercase flex items-center gap-1 ${item.type === 'veg' ? 'text-green-600' : 'text-red-600'}">
+                                    <i class="fa-solid fa-circle text-[6px]"></i> ${item.type}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-5 px-2 pb-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-900 text-xl tracking-tight">${item.name}</h4>
+                                <span class="font-900 text-xl text-orange-600">₹${item.price}</span>
+                            </div>
+                            <p class="text-gray-400 text-xs mb-6 font-medium">Authentic steam-fried delight with spicy chutney.</p>
+                            <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" 
+                                class="w-full bg-gray-50 hover:bg-black hover:text-white py-4 rounded-2xl font-black transition-all border border-gray-100 active:scale-95 flex items-center justify-center gap-2">
+                                ADD TO BOX <i class="fa-solid fa-plus text-[10px]"></i>
                             </button>
                         </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+                    </div>`;
+            });
+        });
 
-        // 5. CART & ORDER LOGIC
-        function addToCart(name, id) {
-            const select = document.getElementById(`size-${id}`);
-            const price = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
-            const size = select.value;
-
-            cart.push({ name, size, price });
-            document.getElementById('cart-badge').innerText = cart.length;
-            alert(`${name} (${size}) added to bag!`);
-        }
-
-        function toggleCart() {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.toggle('hidden');
-            const list = document.getElementById('cart-items');
-            const totalDisplay = document.getElementById('total-price');
-            
-            let total = 0;
-            list.innerHTML = cart.map(item => {
-                total += item.price;
-                return `<div class="flex justify-between font-semibold border-b pb-2">
-                    <span>${item.name} (${item.size})</span>
-                    <span>₹${item.price}</span>
-                </div>`;
-            }).join('');
-            totalDisplay.innerText = `₹${total}`;
-        }
-
-        async function placeOrder() {
-            if(cart.length === 0) return alert("Cart khali hai!");
-            
-            const btn = document.getElementById('order-btn');
-            btn.innerText = "Placing Order...";
-            btn.disabled = true;
-
-            const orderData = {
-                ...currentUser,
-                items: cart,
-                total: cart.reduce((s, i) => s + i.price, 0),
-                status: "Pending",
-                time: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            try {
-                await db.collection("orders").add(orderData);
-                alert("🎉 Order Success! Freshfry team will call you.");
-                cart = [];
-                document.getElementById('cart-badge').innerText = "0";
-                toggleCart();
-            } catch (e) {
-                alert("Error! Check Firebase Rules.");
-            } finally {
-                btn.innerText = "Confirm Order (COD)";
-                btn.disabled = false;
+        window.addToCart = (name, price, image) => {
+            const existing = cart.find(i => i.name === name);
+            if(existing) {
+                existing.qty++;
+            } else {
+                cart.push({ name, price, image, qty: 1 });
             }
-        }
+            updateCartUI();
+            
+            const btn = event.currentTarget;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = "ADDED! ✨";
+            btn.classList.add('bg-orange-500', 'text-white');
+            setTimeout(() => {
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('bg-orange-500', 'text-white');
+            }, 800);
+        };
+
+        window.updateCartUI = () => {
+            const list = document.getElementById('cart-items-list');
+            const totalEl = document.getElementById('cart-total');
+            const subtotalEl = document.getElementById('subtotal');
+            const badge = document.getElementById('cart-badge');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            badge.innerText = totalItems;
+            
+            if(cart.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-20">
+                        <div class="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300 text-3xl">🥟</div>
+                        <p class="text-gray-400 font-bold">Your box is empty!</p>
+                    </div>`;
+                totalEl.innerText = "₹0";
+                subtotalEl.innerText = "₹0";
+                return;
+            }
+
+            let total = 0;
+            list.innerHTML = cart.map((item, index) => {
+                total += (item.price * item.qty);
+                return `
+                    <div class="flex items-center gap-4 bg-gray-50/50 p-4 rounded-[1.5rem] border border-gray-100">
+                        <img src="${item.image}" class="w-20 h-20 object-cover rounded-2xl shadow-md">
+                        <div class="flex-1">
+                            <p class="text-sm font-900 leading-tight mb-1">${item.name}</p>
+                            <p class="text-orange-600 text-xs font-black">₹${item.price} x ${item.qty}</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <button onclick="changeQty(${index}, -1)" class="w-6 h-6 bg-white rounded-lg border flex items-center justify-center text-xs shadow-sm">-</button>
+                                <span class="text-xs font-black">${item.qty}</span>
+                                <button onclick="changeQty(${index}, 1)" class="w-6 h-6 bg-white rounded-lg border flex items-center justify-center text-xs shadow-sm">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500 transition-colors px-2">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            
+            totalEl.innerText = "₹" + total;
+            subtotalEl.innerText = "₹" + total;
+        };
+
+        window.changeQty = (index, delta) => {
+            cart[index].qty += delta;
+            if(cart[index].qty < 1) return removeFromCart(index);
+            updateCartUI();
+        };
+
+        window.removeFromCart = (index) => {
+            cart.splice(index, 1);
+            updateCartUI();
+        };
+
+        window.toggleCart = (open) => {
+            const sb = document.getElementById('cart-sidebar');
+            const ov = document.getElementById('cart-overlay');
+            if(open) {
+                sb.classList.replace('cart-closed', 'cart-open');
+                ov.classList.remove('hidden');
+            } else {
+                sb.classList.replace('cart-open', 'cart-closed');
+                ov.classList.add('hidden');
+            }
+        };
+
+        window.checkout = () => {
+            if(cart.length === 0) return alert("Add some momos first!");
+            
+            // WhatsApp Order Logic
+            let message = "🍱 *New Order from Freshfry Baripada*%0A--------------------------%0A";
+            cart.forEach(item => {
+                message += `• ${item.name} (x${item.qty}) - ₹${item.price * item.qty}%0A`;
+            });
+            message += `--------------------------%0A*Total: ${document.getElementById('cart-total').innerText}*%0A%0A_Please confirm my order!_`;
+            
+            window.open(`https://wa.me/91XXXXXXXXXX?text=${message}`, '_blank'); // Replace X with your number
+        };
     </script>
 </body>
 </html>
