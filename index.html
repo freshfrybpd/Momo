@@ -8,65 +8,86 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: #0f172a; overflow-x: hidden; }
+        :root { --primary: #ff5e00; --dark: #0f172a; }
+        body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); overflow-x: hidden; }
+        
+        /* Premium Card Design Same As Previous */
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); }
         .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
+        
         .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1000; }
         .cart-open { transform: translateX(0); }
         .cart-closed { transform: translateX(100%); }
+        
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-10">
 
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-900 tracking-tighter flex items-center gap-1 text-orange-600">
-                Freshfry.
+            <h1 class="text-2xl font-900 tracking-tighter flex items-center gap-1">
+                <span class="text-orange-500"><i class="fa-solid fa-dumpling"></i></span>
+                Fresh<span class="text-orange-600">fry.</span>
             </h1>
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Finest</p>
         </div>
         <div class="flex items-center gap-4">
-            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-gray-200">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
-            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-gray-100 overflow-hidden shadow-sm">
+            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden shadow-sm active:scale-90 transition-all">
                 <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="w-full h-full object-cover">
             </a>
         </div>
     </nav>
 
-    <div id="promo-banner" class="hidden mx-6 mt-6 p-6 btn-gradient rounded-[2.5rem] text-white relative overflow-hidden">
+    <div id="promo-banner" class="hidden mx-6 mt-6 p-6 btn-gradient rounded-[2.5rem] text-white shadow-2xl shadow-orange-200 relative overflow-hidden">
         <div class="relative z-10">
-            <h3 id="p-title" class="text-2xl font-900 leading-tight">--</h3>
-            <p id="p-code" class="mt-2 font-black tracking-widest opacity-90 text-sm">CODE: --</p>
+            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Limited Offer</span>
+            <h3 id="p-title" class="text-2xl font-900 mt-2 leading-tight">--</h3>
+            <div class="mt-4 inline-flex items-center gap-2 bg-black/10 px-4 py-2 rounded-xl border border-white/20">
+                <span class="text-[10px] opacity-70">USE CODE:</span>
+                <span id="p-code" class="font-900 tracking-widest">--</span>
+            </div>
         </div>
     </div>
 
     <main class="px-6 mt-8">
-        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Premium <span class="text-orange-500">Momos</span></h2>
+        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
+        
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="col-span-full py-20 text-center text-gray-400">Loading Menu...</div>
+            <div class="col-span-full py-20 text-center">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
+            </div>
         </div>
     </main>
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar">
         <div class="p-6 flex justify-between items-center border-b">
-            <h2 class="text-2xl font-900 italic">Your Box</h2>
-            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div>
+                <h2 class="text-2xl font-900 italic">Your Box</h2>
+                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Freshfry Baripada</p>
+            </div>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
         <div class="p-8 bg-white border-t space-y-6">
-            <div class="flex justify-between font-900 text-2xl pt-2">
+            <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg">PLACE ORDER</button>
+            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl active:scale-95 transition-all">
+                PLACE ORDER <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
         </div>
     </div>
-    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm"></div>
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-md"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -85,48 +106,67 @@
         const db = getFirestore(app);
         let cart = [];
 
-        // 1. Sync Photo & Data
-        window.onload = () => {
-            const savedPhoto = localStorage.getItem('user_photo');
+        // 1. Sync User Data (Photo & Name)
+        function loadUserSession() {
             const userName = localStorage.getItem('ff_user') || "Guest";
-            if(savedPhoto) document.getElementById('user-profile-img').src = savedPhoto;
-            else document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
-        };
+            const savedPhoto = localStorage.getItem('user_photo');
+            const profileImg = document.getElementById('user-profile-img');
+            
+            if(savedPhoto) {
+                profileImg.src = savedPhoto;
+            } else {
+                profileImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
+            }
+        }
 
-        // 2. Fetch Promo
+        // 2. Promo Sync
         onSnapshot(doc(db, "settings", "promo"), (d) => {
             if(d.exists()) {
                 document.getElementById('promo-banner').classList.remove('hidden');
                 document.getElementById('p-title').innerText = d.data().text;
-                document.getElementById('p-code').innerText = "CODE: " + d.data().code;
+                document.getElementById('p-code').innerText = d.data().code;
             }
         });
 
-        // 3. Smart Filtered Menu
+        // 3. Menu Fetch with Veg Filter
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
-            const isVegOnly = localStorage.getItem('ff_veg_only') === 'true';
+            const isVegOnly = localStorage.getItem('ff_veg_only') === 'true'; // From Profile switch
             list.innerHTML = '';
             
             snap.forEach(d => {
                 const item = d.data();
-                if (isVegOnly && item.type.toLowerCase() !== 'veg') return;
+                const type = (item.type || 'non-veg').toLowerCase();
+
+                // Backend Filter Logic
+                if (isVegOnly && type !== 'veg') return;
 
                 list.innerHTML += `
                     <div class="momo-card p-4">
-                        <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-900 text-xl italic uppercase">${item.name}</h4>
-                            <span class="text-orange-600 font-900">₹${item.price}</span>
+                        <div class="relative group cursor-pointer overflow-hidden rounded-[2rem]">
+                            <img src="${item.image}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
+                                <p class="text-[10px] font-black uppercase flex items-center gap-1 ${type === 'veg' ? 'text-green-600' : 'text-red-600'}">
+                                    <i class="fa-solid fa-circle text-[6px]"></i> ${type}
+                                </p>
+                            </div>
                         </div>
-                        <p class="text-[10px] uppercase font-bold text-gray-400 mt-1">${item.type} Momo</p>
-                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" 
-                            class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black text-sm">ADD TO BOX</button>
+                        <div class="mt-5 px-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-900 text-xl tracking-tight uppercase italic">${item.name}</h4>
+                                <span class="font-900 text-xl text-orange-600">₹${item.price}</span>
+                            </div>
+                            <p class="text-gray-400 text-[10px] mb-6 font-bold uppercase tracking-widest">Handcrafted Baripada Special</p>
+                            <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" 
+                                class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black transition-all active:scale-95 flex items-center justify-center gap-2">
+                                ADD TO BOX <i class="fa-solid fa-plus text-[10px]"></i>
+                            </button>
+                        </div>
                     </div>`;
             });
         });
 
-        // Cart Functions
+        // Cart Backend
         window.addToCart = (name, price, image) => {
             const existing = cart.find(i => i.name === name);
             if(existing) existing.qty++;
@@ -144,11 +184,13 @@
             list.innerHTML = cart.map((item, index) => {
                 total += (item.price * item.qty);
                 return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
-                    <img src="${item.image}" class="w-16 h-16 object-cover rounded-xl">
-                    <div class="flex-1 text-sm font-900">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
-                    <button onclick="changeQty(${index}, -1)" class="w-8 h-8 bg-white border rounded-lg">-</button>
-                    <span class="font-bold">${item.qty}</span>
-                    <button onclick="changeQty(${index}, 1)" class="w-8 h-8 bg-white border rounded-lg">+</button>
+                    <img src="${item.image}" class="w-16 h-16 object-cover rounded-xl shadow-sm">
+                    <div class="flex-1 text-sm font-900 uppercase">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeQty(${index}, -1)" class="w-7 h-7 bg-white border rounded-lg">-</button>
+                        <span class="font-bold text-xs">${item.qty}</span>
+                        <button onclick="changeQty(${index}, 1)" class="w-7 h-7 bg-white border rounded-lg">+</button>
+                    </div>
                 </div>`;
             }).join('');
             totalEl.innerText = "₹" + total;
@@ -168,12 +210,15 @@
         };
 
         window.checkout = () => {
+            if(cart.length === 0) return alert("Box is empty!");
             const uName = localStorage.getItem('ff_user') || "Guest";
-            let msg = `*New Order: Freshfry Baripada*%0A*Customer:* ${uName}%0A`;
+            let msg = `🍱 *Freshfry Order*%0A*Customer:* ${uName}%0A%0A`;
             cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-            msg += `*Total: ${document.getElementById('cart-total').innerText}*`;
+            msg += `%0A*Total: ${document.getElementById('cart-total').innerText}*`;
             window.open(`https://wa.me/918984225363?text=${msg}`);
         };
+
+        window.onload = loadUserSession;
     </script>
 </body>
 </html>
