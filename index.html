@@ -9,27 +9,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-        
         .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; }
-        .momo-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(242, 153, 74, 0.4); }
-
+        .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid #f1f5f9; }
+        .momo-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(242, 153, 74, 0.3); }
         .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
         .cart-closed { transform: translateX(110%); }
-
-        .btn-add { transition: all 0.3s ease; }
-        .btn-add.added { background: #10b981 !important; color: white; transform: scale(0.95); }
-
-        /* Tracking UI */
-        .step-dot { height: 12px; width: 12px; border-radius: 50%; background: #e2e8f0; }
-        .step-dot.active { background: #f2994a; box-shadow: 0 0 10px #f2994a; }
-        .step-line { height: 3px; flex: 1; background: #e2e8f0; }
-        .step-line.active { background: #f2994a; }
-        
-        @keyframes bike-float { 0%, 100% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
-        .animate-bike { animation: bike-float 2s infinite ease-in-out; }
+        .portion-btn.active { background: #f2994a; color: white; border-color: #f2994a; }
+        .btn-add.added { background: #10b981 !important; color: white; }
     </style>
 </head>
 <body class="no-scrollbar">
@@ -37,136 +23,119 @@
     <div id="login-modal" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-6 text-center">
         <div class="w-full max-w-sm">
             <div class="text-5xl font-extrabold text-orange-500 mb-2">Fresh<span class="text-gray-900">fry</span>.</div>
-            <p class="text-gray-400 font-bold text-xs mb-10 tracking-[0.3em] uppercase">Premium Momo Hub</p>
+            <p class="text-gray-400 font-bold text-xs mb-10 tracking-[0.3em] uppercase text-center">Premium Momo Hub</p>
             <div class="space-y-4">
-                <input id="user-name" type="text" placeholder="Your Name" class="w-full px-6 py-5 bg-gray-100 rounded-[2rem] outline-none font-bold text-center">
-                <input id="user-phone" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-6 py-5 bg-gray-100 rounded-[2rem] outline-none font-bold text-center">
-                <button onclick="handleLogin()" class="w-full freshfry-gradient text-white py-6 rounded-[2rem] font-800 shadow-xl shadow-orange-200 active:scale-95 transition">Start Eating</button>
+                <input id="user-name" type="text" placeholder="Your Name" class="w-full px-6 py-5 bg-gray-100 rounded-[2rem] outline-none font-bold text-center focus:ring-2 focus:ring-orange-400">
+                <input id="user-phone" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-6 py-5 bg-gray-100 rounded-[2rem] outline-none font-bold text-center focus:ring-2 focus:ring-orange-400">
+                <button onclick="handleLogin()" class="w-full freshfry-gradient text-white py-6 rounded-[2rem] font-800 shadow-xl active:scale-95 transition">Enter Menu</button>
             </div>
         </div>
     </div>
 
     <nav class="flex items-center justify-between px-8 py-6 bg-white sticky top-0 z-50">
         <div class="text-3xl font-extrabold tracking-tighter text-orange-500">Fresh<span class="text-gray-900">fry</span>.</div>
-        <div onclick="toggleCart(true)" class="relative bg-orange-100 p-4 rounded-full cursor-pointer shadow-inner">
+        <div onclick="toggleCart(true)" class="relative bg-orange-100 p-4 rounded-full cursor-pointer">
             <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
             <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-800 rounded-full h-6 w-6 flex items-center justify-center border-4 border-white">0</span>
         </div>
     </nav>
 
-    <section class="freshfry-gradient px-8 py-20 text-center text-white">
-        <span class="bg-white/20 px-4 py-2 rounded-full text-[10px] font-800 uppercase tracking-widest">Baripada's No. 1</span>
-        <h1 class="text-5xl md:text-7xl font-800 mt-6 mb-4 leading-tight">Freshly Steamed. <br> Deeply Fried.</h1>
-        <p class="opacity-90 mb-8 font-medium italic text-lg">"The crunch you crave, the steam you love."</p>
+    <section class="freshfry-gradient px-8 py-16 text-center text-white">
+        <h1 class="text-5xl font-800 mb-4 leading-tight">Freshly Steamed. <br> Deeply Fried.</h1>
+        <p class="opacity-90 font-medium italic">Baripada's favorite Momo destination</p>
     </section>
 
-    <main class="max-w-6xl mx-auto px-6 -mt-12">
+    <main class="max-w-6xl mx-auto px-6 -mt-10">
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20">
             </div>
     </main>
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[160] cart-sidebar cart-closed flex flex-col shadow-2xl">
-        <div class="p-10 border-b flex justify-between items-center">
+        <div class="p-8 border-b flex justify-between items-center">
             <h2 class="text-2xl font-800">My <span class="text-orange-500">Box</span></h2>
             <button onclick="toggleCart(false)" class="h-12 w-12 bg-gray-50 rounded-full"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="cart-items-list" class="flex-1 overflow-y-auto p-8 space-y-6"></div>
-        <div class="p-10 border-t space-y-4 bg-slate-50">
-            <input id="exact-address" type="text" placeholder="Enter Full Address" class="w-full px-6 py-5 bg-white rounded-[1.5rem] outline-none border border-gray-100 font-bold text-sm">
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-8 border-t space-y-4 bg-slate-50">
+            <input id="exact-address" type="text" placeholder="Delivery Address / Landmark" class="w-full px-6 py-5 bg-white rounded-[1.5rem] outline-none border border-gray-100 font-bold text-sm">
             <div class="flex justify-between items-center px-2">
-                <span class="text-gray-400 font-800 text-xs uppercase tracking-widest">Grand Total</span>
-                <span id="cart-total" class="text-3xl font-800 tracking-tighter">₹0</span>
+                <span class="text-gray-400 font-800 text-xs uppercase tracking-widest">Total Bill</span>
+                <span id="cart-total" class="text-3xl font-800">₹0</span>
             </div>
-            <button onclick="checkout('upi')" class="w-full bg-gray-900 text-white py-6 rounded-[2rem] font-800 uppercase text-xs tracking-[0.2em] shadow-2xl">Pay via UPI</button>
-            <button onclick="checkout('wa')" class="w-full border-2 border-green-500 text-green-600 py-6 rounded-[2rem] font-800 uppercase text-xs tracking-[0.2em]">Order on WhatsApp</button>
+            <button onclick="checkout('upi')" class="w-full bg-gray-900 text-white py-6 rounded-[2rem] font-800 uppercase text-xs tracking-widest shadow-xl">Pay Online (UPI)</button>
+            <button onclick="checkout('wa')" class="w-full border-2 border-green-500 text-green-600 py-6 rounded-[2rem] font-800 uppercase text-xs tracking-widest">Order via WhatsApp</button>
         </div>
     </div>
 
-    <div id="tracking-page" class="fixed inset-0 z-[300] bg-white hidden overflow-y-auto">
-        <div class="max-w-md mx-auto px-8 py-20 text-center">
-            <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-8 animate-bounce">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <h2 class="text-4xl font-800 mb-2 leading-tight italic">Order Placed!</h2>
-            <p class="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-12">Hot & Tasty momos are on the way</p>
-
-            <div class="bg-slate-50 border border-slate-100 rounded-[3rem] p-10 text-left relative">
-                <div class="flex items-center gap-5 mb-10">
-                    <div class="w-16 h-16 freshfry-gradient text-white rounded-[1.5rem] flex items-center justify-center text-2xl shadow-lg animate-bike">
-                        <i class="fa-solid fa-motorcycle"></i>
-                    </div>
-                    <div>
-                        <h4 id="track-status" class="font-800 text-xl tracking-tighter">Kitchen is preparing...</h4>
-                        <p class="text-[10px] font-800 text-orange-400 uppercase tracking-widest mt-1">Estimated 20 Mins</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2 mb-4 px-2">
-                    <div class="step-dot active"></div>
-                    <div class="step-line active"></div>
-                    <div id="line-2" class="step-line"></div>
-                    <div id="dot-3" class="step-dot"></div>
-                </div>
-                <div class="flex justify-between text-[9px] font-800 uppercase text-gray-400 tracking-tighter px-1">
-                    <span>Confirmed</span>
-                    <span>Cooking</span>
-                    <span>Delivered</span>
-                </div>
-            </div>
-            <button onclick="location.reload()" class="mt-12 font-800 text-orange-500 uppercase tracking-[0.3em] text-[10px]">Back to Menu</button>
-        </div>
+    <div id="tracking-page" class="fixed inset-0 z-[300] bg-white hidden flex flex-col items-center justify-center p-8 text-center">
+        <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mb-6"><i class="fa-solid fa-check"></i></div>
+        <h2 class="text-3xl font-800 mb-2 leading-tight">Order Confirmed!</h2>
+        <p class="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-10 italic">Kitchen is preparing your magic...</p>
+        <button onclick="location.reload()" class="font-800 text-orange-500 uppercase text-xs tracking-widest">Order More Momos</button>
     </div>
 
     <script>
-        // 🛒 FIXED DATA (Super Speed)
+        // 🛍️ UPDATED MENU DATA
         const momoMenu = [
-            { id: 1, name: "Chicken Fried Momo", price: 100, image: "https://images.unsplash.com/photo-1534422298391-e4f8c170db76?w=600&q=80" },
-            { id: 2, name: "Veg Steamed Momo", price: 60, image: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=600&q=80" },
-            { id: 3, name: "Chicken Steamed Momo", price: 90, image: "https://images.unsplash.com/photo-1523905330026-b8bd1f5f320e?w=600&q=80" },
-            { id: 4, name: "Veg Fried Momo", price: 70, image: "https://images.unsplash.com/photo-1534422298391-e4f8c170db76?w=600&q=80" },
-            { id: 5, name: "Chicken Kurkure Momo", price: 130, image: "https://images.unsplash.com/photo-1563245332-692546984812?w=600&q=80" },
-            { id: 6, name: "Paneer Fried Momo", price: 110, image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=600&q=80" }
+            { id: 1, name: "KFC Momo", half: 90, full: 160, image: "https://images.unsplash.com/photo-1563245332-692546984812?w=600&q=80" },
+            { id: 2, name: "Steam Momo", half: 50, full: 90, image: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=600&q=80" },
+            { id: 3, name: "Fried Momo", half: 70, full: 130, image: "https://images.unsplash.com/photo-1534422298391-e4f8c170db76?w=600&q=80" },
+            { id: 4, name: "Kurkure Momo", half: 100, full: 180, image: "https://images.unsplash.com/photo-1523905330026-b8bd1f5f320e?w=600&q=80" }
         ];
 
         let cart = [];
 
-        // UI Initialization
-        const renderMenu = () => {
+        function renderMenu() {
             const list = document.getElementById('menu-list');
             list.innerHTML = momoMenu.map(item => `
-                <div class="momo-card p-6 shadow-sm border border-gray-100">
-                    <img src="${item.image}" class="w-full h-64 object-cover rounded-[2rem] mb-6 shadow-lg">
-                    <div class="px-2">
-                        <div class="flex justify-between items-center mb-6">
-                            <h4 class="font-800 text-xl tracking-tighter">${item.name}</h4>
-                            <span class="text-orange-500 font-800 text-xl">₹${item.price}</span>
-                        </div>
-                        <button onclick="addToCart(this, ${item.id})" class="btn-add w-full bg-gray-100 text-gray-900 py-5 rounded-[1.5rem] font-800 text-[10px] uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-all">Add to Box</button>
+                <div class="momo-card p-5">
+                    <img src="${item.image}" class="w-full h-60 object-cover rounded-[2rem] mb-6 shadow-md">
+                    <h4 class="font-800 text-xl tracking-tighter mb-4">${item.name}</h4>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <button onclick="selectPortion(${item.id}, 'half', ${item.half}, this)" 
+                            id="btn-${item.id}-half" class="portion-btn border-2 border-gray-100 py-3 rounded-2xl font-bold text-xs active tracking-widest">
+                            HALF ₹${item.half}
+                        </button>
+                        <button onclick="selectPortion(${item.id}, 'full', ${item.full}, this)" 
+                            id="btn-${item.id}-full" class="portion-btn border-2 border-gray-100 py-3 rounded-2xl font-bold text-xs tracking-widest">
+                            FULL ₹${item.full}
+                        </button>
                     </div>
+
+                    <button onclick="addToCart(this, ${item.id})" class="btn-add w-full bg-gray-100 text-gray-900 py-5 rounded-[1.5rem] font-800 text-[10px] uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-all">
+                        Add to Box
+                    </button>
                 </div>
             `).join('');
-        };
-
-        function handleLogin() {
-            const n = document.getElementById('user-name').value;
-            const p = document.getElementById('user-phone').value;
-            if(n && p.length === 10) {
-                localStorage.setItem('ffUser', n);
-                document.getElementById('login-modal').style.display = 'none';
-            } else { alert("Please enter valid name and phone"); }
         }
 
-        if(localStorage.getItem('ffUser')) document.getElementById('login-modal').style.display = 'none';
+        // Default selections
+        let selectedPortions = {};
+        momoMenu.forEach(m => selectedPortions[m.id] = { type: 'half', price: m.half });
 
-        function toggleCart(o) { document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o); }
+        window.selectPortion = (id, type, price, btn) => {
+            selectedPortions[id] = { type, price };
+            // UI Toggle
+            const card = btn.parentElement;
+            card.querySelectorAll('.portion-btn').forEach(b => b.classList.remove('active', 'freshfry-gradient', 'text-white'));
+            btn.classList.add('active', 'freshfry-gradient', 'text-white');
+        };
 
         window.addToCart = (btn, id) => {
-            const item = momoMenu.find(m => m.id === id);
-            const inCart = cart.find(c => c.id === id);
-            if(inCart) inCart.qty++; else cart.push({...item, qty: 1});
+            const momo = momoMenu.find(m => m.id === id);
+            const selection = selectedPortions[id];
+            const cartId = `${id}-${selection.type}`;
+            
+            const inCart = cart.find(c => c.cartId === cartId);
+            if(inCart) {
+                inCart.qty++;
+            } else {
+                cart.push({ cartId, name: `${momo.name} (${selection.type})`, price: selection.price, image: momo.image, qty: 1 });
+            }
             
             btn.innerText = "Added! ✨"; btn.classList.add('added');
-            setTimeout(() => { btn.innerText = "Add to Box"; btn.classList.remove('added'); }, 1000);
+            setTimeout(() => { btn.innerText = "Add to Box"; btn.classList.remove('added'); }, 800);
             updateCart();
         };
 
@@ -175,37 +144,46 @@
             document.getElementById('cart-badge').innerText = cart.reduce((a,b) => a+b.qty, 0);
             document.getElementById('cart-items-list').innerHTML = cart.map(i => {
                 total += (i.price * i.qty);
-                return `<div class="flex items-center gap-5 bg-gray-50 p-5 rounded-[2rem]">
-                    <img src="${i.image}" class="w-14 h-14 object-cover rounded-2xl">
-                    <div class="flex-1 font-800 text-xs uppercase">${i.name} (x${i.qty})</div>
-                    <div class="font-800 text-lg">₹${i.price*i.qty}</div>
+                return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
+                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl">
+                    <div class="flex-1 font-800 text-[10px] uppercase tracking-tighter">${i.name} (x${i.qty})</div>
+                    <div class="font-800">₹${i.price*i.qty}</div>
                 </div>`;
             }).join('');
             document.getElementById('cart-total').innerText = "₹" + total;
         }
 
+        function handleLogin() {
+            const n = document.getElementById('user-name').value;
+            const p = document.getElementById('user-phone').value;
+            if(n && p.length === 10) {
+                localStorage.setItem('ffUser', n);
+                document.getElementById('login-modal').style.display = 'none';
+            } else { alert("Please enter name and 10-digit phone"); }
+        }
+
+        if(localStorage.getItem('ffUser')) document.getElementById('login-modal').style.display = 'none';
+
+        function toggleCart(o) { document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o); }
+
         window.checkout = (type) => {
             const addr = document.getElementById('exact-address').value;
+            if(!addr || cart.length === 0) return alert("Box or Address is empty!");
             const total = document.getElementById('cart-total').innerText;
-            if(!addr || cart.length === 0) return alert("Details missing!");
-
+            
             if(type === 'upi') {
                 window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total.replace('₹','')}&cu=INR`;
             } else {
-                let msg = `*NEW ORDER - FRESHFRY*%0A*Name:* ${localStorage.getItem('ffUser')}%0A*Address:* ${addr}%0A*Total:* ${total}`;
+                let items = cart.map(c => `${c.name} x${c.qty}`).join(', ');
+                let msg = `*NEW ORDER - FRESHFRY*%0A*Name:* ${localStorage.getItem('ffUser')}%0A*Items:* ${items}%0A*Total:* ${total}%0A*Address:* ${addr}`;
                 window.location.href = `https://wa.me/917008186187?text=${msg}`;
             }
-
-            // Show Success/Tracking Page
             document.getElementById('tracking-page').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('track-status').innerText = "Rider on the way!";
-                document.getElementById('line-2').classList.add('active');
-                document.getElementById('dot-3').classList.add('active');
-            }, 10000);
         };
 
         renderMenu();
+        // Set default visual state for portion buttons
+        document.querySelectorAll('.portion-btn:first-child').forEach(b => b.classList.add('freshfry-gradient', 'text-white'));
     </script>
 </body>
 </html>
