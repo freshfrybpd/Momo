@@ -9,14 +9,26 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .rider-card { border-radius: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .rider-card { border-radius: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 15px 35px -5px rgba(0,0,0,0.05); overflow: hidden; }
         #main-app { display: none; }
+        .pin-input {
+            letter-spacing: 1.5rem;
+            padding-left: 1.5rem;
+            background-image: linear-gradient(to right, #e2e8f0 70%, rgba(255, 255, 255, 0) 0%);
+            background-position: bottom;
+            background-size: 2.5rem 2px;
+            background-repeat: repeat-x;
+        }
+        .wallet-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6 text-white text-center">
         <div class="w-full max-w-sm bg-white rounded-[3rem] p-10 shadow-2xl text-slate-800">
+            <div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fa-solid fa-motorcycle"></i>
+            </div>
             <h2 class="text-2xl font-800 mb-6 uppercase tracking-tighter">Rider Login</h2>
             <div class="space-y-3">
                 <input type="text" id="riderNameInput" placeholder="NAME" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center uppercase">
@@ -29,19 +41,30 @@
     <div id="main-app">
         <nav class="bg-white p-6 sticky top-0 z-50 shadow-sm flex justify-between items-center rounded-b-[2.5rem]">
             <div>
-                <p id="currentDateDisplay" class="text-[9px] font-black text-orange-500 uppercase"></p>
-                <h1 id="displayRiderName" class="text-xl font-800 italic text-slate-900 uppercase tracking-tighter">Rider</h1>
+                <p id="currentDateDisplay" class="text-[9px] font-black text-orange-500 uppercase tracking-widest"></p>
+                <h1 id="displayRiderName" class="text-xl font-800 italic text-slate-900 uppercase tracking-tighter tracking-tighter">Rider</h1>
             </div>
-            <button onclick="logoutRider()" class="text-red-500 bg-red-50 p-3 rounded-xl"><i class="fa-solid fa-power-off"></i></button>
+            <button onclick="logoutRider()" class="text-red-500 bg-red-50 p-3 rounded-xl active:scale-90 transition"><i class="fa-solid fa-power-off"></i></button>
         </nav>
 
-        <main class="p-4 max-w-lg mx-auto space-y-5" id="rider-orders-list">
+        <section class="p-4 grid grid-cols-2 gap-3">
+            <div class="wallet-card p-6 rounded-[2.5rem] text-white shadow-xl shadow-slate-200">
+                <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Today's Earnings</p>
+                <h3 id="todayEarning" class="text-3xl font-800 italic tracking-tighter">₹0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Lifetime</p>
+                <h3 id="lifetimeEarning" class="text-3xl font-800 italic text-slate-900 tracking-tighter">₹0</h3>
+            </div>
+        </section>
+
+        <main class="p-4 max-w-lg mx-auto space-y-6" id="rider-orders-list">
             </main>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where, doc, updateDoc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, where, doc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -80,56 +103,94 @@
             document.getElementById('rider-login-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('displayRiderName').innerText = name;
+            document.getElementById('currentDateDisplay').innerText = new Date().toDateString();
+            loadEarningUI(name);
             loadMyOrders(name);
         }
 
-        // --- ORDER LIST WITH PIN INPUT ---
+        // --- WALLET LOGIC ---
+        function loadEarningUI(name) {
+            const tKey = `ff_earn_${name}_${new Date().toLocaleDateString().replace(/\//g,'')}`;
+            const lKey = `ff_life_${name}`;
+            document.getElementById('todayEarning').innerText = `₹${localStorage.getItem(tKey) || 0}`;
+            document.getElementById('lifetimeEarning').innerText = `₹${localStorage.getItem(lKey) || 0}`;
+        }
+
+        function updateWallet(name) {
+            const tKey = `ff_earn_${name}_${new Date().toLocaleDateString().replace(/\//g,'')}`;
+            const lKey = `ff_life_${name}`;
+            localStorage.setItem(tKey, (parseInt(localStorage.getItem(tKey)||0) + 20));
+            localStorage.setItem(lKey, (parseInt(localStorage.getItem(lKey)||0) + 20));
+            loadEarningUI(name);
+        }
+
+        // --- ORDER LIST ---
         function loadMyOrders(riderName) {
             const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('rider-orders-list');
                 list.innerHTML = '';
                 
+                if(snap.empty) {
+                    list.innerHTML = `<div class="text-center py-20 text-slate-300 font-bold uppercase text-[10px] tracking-[0.2em]">Waiting for new orders...</div>`;
+                    return;
+                }
+
                 snap.forEach(d => {
                     const order = d.data();
                     list.innerHTML += `
-                    <div class="bg-white p-8 rider-card">
-                        <div class="flex justify-between mb-4">
-                            <h3 class="text-xl font-800 uppercase italic">${order.customerName}</h3>
-                            <p class="text-2xl font-900 italic text-orange-500">₹${order.total}</p>
+                    <div class="bg-white p-8 rider-card border-t-8 border-orange-500">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-900 uppercase italic tracking-tighter">${order.customerName}</h3>
+                                <p class="text-[10px] font-black text-orange-500 uppercase">${order.customer}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-900 text-slate-900 tracking-tighter">₹${order.total}</p>
+                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${order.paymentMethod}</p>
+                            </div>
                         </div>
-                        <div class="bg-slate-50 p-4 rounded-2xl mb-6 text-sm font-bold text-slate-600">
-                            ${order.address}
+
+                        <div class="bg-slate-50 p-5 rounded-[1.5rem] mb-8">
+                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Delivery Location:</p>
+                            <p class="text-sm font-bold text-slate-700 leading-tight mb-4">${order.address}</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}" target="_blank" class="text-orange-500 font-900 text-[10px] uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot"></i> Open Maps
+                            </a>
                         </div>
                         
-                        <div class="mb-6">
-                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Ask Customer for PIN:</p>
-                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="ENTER 4-DIGIT PIN" 
-                                class="w-full bg-slate-100 border-2 border-slate-100 focus:border-orange-500 rounded-2xl py-4 text-center text-xl font-900 tracking-[0.5em] outline-none transition-all">
+                        <div class="bg-orange-50 p-6 rounded-[2rem] border-2 border-orange-100 mb-6">
+                            <label class="block text-center text-[10px] font-black text-orange-600 uppercase mb-4 tracking-widest">Verify Customer PIN</label>
+                            <div class="relative">
+                                <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="0000" 
+                                    class="w-full bg-transparent border-none text-center text-4xl font-900 tracking-[1.2rem] outline-none text-slate-800 placeholder-orange-200">
+                            </div>
                         </div>
 
                         <button onclick="verifyAndDeliver('${d.id}', ${order.deliveryPin})" 
-                            class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">
-                            Verify & Deliver ✅
+                            class="w-full bg-slate-900 text-white py-6 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest shadow-xl shadow-slate-200 active:scale-95 transition-all">
+                            Confirm Delivery & Earn ₹20 💸
                         </button>
                     </div>`;
                 });
             });
         }
 
-        // --- PIN VERIFICATION LOGIC ---
+        // --- VERIFICATION LOGIC ---
         window.verifyAndDeliver = async (orderId, correctPin) => {
-            const enteredPin = document.getElementById(`pin-${orderId}`).value;
+            const pinInput = document.getElementById(`pin-${orderId}`);
+            const enteredPin = pinInput.value;
             
             if(enteredPin == correctPin) {
                 try {
                     await updateDoc(doc(db, "orders", orderId), { status: 'delivered' });
-                    // Update Local Wallet Logic (Optional)
-                    alert("PIN Matched! Order Delivered Successfully 💸");
-                } catch (e) { alert("Error updating order."); }
+                    updateWallet(sessionStorage.getItem('rider_name'));
+                    alert("✅ Success! ₹20 added to your wallet.");
+                } catch (e) { alert("Server Error!"); }
             } else {
-                alert("❌ Wrong PIN! Please ask the customer for the correct 4-digit code.");
-                document.getElementById(`pin-${orderId}`).classList.add('border-red-500');
+                alert("❌ Invalid PIN! Please check with customer.");
+                pinInput.value = '';
+                pinInput.focus();
             }
         };
 
