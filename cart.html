@@ -9,23 +9,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
-        
         .cart-sidebar { transition: transform 0.5s cubic-bezier(0.85, 0, 0.15, 1); }
         .cart-open { transform: translateX(0) !important; }
         .cart-closed { transform: translateX(100%); }
-
-        .momo-item-card {
-            background: #ffffff;
-            border: 1px solid #f1f5f9;
-            border-radius: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .checkout-btn {
-            background: linear-gradient(135deg, #111827 0%, #374151 100%);
-            box-shadow: 0 15px 30px -10px rgba(17, 24, 39, 0.4);
-        }
-
+        .momo-item-card { background: #ffffff; border: 1px solid #f1f5f9; border-radius: 1.5rem; transition: all 0.3s ease; }
+        .checkout-btn { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); box-shadow: 0 15px 30px -10px rgba(242, 153, 74, 0.4); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -44,18 +32,20 @@
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[420px] bg-white z-[100] cart-sidebar cart-closed flex flex-col shadow-2xl">
         <div class="p-8 border-b flex justify-between items-center">
             <div>
-                <h2 class="text-2xl font-800 tracking-tighter">My <span class="text-orange-500">Box</span></h2>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Freshly packed for you</p>
+                <h2 class="text-2xl font-800 tracking-tighter italic">Review <span class="text-orange-500">Order</span></h2>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Best Momos</p>
             </div>
-            <button onclick="toggleCart()" class="h-12 w-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+            <button onclick="toggleCart()" class="h-10 w-10 bg-gray-50 rounded-xl text-gray-400"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-3 no-scrollbar">
             </div>
 
-        <div class="p-8 bg-gray-50 border-t rounded-t-[2.5rem] shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]">
+        <div class="px-8 pb-4">
+            <input id="user-address" type="text" placeholder="House No / Street / Landmark" class="w-full px-5 py-4 bg-gray-50 rounded-2xl outline-none border border-gray-100 font-semibold text-sm focus:border-orange-400">
+        </div>
+
+        <div class="p-8 bg-gray-50 border-t rounded-t-[2.5rem]">
             <div class="space-y-3 mb-6">
                 <div class="flex justify-between text-sm font-semibold text-gray-500 px-2">
                     <span>Momo Total</span>
@@ -66,41 +56,27 @@
                     <span class="text-green-600 font-bold">₹20</span>
                 </div>
                 <div class="pt-4 border-t border-dashed border-gray-300 flex justify-between items-center px-2">
-                    <span class="text-lg font-800 text-gray-900">To Pay</span>
-                    <span id="bill-total" class="text-3xl font-800 tracking-tighter text-gray-900">₹0</span>
+                    <span class="text-lg font-800 text-gray-900">TO PAY</span>
+                    <span id="bill-total" class="text-3xl font-800 tracking-tighter text-orange-500">₹0</span>
                 </div>
             </div>
 
-            <button onclick="checkoutOrder()" class="checkout-btn w-full text-white py-6 rounded-[2rem] font-800 uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all">
-                Final Checkout <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <button onclick="initiateCheckout()" class="checkout-btn w-full text-white py-6 rounded-[2rem] font-800 uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all">
+                Pay & Confirm Order <i class="fa-solid fa-bolt text-[10px]"></i>
             </button>
         </div>
     </div>
 
-    <main class="max-w-2xl mx-auto p-6 pt-10">
+    <main class="max-w-2xl mx-auto p-6">
         <h2 class="text-4xl font-800 tracking-tighter mb-8 italic text-gray-900">Today's <span class="text-orange-500">Specials</span></h2>
-        
         <div class="space-y-6">
             <div class="bg-white p-4 rounded-[2.5rem] shadow-sm border border-gray-100 flex items-center gap-5">
-                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=300" class="w-24 h-24 object-cover rounded-[1.8rem]">
+                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=300" class="w-20 h-20 object-cover rounded-2xl">
                 <div class="flex-1">
-                    <h3 class="font-800 text-lg uppercase tracking-tighter">Chicken Fried</h3>
+                    <h3 class="font-800 text-gray-800 uppercase tracking-tighter">Chicken Fried</h3>
                     <p class="text-orange-500 font-extrabold text-sm">₹100</p>
                 </div>
-                <button onclick="addToCart('Chicken Fried', 100)" class="h-12 w-12 bg-gray-900 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
-
-            <div class="bg-white p-4 rounded-[2.5rem] shadow-sm border border-gray-100 flex items-center gap-5">
-                <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?q=80&w=300" class="w-24 h-24 object-cover rounded-[1.8rem]">
-                <div class="flex-1">
-                    <h3 class="font-800 text-lg uppercase tracking-tighter">Veg Steamed</h3>
-                    <p class="text-orange-500 font-extrabold text-sm">₹60</p>
-                </div>
-                <button onclick="addToCart('Veg Steamed', 60)" class="h-12 w-12 bg-gray-900 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
+                <button onclick="addToCart('Chicken Fried', 100)" class="h-10 w-10 bg-gray-900 text-white rounded-xl shadow-lg active:scale-90 transition"><i class="fa-solid fa-plus"></i></button>
             </div>
         </div>
     </main>
@@ -112,10 +88,8 @@
         const deliveryFee = 20;
 
         function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            const overlay = document.getElementById('overlay');
-            sidebar.classList.toggle('cart-open');
-            overlay.classList.toggle('hidden');
+            document.getElementById('cart-sidebar').classList.toggle('cart-open');
+            document.getElementById('overlay').classList.toggle('hidden');
         }
 
         function addToCart(name, price) {
@@ -137,15 +111,9 @@
             badge.innerText = cart.length;
 
             if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-20 text-center">
-                        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                            <i class="fa-solid fa-basket-shopping text-3xl text-gray-200"></i>
-                        </div>
-                        <p class="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Your box is empty</p>
-                    </div>`;
+                container.innerHTML = `<div class="text-center py-20 text-gray-300 font-bold uppercase text-[10px] tracking-widest">Your box is empty</div>`;
                 subtotalEl.innerText = `₹0`;
-                totalEl.innerText = `₹0`;
+                totalEl.innerText = `₹0`; // Jab cart khali ho tab total bhi 0 dikhao
                 return;
             }
 
@@ -153,33 +121,42 @@
             container.innerHTML = cart.map((item, index) => {
                 subtotal += item.price;
                 return `
-                    <div class="momo-item-card p-5 flex items-center justify-between group">
-                        <div class="flex items-center gap-4">
-                            <div class="h-2 w-2 rounded-full bg-orange-500"></div>
-                            <div>
-                                <p class="font-800 text-gray-900 text-sm uppercase tracking-tighter">${item.name}</p>
-                                <p class="text-xs font-bold text-gray-400 tracking-widest">1 Plate</p>
-                            </div>
-                        </div>
+                    <div class="momo-item-card p-4 flex items-center justify-between">
+                        <p class="font-800 text-gray-900 text-sm uppercase tracking-tighter">${item.name}</p>
                         <div class="flex items-center gap-4">
                             <span class="font-800 text-gray-900">₹${item.price}</span>
-                            <button onclick="removeFromCart(${index})" class="h-8 w-8 text-gray-300 hover:text-red-500 transition">
+                            <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500 transition">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
 
             subtotalEl.innerText = `₹${subtotal}`;
             totalEl.innerText = `₹${subtotal + deliveryFee}`;
         }
 
-        function checkoutOrder() {
-            if(cart.length === 0) return alert("Select some momos first!");
-            const finalPay = document.getElementById('bill-total').innerText;
-            alert("Order Confirmed! Final Bill: " + finalPay);
-            // Redirection logic can go here
+        function initiateCheckout() {
+            const address = document.getElementById('user-address').value;
+            const total = document.getElementById('bill-total').innerText.replace('₹', '');
+            
+            if (cart.length === 0) return alert("Select momos first!");
+            if (!address) return alert("Please enter delivery address!");
+
+            // 1. Payment Link (Deep Linking)
+            const upiUrl = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total}&cu=INR`;
+            
+            // 2. WhatsApp Message Construction
+            const itemList = cart.map(i => `• ${i.name} (₹${i.price})`).join('%0A');
+            const waMsg = `*🍱 NEW ORDER - FRESHFRY*%0A%0A*Items:*%0A${itemList}%0A%0A*Bill Summary:*%0A- Subtotal: ₹${total-20}%0A- Delivery: ₹20%0A- *Total Paid: ₹${total}*%0A%0A*Delivery Details:*%0A📍 ${address}%0A%0A_Payment initiated via UPI App_`;
+
+            // Open Payment App
+            window.location.href = upiUrl;
+
+            // Open WhatsApp after short delay for confirmation
+            setTimeout(() => {
+                window.location.href = `https://wa.me/917008186187?text=${waMsg}`;
+            }, 3000);
         }
     </script>
 </body>
