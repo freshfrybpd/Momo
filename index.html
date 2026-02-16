@@ -3,28 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Premium Momos Baripada</title>
+    <title>Freshfry | Baripada Premium Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        
         :root { --primary: #ff5e00; --dark: #0f172a; }
-        body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); }
-        
+        body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); overflow-x: hidden; }
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); }
         .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
-        
-        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1000; }
         .cart-open { transform: translateX(0); }
         .cart-closed { transform: translateX(100%); }
-
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-10">
@@ -32,37 +25,37 @@
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-900 tracking-tighter flex items-center gap-1">
-                <span class="text-orange-500"><i class="fa-solid fa-dumpling"></i></span>
+                <span class="text-orange-500"><i class="fa-solid fa-餃子"></i></span>
                 Fresh<span class="text-orange-600">fry.</span>
             </h1>
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Finest</p>
         </div>
-        <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 active:scale-90 transition-all shadow-lg shadow-gray-200">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white animate-bounce">0</span>
+        <div class="flex items-center gap-4">
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg shadow-gray-200">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+            </div>
+            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-gray-100 overflow-hidden shadow-sm">
+                <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" alt="User">
+            </a>
         </div>
     </nav>
 
     <div id="promo-banner" class="hidden mx-6 mt-6 p-6 btn-gradient rounded-[2.5rem] text-white shadow-2xl shadow-orange-200 relative overflow-hidden">
         <div class="relative z-10">
-            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Limited Offer</span>
+            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Special Deal</span>
             <h3 id="p-title" class="text-2xl font-900 mt-2 leading-tight">--</h3>
             <div class="mt-4 inline-flex items-center gap-2 bg-black/10 px-4 py-2 rounded-xl border border-white/20">
                 <span class="text-[10px] opacity-70">USE CODE:</span>
                 <span id="p-code" class="font-900 tracking-widest">--</span>
             </div>
         </div>
-        <i class="fa-solid fa-fire-amber absolute -right-4 -bottom-4 text-9xl opacity-10"></i>
-    </div>
-
-    <div class="flex gap-3 px-6 mt-8 overflow-x-auto no-scrollbar">
-        <button class="bg-gray-900 text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-md">All</button>
-        <button class="bg-white border border-gray-100 px-6 py-3 rounded-2xl text-sm font-bold text-gray-500">Veg</button>
-        <button class="bg-white border border-gray-100 px-6 py-3 rounded-2xl text-sm font-bold text-gray-500">Non-Veg</button>
+        <i class="fa-solid fa-fire absolute -right-4 -bottom-4 text-9xl opacity-10"></i>
     </div>
 
     <main class="px-6 mt-8">
-        <h2 class="text-2xl font-900 mb-6">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
+        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
+        
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div class="col-span-full py-20 text-center">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
@@ -70,42 +63,29 @@
         </div>
     </main>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-50 shadow-2xl cart-closed flex flex-col cart-sidebar">
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar">
         <div class="p-6 flex justify-between items-center border-b">
-            <div>
-                <h2 class="text-2xl font-900 italic">Your Box</h2>
-                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Freshfry Baripada</p>
-            </div>
+            <h2 class="text-2xl font-900 italic">Your Box</h2>
             <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
         </div>
-        
-        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5">
-            </div>
-
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
         <div class="p-8 bg-white border-t space-y-6">
-            <div class="space-y-2">
-                <div class="flex justify-between text-gray-400 font-bold text-sm">
-                    <span>Subtotal</span>
-                    <span id="subtotal">₹0</span>
-                </div>
-                <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
-                    <span>Total</span>
-                    <span id="cart-total" class="text-orange-600">₹0</span>
-                </div>
+            <div class="flex justify-between font-900 text-2xl pt-2">
+                <span>Total</span>
+                <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl shadow-orange-100 active:scale-95 transition-all flex items-center justify-center gap-3">
-                PLACE ORDER <i class="fa-solid fa-arrow-right"></i>
+            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl shadow-orange-100">
+                PLACE ORDER VIA WHATSAPP
             </button>
         </div>
     </div>
-
-    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-md"></div>
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -121,6 +101,13 @@
 
         let cart = [];
 
+        // 1. Check Login & Setup Profile Icon
+        const userName = localStorage.getItem('ff_user');
+        if(userName) {
+            document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
+        }
+
+        // 2. Fetch Promo from Firebase settings/promo
         onSnapshot(doc(db, "settings", "promo"), (d) => {
             if(d.exists()) {
                 const data = d.data();
@@ -130,29 +117,36 @@
             }
         });
 
+        // 3. Fetch Menu from Firebase collection "menu"
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
             list.innerHTML = '';
+            
+            if(snap.empty) {
+                list.innerHTML = '<p class="col-span-full text-center text-gray-400 font-bold">No items found in Firebase "menu" collection.</p>';
+                return;
+            }
+
             snap.forEach(d => {
                 const item = d.data();
                 list.innerHTML += `
                     <div class="momo-card p-4">
                         <div class="relative group cursor-pointer overflow-hidden rounded-[2rem]">
-                            <img src="${item.image}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=1000&auto=format&fit=crop'">
+                            <img src="${item.image}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
                                 <p class="text-[10px] font-black uppercase flex items-center gap-1 ${item.type === 'veg' ? 'text-green-600' : 'text-red-600'}">
-                                    <i class="fa-solid fa-circle text-[6px]"></i> ${item.type}
+                                    <i class="fa-solid fa-circle text-[6px]"></i> ${item.type || 'Non-Veg'}
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-5 px-2 pb-2">
+                        <div class="mt-5 px-2">
                             <div class="flex justify-between items-center mb-1">
-                                <h4 class="font-900 text-xl tracking-tight">${item.name}</h4>
+                                <h4 class="font-900 text-xl tracking-tight uppercase italic">${item.name}</h4>
                                 <span class="font-900 text-xl text-orange-600">₹${item.price}</span>
                             </div>
-                            <p class="text-gray-400 text-xs mb-6 font-medium">Authentic steam-fried delight with spicy chutney.</p>
+                            <p class="text-gray-400 text-[10px] mb-6 font-bold uppercase tracking-widest">Baripada Special Handcrafted</p>
                             <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" 
-                                class="w-full bg-gray-50 hover:bg-black hover:text-white py-4 rounded-2xl font-black transition-all border border-gray-100 active:scale-95 flex items-center justify-center gap-2">
+                                class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black transition-all active:scale-95 flex items-center justify-center gap-2">
                                 ADD TO BOX <i class="fa-solid fa-plus text-[10px]"></i>
                             </button>
                         </div>
@@ -160,42 +154,25 @@
             });
         });
 
+        // Cart Logic
         window.addToCart = (name, price, image) => {
             const existing = cart.find(i => i.name === name);
-            if(existing) {
-                existing.qty++;
-            } else {
-                cart.push({ name, price, image, qty: 1 });
-            }
+            if(existing) { existing.qty++; } 
+            else { cart.push({ name, price, image, qty: 1 }); }
             updateCartUI();
-            
-            const btn = event.currentTarget;
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = "ADDED! ✨";
-            btn.classList.add('bg-orange-500', 'text-white');
-            setTimeout(() => {
-                btn.innerHTML = originalHtml;
-                btn.classList.remove('bg-orange-500', 'text-white');
-            }, 800);
         };
 
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
             const totalEl = document.getElementById('cart-total');
-            const subtotalEl = document.getElementById('subtotal');
             const badge = document.getElementById('cart-badge');
             
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
             badge.innerText = totalItems;
             
             if(cart.length === 0) {
-                list.innerHTML = `
-                    <div class="text-center py-20">
-                        <div class="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300 text-3xl">🥟</div>
-                        <p class="text-gray-400 font-bold">Your box is empty!</p>
-                    </div>`;
+                list.innerHTML = `<p class="text-center py-10 text-gray-400 font-bold">Box is empty!</p>`;
                 totalEl.innerText = "₹0";
-                subtotalEl.innerText = "₹0";
                 return;
             }
 
@@ -203,62 +180,42 @@
             list.innerHTML = cart.map((item, index) => {
                 total += (item.price * item.qty);
                 return `
-                    <div class="flex items-center gap-4 bg-gray-50/50 p-4 rounded-[1.5rem] border border-gray-100">
-                        <img src="${item.image}" class="w-20 h-20 object-cover rounded-2xl shadow-md">
+                    <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
+                        <img src="${item.image}" class="w-16 h-16 object-cover rounded-xl">
                         <div class="flex-1">
-                            <p class="text-sm font-900 leading-tight mb-1">${item.name}</p>
+                            <p class="text-sm font-900">${item.name}</p>
                             <p class="text-orange-600 text-xs font-black">₹${item.price} x ${item.qty}</p>
-                            <div class="flex items-center gap-3 mt-2">
-                                <button onclick="changeQty(${index}, -1)" class="w-6 h-6 bg-white rounded-lg border flex items-center justify-center text-xs shadow-sm">-</button>
-                                <span class="text-xs font-black">${item.qty}</span>
-                                <button onclick="changeQty(${index}, 1)" class="w-6 h-6 bg-white rounded-lg border flex items-center justify-center text-xs shadow-sm">+</button>
-                            </div>
                         </div>
-                        <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500 transition-colors px-2">
-                            <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
-                    </div>
-                `;
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQty(${index}, -1)" class="w-6 h-6 bg-white rounded border text-xs">-</button>
+                            <span class="text-xs font-black">${item.qty}</span>
+                            <button onclick="changeQty(${index}, 1)" class="w-6 h-6 bg-white rounded border text-xs">+</button>
+                        </div>
+                    </div>`;
             }).join('');
-            
             totalEl.innerText = "₹" + total;
-            subtotalEl.innerText = "₹" + total;
         };
 
         window.changeQty = (index, delta) => {
             cart[index].qty += delta;
-            if(cart[index].qty < 1) return removeFromCart(index);
-            updateCartUI();
-        };
-
-        window.removeFromCart = (index) => {
-            cart.splice(index, 1);
+            if(cart[index].qty < 1) cart.splice(index, 1);
             updateCartUI();
         };
 
         window.toggleCart = (open) => {
             const sb = document.getElementById('cart-sidebar');
             const ov = document.getElementById('cart-overlay');
-            if(open) {
-                sb.classList.replace('cart-closed', 'cart-open');
-                ov.classList.remove('hidden');
-            } else {
-                sb.classList.replace('cart-open', 'cart-closed');
-                ov.classList.add('hidden');
-            }
+            if(open) { sb.classList.replace('cart-closed', 'cart-open'); ov.classList.remove('hidden'); }
+            else { sb.classList.replace('cart-open', 'cart-closed'); ov.classList.add('hidden'); }
         };
 
         window.checkout = () => {
-            if(cart.length === 0) return alert("Add some momos first!");
-            
-            // WhatsApp Order Logic
-            let message = "🍱 *New Order from Freshfry Baripada*%0A--------------------------%0A";
-            cart.forEach(item => {
-                message += `• ${item.name} (x${item.qty}) - ₹${item.price * item.qty}%0A`;
-            });
-            message += `--------------------------%0A*Total: ${document.getElementById('cart-total').innerText}*%0A%0A_Please confirm my order!_`;
-            
-            window.open(`https://wa.me/91XXXXXXXXXX?text=${message}`, '_blank'); // Replace X with your number
+            if(cart.length === 0) return alert("Add momos first!");
+            const phone = localStorage.getItem('ff_phone') || "User";
+            let msg = `*Order from Freshfry*%0AUser: ${userName} (${phone})%0A%0A`;
+            cart.forEach(i => msg += `• ${i.name} x ${i.qty}%0A`);
+            msg += `%0A*Total: ${document.getElementById('cart-total').innerText}*`;
+            window.open(`https://wa.me/91XXXXXXXXXX?text=${msg}`); // Apna No. yahan daalein
         };
     </script>
 </body>
