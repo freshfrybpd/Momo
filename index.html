@@ -10,12 +10,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
         .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
-        .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid #f1f5f9; }
+        .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid #f1f5f9; overflow: hidden; }
         .momo-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(242, 153, 74, 0.3); }
         .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
         .cart-closed { transform: translateX(110%); }
         .portion-btn.active { background: #f2994a; color: white; border-color: #f2994a; }
         .btn-add.added { background: #10b981 !important; color: white; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="no-scrollbar">
@@ -23,7 +24,7 @@
     <div id="login-modal" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-6 text-center">
         <div class="w-full max-w-sm">
             <div class="text-5xl font-extrabold text-orange-500 mb-2">Fresh<span class="text-gray-900">fry</span>.</div>
-            <p class="text-gray-400 font-bold text-xs mb-10 tracking-[0.3em] uppercase text-center">Premium Momo Hub</p>
+            <p class="text-gray-400 font-bold text-xs mb-10 tracking-[0.3em] uppercase tracking-tighter">Premium Momo Hub</p>
             <div class="space-y-4">
                 <input id="user-name" type="text" placeholder="Your Name" class="w-full px-6 py-5 bg-gray-100 rounded-[2rem] outline-none font-bold text-center focus:ring-2 focus:ring-orange-400">
                 <input id="user-phone" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-6 py-5 bg-gray-100 rounded-[2rem] outline-none font-bold text-center focus:ring-2 focus:ring-orange-400">
@@ -32,7 +33,7 @@
         </div>
     </div>
 
-    <nav class="flex items-center justify-between px-8 py-6 bg-white sticky top-0 z-50">
+    <nav class="flex items-center justify-between px-8 py-6 bg-white sticky top-0 z-50 shadow-sm">
         <div class="text-3xl font-extrabold tracking-tighter text-orange-500">Fresh<span class="text-gray-900">fry</span>.</div>
         <div onclick="toggleCart(true)" class="relative bg-orange-100 p-4 rounded-full cursor-pointer">
             <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
@@ -55,7 +56,7 @@
             <h2 class="text-2xl font-800">My <span class="text-orange-500">Box</span></h2>
             <button onclick="toggleCart(false)" class="h-12 w-12 bg-gray-50 rounded-full"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
         <div class="p-8 border-t space-y-4 bg-slate-50">
             <input id="exact-address" type="text" placeholder="Delivery Address / Landmark" class="w-full px-6 py-5 bg-white rounded-[1.5rem] outline-none border border-gray-100 font-bold text-sm">
             <div class="flex justify-between items-center px-2">
@@ -74,72 +75,98 @@
         <button onclick="location.reload()" class="font-800 text-orange-500 uppercase text-xs tracking-widest">Order More Momos</button>
     </div>
 
-    <script>
-        // 🛍️ UPDATED MENU DATA
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+            authDomain: "freshfry-39a10.firebaseapp.com",
+            projectId: "freshfry-39a10",
+            storageBucket: "freshfry-39a10.firebasestorage.app",
+            messagingSenderId: "928483976893",
+            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         const momoMenu = [
-            { id: 1, name: "KFC Momo", half: 80, full: 120, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBLJNa4-2vMgc70QAXidfnbIjILJlnNLafvya8mnqL4DlSjGJzMYwQ2w&s=10?w=600&q=80" },
+            { id: 1, name: "KFC Momo", half: 80, full: 120, image: "https://images.unsplash.com/photo-1563245332-692546984812?w=600&q=80" },
             { id: 2, name: "Steam Momo", half: 50, full: 90, image: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=600&q=80" },
             { id: 3, name: "Fried Momo", half: 70, full: 130, image: "https://foodiko.in/wp-content/uploads/2025/08/fry-momo.jpg?w=600&q=80" },
             { id: 4, name: "Kurkure Momo", half: 100, full: 180, image: "https://images.unsplash.com/photo-1523905330026-b8bd1f5f320e?w=600&q=80" }
         ];
 
         let cart = [];
+        let selectedPortions = {};
+        momoMenu.forEach(m => selectedPortions[m.id] = { type: 'half', price: m.half });
 
-        function renderMenu() {
+        // --- AUTH & SYNC TO ADMIN ---
+        window.handleLogin = async () => {
+            const n = document.getElementById('user-name').value.trim();
+            const p = document.getElementById('user-phone').value.trim();
+            if(n && p.length === 10) {
+                try {
+                    // Save User to Database for Admin to see
+                    await setDoc(doc(db, "users", p), {
+                        name: n,
+                        phone: p,
+                        joined: serverTimestamp()
+                    }, { merge: true });
+
+                    localStorage.setItem('ffUser', n);
+                    localStorage.setItem('ffPhone', p);
+                    document.getElementById('login-modal').style.display = 'none';
+                } catch(e) { alert("Check Connection"); }
+            } else { alert("Name & 10-digit Phone required"); }
+        };
+
+        // --- RENDER MENU ---
+        window.renderMenu = () => {
             const list = document.getElementById('menu-list');
             list.innerHTML = momoMenu.map(item => `
                 <div class="momo-card p-5">
                     <img src="${item.image}" class="w-full h-60 object-cover rounded-[2rem] mb-6 shadow-md">
                     <h4 class="font-800 text-xl tracking-tighter mb-4">${item.name}</h4>
-                    
                     <div class="grid grid-cols-2 gap-3 mb-6">
                         <button onclick="selectPortion(${item.id}, 'half', ${item.half}, this)" 
-                            id="btn-${item.id}-half" class="portion-btn border-2 border-gray-100 py-3 rounded-2xl font-bold text-xs active tracking-widest">
+                            class="portion-btn border-2 border-gray-100 py-3 rounded-2xl font-bold text-xs freshfry-gradient text-white active tracking-widest">
                             HALF ₹${item.half}
                         </button>
                         <button onclick="selectPortion(${item.id}, 'full', ${item.full}, this)" 
-                            id="btn-${item.id}-full" class="portion-btn border-2 border-gray-100 py-3 rounded-2xl font-bold text-xs tracking-widest">
+                            class="portion-btn border-2 border-gray-100 py-3 rounded-2xl font-bold text-xs tracking-widest">
                             FULL ₹${item.full}
                         </button>
                     </div>
-
                     <button onclick="addToCart(this, ${item.id})" class="btn-add w-full bg-gray-100 text-gray-900 py-5 rounded-[1.5rem] font-800 text-[10px] uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-all">
                         Add to Box
                     </button>
                 </div>
             `).join('');
-        }
-
-        // Default selections
-        let selectedPortions = {};
-        momoMenu.forEach(m => selectedPortions[m.id] = { type: 'half', price: m.half });
+        };
 
         window.selectPortion = (id, type, price, btn) => {
             selectedPortions[id] = { type, price };
-            // UI Toggle
             const card = btn.parentElement;
-            card.querySelectorAll('.portion-btn').forEach(b => b.classList.remove('active', 'freshfry-gradient', 'text-white'));
-            btn.classList.add('active', 'freshfry-gradient', 'text-white');
+            card.querySelectorAll('.portion-btn').forEach(b => b.classList.remove('freshfry-gradient', 'text-white'));
+            btn.classList.add('freshfry-gradient', 'text-white');
         };
 
         window.addToCart = (btn, id) => {
             const momo = momoMenu.find(m => m.id === id);
             const selection = selectedPortions[id];
             const cartId = `${id}-${selection.type}`;
-            
             const inCart = cart.find(c => c.cartId === cartId);
-            if(inCart) {
-                inCart.qty++;
-            } else {
-                cart.push({ cartId, name: `${momo.name} (${selection.type})`, price: selection.price, image: momo.image, qty: 1 });
-            }
+            if(inCart) inCart.qty++;
+            else cart.push({ cartId, name: `${momo.name} (${selection.type})`, price: selection.price, image: momo.image, qty: 1 });
             
             btn.innerText = "Added! ✨"; btn.classList.add('added');
             setTimeout(() => { btn.innerText = "Add to Box"; btn.classList.remove('added'); }, 800);
             updateCart();
         };
 
-        function updateCart() {
+        window.updateCart = () => {
             let total = 0;
             document.getElementById('cart-badge').innerText = cart.reduce((a,b) => a+b.qty, 0);
             document.getElementById('cart-items-list').innerHTML = cart.map(i => {
@@ -151,39 +178,47 @@
                 </div>`;
             }).join('');
             document.getElementById('cart-total').innerText = "₹" + total;
-        }
-
-        function handleLogin() {
-            const n = document.getElementById('user-name').value;
-            const p = document.getElementById('user-phone').value;
-            if(n && p.length === 10) {
-                localStorage.setItem('ffUser', n);
-                document.getElementById('login-modal').style.display = 'none';
-            } else { alert("Please enter name and 10-digit phone"); }
-        }
-
-        if(localStorage.getItem('ffUser')) document.getElementById('login-modal').style.display = 'none';
-
-        function toggleCart(o) { document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o); }
-
-        window.checkout = (type) => {
-            const addr = document.getElementById('exact-address').value;
-            if(!addr || cart.length === 0) return alert("Box or Address is empty!");
-            const total = document.getElementById('cart-total').innerText;
-            
-            if(type === 'upi') {
-                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total.replace('₹','')}&cu=INR`;
-            } else {
-                let items = cart.map(c => `${c.name} x${c.qty}`).join(', ');
-                let msg = `*NEW ORDER - FRESHFRY*%0A*Name:* ${localStorage.getItem('ffUser')}%0A*Items:* ${items}%0A*Total:* ${total}%0A*Address:* ${addr}`;
-                window.location.href = `https://wa.me/917008186187?text=${msg}`;
-            }
-            document.getElementById('tracking-page').classList.remove('hidden');
         };
 
+        window.toggleCart = (o) => { document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o); };
+
+        // --- CHECKOUT ---
+        window.checkout = async (type) => {
+            const addr = document.getElementById('exact-address').value;
+            if(!addr || cart.length === 0) return alert("Address or Box empty!");
+            
+            const total = document.getElementById('cart-total').innerText;
+            const userName = localStorage.getItem('ffUser');
+            const userPhone = localStorage.getItem('ffPhone');
+
+            const orderData = {
+                customerName: userName,
+                customer: userPhone,
+                address: addr,
+                items: cart,
+                total: parseInt(total.replace('₹','')),
+                status: 'pending',
+                paymentMethod: type === 'upi' ? 'Online' : 'WhatsApp/COD',
+                time: Date.now()
+            };
+
+            try {
+                // Send order to Kitchen Feed (Admin)
+                await addDoc(collection(db, "orders"), orderData);
+
+                if(type === 'upi') {
+                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${orderData.total}&cu=INR`;
+                } else {
+                    let itemsList = cart.map(c => `${c.name} x${c.qty}`).join(', ');
+                    let msg = `*NEW ORDER - FRESHFRY*%0A*Name:* ${userName}%0A*Items:* ${itemsList}%0A*Total:* ${total}%0A*Address:* ${addr}`;
+                    window.location.href = `https://wa.me/917008186187?text=${msg}`;
+                }
+                document.getElementById('tracking-page').classList.remove('hidden');
+            } catch(e) { alert("Failed to connect to Kitchen"); }
+        };
+
+        if(localStorage.getItem('ffUser')) document.getElementById('login-modal').style.display = 'none';
         renderMenu();
-        // Set default visual state for portion buttons
-        document.querySelectorAll('.portion-btn:first-child').forEach(b => b.classList.add('freshfry-gradient', 'text-white'));
     </script>
 </body>
 </html>
