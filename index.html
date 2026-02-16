@@ -3,180 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Premium Momos</title>
+    <title>Freshfry | Crunchy & Steamy Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #0d0d0d; color: #fff; margin: 0; overflow-x: hidden; }
-        
-        /* Login UI */
-        .hero-bg { height: 60vh; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,1) 100%), url('https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .login-card { background: white; border-top-left-radius: 35px; border-top-right-radius: 35px; height: 40vh; position: fixed; bottom: 0; width: 100%; padding: 30px 24px; color: #1c1c1c; z-index: 5000; }
-        .input-group { border: 1.5px solid #e8e8e8; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .btn-main { background-color: #ef4f5f; color: white; width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; }
-
-        /* Dashboard UI */
-        .zomato-add-btn { background: #fff; color: #16a34a; border: 1px solid #e2e8f0; font-weight: 900; padding: 6px 20px; border-radius: 12px; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 12px; }
-        .bottom-nav { background: rgba(13, 13, 13, 0.98); backdrop-filter: blur(10px); border-top: 1px solid #222; position: fixed; bottom: 0; width: 100%; z-index: 1000; }
-        .category-scroll::-webkit-scrollbar { display: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-24">
+<body class="bg-slate-50 text-gray-800">
 
-    <div id="login-modal" class="fixed inset-0 z-[6000] bg-black">
-        <div class="hero-bg text-center">
-            <h1 class="text-4xl font-900 tracking-tighter uppercase leading-tight">Your Daily Dose<br>Of Momos</h1>
-            <div class="mt-4 bg-[#ef4f5f] px-6 py-1 transform -rotate-2 font-900 italic text-3xl">freshfry</div>
+    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-3xl font-extrabold tracking-tight text-orange-500">
+            Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
-        <div class="login-card">
-            <h2 class="text-center font-bold text-gray-500 text-sm tracking-widest uppercase mb-6">Log in or sign up</h2>
-            <div class="input-group">
-                <i class="fa-regular fa-user text-gray-400"></i>
-                <input type="text" id="custName" placeholder="Enter Your Name" class="w-full outline-none font-semibold">
-            </div>
-            <div class="input-group">
-                <div class="flex items-center gap-2 border-r border-gray-200 pr-3">
-                    <img src="https://flagcdn.com/w20/in.png" class="w-5">
-                    <span class="text-sm font-bold">+91</span>
-                </div>
-                <input type="tel" id="custPhone" maxlength="10" placeholder="Enter Phone Number" class="w-full outline-none font-semibold">
-            </div>
-            <button onclick="submitToFirebase()" id="subBtn" class="btn-main mt-2">Continue</button>
+        <div class="hidden md:flex space-x-8 font-semibold text-gray-600">
+            <a href="#" class="hover:text-orange-500 transition">Explore</a>
+            <a href="#" class="hover:text-orange-500 transition">Best Sellers</a>
+            <a href="#" class="hover:text-orange-500 transition">Bulk Orders</a>
         </div>
-    </div>
-
-    <div id="main-dashboard" class="hidden">
-        <header class="p-5 flex items-center justify-between sticky top-0 bg-black/90 backdrop-blur-md z-50">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-location-dot text-[#ef4f5f] text-xl"></i>
-                <div>
-                    <h2 class="text-sm font-900 italic">Home <i class="fa-solid fa-chevron-down text-[10px]"></i></h2>
-                    <p class="text-[9px] text-gray-400 font-bold uppercase">Baripada, Odisha</p>
-                </div>
-            </div>
-            <a href="profile.html" class="w-11 h-11 rounded-full border-2 border-zinc-800 overflow-hidden">
-                <img id="user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Fresh" alt="Profile">
-            </a>
-        </header>
-
-        <main class="px-5">
-            <div class="my-4 bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex items-center justify-between text-gray-500">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-magnifying-glass text-[#ef4f5f]"></i>
-                    <span class="text-sm font-semibold">Search "KFC Fried Momo"</span>
-                </div>
-                <i class="fa-solid fa-microphone text-[#ef4f5f] border-l border-zinc-700 pl-4"></i>
-            </div>
-
-            <h4 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-8">Recommended for you</h4>
-
-            <div class="space-y-12 pb-10">
-                <div class="flex justify-between items-start gap-4">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="w-3 h-3 border border-green-600 flex items-center justify-center p-[2px]"><div class="w-full h-full bg-green-600 rounded-full"></div></span>
-                            <p class="text-[9px] text-green-500 font-black uppercase italic">Highly Reordered</p>
-                        </div>
-                        <h4 class="text-xl font-900 italic uppercase">KFC Fried Momo</h4>
-                        <p class="text-sm font-bold mt-1 text-zinc-300">₹120</p>
-                    </div>
-                    <div class="relative w-36 h-36">
-                        <img src="https://foodiko.in/wp-content/uploads/2025/08/fry-momo.jpg" class="w-full h-full object-cover rounded-[2rem] border border-zinc-800 shadow-xl">
-                        <button class="zomato-add-btn">ADD +</button>
-                    </div>
-                </div>
-
-                <hr class="border-zinc-900">
-
-                <div class="flex justify-between items-start gap-4">
-                    <div class="flex-1">
-                        <h4 class="text-xl font-900 italic uppercase">Steam Butter Momo</h4>
-                        <p class="text-sm font-bold mt-1 text-zinc-300">₹70</p>
-                    </div>
-                    <div class="relative w-36 h-36">
-                        <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=400" class="w-full h-full object-cover rounded-[2rem] border border-zinc-800 shadow-xl">
-                        <button class="zomato-add-btn">ADD +</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <nav class="bottom-nav flex justify-around items-center py-4">
-            <div class="flex flex-col items-center gap-1 text-[#1a9e3e]">
-                <i class="fa-solid fa-motorcycle text-2xl"></i>
-                <span class="text-[10px] font-black uppercase">Delivery</span>
-            </div>
-            <div class="flex flex-col items-center gap-1 text-zinc-600">
-                <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
-                <span class="text-[10px] font-black uppercase">History</span>
-            </div>
-            <a href="profile.html" class="flex flex-col items-center gap-1 text-zinc-600">
-                <i class="fa-solid fa-user text-2xl"></i>
-                <span class="text-[10px] font-black uppercase">Profile</span>
-            </a>
-        </nav>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
-          authDomain: "freshfry-39a10.firebaseapp.com",
-          projectId: "freshfry-39a10",
-          storageBucket: "freshfry-39a10.firebasestorage.app",
-          messagingSenderId: "928483976893",
-          appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.submitToFirebase = async function() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const btn = document.getElementById('subBtn');
-
-            if (name === "" || phone.length !== 10) {
-                alert("Please enter Name and 10-digit Phone Number.");
-                return;
-            }
-
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
-            try {
-                // Firebase Store
-                await addDoc(collection(db, "users"), {
-                    fullName: name,
-                    phoneNumber: phone,
-                    createdAt: serverTimestamp()
-                });
-
-                localStorage.setItem('ff_user', name);
-                localStorage.setItem('ff_phone', phone);
-                
-                showDashboard();
-            } catch (e) {
-                alert("Error: " + e.message);
-                btn.innerText = "Continue";
-                btn.disabled = false;
-            }
-        };
-
-        function showDashboard() {
-            document.getElementById('login-modal').classList.add('hidden');
-            document.getElementById('main-dashboard').classList.remove('hidden');
-            const name = localStorage.getItem('ff_user');
-            document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
-        }
-
-        // Auto-login check
-        if(localStorage.getItem('ff_phone')) {
-            showDashboard();
-        }
-    </script>
-</body>
-</html>
+        <div class="flex items-center space-x-5">
