@@ -10,73 +10,121 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         #main-content { display: none; }
-        .order-card { transition: all 0.3s ease; border-radius: 2rem; }
-        .order-card:hover { transform: translateY(-5px); }
+        .order-card { transition: all 0.3s ease; border-radius: 2.5rem; border: 1px solid #f1f5f9; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-[#f8fafc] text-slate-900">
 
     <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
-        <div class="w-full max-w-md bg-white rounded-[3rem] p-10 shadow-2xl text-center">
-            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6">
-                <i class="fa-solid fa-shield-check"></i>
+        <div class="w-full max-w-md bg-white rounded-[3.5rem] p-12 shadow-2xl text-center">
+            <div class="w-20 h-20 bg-orange-500 text-white rounded-[2rem] flex items-center justify-center text-3xl mx-auto mb-8 shadow-xl shadow-orange-200">
+                <i class="fa-solid fa-crown"></i>
             </div>
-            <h2 class="text-3xl font-900 text-slate-800 mb-2 italic tracking-tighter">Freshfry<span class="text-orange-500">Admin.</span></h2>
-            <div class="space-y-4">
-                <input type="password" id="adminPassInput" placeholder="Master Password" class="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center">
-                <button onclick="checkAdminLogin()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-xs">Unlock Console</button>
+            <h2 class="text-3xl font-800 text-slate-800 mb-2 italic tracking-tighter">Freshfry <span class="text-orange-500">HQ.</span></h2>
+            <div class="space-y-4 mt-8">
+                <input type="password" id="adminPassInput" placeholder="Master Key" class="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center">
+                <button onclick="checkAdminLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px]">Access Console</button>
             </div>
         </div>
     </div>
 
-    <div id="main-content" class="p-4 lg:p-10 max-w-7xl mx-auto">
-        <header class="flex justify-between items-center mb-10">
+    <div id="main-content" class="p-6 lg:p-12 max-w-[1600px] mx-auto">
+        
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
             <div>
-                <h1 class="text-3xl font-800 text-slate-900 italic tracking-tighter">Command Centre<span class="text-orange-500">.</span></h1>
-                <p id="live-indicator" class="text-green-500 font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> System Live & Connected
-                </p>
+                <p class="text-orange-500 font-900 text-[10px] uppercase tracking-[0.4em] mb-1">System Version 2.0</p>
+                <h1 class="text-4xl font-800 text-slate-900 italic tracking-tighter">Command Centre<span class="text-orange-500">.</span></h1>
             </div>
-            <button onclick="logout()" class="bg-white p-4 rounded-2xl shadow-sm border text-red-500"><i class="fa-solid fa-power-off"></i></button>
+            <div class="flex items-center gap-4 bg-white p-3 rounded-[2rem] shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 px-4 border-r border-slate-100">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-black uppercase text-slate-400">Live</span>
+                </div>
+                <button onclick="logout()" class="w-12 h-12 flex items-center justify-center rounded-xl text-red-500 hover:bg-red-50 transition"><i class="fa-solid fa-power-off"></i></button>
+            </div>
         </header>
 
-        <section class="mb-12">
-            <div class="flex items-center gap-3 mb-6">
-                <h2 class="text-xl font-800 text-slate-800">Active Deliveries</h2>
-                <span id="order-count" class="bg-slate-900 text-white text-[10px] px-3 py-1 rounded-full font-black">0</span>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pending Orders</p>
+                <h3 id="order-count" class="text-4xl font-800">0</h3>
             </div>
-            <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
-        </section>
+            <div class="bg-orange-500 p-8 rounded-[2.5rem] shadow-xl shadow-orange-100 text-white">
+                <p class="text-[10px] font-black text-orange-100 uppercase tracking-widest mb-1">Active Riders</p>
+                <h3 id="rider-count" class="text-4xl font-800">0</h3>
+            </div>
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Registered Users</p>
+                <h3 id="user-count" class="text-4xl font-800">0</h3>
+            </div>
+            <div class="bg-slate-900 p-8 rounded-[2.5rem] shadow-sm text-white">
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Sales</p>
+                <h3 class="text-4xl font-800">₹<span id="total-revenue">0</span></h3>
+            </div>
+        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                    <h3 class="font-800 text-slate-800 mb-6 uppercase text-xs tracking-widest text-orange-500">Add New Item</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+            <div class="lg:col-span-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-800 text-slate-800 tracking-tighter">Kitchen Feed</h2>
+                    <div class="h-1 w-full mx-6 bg-slate-100 rounded-full"></div>
+                </div>
+                <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    </div>
+            </div>
+
+            <div class="lg:col-span-4">
+                <div class="bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100 sticky top-32">
+                    <h3 class="font-900 text-slate-900 mb-6 uppercase text-xs tracking-[0.2em] flex items-center gap-2">
+                        <i class="fa-solid fa-ticket text-orange-500"></i> Marketing Tools
+                    </h3>
                     <div class="space-y-4">
-                        <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
-                        <input type="number" id="foodPrice" placeholder="Price (₹)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
-                        <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-sm">
-                        <button id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-lg">UPLOAD TO MENU</button>
+                        <input type="text" id="promoCode" placeholder="CODE (e.g. MOMO50)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none font-bold uppercase text-sm border border-transparent focus:border-orange-500">
+                        <input type="number" id="promoValue" placeholder="Discount Amount (₹)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none font-bold text-sm border border-transparent focus:border-orange-500">
+                        <button onclick="sendCoupon()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-lg shadow-orange-100 text-[10px] tracking-widest uppercase">Push Coupon</button>
+                    </div>
+                    <div class="mt-8 pt-8 border-t border-dashed">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Active Promo List</p>
+                        <div id="coupon-list" class="space-y-2"></div>
                     </div>
                 </div>
             </div>
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-[3rem] shadow-sm border border-slate-100 p-8">
+                <h3 class="font-800 text-slate-900 mb-6 text-xl tracking-tighter italic">Manage Customers</h3>
+                <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
-                            <tr><th class="px-6 py-5">Dish</th><th class="px-6 py-5">Status</th><th class="px-6 py-5 text-right">Action</th></tr>
-                        </thead>
-                        <tbody id="menuTableBody" class="text-sm font-bold divide-y divide-slate-50"></tbody>
+                        <tbody id="userTableBody" class="divide-y divide-slate-50">
+                            </tbody>
                     </table>
                 </div>
             </div>
+
+            <div class="bg-white rounded-[3rem] shadow-sm border border-slate-100 p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-800 text-slate-900 text-xl tracking-tighter italic">Live Menu</h3>
+                    <button onclick="toggleMenuForm()" class="bg-slate-900 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase">Add Item +</button>
+                </div>
+                <div id="menu-form" class="hidden mb-6 p-6 bg-slate-50 rounded-3xl space-y-3">
+                    <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-white rounded-xl border border-slate-100 outline-none font-bold text-sm">
+                    <input type="number" id="foodPrice" placeholder="Price" class="w-full p-4 bg-white rounded-xl border border-slate-100 outline-none font-bold text-sm">
+                    <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-white rounded-xl border border-slate-100 outline-none font-bold text-sm">
+                    <button id="submitBtn" class="w-full bg-orange-500 text-white py-4 rounded-xl font-black text-xs uppercase">Save Dish</button>
+                </div>
+                <div id="menu-grid" class="space-y-4">
+                    </div>
+            </div>
         </div>
+
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -96,7 +144,7 @@
                 document.getElementById('admin-login-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 sessionStorage.setItem('isAdmin', 'true');
-            } else alert("Wrong Password!");
+            } else alert("Wrong Passkey!");
         };
         window.logout = () => { sessionStorage.clear(); location.reload(); };
 
@@ -104,98 +152,129 @@
         onSnapshot(query(collection(db, "orders"), orderBy("time", "desc")), (snap) => {
             const grid = document.getElementById('admin-orders-grid');
             grid.innerHTML = '';
-            let count = 0;
+            let count = 0; let revenue = 0;
+            let activeRiders = new Set();
 
             snap.forEach(d => {
                 const order = d.data();
                 const id = d.id;
                 const status = order.status || 'pending';
-                if(status === 'delivered') return;
+                
+                if(status === 'delivered') { revenue += order.total; return; }
+                if(order.riderName) activeRiders.add(order.riderName);
 
                 count++;
                 grid.innerHTML += `
-                <div class="bg-white p-6 order-card shadow-lg border border-slate-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${status==='pending'?'bg-orange-100 text-orange-600':'bg-blue-100 text-blue-600'}">${status}</span>
-                        <p class="text-[10px] text-slate-300 font-bold">#${id.slice(-5)}</p>
+                <div class="bg-white p-8 order-card shadow-lg relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${status==='pending'?'bg-red-100 text-red-500':'bg-blue-100 text-blue-500'}">${status}</span>
+                            <p class="text-[10px] text-slate-300 font-bold mt-2 tracking-widest">ID: #${id.slice(-5)}</p>
+                        </div>
+                        <p class="text-2xl font-900 text-slate-800 tracking-tighter italic">₹${order.total}</p>
                     </div>
-                    <h4 class="font-800 text-slate-900">${order.customer}</h4>
-                    <p class="text-[10px] text-slate-400 font-bold mb-4 uppercase tracking-tighter italic">${order.location}</p>
                     
-                    <div class="bg-slate-50 p-3 rounded-xl mb-4 text-xs font-bold text-slate-600">
-                        ${order.items.map(i => `<div>${i.qty} x ${i.name}</div>`).join('')}
+                    <div class="mb-6">
+                        <h4 class="font-800 text-slate-900 text-lg leading-tight uppercase tracking-tighter">${order.customerName || 'Freshfry Customer'}</h4>
+                        <p class="text-xs font-bold text-slate-400 mt-1">${order.customer}</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl mb-6 border border-slate-100">
+                        <p class="text-[9px] font-black text-slate-300 uppercase mb-2 tracking-widest">Address:</p>
+                        <p class="text-xs font-bold text-slate-600 italic">${order.address}</p>
+                    </div>
+
+                    <div class="space-y-2 mb-8">
+                        ${order.items.map(i => `<div class="flex justify-between text-xs font-bold text-slate-500 uppercase"><span>${i.name}</span> <span>x${i.qty}</span></div>`).join('')}
                     </div>
 
                     ${status === 'out_for_delivery' ? `
-                        <div class="mb-4 text-[10px] font-black text-blue-600 bg-blue-50 p-2 rounded-lg flex items-center gap-2 uppercase">
-                            <i class="fa-solid fa-motorcycle"></i> Assigned to: ${order.riderName}
+                        <div class="mb-6 text-[10px] font-black text-blue-600 bg-blue-50 p-3 rounded-xl flex items-center gap-3 uppercase tracking-widest">
+                            <i class="fa-solid fa-motorcycle text-lg"></i> Rider: ${order.riderName}
                         </div>
                     ` : ''}
 
-                    <div class="flex gap-2">
+                    <div class="flex gap-3">
                         ${status === 'pending' ? `
-                            <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-black text-[10px] uppercase">Accept</button>
-                            <button onclick="rejectOrder('${id}')" class="flex-1 bg-red-50 text-red-500 py-3 rounded-xl font-black text-[10px] uppercase">Reject</button>
+                            <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-green-100">Accept</button>
+                            <button onclick="rejectOrder('${id}')" class="bg-red-50 text-red-500 px-6 rounded-2xl font-black text-[10px] uppercase">Reject</button>
                         ` : status === 'accepted' ? `
-                            <button onclick="assignRider('${id}')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest">Assign Rider 🛵</button>
+                            <button onclick="assignRider('${id}')" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl">Assign Rider 🛵</button>
                         ` : `
-                            <div class="w-full text-center text-blue-500 font-black text-[10px] uppercase italic py-2">On the Way...</div>
+                            <div class="w-full text-center text-blue-500 font-black text-[10px] uppercase italic tracking-[0.2em] py-3 bg-blue-50 rounded-xl">Order is Live</div>
                         `}
                     </div>
                 </div>`;
             });
             document.getElementById('order-count').innerText = count;
+            document.getElementById('total-revenue').innerText = revenue;
+            document.getElementById('rider-count').innerText = activeRiders.size;
         });
 
-        // --- FUNCTIONS ---
-        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
-        window.rejectOrder = async (id) => { if(confirm("Reject?")) await deleteDoc(doc(db, "orders", id)); };
-        
-        window.assignRider = async (id) => {
-            const rName = prompt("Enter Delivery Boy Name:");
-            if(rName) {
-                await updateDoc(doc(db, "orders", id), { 
-                    status: 'out_for_delivery', 
-                    riderName: rName.toUpperCase() 
-                });
-            }
-        };
-
-        // --- MENU LOGIC ---
-        onSnapshot(collection(db, "menu"), (snap) => {
-            const body = document.getElementById('menuTableBody');
+        // --- USER MANAGEMENT ---
+        onSnapshot(collection(db, "users"), (snap) => {
+            const body = document.getElementById('userTableBody');
             body.innerHTML = '';
+            document.getElementById('user-count').innerText = snap.size;
             snap.forEach(d => {
-                const item = d.data();
+                const user = d.data();
                 body.innerHTML += `
-                <tr>
-                    <td class="px-6 py-4 flex items-center gap-3">
-                        <img src="${item.image}" class="w-8 h-8 rounded-lg object-cover">
-                        <div><p class="text-slate-900">${item.name}</p><p class="text-[10px] text-orange-500">₹${item.price}</p></div>
+                <tr class="group">
+                    <td class="py-5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center font-black text-slate-400 text-xs">${user.name ? user.name[0] : 'U'}</div>
+                            <div>
+                                <p class="text-sm font-800 text-slate-800 uppercase tracking-tighter">${user.name || 'Anonymous'}</p>
+                                <p class="text-[10px] font-bold text-slate-400 tracking-widest">${user.phone || d.id}</p>
+                            </div>
+                        </div>
                     </td>
-                    <td class="px-6 py-4">
-                        <button onclick="toggleStock('${d.id}', ${item.inStock})" class="text-[9px] px-2 py-1 rounded-md font-black ${item.inStock?'bg-green-100 text-green-600':'bg-red-100 text-red-600'}">
-                            ${item.inStock ? 'STOCK' : 'OUT'}
-                        </button>
+                    <td class="text-right py-5">
+                        <button onclick="deleteUser('${d.id}')" class="text-slate-300 hover:text-red-500 transition"><i class="fa-solid fa-user-xmark"></i></button>
                     </td>
-                    <td class="px-6 py-4 text-right"><button onclick="deleteItem('${d.id}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button></td>
                 </tr>`;
             });
         });
 
-        window.toggleStock = async (id, s) => { await updateDoc(doc(db, "menu", id), { inStock: !s }); };
-        window.deleteItem = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "menu", id)); };
+        // --- MENU & COUPONS ---
+        window.toggleMenuForm = () => document.getElementById('menu-form').classList.toggle('hidden');
 
-        document.getElementById('submitBtn').addEventListener('click', async () => {
-            const name = document.getElementById('foodName').value;
-            const price = document.getElementById('foodPrice').value;
-            const image = document.getElementById('foodImage').value;
-            if(name && price) {
-                await addDoc(collection(db, "menu"), { name, price: parseInt(price), image, inStock: true });
-                alert("Dish Added!");
-                document.querySelectorAll('input').forEach(i => i.value = '');
+        window.sendCoupon = async () => {
+            const code = document.getElementById('promoCode').value;
+            const value = document.getElementById('promoValue').value;
+            if(code && value) {
+                await setDoc(doc(db, "coupons", code.toUpperCase()), { code: code.toUpperCase(), value: parseInt(value), active: true });
+                alert("Coupon Pushed Successfully!");
+                document.getElementById('promoCode').value = '';
+                document.getElementById('promoValue').value = '';
             }
+        };
+
+        onSnapshot(collection(db, "coupons"), (snap) => {
+            const list = document.getElementById('coupon-list');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                const c = d.data();
+                list.innerHTML += `
+                <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <span class="text-[10px] font-black tracking-[0.2em] text-orange-500">${c.code}</span>
+                    <div class="flex gap-4 items-center">
+                        <span class="text-xs font-black">₹${c.value}</span>
+                        <button onclick="deleteCoupon('${d.id}')" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-circle-xmark"></i></button>
+                    </div>
+                </div>`;
+            });
         });
+
+        // --- ACTIONS ---
+        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
+        window.rejectOrder = async (id) => { if(confirm("Reject?")) await deleteDoc(doc(db, "orders", id)); };
+        window.deleteUser = async (id) => { if(confirm("Remove User?")) await deleteDoc(doc(db, "users", id)); };
+        window.deleteCoupon = async (id) => { await deleteDoc(doc(db, "coupons", id)); };
+        window.assignRider = async (id) => {
+            const rName = prompt("Enter Delivery Boy Name:");
+            if(rName) await updateDoc(doc(db, "orders", id), { status: 'out_for_delivery', riderName: rName.toUpperCase() });
+        };
 
         if(sessionStorage.getItem('isAdmin') === 'true') {
             document.getElementById('admin-login-screen').style.display = 'none';
