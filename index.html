@@ -31,13 +31,13 @@
     </div>
 
     <div id="loc-modal" class="fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm hidden flex items-end">
-        <div class="bg-white w-full rounded-t-[3rem] p-8">
-            <h3 class="text-2xl font-900 mb-6 px-2">Delivery Location</h3>
+        <div class="bg-white w-full rounded-t-[3rem] p-8 shadow-2xl">
+            <h3 class="text-2xl font-900 mb-6 px-2 italic">Delivery Area</h3>
             <div class="grid grid-cols-2 gap-3 mb-8">
-                <button onclick="setLoc('Murgabadi')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold hover:border-orange-500 hover:text-orange-500 transition-all text-sm">Murgabadi</button>
-                <button onclick="setLoc('Station Bazar')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold hover:border-orange-500 hover:text-orange-500 transition-all text-sm">Station Bazar</button>
-                <button onclick="setLoc('Lal Bazar')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold hover:border-orange-500 hover:text-orange-500 transition-all text-sm">Lal Bazar</button>
-                <button onclick="setLoc('Ambika Mandir')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold hover:border-orange-500 hover:text-orange-500 transition-all text-sm">Ambika Mandir</button>
+                <button onclick="setLoc('Murgabadi')" class="p-4 border-2 border-gray-100 rounded-2xl font-black hover:border-orange-500 hover:text-orange-500 transition-all text-xs uppercase">Murgabadi</button>
+                <button onclick="setLoc('Station Bazar')" class="p-4 border-2 border-gray-100 rounded-2xl font-black hover:border-orange-500 hover:text-orange-500 transition-all text-xs uppercase">Station Bazar</button>
+                <button onclick="setLoc('Lal Bazar')" class="p-4 border-2 border-gray-100 rounded-2xl font-black hover:border-orange-500 hover:text-orange-500 transition-all text-xs uppercase">Lal Bazar</button>
+                <button onclick="setLoc('Ambika Mandir')" class="p-4 border-2 border-gray-100 rounded-2xl font-black hover:border-orange-500 hover:text-orange-500 transition-all text-xs uppercase">Ambika Mandir</button>
             </div>
         </div>
     </div>
@@ -57,9 +57,9 @@
 
     <main class="px-6 mt-8">
         <div class="flex gap-3 mb-8 overflow-x-auto no-scrollbar py-2">
-            <button onclick="filterMenu('all')" class="bg-gray-900 text-white px-6 py-2.5 rounded-2xl font-black text-xs">ALL</button>
-            <button onclick="filterMenu('veg')" class="bg-white border px-6 py-2.5 rounded-2xl font-black text-xs">🥦 VEG</button>
-            <button onclick="filterMenu('non-veg')" class="bg-white border px-6 py-2.5 rounded-2xl font-black text-xs">🍗 NON-VEG</button>
+            <button onclick="filterMenu('all')" class="bg-gray-900 text-white px-6 py-2.5 rounded-2xl font-black text-xs shadow-lg">ALL</button>
+            <button onclick="filterMenu('veg')" class="bg-white border px-6 py-2.5 rounded-2xl font-black text-xs text-gray-400">🥦 VEG</button>
+            <button onclick="filterMenu('non-veg')" class="bg-white border px-6 py-2.5 rounded-2xl font-black text-xs text-gray-400">🍗 NON-VEG</button>
         </div>
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
@@ -71,12 +71,12 @@
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
         <div class="p-6 bg-white border-t space-y-4">
-            <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold text-sm outline-none">
+            <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500">
             <div class="flex justify-between font-900 text-xl px-2">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="finalCheckout()" class="w-full bg-orange-500 text-white py-5 rounded-[2rem] font-black shadow-xl active:scale-95 transition-all uppercase tracking-widest text-xs">Confirm Order</button>
+            <button onclick="finalCheckout()" class="w-full bg-orange-500 text-white py-5 rounded-[2rem] font-black shadow-xl active:scale-95 transition-all uppercase tracking-widest text-[10px]">Confirm Order 🚀</button>
         </div>
     </div>
 
@@ -105,23 +105,30 @@
 
         let cart = [];
         let allMenuItems = [];
+        
+        // --- AUTO LOGIN LOGIC ---
         let userData = { 
             phone: localStorage.getItem('customerPhone') || '', 
             location: localStorage.getItem('customerLoc') || '' 
         };
 
-        // If user already logged in
-        if(userData.phone) {
-            document.getElementById('login-modal').classList.add('hidden');
-            if(userData.location) document.getElementById('current-loc').innerText = userData.location;
-        }
+        window.onload = () => {
+            if(userData.phone) {
+                document.getElementById('login-modal').style.display = 'none';
+                if(userData.location) {
+                    document.getElementById('current-loc').innerText = userData.location;
+                } else {
+                    showLocationPicker();
+                }
+            }
+        };
 
         window.saveUser = () => {
-            const ph = document.getElementById('phone-input').value;
-            if(ph.length < 10) return alert("Enter 10-digit number");
+            const ph = document.getElementById('phone-input').value.trim();
+            if(ph.length < 10) return alert("Enter valid 10-digit number");
             userData.phone = ph;
             localStorage.setItem('customerPhone', ph);
-            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('login-modal').style.display = 'none';
             showLocationPicker();
         };
 
@@ -134,6 +141,7 @@
             document.getElementById('loc-modal').classList.add('hidden');
         };
 
+        // --- MENU LOGIC ---
         onSnapshot(collection(db, "menu"), (snap) => {
             allMenuItems = [];
             snap.forEach(d => allMenuItems.push({id: d.id, ...d.data()}));
@@ -147,14 +155,14 @@
             items.forEach(item => {
                 const isStock = item.inStock !== false;
                 list.innerHTML += `
-                <div class="momo-card p-4 ${isStock ? '' : 'opacity-60 grayscale'}">
+                <div class="momo-card p-4 ${isStock ? '' : 'opacity-60 grayscale'} shadow-sm">
                     <img src="${item.image}" class="w-full h-48 object-cover rounded-[1.5rem] mb-4">
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="font-900">${item.name}</h4>
                         <span class="text-orange-500 font-900">₹${item.price}</span>
                     </div>
                     <button onclick="${isStock ? `addToCart('${item.name}', ${item.price}, '${item.image}')` : ''}" 
-                        class="w-full ${isStock ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-400'} py-4 rounded-2xl font-black text-xs">
+                        class="w-full ${isStock ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-400'} py-4 rounded-2xl font-black text-[10px] uppercase">
                         ${isStock ? 'ADD TO BOX +' : 'SOLD OUT'}
                     </button>
                 </div>`;
@@ -175,7 +183,7 @@
                 total += (item.price * item.qty);
                 return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
                     <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
-                    <div class="flex-1 text-xs font-900">${item.name} (x${item.qty})</div>
+                    <div class="flex-1 text-[10px] font-900 uppercase">${item.name} (x${item.qty})</div>
                     <div class="font-900 text-xs">₹${item.price * item.qty}</div>
                 </div>`;
             }).join('');
@@ -187,13 +195,12 @@
             document.getElementById('cart-overlay').classList.toggle('hidden', !o);
         };
 
-        // --- FINAL CHECKOUT WITH TRACKING SYNC ---
+        // --- FINAL CHECKOUT ---
         window.finalCheckout = async () => {
             const addr = document.getElementById('exact-address').value;
             if(cart.length === 0 || !addr) return alert("Fill address & cart!");
 
             try {
-                // 1. Create Order in Firebase
                 const docRef = await addDoc(collection(db, "orders"), {
                     customer: userData.phone,
                     location: userData.location,
@@ -201,19 +208,12 @@
                     total: document.getElementById('cart-total').innerText,
                     items: cart,
                     status: 'pending',
-                    riderName: '', // Will be updated by Admin
+                    riderName: '', 
                     time: serverTimestamp()
                 });
-
-                // 2. Save Order ID for Tracking Page
                 localStorage.setItem('currentOrderId', docRef.id);
-
-                // 3. Animation and Redirect
                 document.getElementById('order-success').classList.remove('hidden');
-                setTimeout(() => {
-                    window.location.href = "tracking.html"; 
-                }, 2000);
-
+                setTimeout(() => window.location.href = "tracking.html", 2000);
             } catch(e) { alert("Error placing order."); }
         };
         
