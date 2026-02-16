@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshfry | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #000; color: #fff; overflow: hidden; }
+        
+        /* Background Image Styling (Ref: Image 4, 15) */
+        .bg-container {
+            height: 60vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 100%), 
+                        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-sheet {
+            background: white;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            color: #1c1c1c;
+            height: 45vh;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 24px;
+        }
+
+        .input-box {
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .btn-continue {
+            background-color: #ef4f5f; /* Zomato Red Style */
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-container relative">
+        <button class="absolute top-5 right-5 bg-black/50 px-4 py-1 rounded-full text-xs font-bold">Skip</button>
+        <div class="absolute top-1/4 w-full text-center px-6">
+            <h1 class="text-4xl font-900 leading-tight uppercase tracking-tighter">India's #1 Food<br>Delivery App</h1>
+            <div class="mt-4 flex justify-center">
+                <div class="bg-[#ef4f5f] px-6 py-1 transform -rotate-2">
+                    <span class="text-3xl font-black italic tracking-tighter">freshfry</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-sheet">
+        <h2 class="text-center font-bold text-gray-700 mb-6">Log in or sign up</h2>
+        
+        <div class="input-box">
+            <i class="fa-regular fa-user text-gray-400"></i>
+            <input type="text" id="userName" placeholder="Enter Full Name" class="w-full outline-none text-sm font-medium">
+        </div>
+
+        <div class="input-box">
+            <div class="flex items-center gap-1 border-r pr-2">
+                <img src="https://flagcdn.com/w20/in.png" class="w-5 h-3">
+                <span class="text-sm font-bold">+91</span>
+                <i class="fa-solid fa-caret-down text-[10px] text-gray-500"></i>
+            </div>
+            <input type="number" id="userPhone" placeholder="Enter Mobile Number" class="w-full outline-none text-sm font-medium tracking-widest">
+        </div>
+
+        <button onclick="saveToFirebase()" class="btn-continue">Continue</button>
+
+        <div class="mt-6 flex items-center gap-4">
+            <hr class="flex-1"> <span class="text-xs text-gray-400 font-bold uppercase">or</span> <hr class="flex-1">
+        </div>
+
+        <div class="flex justify-center gap-10 mt-6">
+            <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center shadow-sm">
+                <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" class="w-6">
+            </div>
+            <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center shadow-sm">
+                <i class="fa-brands fa-apple text-2xl"></i>
+            </div>
+            <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center shadow-sm">
+                <i class="fa-solid fa-envelope text-xl text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.saveToFirebase = async function() {
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+
+            if(name && phone.length === 10) {
+                try {
+                    await addDoc(collection(db, "users"), {
+                        fullName: name,
+                        phoneNumber: phone,
+                        timestamp: new Date()
+                    });
+                    alert("Data saved! Redirecting to OTP...");
+                    window.location.href = "otp.html"; // Redirect to your OTP page (Ref: Image 3)
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }
+            } else {
+                alert("Please enter valid Name and 10-digit Phone Number");
+            }
+        }
+    </script>
+</body>
+</html>
