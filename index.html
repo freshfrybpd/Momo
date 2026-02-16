@@ -1,27 +1,220 @@
-                    <p class="text-gray-500 text-sm mb-4">Crispy golden outer layer with soft paneer filling.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-2xl font-black text-gray-900">₹199</span>
-                        <button class="bg-gray-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-orange-500 transition shadow-lg">
-                            Add +
-                        </button>
-                    </div>
-                </div>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshfry | Crunchy & Steamy Momos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .active-scale:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+
+    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-3xl font-extrabold tracking-tight text-orange-500">
+            Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
+        </div>
+        <div class="flex items-center space-x-5">
+            <div id="cart-btn" onclick="toggleCart()" class="relative bg-orange-100 p-2 rounded-full cursor-pointer active-scale">
+                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <section id="login-section" class="px-6 py-10 max-w-lg mx-auto">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
+            <h2 class="text-2xl font-extrabold mb-2">Login to Freshfry 🥟</h2>
+            <p class="text-gray-400 mb-6 text-sm">Enter details to start ordering in Baripada.</p>
+            <div class="space-y-4">
+                <input type="text" id="custName" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
+                <input type="tel" id="custPhone" placeholder="Phone Number" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
+                <select id="custArea" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none font-semibold text-gray-700">
+                    <option>Badbazar</option>
+                    <option>Station Bazar</option>
+                    <option>Bhanjpur</option>
+                    <option>Baghra Road</option>
+                    <option>Near Ambika Temple</option>
+                    <option>Near Jagganath Temple</option>
+                </select>
+                <button onclick="handleLogin()" class="w-full freshfry-gradient text-white py-4 rounded-2xl font-bold text-lg shadow-lg active-scale transition">
+                    Start Eating
+                </button>
+            </div>
         </div>
     </section>
 
-    <div class="h-24 md:hidden"></div>
+    <section id="menu-section" class="hidden px-6 py-8 max-w-4xl mx-auto">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="text-3xl font-extrabold">Popular Momos</h2>
+                <p class="text-gray-400">Best in Baripada, delivered fast.</p>
+            </div>
+        </div>
+        
+        <div id="momo-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            </div>
+    </section>
 
-    <nav class="md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-8 rounded-3xl flex justify-between items-center shadow-2xl z-50">
+    <div id="cart-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-end">
+        <div class="bg-white w-full rounded-t-[2.5rem] p-8 animate-slide-up shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Your Bag 🛍️</h3>
+                <button onclick="toggleCart()" class="text-gray-400 text-3xl">&times;</button>
+            </div>
+            <div id="cart-items" class="space-y-4 max-h-60 overflow-y-auto mb-6"></div>
+            <div class="border-t pt-6">
+                <div class="flex justify-between text-xl font-bold mb-6">
+                    <span>Total Bill:</span>
+                    <span id="total-price" class="text-orange-500">₹0</span>
+                </div>
+                <button onclick="placeOrder()" id="order-btn" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-bold text-lg active-scale shadow-xl">
+                    Confirm Order (COD)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav id="bottom-nav" class="hidden md:hidden fixed bottom-6 left-6 right-6 bg-gray-900 text-white py-4 px-8 rounded-3xl flex justify-between items-center shadow-2xl z-50">
         <i class="fa-solid fa-house text-orange-400"></i>
         <i class="fa-solid fa-fire-flame-curved opacity-50"></i>
-        <div class="bg-orange-500 p-3 rounded-full -mt-12 border-4 border-slate-50 shadow-lg">
+        <div onclick="toggleCart()" class="bg-orange-500 p-3 rounded-full -mt-12 border-4 border-slate-50 shadow-lg active-scale">
             <i class="fa-solid fa-plus text-white"></i>
         </div>
         <i class="fa-solid fa-heart opacity-50"></i>
         <i class="fa-solid fa-clock-rotate-left opacity-50"></i>
     </nav>
 
+    <script>
+        // 1. YOUR FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+            authDomain: "freshfry-39a10.firebaseapp.com",
+            projectId: "freshfry-39a10",
+            storageBucket: "freshfry-39a10.firebasestorage.app",
+            messagingSenderId: "928483976893",
+            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 2. DATA & STATE
+        let currentUser = null;
+        let cart = [];
+        const menu = [
+            { id: 1, name: "Veg Steamed", h: 60, f: 110, img: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=300" },
+            { id: 2, name: "Paneer Fried", h: 80, f: 150, img: "https://images.unsplash.com/photo-1534422298391-e4f8c170db06?w=300" },
+            { id: 3, name: "Chicken Steamed", h: 90, f: 170, img: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=300" },
+            { id: 4, name: "Freshfry Special", h: 120, f: 220, img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=300" }
+        ];
+
+        // 3. LOGIN LOGIC
+        async function handleLogin() {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const area = document.getElementById('custArea').value;
+
+            if(!name || !phone) return alert("Bhai, Details dalo!");
+
+            currentUser = { name, phone, area };
+            
+            // Save user to Firebase
+            await db.collection("users").doc(phone).set({ ...currentUser, date: new Date() });
+
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('menu-section').classList.remove('hidden');
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            renderMenu();
+        }
+
+        // 4. RENDER MENU
+        function renderMenu() {
+            const container = document.getElementById('momo-container');
+            container.innerHTML = menu.map(m => `
+                <div class="bg-white p-4 rounded-[2rem] shadow-sm flex items-center border border-gray-100">
+                    <img src="${m.img}" class="w-24 h-24 rounded-2xl object-cover">
+                    <div class="ml-4 flex-1">
+                        <h3 class="font-bold text-lg">${m.name}</h3>
+                        <div class="flex items-center justify-between mt-2">
+                            <select id="size-${m.id}" class="text-xs bg-gray-50 p-1 rounded font-bold outline-none border-none">
+                                <option value="Half" data-price="${m.h}">Half - ₹${m.h}</option>
+                                <option value="Full" data-price="${m.f}">Full - ₹${m.f}</option>
+                            </select>
+                            <button onclick="addToCart('${m.name}', ${m.id})" class="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md active-scale transition">
+                                Add +
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 5. CART & ORDER LOGIC
+        function addToCart(name, id) {
+            const select = document.getElementById(`size-${id}`);
+            const price = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
+            const size = select.value;
+
+            cart.push({ name, size, price });
+            document.getElementById('cart-badge').innerText = cart.length;
+            alert(`${name} (${size}) added to bag!`);
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+            const list = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('total-price');
+            
+            let total = 0;
+            list.innerHTML = cart.map(item => {
+                total += item.price;
+                return `<div class="flex justify-between font-semibold border-b pb-2">
+                    <span>${item.name} (${item.size})</span>
+                    <span>₹${item.price}</span>
+                </div>`;
+            }).join('');
+            totalDisplay.innerText = `₹${total}`;
+        }
+
+        async function placeOrder() {
+            if(cart.length === 0) return alert("Cart khali hai!");
+            
+            const btn = document.getElementById('order-btn');
+            btn.innerText = "Placing Order...";
+            btn.disabled = true;
+
+            const orderData = {
+                ...currentUser,
+                items: cart,
+                total: cart.reduce((s, i) => s + i.price, 0),
+                status: "Pending",
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await db.collection("orders").add(orderData);
+                alert("🎉 Order Success! Freshfry team will call you.");
+                cart = [];
+                document.getElementById('cart-badge').innerText = "0";
+                toggleCart();
+            } catch (e) {
+                alert("Error! Check Firebase Rules.");
+            } finally {
+                btn.innerText = "Confirm Order (COD)";
+                btn.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
