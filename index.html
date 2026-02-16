@@ -12,18 +12,23 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: var(--dark); overflow-x: hidden; }
         
         .glass-nav { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .momo-card { border-radius: 2.5rem; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); background: #ffffff; border: 1px solid rgba(0,0,0,0.02); }
+        .momo-card { border-radius: 2.5rem; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); background: #ffffff; }
         .momo-card:hover { transform: translateY(-10px); box-shadow: 0 40px 80px -20px rgba(0,0,0,0.1); }
         
-        /* Add to Cart Animation */
-        .btn-add { position: relative; overflow: hidden; transition: all 0.3s ease; }
-        .btn-add.added { background-color: #22C55E !important; }
+        .btn-add { transition: all 0.3s ease; }
+        .btn-add.added { background-color: #22C55E !important; transform: scale(0.95); }
         
         .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
         .cart-closed { transform: translateX(110%); }
         
-        .animate-wa { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        /* 📍 Rider Tracking Animation */
+        .step-dot { height: 12px; width: 12px; border-radius: 50%; background: #E2E8F0; position: relative; }
+        .step-dot.active { background: #FF5C00; box-shadow: 0 0 15px #FF5C00; }
+        .step-line { height: 2px; flex: 1; background: #E2E8F0; }
+        .step-line.active { background: #FF5C00; }
+
+        @keyframes bike-move { 0% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 100% { transform: translateX(-10px); } }
+        .animate-bike { animation: bike-move 3s infinite ease-in-out; }
     </style>
 </head>
 <body class="pb-24">
@@ -31,47 +36,41 @@
     <div id="login-modal" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-6 text-center">
         <div class="w-full max-w-sm">
             <h1 class="text-5xl font-800 tracking-tighter italic mb-2">F<span class="text-orange-500">f.</span></h1>
-            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-10">Freshfry Baripada</p>
+            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-10">Premium Experience</p>
             <div class="space-y-4">
-                <input id="user-name" type="text" placeholder="Enter Your Name" class="w-full px-8 py-5 bg-slate-100 rounded-[2rem] focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center text-lg transition-all">
-                <input id="phone-input" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-8 py-5 bg-slate-100 rounded-[2rem] focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center text-lg transition-all">
-                <button onclick="saveUser()" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800 active:scale-95 transition-all shadow-xl">Get Started</button>
+                <input id="user-name" type="text" placeholder="Your Name" class="w-full px-8 py-5 bg-slate-100 rounded-[2rem] outline-none font-bold text-center">
+                <input id="phone-input" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-8 py-5 bg-slate-100 rounded-[2rem] outline-none font-bold text-center">
+                <button onclick="saveUser()" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800 shadow-xl">Start Ordering</button>
             </div>
         </div>
     </div>
 
     <div id="loc-modal" class="fixed inset-0 z-[150] bg-slate-900/20 backdrop-blur-xl hidden flex items-end">
         <div class="bg-white w-full rounded-t-[3.5rem] p-10 shadow-2xl">
-            <h3 class="text-2xl font-800 mb-8 text-center italic">Where to <span class="text-orange-500">Deliver?</span></h3>
+            <h3 class="text-2xl font-800 mb-8 text-center italic">Select <span class="text-orange-500">Zone</span></h3>
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="setLoc('Murgabadi')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Murgabadi</button>
-                <button onclick="setLoc('Station Bazar')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Station Bazar</button>
-                <button onclick="setLoc('Lal Bazar')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Lal Bazar</button>
-                <button onclick="setLoc('Ambika Mandir')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Ambika Mandir</button>
+                <button onclick="setLoc('Murgabadi')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase">Murgabadi</button>
+                <button onclick="setLoc('Station Bazar')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase">Station Bazar</button>
+                <button onclick="setLoc('Lal Bazar')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase">Lal Bazar</button>
+                <button onclick="setLoc('Ambika Mandir')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase">Ambika Mandir</button>
             </div>
         </div>
     </div>
 
     <nav class="sticky top-0 z-[100] px-8 py-6 glass-nav flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-800 tracking-tighter italic">Fresh<span class="text-orange-500">fry.</span></h1>
-            <button onclick="showLocationPicker()" class="text-[9px] font-800 uppercase text-orange-500 tracking-widest flex items-center gap-1">
-                <i class="fa-solid fa-location-dot"></i> <span id="current-loc">Select Location</span>
-            </button>
+            <h1 class="text-2xl font-800 italic">Fresh<span class="text-orange-500">fry.</span></h1>
+            <span id="current-loc" class="text-[9px] font-800 uppercase text-slate-400 tracking-widest">Baripada</span>
         </div>
-        <button onclick="toggleCart(true)" class="relative h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-xl border border-slate-50">
-            <i class="fa-solid fa-cart-shopping"></i>
+        <button onclick="toggleCart(true)" class="relative h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-xl">
+            <i class="fa-solid fa-bag-shopping text-xl"></i>
             <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] h-6 w-6 rounded-full flex items-center justify-center text-white border-4 border-white font-800">0</span>
         </button>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-8">
-        <div class="py-12">
-            <p class="text-orange-500 font-800 uppercase tracking-widest text-[10px] mb-2">Available Now</p>
-            <h2 class="text-5xl font-800 tracking-tight italic leading-tight mb-12">Authentic<br>Momo <span class="text-orange-500">Bar.</span></h2>
-            
-            <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
-        </div>
+    <main id="main-content" class="max-w-6xl mx-auto px-8 py-10">
+        <h2 class="text-5xl font-800 italic leading-tight mb-12">Your Daily<br><span class="text-orange-500">Momo Fix.</span></h2>
+        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
     </main>
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[160] cart-sidebar cart-closed flex flex-col shadow-2xl">
@@ -81,46 +80,63 @@
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
         <div class="p-10 border-t space-y-4">
-            <input type="text" id="exact-address" placeholder="Flat No / Landmarks / Area" class="w-full px-6 py-5 bg-slate-50 rounded-[1.5rem] font-bold text-sm outline-none border border-slate-100">
+            <input type="text" id="exact-address" placeholder="Exact Delivery Address" class="w-full px-6 py-5 bg-slate-50 rounded-[1.5rem] font-bold text-sm outline-none border border-slate-100">
             <div class="flex justify-between items-center p-6 bg-slate-50 rounded-[1.5rem]">
-                <span class="text-xs font-800 text-slate-400 uppercase tracking-widest">Total Bill</span>
+                <span class="text-xs font-800 text-slate-400 tracking-widest uppercase">Total</span>
                 <span id="cart-total" class="text-2xl font-800">₹0</span>
             </div>
-            <div class="grid grid-cols-1 gap-3">
-                <button onclick="finalCheckout('upi')" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800 uppercase text-[10px] tracking-widest shadow-xl active:scale-95 transition-all">Pay via UPI (Instant)</button>
-                <button onclick="finalCheckout('wa')" class="w-full bg-[#25D366] text-white py-6 rounded-[2rem] font-800 uppercase text-[10px] tracking-widest shadow-xl active:scale-95 transition-all">Order on WhatsApp</button>
+            <button onclick="finalCheckout('upi')" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800 uppercase text-[10px] tracking-widest shadow-xl mb-2">Pay via UPI</button>
+            <button onclick="finalCheckout('wa')" class="w-full bg-[#25D366] text-white py-6 rounded-[2rem] font-800 uppercase text-[10px] tracking-widest shadow-xl">WhatsApp Order</button>
+        </div>
+    </div>
+
+    <div id="tracking-page" class="fixed inset-0 z-[300] bg-white hidden overflow-y-auto">
+        <div class="max-w-md mx-auto px-8 py-20 text-center">
+            <div class="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-8 shadow-2xl">
+                <i class="fa-solid fa-check"></i>
             </div>
+            <h2 class="text-4xl font-800 italic mb-2">Yummm!</h2>
+            <p class="text-slate-400 font-bold uppercase text-[10px] tracking-[0.3em] mb-12">Order Placed Successfully</p>
+
+            <div class="bg-slate-50 rounded-[2.5rem] p-8 text-left border border-slate-100 relative overflow-hidden">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-xl animate-bike">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <div>
+                        <h4 id="track-status" class="font-800 text-lg uppercase tracking-tighter">Kitchen is preparing...</h4>
+                        <p class="text-[10px] font-bold text-slate-400">Arriving in 20-30 mins</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="step-dot active"></div>
+                    <div class="step-line active"></div>
+                    <div class="step-dot active"></div>
+                    <div id="line-2" class="step-line"></div>
+                    <div id="dot-3" class="step-dot"></div>
+                </div>
+                <div class="flex justify-between text-[8px] font-800 uppercase text-slate-400 tracking-widest">
+                    <span>Placed</span>
+                    <span>Kitchen</span>
+                    <span>On Way</span>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="mt-12 w-full py-6 rounded-[2rem] border-2 border-slate-100 font-800 uppercase text-[10px] tracking-widest text-slate-400 hover:bg-slate-900 hover:text-white transition-all">Order More</button>
         </div>
     </div>
-
-    <div id="order-confirm" class="fixed inset-0 z-[400] bg-white hidden flex flex-col items-center justify-center p-8 text-center animate-fade-in">
-        <div class="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-2xl animate-bounce">
-            <i class="fa-solid fa-check"></i>
-        </div>
-        <h2 class="text-3xl font-800 italic mb-2">Order Received!</h2>
-        <p class="text-slate-400 font-bold mb-8 uppercase text-[10px] tracking-widest">We are preparing your fresh momos</p>
-        <button onclick="location.reload()" class="px-10 py-5 bg-slate-900 text-white rounded-full font-800 text-[10px] uppercase tracking-widest">Back to Menu</button>
-    </div>
-
-    <a href="https://wa.me/917008186187" class="fixed bottom-8 right-8 z-[140] flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-2xl animate-wa">
-        <i class="fa-brands fa-whatsapp text-3xl"></i>
-    </a>
-
-    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-slate-900/40 z-[155] hidden backdrop-blur-md"></div>
 
     <script>
-        // Auth & UI Logic
         function saveUser() {
-            const name = document.getElementById('user-name').value.trim();
-            const ph = document.getElementById('phone-input').value.trim();
-            if(!name || ph.length < 10) return alert("Enter Name & 10-digit Phone");
+            const name = document.getElementById('user-name').value;
+            const ph = document.getElementById('phone-input').value;
+            if(!name || ph.length < 10) return alert("Fill Name & 10 digit Phone");
             localStorage.setItem('customerName', name);
             localStorage.setItem('customerPhone', ph);
             document.getElementById('login-modal').style.display = 'none';
-            if(!localStorage.getItem('customerLoc')) showLocationPicker();
+            if(!localStorage.getItem('customerLoc')) document.getElementById('loc-modal').classList.remove('hidden');
         }
-
-        function showLocationPicker() { document.getElementById('loc-modal').classList.remove('hidden'); }
 
         function setLoc(loc) {
             localStorage.setItem('customerLoc', loc);
@@ -130,14 +146,11 @@
 
         function toggleCart(o) {
             document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o);
-            document.getElementById('cart-overlay').classList.toggle('hidden', !o);
         }
 
         if(localStorage.getItem('customerPhone')) {
             document.getElementById('login-modal').style.display = 'none';
-            if(localStorage.getItem('customerLoc')) {
-                document.getElementById('current-loc').innerText = localStorage.getItem('customerLoc');
-            } else { showLocationPicker(); }
+            if(localStorage.getItem('customerLoc')) document.getElementById('current-loc').innerText = localStorage.getItem('customerLoc');
         }
     </script>
 
@@ -145,14 +158,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
-            authDomain: "freshfry-39a10.firebaseapp.com",
-            projectId: "freshfry-39a10",
-            storageBucket: "freshfry-39a10.firebasestorage.app",
-            messagingSenderId: "928483976893",
-            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM", authDomain: "freshfry-39a10.firebaseapp.com", projectId: "freshfry-39a10", storageBucket: "freshfry-39a10.firebasestorage.app", messagingSenderId: "928483976893", appId: "1:928483976893:web:3459478b550ba0e12fb9d4" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -167,75 +173,69 @@
                 <div class="momo-card overflow-hidden">
                     <img src="${item.image}" class="w-full h-64 object-cover rounded-t-[2.5rem]">
                     <div class="p-8">
-                        <div class="flex justify-between items-center mb-6 px-2">
+                        <div class="flex justify-between items-center mb-6">
                             <h4 class="font-800 text-lg italic uppercase">${item.name}</h4>
                             <span class="font-800 text-lg">₹${item.price}</span>
                         </div>
-                        <button onclick="addToCart(this, '${item.name}', ${item.price}, '${item.image}')" 
-                            class="btn-add w-full bg-slate-900 text-white py-5 rounded-[1.8rem] font-800 text-[10px] uppercase tracking-widest">
-                            Add to Box
-                        </button>
+                        <button onclick="addToCart(this, '${item.name}', ${item.price}, '${item.image}')" class="btn-add w-full bg-slate-900 text-white py-5 rounded-[1.8rem] font-800 text-[10px] uppercase tracking-widest">Add to Box</button>
                     </div>
                 </div>`;
             });
         });
 
         window.addToCart = (btn, name, price, image) => {
-            // Animation
-            const originalText = btn.innerText;
-            btn.innerText = "Added! ✨";
-            btn.classList.add('added');
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove('added');
-            }, 1000);
-
+            btn.innerText = "Added! ✨"; btn.classList.add('added');
+            setTimeout(() => { btn.innerText = "Add to Box"; btn.classList.remove('added'); }, 1000);
             const item = cart.find(i => i.name === name);
             if(item) item.qty++; else cart.push({name, price, image, qty: 1});
-            updateCartUI();
+            updateUI();
         };
 
-        function updateCartUI() {
-            const list = document.getElementById('cart-items-list');
+        function updateUI() {
             let total = 0;
-            document.getElementById('cart-badge').innerText = cart.reduce((a, b) => a + b.qty, 0);
-            list.innerHTML = cart.map(item => {
-                total += (item.price * item.qty);
+            document.getElementById('cart-badge').innerText = cart.reduce((a,b) => a+b.qty, 0);
+            document.getElementById('cart-items-list').innerHTML = cart.map(i => {
+                total += (i.price * i.qty);
                 return `<div class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-xl">
-                    <div class="flex-1 font-800 text-[10px] uppercase">${item.name} (x${item.qty})</div>
-                    <div class="font-800">₹${item.price * item.qty}</div>
+                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl">
+                    <div class="flex-1 font-800 text-[10px] uppercase">${i.name} (x${i.qty})</div>
+                    <div class="font-800">₹${i.price*i.qty}</div>
                 </div>`;
             }).join('');
             document.getElementById('cart-total').innerText = "₹" + total;
         }
 
         window.finalCheckout = async (type) => {
-            const addr = document.getElementById('exact-address').value.trim();
+            const addr = document.getElementById('exact-address').value;
             const total = document.getElementById('cart-total').innerText.replace('₹','');
-            if(!addr || cart.length === 0) return alert("Enter address & add items");
+            if(!addr || cart.length === 0) return alert("Add items & address");
 
-            const orderData = {
-                name: localStorage.getItem('customerName'),
+            await addDoc(collection(db, "orders"), {
+                customer: localStorage.getItem('customerName'),
                 phone: localStorage.getItem('customerPhone'),
-                location: localStorage.getItem('customerLoc'),
                 address: addr,
                 total: "₹" + total,
                 items: cart,
                 status: 'pending',
                 time: serverTimestamp()
-            };
-
-            await addDoc(collection(db, "orders"), orderData);
+            });
 
             if(type === 'upi') {
                 window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total}&cu=INR`;
             } else {
-                let msg = `*🍱 NEW ORDER | FRESHFRY*%0A*Name:* ${orderData.name}%0A*Phone:* ${orderData.phone}%0A*Address:* ${addr}%0A*Total:* ₹${total}`;
+                let msg = `*🍱 NEW ORDER | FRESHFRY*%0A*Name:* ${localStorage.getItem('customerName')}%0A*Address:* ${addr}%0A*Total:* ₹${total}`;
                 window.location.href = `https://wa.me/917008186187?text=${msg}`;
             }
 
-            document.getElementById('order-confirm').classList.remove('hidden');
+            // Show Tracking Page
+            document.getElementById('tracking-page').classList.remove('hidden');
+            
+            // Simulation: Change status after 10 seconds to "On Way"
+            setTimeout(() => {
+                document.getElementById('track-status').innerText = "Rider is on the way!";
+                document.getElementById('line-2').classList.add('active');
+                document.getElementById('dot-3').classList.add('active');
+            }, 10000);
         };
     </script>
 </body>
