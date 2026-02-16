@@ -3,89 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry Admin | Command Centre</title>
+    <title>Freshfry Admin | Control Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        #main-content { display: none; }
-        .order-card { transition: all 0.3s ease; border-radius: 2.5rem; border: 1px solid #f1f5f9; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        /* Rider Popup Styles */
-        #rider-modal { display: none; backdrop-filter: blur(8px); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #f1f5f9; }
+        .order-card { border-radius: 2rem; transition: all 0.3s ease; border: 1px solid #e2e8f0; }
+        .status-pill { font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; padding: 6px 12px; border-radius: 12px; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-900">
+<body class="pb-20">
 
-    <div id="rider-modal" class="fixed inset-0 z-[200] bg-slate-900/50 flex items-center justify-center p-6">
+    <nav class="bg-white p-6 sticky top-0 z-50 shadow-sm flex justify-between items-center">
+        <h1 class="text-2xl font-900 italic tracking-tighter">Freshfry <span class="text-orange-500 underline">Admin</span></h1>
+        <div class="flex gap-4">
+             <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-2xl text-xs font-900">Live Kitchen</div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-4">
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-[2rem] border-b-4 border-orange-500 shadow-sm">
+                <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Active Orders</p>
+                <h2 id="active-orders-count" class="text-4xl font-900 italic">0</h2>
+            </div>
+            <div class="bg-white p-6 rounded-[2rem] border-b-4 border-green-500 shadow-sm">
+                <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Delivered Today</p>
+                <h2 id="delivered-count" class="text-4xl font-900 italic">0</h2>
+            </div>
+        </div>
+
+        <h3 class="text-xs font-900 text-slate-400 uppercase tracking-widest mb-4 px-2">Kitchen Feed</h3>
+        <div id="admin-orders-list" class="space-y-4">
+            </div>
+    </main>
+
+    <div id="rider-modal" class="modal p-6">
         <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl">
-            <h3 class="text-xl font-800 mb-2 italic tracking-tighter">Select Rider<span class="text-orange-500">.</span></h3>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Showing Online Riders Only</p>
-            <div id="rider-list-container" class="space-y-3 max-h-60 overflow-y-auto no-scrollbar">
+            <h3 class="text-2xl font-900 italic mb-1 uppercase tracking-tighter">Select Rider</h3>
+            <p class="text-[9px] font-900 text-slate-400 uppercase tracking-widest mb-6">Showing Online Riders Only</p>
+            
+            <div id="rider-list-container" class="space-y-3 max-h-60 overflow-y-auto pr-2">
                 </div>
-            <button onclick="closeRiderModal()" class="w-full mt-6 py-4 text-slate-400 font-bold text-xs uppercase tracking-widest">Cancel</button>
-        </div>
-    </div>
 
-    <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
-        <div class="w-full max-w-md bg-white rounded-[3.5rem] p-12 shadow-2xl text-center">
-            <div class="w-20 h-20 bg-orange-500 text-white rounded-[2rem] flex items-center justify-center text-3xl mx-auto mb-8 shadow-xl shadow-orange-200">
-                <i class="fa-solid fa-crown"></i>
-            </div>
-            <h2 class="text-3xl font-800 text-slate-800 mb-2 italic tracking-tighter">Freshfry <span class="text-orange-500">HQ.</span></h2>
-            <div class="space-y-4 mt-8">
-                <input type="password" id="adminPassInput" placeholder="Master Key" class="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-center">
-                <button onclick="checkAdminLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px]">Access Console</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="main-content" class="p-6 lg:p-12 max-w-[1600px] mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-            <div>
-                <p class="text-orange-500 font-900 text-[10px] uppercase tracking-[0.4em] mb-1">System Version 2.0</p>
-                <h1 class="text-4xl font-800 text-slate-900 italic tracking-tighter">Command Centre<span class="text-orange-500">.</span></h1>
-            </div>
-            <div class="flex items-center gap-4 bg-white p-3 rounded-[2rem] shadow-sm border border-slate-100">
-                <div class="flex items-center gap-2 px-4 border-r border-slate-100">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-[10px] font-black uppercase text-slate-400">Live</span>
-                </div>
-                <button onclick="logout()" class="w-12 h-12 flex items-center justify-center rounded-xl text-red-500 hover:bg-red-50 transition"><i class="fa-solid fa-power-off"></i></button>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pending Orders</p>
-                <h3 id="order-count" class="text-4xl font-800">0</h3>
-            </div>
-            <div class="bg-orange-500 p-8 rounded-[2.5rem] shadow-xl shadow-orange-100 text-white">
-                <p class="text-[10px] font-black text-orange-100 uppercase tracking-widest mb-1">Active Riders</p>
-                <h3 id="rider-count-stats" class="text-4xl font-800">0</h3>
-            </div>
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Registered Users</p>
-                <h3 id="user-count" class="text-4xl font-800">0</h3>
-            </div>
-            <div class="bg-slate-900 p-8 rounded-[2.5rem] shadow-sm text-white">
-                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Sales</p>
-                <h3 class="text-4xl font-800">₹<span id="total-revenue">0</span></h3>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-            <div class="lg:col-span-12">
-                <h2 class="text-2xl font-800 text-slate-800 tracking-tighter mb-6">Kitchen Feed</h2>
-                <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-            </div>
+            <button onclick="closeRiderModal()" class="w-full mt-6 py-4 text-slate-400 font-900 uppercase text-[10px] tracking-widest">Cancel</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc, setDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, where, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -101,59 +70,69 @@
 
         let currentOrderId = null;
 
-        // --- AUTH ---
-        window.checkAdminLogin = () => {
-            if(document.getElementById('adminPassInput').value === "admin5") {
-                document.getElementById('admin-login-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                sessionStorage.setItem('isAdmin', 'true');
-            } else alert("Wrong Passkey!");
-        };
-        window.logout = () => { sessionStorage.clear(); location.reload(); };
+        // --- FETCH ORDERS ---
+        function loadAdminOrders() {
+            const q = query(collection(db, "orders"), orderBy("time", "desc"));
+            onSnapshot(q, (snap) => {
+                const list = document.getElementById('admin-orders-list');
+                let activeCount = 0;
+                let delCount = 0;
+                list.innerHTML = '';
 
-        // --- ORDER MANAGEMENT ---
-        onSnapshot(query(collection(db, "orders"), orderBy("time", "desc")), (snap) => {
-            const grid = document.getElementById('admin-orders-grid');
-            grid.innerHTML = '';
-            let count = 0; let revenue = 0;
-            
-            snap.forEach(d => {
-                const order = d.data();
-                const id = d.id;
-                const status = order.status || 'pending';
-                if(status === 'delivered') { revenue += order.total; return; }
+                snap.forEach(d => {
+                    const order = d.data();
+                    if(order.status !== 'delivered') activeCount++; else delCount++;
 
-                count++;
-                grid.innerHTML += `
-                <div class="bg-white p-8 order-card shadow-lg relative">
-                    <div class="flex justify-between items-start mb-6">
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${status==='pending'?'bg-red-100 text-red-500':'bg-blue-100 text-blue-500'}">${status}</span>
-                        <p class="text-2xl font-900 text-slate-800 italic">₹${order.total}</p>
-                    </div>
-                    <h4 class="font-800 text-slate-900 text-lg uppercase tracking-tighter">${order.customerName || 'Customer'}</h4>
-                    <p class="text-xs font-bold text-slate-400 mb-4 tracking-widest italic">${order.address}</p>
-                    
-                    <div class="flex gap-3 mt-6">
-                        ${status === 'pending' ? `
-                            <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase">Accept</button>
-                        ` : status === 'accepted' ? `
-                            <button onclick="openRiderModal('${id}')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Assign Rider 🛵</button>
-                        ` : `
-                            <div class="w-full text-center text-blue-500 font-black text-[10px] uppercase py-3 bg-blue-50 rounded-xl italic">On Delivery: ${order.riderName}</div>
-                        `}
-                    </div>
-                </div>`;
+                    list.innerHTML += `
+                    <div class="bg-white p-6 order-card shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-900 italic uppercase tracking-tighter">${order.customerName}</h4>
+                                <p class="text-[10px] font-bold text-slate-400">${order.customer} | ${order.paymentMethod}</p>
+                            </div>
+                            <span class="status-pill ${getStatusClass(order.status)}">${order.status.replace(/_/g,' ')}</span>
+                        </div>
+                        
+                        <div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-100">
+                             <p class="text-[9px] font-900 text-slate-400 uppercase mb-1">Items:</p>
+                             <p class="text-xs font-bold text-slate-700">${order.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</p>
+                             <p class="mt-3 text-[9px] font-900 text-slate-400 uppercase mb-1">Address:</p>
+                             <p class="text-xs font-bold text-slate-800">${order.address}</p>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-3">
+                            <h5 class="text-2xl font-900 italic">₹${order.total}</h5>
+                            <div class="flex gap-2">
+                                ${order.status === 'pending' ? 
+                                `<button onclick="updateStatus('${d.id}', 'preparing')" class="bg-orange-500 text-white px-4 py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest">Accept</button>` : ''}
+                                
+                                ${order.status === 'preparing' ? 
+                                `<button onclick="openRiderModal('${d.id}')" class="bg-slate-900 text-white px-4 py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest">Assign Rider</button>` : ''}
+                                
+                                <button onclick="deleteOrder('${d.id}')" class="bg-red-50 text-red-500 p-3 rounded-xl"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                        ${order.riderName ? `<p class="mt-3 text-[9px] font-900 text-blue-500 uppercase tracking-widest italic">Rider: ${order.riderName}</p>` : ''}
+                    </div>`;
+                });
+                document.getElementById('active-orders-count').innerText = activeCount;
+                document.getElementById('delivered-count').innerText = delCount;
             });
-            document.getElementById('order-count').innerText = count;
-            document.getElementById('total-revenue').innerText = revenue;
-        });
+        }
 
-        // --- DYNAMIC RIDER ASSIGNMENT ---
+        function getStatusClass(s) {
+            if(s === 'pending') return 'bg-yellow-100 text-yellow-600';
+            if(s === 'preparing') return 'bg-blue-100 text-blue-600';
+            if(s === 'out_for_delivery') return 'bg-purple-100 text-purple-600';
+            return 'bg-green-100 text-green-600';
+        }
+
+        // --- RIDER MODAL LOGIC (FIXED) ---
         window.openRiderModal = (orderId) => {
             currentOrderId = orderId;
             document.getElementById('rider-modal').style.display = 'flex';
             
-            // Fetch Online Riders from 'riders' collection
+            // "Online" match with Rider App exactly
             const q = query(collection(db, "riders"), where("status", "==", "Online"));
             
             onSnapshot(q, (snap) => {
@@ -161,50 +140,43 @@
                 container.innerHTML = '';
                 
                 if(snap.empty) {
-                    container.innerHTML = '<p class="text-center text-red-500 font-bold text-xs py-4 uppercase">No Riders Online ❌</p>';
+                    container.innerHTML = `
+                        <div class="text-center py-6">
+                            <p class="text-red-500 font-900 text-xs uppercase mb-2">No Riders Online ❌</p>
+                            <p class="text-[9px] text-slate-400 px-4 font-bold">Ask rider to login and 'Start Duty'</p>
+                        </div>`;
                     return;
                 }
 
                 snap.forEach(d => {
                     const rider = d.data();
                     container.innerHTML += `
-                        <button onclick="confirmRider('${rider.riderName}')" class="w-full bg-slate-50 hover:bg-orange-500 hover:text-white transition-all p-5 rounded-2xl flex justify-between items-center group">
-                            <span class="font-black text-sm uppercase tracking-tighter">${rider.riderName}</span>
-                            <i class="fa-solid fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100"></i>
-                        </button>
-                    `;
+                        <button onclick="confirmRider('${rider.riderName}')" class="w-full bg-slate-50 hover:bg-orange-500 hover:text-white transition-all p-5 rounded-2xl flex justify-between items-center group mb-2 border border-slate-100">
+                            <span class="font-900 text-sm uppercase tracking-tighter">${rider.riderName}</span>
+                            <span class="bg-green-500 w-2 h-2 rounded-full animate-pulse"></span>
+                        </button>`;
                 });
             });
         };
 
-        window.confirmRider = async (rName) => {
-            if(currentOrderId && rName) {
-                await updateDoc(doc(db, "orders", currentOrderId), { 
-                    status: 'out_for_delivery', 
-                    riderName: rName.toUpperCase() 
+        window.confirmRider = async (riderName) => {
+            if(!currentOrderId) return;
+            try {
+                await updateDoc(doc(db, "orders", currentOrderId), {
+                    status: 'out_for_delivery',
+                    riderName: riderName
                 });
                 closeRiderModal();
-                alert(`Order assigned to ${rName}!`);
-            }
+                alert(`Order assigned to ${riderName} 🏍️`);
+            } catch (e) { alert("Assignment Failed!"); }
         };
 
-        window.closeRiderModal = () => {
-            document.getElementById('rider-modal').style.display = 'none';
-            currentOrderId = null;
-        };
+        window.closeRiderModal = () => { document.getElementById('rider-modal').style.display = 'none'; };
 
-        // Standard Actions
-        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
+        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); };
+        window.deleteOrder = async (id) => { if(confirm("Delete this order?")) await deleteDoc(doc(db, "orders", id)); };
 
-        // Active Rider Count Tracker
-        onSnapshot(query(collection(db, "riders"), where("status", "==", "Online")), (snap) => {
-            document.getElementById('rider-count-stats').innerText = snap.size;
-        });
-
-        if(sessionStorage.getItem('isAdmin') === 'true') {
-            document.getElementById('admin-login-screen').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-        }
+        loadAdminOrders();
     </script>
 </body>
 </html>
