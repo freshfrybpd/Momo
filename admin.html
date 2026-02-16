@@ -11,11 +11,22 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         #main-content { display: none; }
         .order-card { transition: all 0.3s ease; border-radius: 2.5rem; border: 1px solid #f1f5f9; }
-        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* Rider Popup Styles */
+        #rider-modal { display: none; backdrop-filter: blur(8px); }
     </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-900">
+
+    <div id="rider-modal" class="fixed inset-0 z-[200] bg-slate-900/50 flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl">
+            <h3 class="text-xl font-800 mb-2 italic tracking-tighter">Select Rider<span class="text-orange-500">.</span></h3>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Showing Online Riders Only</p>
+            <div id="rider-list-container" class="space-y-3 max-h-60 overflow-y-auto no-scrollbar">
+                </div>
+            <button onclick="closeRiderModal()" class="w-full mt-6 py-4 text-slate-400 font-bold text-xs uppercase tracking-widest">Cancel</button>
+        </div>
+    </div>
 
     <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
         <div class="w-full max-w-md bg-white rounded-[3.5rem] p-12 shadow-2xl text-center">
@@ -31,7 +42,6 @@
     </div>
 
     <div id="main-content" class="p-6 lg:p-12 max-w-[1600px] mx-auto">
-        
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
             <div>
                 <p class="text-orange-500 font-900 text-[10px] uppercase tracking-[0.4em] mb-1">System Version 2.0</p>
@@ -53,7 +63,7 @@
             </div>
             <div class="bg-orange-500 p-8 rounded-[2.5rem] shadow-xl shadow-orange-100 text-white">
                 <p class="text-[10px] font-black text-orange-100 uppercase tracking-widest mb-1">Active Riders</p>
-                <h3 id="rider-count" class="text-4xl font-800">0</h3>
+                <h3 id="rider-count-stats" class="text-4xl font-800">0</h3>
             </div>
             <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Registered Users</p>
@@ -66,65 +76,16 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-            <div class="lg:col-span-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-800 text-slate-800 tracking-tighter">Kitchen Feed</h2>
-                    <div class="h-1 w-full mx-6 bg-slate-100 rounded-full"></div>
-                </div>
-                <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    </div>
-            </div>
-
-            <div class="lg:col-span-4">
-                <div class="bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100 sticky top-32">
-                    <h3 class="font-900 text-slate-900 mb-6 uppercase text-xs tracking-[0.2em] flex items-center gap-2">
-                        <i class="fa-solid fa-ticket text-orange-500"></i> Marketing Tools
-                    </h3>
-                    <div class="space-y-4">
-                        <input type="text" id="promoCode" placeholder="CODE (e.g. MOMO50)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none font-bold uppercase text-sm border border-transparent focus:border-orange-500">
-                        <input type="number" id="promoValue" placeholder="Discount Amount (₹)" class="w-full p-5 bg-slate-50 rounded-2xl outline-none font-bold text-sm border border-transparent focus:border-orange-500">
-                        <button onclick="sendCoupon()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black shadow-lg shadow-orange-100 text-[10px] tracking-widest uppercase">Push Coupon</button>
-                    </div>
-                    <div class="mt-8 pt-8 border-t border-dashed">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Active Promo List</p>
-                        <div id="coupon-list" class="space-y-2"></div>
-                    </div>
-                </div>
+            <div class="lg:col-span-12">
+                <h2 class="text-2xl font-800 text-slate-800 tracking-tighter mb-6">Kitchen Feed</h2>
+                <div id="admin-orders-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white rounded-[3rem] shadow-sm border border-slate-100 p-8">
-                <h3 class="font-800 text-slate-900 mb-6 text-xl tracking-tighter italic">Manage Customers</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <tbody id="userTableBody" class="divide-y divide-slate-50">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-[3rem] shadow-sm border border-slate-100 p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="font-800 text-slate-900 text-xl tracking-tighter italic">Live Menu</h3>
-                    <button onclick="toggleMenuForm()" class="bg-slate-900 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase">Add Item +</button>
-                </div>
-                <div id="menu-form" class="hidden mb-6 p-6 bg-slate-50 rounded-3xl space-y-3">
-                    <input type="text" id="foodName" placeholder="Momo Name" class="w-full p-4 bg-white rounded-xl border border-slate-100 outline-none font-bold text-sm">
-                    <input type="number" id="foodPrice" placeholder="Price" class="w-full p-4 bg-white rounded-xl border border-slate-100 outline-none font-bold text-sm">
-                    <input type="text" id="foodImage" placeholder="Image URL" class="w-full p-4 bg-white rounded-xl border border-slate-100 outline-none font-bold text-sm">
-                    <button id="submitBtn" class="w-full bg-orange-500 text-white py-4 rounded-xl font-black text-xs uppercase">Save Dish</button>
-                </div>
-                <div id="menu-grid" class="space-y-4">
-                    </div>
-            </div>
-        </div>
-
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc, setDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -137,6 +98,8 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        let currentOrderId = null;
 
         // --- AUTH ---
         window.checkAdminLogin = () => {
@@ -153,128 +116,90 @@
             const grid = document.getElementById('admin-orders-grid');
             grid.innerHTML = '';
             let count = 0; let revenue = 0;
-            let activeRiders = new Set();
-
+            
             snap.forEach(d => {
                 const order = d.data();
                 const id = d.id;
                 const status = order.status || 'pending';
-                
                 if(status === 'delivered') { revenue += order.total; return; }
-                if(order.riderName) activeRiders.add(order.riderName);
 
                 count++;
                 grid.innerHTML += `
                 <div class="bg-white p-8 order-card shadow-lg relative">
                     <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${status==='pending'?'bg-red-100 text-red-500':'bg-blue-100 text-blue-500'}">${status}</span>
-                            <p class="text-[10px] text-slate-300 font-bold mt-2 tracking-widest">ID: #${id.slice(-5)}</p>
-                        </div>
-                        <p class="text-2xl font-900 text-slate-800 tracking-tighter italic">₹${order.total}</p>
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${status==='pending'?'bg-red-100 text-red-500':'bg-blue-100 text-blue-500'}">${status}</span>
+                        <p class="text-2xl font-900 text-slate-800 italic">₹${order.total}</p>
                     </div>
+                    <h4 class="font-800 text-slate-900 text-lg uppercase tracking-tighter">${order.customerName || 'Customer'}</h4>
+                    <p class="text-xs font-bold text-slate-400 mb-4 tracking-widest italic">${order.address}</p>
                     
-                    <div class="mb-6">
-                        <h4 class="font-800 text-slate-900 text-lg leading-tight uppercase tracking-tighter">${order.customerName || 'Freshfry Customer'}</h4>
-                        <p class="text-xs font-bold text-slate-400 mt-1">${order.customer}</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-4 rounded-2xl mb-6 border border-slate-100">
-                        <p class="text-[9px] font-black text-slate-300 uppercase mb-2 tracking-widest">Address:</p>
-                        <p class="text-xs font-bold text-slate-600 italic">${order.address}</p>
-                    </div>
-
-                    <div class="space-y-2 mb-8">
-                        ${order.items.map(i => `<div class="flex justify-between text-xs font-bold text-slate-500 uppercase"><span>${i.name}</span> <span>x${i.qty}</span></div>`).join('')}
-                    </div>
-
-                    ${status === 'out_for_delivery' ? `
-                        <div class="mb-6 text-[10px] font-black text-blue-600 bg-blue-50 p-3 rounded-xl flex items-center gap-3 uppercase tracking-widest">
-                            <i class="fa-solid fa-motorcycle text-lg"></i> Rider: ${order.riderName}
-                        </div>
-                    ` : ''}
-
-                    <div class="flex gap-3">
+                    <div class="flex gap-3 mt-6">
                         ${status === 'pending' ? `
-                            <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-green-100">Accept</button>
-                            <button onclick="rejectOrder('${id}')" class="bg-red-50 text-red-500 px-6 rounded-2xl font-black text-[10px] uppercase">Reject</button>
+                            <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase">Accept</button>
                         ` : status === 'accepted' ? `
-                            <button onclick="assignRider('${id}')" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl">Assign Rider 🛵</button>
+                            <button onclick="openRiderModal('${id}')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Assign Rider 🛵</button>
                         ` : `
-                            <div class="w-full text-center text-blue-500 font-black text-[10px] uppercase italic tracking-[0.2em] py-3 bg-blue-50 rounded-xl">Order is Live</div>
+                            <div class="w-full text-center text-blue-500 font-black text-[10px] uppercase py-3 bg-blue-50 rounded-xl italic">On Delivery: ${order.riderName}</div>
                         `}
                     </div>
                 </div>`;
             });
             document.getElementById('order-count').innerText = count;
             document.getElementById('total-revenue').innerText = revenue;
-            document.getElementById('rider-count').innerText = activeRiders.size;
         });
 
-        // --- USER MANAGEMENT ---
-        onSnapshot(collection(db, "users"), (snap) => {
-            const body = document.getElementById('userTableBody');
-            body.innerHTML = '';
-            document.getElementById('user-count').innerText = snap.size;
-            snap.forEach(d => {
-                const user = d.data();
-                body.innerHTML += `
-                <tr class="group">
-                    <td class="py-5">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center font-black text-slate-400 text-xs">${user.name ? user.name[0] : 'U'}</div>
-                            <div>
-                                <p class="text-sm font-800 text-slate-800 uppercase tracking-tighter">${user.name || 'Anonymous'}</p>
-                                <p class="text-[10px] font-bold text-slate-400 tracking-widest">${user.phone || d.id}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="text-right py-5">
-                        <button onclick="deleteUser('${d.id}')" class="text-slate-300 hover:text-red-500 transition"><i class="fa-solid fa-user-xmark"></i></button>
-                    </td>
-                </tr>`;
+        // --- DYNAMIC RIDER ASSIGNMENT ---
+        window.openRiderModal = (orderId) => {
+            currentOrderId = orderId;
+            document.getElementById('rider-modal').style.display = 'flex';
+            
+            // Fetch Online Riders from 'riders' collection
+            const q = query(collection(db, "riders"), where("status", "==", "Online"));
+            
+            onSnapshot(q, (snap) => {
+                const container = document.getElementById('rider-list-container');
+                container.innerHTML = '';
+                
+                if(snap.empty) {
+                    container.innerHTML = '<p class="text-center text-red-500 font-bold text-xs py-4 uppercase">No Riders Online ❌</p>';
+                    return;
+                }
+
+                snap.forEach(d => {
+                    const rider = d.data();
+                    container.innerHTML += `
+                        <button onclick="confirmRider('${rider.riderName}')" class="w-full bg-slate-50 hover:bg-orange-500 hover:text-white transition-all p-5 rounded-2xl flex justify-between items-center group">
+                            <span class="font-black text-sm uppercase tracking-tighter">${rider.riderName}</span>
+                            <i class="fa-solid fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100"></i>
+                        </button>
+                    `;
+                });
             });
-        });
+        };
 
-        // --- MENU & COUPONS ---
-        window.toggleMenuForm = () => document.getElementById('menu-form').classList.toggle('hidden');
-
-        window.sendCoupon = async () => {
-            const code = document.getElementById('promoCode').value;
-            const value = document.getElementById('promoValue').value;
-            if(code && value) {
-                await setDoc(doc(db, "coupons", code.toUpperCase()), { code: code.toUpperCase(), value: parseInt(value), active: true });
-                alert("Coupon Pushed Successfully!");
-                document.getElementById('promoCode').value = '';
-                document.getElementById('promoValue').value = '';
+        window.confirmRider = async (rName) => {
+            if(currentOrderId && rName) {
+                await updateDoc(doc(db, "orders", currentOrderId), { 
+                    status: 'out_for_delivery', 
+                    riderName: rName.toUpperCase() 
+                });
+                closeRiderModal();
+                alert(`Order assigned to ${rName}!`);
             }
         };
 
-        onSnapshot(collection(db, "coupons"), (snap) => {
-            const list = document.getElementById('coupon-list');
-            list.innerHTML = '';
-            snap.forEach(d => {
-                const c = d.data();
-                list.innerHTML += `
-                <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <span class="text-[10px] font-black tracking-[0.2em] text-orange-500">${c.code}</span>
-                    <div class="flex gap-4 items-center">
-                        <span class="text-xs font-black">₹${c.value}</span>
-                        <button onclick="deleteCoupon('${d.id}')" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-circle-xmark"></i></button>
-                    </div>
-                </div>`;
-            });
-        });
-
-        // --- ACTIONS ---
-        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
-        window.rejectOrder = async (id) => { if(confirm("Reject?")) await deleteDoc(doc(db, "orders", id)); };
-        window.deleteUser = async (id) => { if(confirm("Remove User?")) await deleteDoc(doc(db, "users", id)); };
-        window.deleteCoupon = async (id) => { await deleteDoc(doc(db, "coupons", id)); };
-        window.assignRider = async (id) => {
-            const rName = prompt("Enter Delivery Boy Name:");
-            if(rName) await updateDoc(doc(db, "orders", id), { status: 'out_for_delivery', riderName: rName.toUpperCase() });
+        window.closeRiderModal = () => {
+            document.getElementById('rider-modal').style.display = 'none';
+            currentOrderId = null;
         };
+
+        // Standard Actions
+        window.updateStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s }); };
+
+        // Active Rider Count Tracker
+        onSnapshot(query(collection(db, "riders"), where("status", "==", "Online")), (snap) => {
+            document.getElementById('rider-count-stats').innerText = snap.size;
+        });
 
         if(sessionStorage.getItem('isAdmin') === 'true') {
             document.getElementById('admin-login-screen').style.display = 'none';
