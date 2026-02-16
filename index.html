@@ -3,122 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Premium Momos</title>
+    <title>Freshfry | Crunchy & Steamy Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
         
-        :root { --primary: #FF5C00; --dark: #07090E; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--dark); color: white; overflow-x: hidden; }
+        .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
+        
+        .momo-card { border-radius: 2rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(242, 153, 74, 0.3); }
 
-        /* 🔥 Hero Section Styling */
-        .hero-gradient {
-            background: radial-gradient(circle at top right, rgba(255, 92, 0, 0.15), transparent),
-                        radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.1), transparent);
-        }
+        .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
+        .cart-closed { transform: translateX(110%); }
 
-        .hero-text { font-family: 'Playfair Display', serif; font-style: italic; }
+        .btn-add { transition: all 0.3s ease; }
+        .btn-add.added { background-color: #10b981 !important; }
 
-        /* ✨ Animated Cards */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 3rem;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-15px) scale(1.02);
-            border-color: var(--primary);
-            box-shadow: 0 30px 60px -15px rgba(255, 92, 0, 0.2);
-        }
-
-        /* 🍊 Floating Glow */
-        .glow-dot {
-            position: absolute; width: 300px; height: 300px;
-            background: var(--primary); filter: blur(150px);
-            opacity: 0.2; z-index: -1; animation: float 10s infinite alternate;
-        }
-
-        @keyframes float { from { transform: translate(0,0); } to { transform: translate(50px, 100px); } }
-
-        /* 🛒 Add to Cart Button Premium */
-        .btn-premium {
-            background: linear-gradient(135deg, #FF8A00 0%, #FF5C00 100%);
-            box-shadow: 0 10px 20px -5px rgba(255, 92, 0, 0.5);
-        }
-
-        /* 📍 Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        /* Tracking Animation */
+        .step-dot { height: 12px; width: 12px; border-radius: 50%; background: #e2e8f0; }
+        .step-dot.active { background: #f2994a; box-shadow: 0 0 10px #f2994a; }
+        .step-line { height: 3px; flex: 1; background: #e2e8f0; }
+        .step-line.active { background: #f2994a; }
+        
+        @keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-bounce-slow { animation: bounce-slow 3s infinite; }
     </style>
 </head>
-<body class="hero-gradient pb-20">
+<body class="no-scrollbar">
 
-    <div class="glow-dot top-0 left-0"></div>
-    <div class="glow-dot bottom-0 right-0" style="background: #7C3AED;"></div>
-
-    <nav class="sticky top-0 z-[100] px-8 py-8 flex justify-between items-center backdrop-blur-md border-b border-white/5">
-        <div>
-            <h1 class="text-3xl font-800 italic tracking-tighter">Fresh<span class="text-orange-500">fry.</span></h1>
-            <div class="flex items-center gap-2 mt-1">
-                <span class="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                <span id="current-loc" class="text-[10px] font-800 uppercase text-slate-400 tracking-[0.2em]">Authentic Momos</span>
+    <div id="login-modal" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-6 text-center">
+        <div class="w-full max-w-sm">
+            <div class="text-4xl font-extrabold text-orange-500 mb-2">Fresh<span class="text-gray-900">fry</span>.</div>
+            <p class="text-gray-400 font-semibold text-sm mb-10 tracking-widest uppercase">Premium Momo Hub</p>
+            <div class="space-y-4">
+                <input id="user-name" type="text" placeholder="Your Name" class="w-full px-6 py-4 bg-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400 font-semibold text-center">
+                <input id="user-phone" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-6 py-4 bg-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400 font-semibold text-center">
+                <button onclick="handleLogin()" class="w-full freshfry-gradient text-white py-5 rounded-2xl font-bold shadow-lg shadow-orange-200 active:scale-95 transition">Enter Shop</button>
             </div>
         </div>
-        
-        <div class="flex items-center gap-4">
-            <button onclick="toggleCart(true)" class="relative h-14 w-14 glass-card flex items-center justify-center border-none bg-white/10">
-                <i class="fa-solid fa-cart-shopping text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] h-6 w-6 rounded-full flex items-center justify-center text-white font-800 border-4 border-[#07090E]">0</span>
-            </button>
+    </div>
+
+    <div id="loc-modal" class="fixed inset-0 z-[150] bg-black/20 backdrop-blur-md hidden flex items-end">
+        <div class="bg-white w-full rounded-t-[3rem] p-10 shadow-2xl">
+            <h3 class="text-2xl font-bold mb-8 text-center">Deliver to <span class="text-orange-500">Where?</span></h3>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="saveLoc('Murgabadi')" class="p-6 border-2 border-gray-50 rounded-3xl font-bold hover:border-orange-400 hover:text-orange-500 transition uppercase text-xs">Murgabadi</button>
+                <button onclick="saveLoc('Station Bazar')" class="p-6 border-2 border-gray-50 rounded-3xl font-bold hover:border-orange-400 hover:text-orange-500 transition uppercase text-xs">Station Bazar</button>
+                <button onclick="saveLoc('Lal Bazar')" class="p-6 border-2 border-gray-50 rounded-3xl font-bold hover:border-orange-400 hover:text-orange-500 transition uppercase text-xs">Lal Bazar</button>
+                <button onclick="saveLoc('Ambika Mandir')" class="p-6 border-2 border-gray-50 rounded-3xl font-bold hover:border-orange-400 hover:text-orange-500 transition uppercase text-xs">Ambika Mandir</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-3xl font-extrabold tracking-tight text-orange-500">
+            Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
+        </div>
+        <div class="flex items-center space-x-5">
+            <div onclick="document.getElementById('loc-modal').classList.remove('hidden')" class="bg-gray-100 px-4 py-2 rounded-full cursor-pointer hover:bg-gray-200 hidden sm:flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-orange-500"></i>
+                <span id="nav-loc" class="text-xs font-bold uppercase tracking-tighter">Baripada</span>
+            </div>
+            <div onclick="toggleCart(true)" class="relative bg-orange-100 p-3 rounded-full cursor-pointer">
+                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            </div>
         </div>
     </nav>
 
-    <header class="max-w-6xl mx-auto px-8 pt-16 pb-12">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <p class="text-orange-500 font-800 uppercase tracking-[0.5em] text-[10px] mb-4">Taste the Extraordinary</p>
-                <h2 class="text-7xl md:text-8xl hero-text leading-[0.9] mb-8">
-                    Crafting <br> <span class="text-orange-500">Magic</span> Momos.
-                </h2>
-                <p class="text-slate-400 font-medium text-lg max-w-md leading-relaxed mb-10">
-                    Handmade with love in Baripada. Every bite is a fusion of tradition and premium flavors.
-                </p>
-                <div class="flex gap-4">
-                    <a href="#menu-section" class="btn-premium px-10 py-5 rounded-full font-800 uppercase text-[10px] tracking-widest transition-all hover:px-14">View Menu</a>
-                </div>
-            </div>
-            <div class="hidden lg:block relative">
-                <div class="absolute inset-0 bg-orange-500/20 blur-[100px] rounded-full"></div>
-                <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=800&q=80" 
-                     class="relative z-10 rounded-[4rem] shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
-            </div>
-        </div>
-    </header>
+    <section class="freshfry-gradient px-6 py-16 text-center text-white">
+        <span class="bg-white/30 px-4 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-[0.3em]">Premium Momo Hub</span>
+        <h1 class="text-5xl font-extrabold mt-4 mb-4 leading-tight">Freshly Steamed. <br> Deeply Fried.</h1>
+        <p class="opacity-90 mb-8 font-medium">India's most loved momos, delivered with extra chutney.</p>
+    </section>
 
-    <main id="menu-section" class="max-w-6xl mx-auto px-8 py-20">
-        <div class="flex justify-between items-end mb-16">
-            <div>
-                <h3 class="text-4xl font-800 italic uppercase tracking-tighter">Chef's <span class="text-orange-500">Specials</span></h3>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-2">Freshly steamed, every single day</p>
-            </div>
-            <div class="flex gap-2">
-                <button class="h-12 w-12 glass-card flex items-center justify-center text-sm hover:bg-orange-500"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="h-12 w-12 glass-card flex items-center justify-center text-sm hover:bg-orange-500"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-        </div>
-
-        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <main class="max-w-6xl mx-auto px-6 -mt-8">
+        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
     </main>
 
-    <footer class="max-w-6xl mx-auto px-8 py-20 border-t border-white/5 text-center">
-        <h1 class="text-6xl font-800 italic opacity-10 mb-8">FRESHFRY MOMO</h1>
-        <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.5em]">Baripada · Odisha · Since 2024</p>
-    </footer>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[160] cart-sidebar cart-closed flex flex-col shadow-2xl">
+        <div class="p-8 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-bold">My <span class="text-orange-500">Box</span></h2>
+            <button onclick="toggleCart(false)" class="h-10 w-10 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-8 border-t space-y-4 bg-gray-50">
+            <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" class="w-full px-5 py-4 bg-white rounded-2xl outline-none border border-gray-200 font-semibold text-sm">
+            <div class="flex justify-between items-center px-2">
+                <span class="text-gray-400 font-bold text-xs uppercase tracking-widest">Grand Total</span>
+                <span id="cart-total" class="text-2xl font-extrabold">₹0</span>
+            </div>
+            <button onclick="checkout('upi')" class="w-full bg-gray-900 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-xl">Pay via UPI</button>
+            <button onclick="checkout('wa')" class="w-full border-2 border-green-500 text-green-600 py-5 rounded-2xl font-bold uppercase text-xs tracking-widest">Order on WhatsApp</button>
+        </div>
+    </div>
 
-    </body>
+    <div id="tracking-page" class="fixed inset-0 z-[300] bg-white hidden overflow-y-auto">
+        <div class="max-w-md mx-auto px-8 py-20 text-center">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold mb-2 leading-tight">Order Confirmed!</h2>
+            <p class="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-10">Freshfry is preparing magic...</p>
+
+            <div class="bg-slate-50 border border-gray-100 rounded-[2.5rem] p-8 text-left relative overflow-hidden">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 freshfry-gradient text-white rounded-2xl flex items-center justify-center text-xl animate-bounce-slow">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <div>
+                        <h4 id="track-status" class="font-extrabold text-gray-800">Kitchen is busy...</h4>
+                        <p class="text-[10px] font-bold text-orange-400 uppercase tracking-widest">Eta: 25 Mins</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="step-dot active"></div>
+                    <div class="step-line active"></div>
+                    <div id="line-2" class="step-line"></div>
+                    <div id="dot-3" class="step-dot"></div>
+                </div>
+                <div class="flex justify-between text-[9px] font-bold uppercase text-gray-400">
+                    <span>Placed</span>
+                    <span>Kitchen</span>
+                    <span>Delivered</span>
+                </div>
+            </div>
+            <button onclick="location.reload()" class="mt-10 font-bold text-orange-500 uppercase tracking-widest text-xs">Back to Home</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM", authDomain: "freshfry-39a10.firebaseapp.com", projectId: "freshfry-39a10", storageBucket: "freshfry-39a10.firebasestorage.app", messagingSenderId: "928483976893", appId: "1:928483976893:web:3459478b550ba0e12fb9d4" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // UI Helpers
+        window.handleLogin = () => {
+            const name = document.getElementById('user-name').value;
+            const ph = document.getElementById('user-phone').value;
+            if(!name || ph.length < 10) return alert("Enter valid details");
+            localStorage.setItem('ffName', name); localStorage.setItem('ffPhone', ph);
+            document.getElementById('login-modal').style.display = 'none';
+            if(!localStorage.getItem('ffLoc')) document.getElementById('loc-modal').classList.remove('hidden');
+        };
+
+        window.saveLoc = (loc) => {
+            localStorage.setItem('ffLoc', loc);
+            document.getElementById('nav-loc').innerText = loc;
+            document.getElementById('loc-modal').classList.add('hidden');
+        };
+
+        window.toggleCart = (o) => document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o);
+
+        if(localStorage.getItem('ffPhone')) {
+            document.getElementById('login-modal').style.display = 'none';
+            if(localStorage.getItem('ffLoc')) document.getElementById('nav-loc').innerText = localStorage.getItem('ffLoc');
+        }
+
+        // Menu & Cart
+        let cart = [];
+        onSnapshot(collection(db, "menu"), (snap) => {
+            const list = document.getElementById('menu-list');
+            list.innerHTML = '';
+            snap.forEach(doc => {
+                const item = doc.data();
+                list.innerHTML += `
+                <div class="momo-card bg-white p-4 shadow-sm">
+                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[1.5rem] mb-5">
+                    <div class="px-2">
+                        <div class="flex justify-between items-center mb-5">
+                            <h4 class="font-bold text-lg">${item.name}</h4>
+                            <span class="text-orange-500 font-extrabold">₹${item.price}</span>
+                        </div>
+                        <button onclick="addToCart(this, '${item.name}', ${item.price}, '${item.image}')" class="btn-add w-full bg-gray-100 text-gray-800 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-orange-500 hover:text-white transition">Add to Box</button>
+                    </div>
+                </div>`;
+            });
+        });
+
+        window.addToCart = (btn, name, price, image) => {
+            btn.innerText = "Added! ✨"; btn.classList.add('added');
+            setTimeout(() => { btn.innerText = "Add to Box"; btn.classList.remove('added'); }, 1000);
+            const item = cart.find(i => i.name === name);
+            if(item) item.qty++; else cart.push({name, price, image, qty: 1});
+            updateUI();
+        };
+
+        function updateUI() {
+            let total = 0;
+            document.getElementById('cart-badge').innerText = cart.reduce((a,b) => a+b.qty, 0);
+            document.getElementById('cart-items-list').innerHTML = cart.map(i => {
+                total += (i.price * i.qty);
+                return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl">
+                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl">
+                    <div class="flex-1 font-bold text-xs uppercase tracking-tighter">${i.name} (x${i.qty})</div>
+                    <div class="font-extrabold">₹${i.price*i.qty}</div>
+                </div>`;
+            }).join('');
+            document.getElementById('cart-total').innerText = "₹" + total;
+        }
+
+        window.checkout = async (type) => {
+            const addr = document.getElementById('exact-address').value;
+            const total = document.getElementById('cart-total').innerText.replace('₹','');
+            if(!addr || cart.length === 0) return alert("Box is empty or address missing");
+
+            await addDoc(collection(db, "orders"), {
+                customer: localStorage.getItem('ffName'),
+                phone: localStorage.getItem('ffPhone'),
+                address: addr,
+                total: "₹" + total,
+                items: cart,
+                status: 'pending',
+                time: serverTimestamp()
+            });
+
+            if(type === 'upi') {
+                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total}&cu=INR`;
+            } else {
+                let msg = `*🍱 NEW FRESHFRY ORDER*%0A*Name:* ${localStorage.getItem('ffName')}%0A*Address:* ${addr}%0A*Total:* ₹${total}`;
+                window.location.href = `https://wa.me/917008186187?text=${msg}`;
+            }
+
+            document.getElementById('tracking-page').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('track-status').innerText = "Momo is on the way!";
+                document.getElementById('line-2').classList.add('active');
+                document.getElementById('dot-3').classList.add('active');
+            }, 10000);
+        };
+    </script>
+</body>
 </html>
