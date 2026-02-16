@@ -3,125 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreshFry | Order Momos Online</title>
+    <title>Freshfry | Crunchy & Steamy Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Basis+Grotesque+Pro:wght@300;400;700&display=swap');
-        body { font-family: 'Basis Grotesque Pro', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .freshfry-gradient { background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .active-dot { width: 8px; height: 8px; background: #fc8019; border-radius: 50%; }
     </style>
 </head>
-<body class="bg-white">
+<body class="bg-slate-50 text-gray-800">
 
-    <header class="sticky top-0 bg-white z-50 border-b border-gray-100 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-2 truncate">
-            <i class="fa-solid fa-location-dot text-orange-500 text-xl"></i>
-            <div class="flex flex-col truncate">
-                <span class="font-black text-sm border-b-2 border-black w-fit leading-tight">Baripada</span>
-                <span class="text-xs text-gray-500 truncate" id="current-loc">Badbazar, Near Ambika Temple...</span>
-            </div>
-            <i class="fa-solid fa-chevron-down text-orange-500 text-xs mt-1"></i>
+    <nav class="flex items-center justify-between px-6 py-5 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-3xl font-extrabold tracking-tight text-orange-500">
+            Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
-        <div class="flex space-x-4">
-            <i class="fa-solid fa-percent text-gray-600 text-lg"></i>
-            <div class="relative">
-                <i class="fa-solid fa-cart-shopping text-gray-600 text-lg"></i>
-                <span id="cart-badge" class="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+        <div class="flex items-center space-x-5">
+            <div id="user-display" class="hidden text-sm font-bold text-gray-600"></div>
+            <div class="relative bg-orange-100 p-2 rounded-full cursor-pointer" onclick="goToCheckout()">
+                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <div class="p-4">
-        <div class="flex items-center bg-gray-100 rounded-xl p-3 space-x-3 border border-gray-200">
-            <input type="text" placeholder="Search for 'Chicken Momos'" class="bg-transparent flex-1 outline-none text-sm text-gray-600 font-medium">
-            <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-        </div>
-    </div>
-
-    <div class="px-4 mb-6">
-        <h2 class="font-black text-xl text-gray-800 mb-3 tracking-tight">Best Offers For You</h2>
-        <div class="flex space-x-4 overflow-x-auto no-scrollbar">
-            <img src="https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=400&h=200&fit=crop" class="w-72 h-40 rounded-2xl object-cover shadow-sm">
-            <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=200&fit=crop" class="w-72 h-40 rounded-2xl object-cover shadow-sm">
-        </div>
-    </div>
-
-    <div class="px-4 pb-24">
-        <h2 class="font-black text-xl text-gray-800 mb-4 tracking-tight">Momo Masterpieces</h2>
+    <div id="login-section" class="max-w-md mx-auto mt-10 p-8 bg-white rounded-[2rem] shadow-xl border border-gray-100">
+        <h2 class="text-2xl font-extrabold mb-2">Welcome to Freshfry 🥟</h2>
+        <p class="text-gray-400 mb-6 font-medium text-sm">Enter details to explore Baripada's best momos.</p>
         
-        <div id="momo-container" class="space-y-8">
-            <div class="flex justify-between items-start pb-6 border-b border-gray-100">
-                <div class="flex-1 pr-4">
-                    <div class="border border-green-600 w-3 h-3 flex items-center justify-center p-0.5 mb-1">
-                        <div class="bg-green-600 w-full h-full rounded-full"></div>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-lg">Veg Steamed Momos</h3>
-                    <p class="font-bold text-gray-700 text-sm">₹60 <span class="text-xs text-gray-400 font-normal ml-2">(Half)</span></p>
-                    <p class="text-gray-400 text-xs mt-2 line-clamp-2 italic">Authentic Baripada-style thin skin momos served with fiery red chutney.</p>
-                </div>
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=200&h=200&fit=crop" class="w-32 h-32 rounded-2xl object-cover shadow-md">
-                    <button onclick="addToCart('Veg Steamed', 60)" class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-green-600 font-black border border-gray-200 py-1 px-8 rounded-lg shadow-lg hover:bg-gray-50 active:scale-90 transition">
-                        ADD
-                    </button>
-                </div>
-            </div>
-            <div class="flex justify-between items-start pb-6 border-b border-gray-100">
-                <div class="flex-1 pr-4">
-                    <div class="border border-green-600 w-3 h-3 flex items-center justify-center p-0.5 mb-1">
-                        <div class="bg-green-600 w-full h-full rounded-full"></div>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-lg">Paneer Fried Momos</h3>
-                    <p class="font-bold text-gray-700 text-sm">₹80 <span class="text-xs text-gray-400 font-normal ml-2">(Half)</span></p>
-                    <p class="text-gray-400 text-xs mt-2 line-clamp-2">Crispy on the outside, creamy on the inside. A FreshFry special!</p>
-                </div>
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?w=200&h=200&fit=crop" class="w-32 h-32 rounded-2xl object-cover shadow-md">
-                    <button onclick="addToCart('Paneer Fried', 80)" class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-green-600 font-black border border-gray-200 py-1 px-8 rounded-lg shadow-lg hover:bg-gray-50 active:scale-90 transition">
-                        ADD
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div class="space-y-4">
+            <input type="text" id="custName" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
+            <input type="tel" id="custPhone" placeholder="Phone Number" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
+            
+            <select id="custArea" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none font-semibold text-gray-700">
+                <option>Badbazar</option>
+                <option>Station Bazar</option>
+                <option>Bhanjpur</option>
+                <option>Baghra Road</option>
+                <option>Near Ambika Temple</option>
+                <option>Near Jagganath Temple</option>
+                <option>Other</option>
+            </select>
 
-    <div id="view-cart-bar" class="fixed bottom-6 left-4 right-4 bg-[#60b246] text-white p-4 rounded-xl flex justify-between items-center shadow-2xl hidden animate-bounce">
-        <div class="flex flex-col">
-            <span id="items-count" class="text-xs font-bold uppercase tracking-wider">1 Item Added</span>
-            <span class="font-black">View Cart <i class="fa-solid fa-bag-shopping ml-1 text-sm"></i></span>
-        </div>
-        <div class="flex items-center space-x-2">
-            <span id="final-price" class="font-black text-lg">₹60</span>
+            <button onclick="saveUser()" class="w-full freshfry-gradient text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-orange-200 active:scale-95 transition">
+                Start Eating
+            </button>
         </div>
     </div>
 
     <script>
-        let cart = [];
+        // 2. YOUR FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+            authDomain: "freshfry-39a10.firebaseapp.com",
+            projectId: "freshfry-39a10",
+            storageBucket: "freshfry-39a10.firebasestorage.app",
+            messagingSenderId: "928483976893",
+            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+        };
 
-        function addToCart(name, price) {
-            cart.push({name, price});
-            updateUI();
-        }
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        function updateUI() {
-            const bar = document.getElementById('view-cart-bar');
-            const badge = document.getElementById('cart-badge');
-            const itemsCountText = document.getElementById('items-count');
-            const priceText = document.getElementById('final-price');
+        // 3. SAVE USER LOGIC
+        async function saveUser() {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const area = document.getElementById('custArea').value;
 
-            if(cart.length > 0) {
-                bar.classList.remove('hidden');
-                badge.classList.remove('hidden');
-                badge.innerText = cart.length;
-                itemsCountText.innerText = `${cart.length} Item${cart.length > 1 ? 's' : ''} Added`;
+            if(!name || !phone) {
+                alert("Bhai, Details toh bharo!");
+                return;
+            }
+
+            try {
+                // Firebase Firestore mein user save karna
+                await db.collection("customers").doc(phone).set({
+                    name: name,
+                    phone: phone,
+                    area: area,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // LocalStorage mein save karein checkout ke liye
+                localStorage.setItem('freshfry_user', JSON.stringify({name, phone, area}));
+
+                alert("Welcome " + name + "!");
                 
-                let total = cart.reduce((sum, item) => sum + item.price, 0);
-                priceText.innerText = `₹${total}`;
+                // Login form hide karein ya redirect karein
+                document.getElementById('login-section').innerHTML = `<p class='text-center font-bold text-green-600 py-10'>Logged in as ${name}. <br> Ab momos select karein!</p>`;
+                document.getElementById('user-display').innerText = `Hi, ${name}`;
+                document.getElementById('user-display').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error saving user: ", error);
+                alert("Firebase Rules check karein!");
             }
         }
-    </script>
 
+        function goToCheckout() {
+            window.location.href = "order.html";
+        }
+    </script>
 </body>
 </html>
