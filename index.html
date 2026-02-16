@@ -3,109 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Baripada's Best Momos</title>
+    <title>Freshfry | Premium Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #000; color: #fff; overflow-x: hidden; }
+        body { font-family: 'Outfit', sans-serif; background-color: #0d0d0d; color: #fff; margin: 0; overflow-x: hidden; }
         
-        .zomato-add-btn { background: #e7f7ed; color: #1a9e3e; border: 1px solid #1a9e3e; font-weight: 800; padding: 6px 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(26,158,62,0.2); }
-        .momo-card { background: #151515; border-radius: 1.5rem; border: 1px solid #222; overflow: hidden; }
-        .pairing-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0; scrollbar-width: none; }
-        .pairing-scroll::-webkit-scrollbar { display: none; }
-        
-        #view-cart-bar {
-            display: none; position: fixed; bottom: 20px; left: 15px; right: 15px;
-            background: #1a9e3e; color: white; padding: 16px 20px; border-radius: 16px;
-            z-index: 1000; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 25px rgba(26,158,62,0.3); animation: slideUp 0.4s ease;
-        }
-        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
-        
-        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.85, 0, 0.15, 1); transform: translateX(100%); }
-        .cart-open { transform: translateX(0); }
+        /* Login UI */
+        .hero-bg { height: 60vh; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,1) 100%), url('https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .login-card { background: white; border-top-left-radius: 35px; border-top-right-radius: 35px; height: 40vh; position: fixed; bottom: 0; width: 100%; padding: 30px 24px; color: #1c1c1c; z-index: 5000; }
+        .input-group { border: 1.5px solid #e8e8e8; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .btn-main { background-color: #ef4f5f; color: white; width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; }
+
+        /* Dashboard UI */
+        .zomato-add-btn { background: #fff; color: #16a34a; border: 1px solid #e2e8f0; font-weight: 900; padding: 6px 20px; border-radius: 12px; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 12px; }
+        .bottom-nav { background: rgba(13, 13, 13, 0.98); backdrop-filter: blur(10px); border-top: 1px solid #222; position: fixed; bottom: 0; width: 100%; z-index: 1000; }
+        .category-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-32">
+<body class="pb-24">
 
-    <div id="login-modal" class="fixed inset-0 z-[3000] bg-black flex items-center justify-center p-6 text-center">
-        <div class="w-full max-w-sm">
-            <h1 class="text-5xl font-900 italic mb-2 text-orange-500">Freshfry.</h1>
-            <p class="text-gray-500 font-bold text-xs mb-10 tracking-[0.3em] uppercase">Premium Momo Delivery</p>
-            <div class="space-y-4">
-                <input id="user-name" type="text" placeholder="Your Name" class="w-full px-6 py-5 bg-zinc-900 rounded-2xl outline-none font-bold text-center border border-zinc-800">
-                <input id="user-phone" type="tel" maxlength="10" placeholder="Mobile Number" class="w-full px-6 py-5 bg-zinc-900 rounded-2xl outline-none font-bold text-center border border-zinc-800">
-                <button onclick="handleLogin()" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-900 uppercase text-xs tracking-widest shadow-lg">Start Ordering</button>
+    <div id="login-modal" class="fixed inset-0 z-[6000] bg-black">
+        <div class="hero-bg text-center">
+            <h1 class="text-4xl font-900 tracking-tighter uppercase leading-tight">Your Daily Dose<br>Of Momos</h1>
+            <div class="mt-4 bg-[#ef4f5f] px-6 py-1 transform -rotate-2 font-900 italic text-3xl">freshfry</div>
+        </div>
+        <div class="login-card">
+            <h2 class="text-center font-bold text-gray-500 text-sm tracking-widest uppercase mb-6">Log in or sign up</h2>
+            <div class="input-group">
+                <i class="fa-regular fa-user text-gray-400"></i>
+                <input type="text" id="custName" placeholder="Enter Your Name" class="w-full outline-none font-semibold">
             </div>
-        </div>
-    </div>
-
-    <nav class="p-5 flex items-center justify-between sticky top-0 bg-black/80 backdrop-blur-md z-50">
-        <div>
-            <h2 class="text-xl font-900 italic text-orange-500">Freshfry</h2>
-            <p id="display-user" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Baripada, Odisha</p>
-        </div>
-        <div onclick="toggleCart(true)" class="relative bg-zinc-900 p-3 rounded-full cursor-pointer border border-zinc-800">
-            <i class="fa-solid fa-cart-shopping text-orange-500"></i>
-            <span id="cart-badge" class="absolute -top-1 -right-1 bg-white text-black text-[9px] font-black rounded-full h-5 w-5 flex items-center justify-center">0</span>
-        </div>
-    </nav>
-
-    <div class="px-5 mb-6">
-        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex items-center gap-3 text-gray-500">
-            <i class="fa-solid fa-magnifying-glass text-orange-500"></i>
-            <span class="text-sm">Search "KFC Momos"</span>
-        </div>
-    </div>
-
-    <main class="px-5">
-        <h3 class="text-xs font-900 text-gray-500 uppercase tracking-widest mb-6">Recommended Momos</h3>
-        <div id="momo-list" class="space-y-6"></div>
-
-        <div class="mt-12">
-            <h3 class="text-sm font-800 mb-2 italic">You will love pairing it with</h3>
-            <div id="pairing-list" class="pairing-scroll"></div>
-        </div>
-    </main>
-
-    <div id="view-cart-bar" onclick="toggleCart(true)">
-        <div class="flex items-center gap-3">
-            <div class="bg-white/20 p-2 rounded-lg"><i class="fa-solid fa-bag-shopping"></i></div>
-            <div>
-                <p id="float-count" class="text-sm font-900 leading-none">0 Item added</p>
-                <p class="text-[10px] opacity-80 font-bold uppercase">View Cart & Checkout</p>
+            <div class="input-group">
+                <div class="flex items-center gap-2 border-r border-gray-200 pr-3">
+                    <img src="https://flagcdn.com/w20/in.png" class="w-5">
+                    <span class="text-sm font-bold">+91</span>
+                </div>
+                <input type="tel" id="custPhone" maxlength="10" placeholder="Enter Phone Number" class="w-full outline-none font-semibold">
             </div>
+            <button onclick="submitToFirebase()" id="subBtn" class="btn-main mt-2">Continue</button>
         </div>
-        <span id="float-total" class="font-900 text-lg italic">₹0</span>
     </div>
 
-    <div id="cart-sidebar" class="fixed inset-0 h-full w-full bg-black z-[2000] cart-sidebar flex flex-col p-6">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-900 italic">My <span class="text-orange-500">Box</span></h2>
-            <button onclick="toggleCart(false)" class="text-2xl text-gray-500"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="cart-items-display" class="flex-1 overflow-y-auto space-y-4"></div>
-        <div class="pt-6 border-t border-zinc-800 space-y-4">
-            <input id="order-address" type="text" placeholder="Full Delivery Address" class="w-full p-5 bg-zinc-900 rounded-2xl border border-zinc-800 outline-none font-bold">
-            <div class="flex justify-between text-2xl font-900 px-2 italic">
-                <span>Total</span>
-                <span id="grand-total">₹0</span>
+    <div id="main-dashboard" class="hidden">
+        <header class="p-5 flex items-center justify-between sticky top-0 bg-black/90 backdrop-blur-md z-50">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-location-dot text-[#ef4f5f] text-xl"></i>
+                <div>
+                    <h2 class="text-sm font-900 italic">Home <i class="fa-solid fa-chevron-down text-[10px]"></i></h2>
+                    <p class="text-[9px] text-gray-400 font-bold uppercase">Baripada, Odisha</p>
+                </div>
             </div>
-            <button onclick="placeOrder('UPI')" class="w-full bg-white text-black py-5 rounded-2xl font-900 uppercase text-xs tracking-widest">Pay via UPI</button>
-            <button onclick="placeOrder('COD')" class="w-full border border-orange-500 text-orange-500 py-5 rounded-2xl font-900 uppercase text-xs tracking-widest">Cash on Delivery</button>
-        </div>
-    </div>
+            <a href="profile.html" class="w-11 h-11 rounded-full border-2 border-zinc-800 overflow-hidden">
+                <img id="user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Fresh" alt="Profile">
+            </a>
+        </header>
 
-    <div id="success-screen" class="fixed inset-0 z-[4000] bg-black hidden flex-col items-center justify-center p-8 text-center">
-        <div class="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center text-3xl mb-6"><i class="fa-solid fa-check"></i></div>
-        <h2 class="text-3xl font-900 italic uppercase">Order Placed!</h2>
-        <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-10 italic">Freshfry Baripada is preparing your meal</p>
-        <div class="bg-orange-500/10 border-2 border-dashed border-orange-500/30 p-10 rounded-[3rem] mb-10">
-            <p class="text-orange-500 text-[10px] font-900 uppercase tracking-widest mb-2">Delivery PIN</p>
-            <h3 id="final-pin" class="text-6xl font-900 text-orange-500 tracking-widest">0000</h3>
-        </div>
-        <button onclick="location.reload()" class="bg-zinc-900 text-white px-10 py-5 rounded-2xl font-900 uppercase text-xs tracking-widest">Track Order</button>
+        <main class="px-5">
+            <div class="my-4 bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex items-center justify-between text-gray-500">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-magnifying-glass text-[#ef4f5f]"></i>
+                    <span class="text-sm font-semibold">Search "KFC Fried Momo"</span>
+                </div>
+                <i class="fa-solid fa-microphone text-[#ef4f5f] border-l border-zinc-700 pl-4"></i>
+            </div>
+
+            <h4 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-8">Recommended for you</h4>
+
+            <div class="space-y-12 pb-10">
+                <div class="flex justify-between items-start gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-3 h-3 border border-green-600 flex items-center justify-center p-[2px]"><div class="w-full h-full bg-green-600 rounded-full"></div></span>
+                            <p class="text-[9px] text-green-500 font-black uppercase italic">Highly Reordered</p>
+                        </div>
+                        <h4 class="text-xl font-900 italic uppercase">KFC Fried Momo</h4>
+                        <p class="text-sm font-bold mt-1 text-zinc-300">₹120</p>
+                    </div>
+                    <div class="relative w-36 h-36">
+                        <img src="https://foodiko.in/wp-content/uploads/2025/08/fry-momo.jpg" class="w-full h-full object-cover rounded-[2rem] border border-zinc-800 shadow-xl">
+                        <button class="zomato-add-btn">ADD +</button>
+                    </div>
+                </div>
+
+                <hr class="border-zinc-900">
+
+                <div class="flex justify-between items-start gap-4">
+                    <div class="flex-1">
+                        <h4 class="text-xl font-900 italic uppercase">Steam Butter Momo</h4>
+                        <p class="text-sm font-bold mt-1 text-zinc-300">₹70</p>
+                    </div>
+                    <div class="relative w-36 h-36">
+                        <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=400" class="w-full h-full object-cover rounded-[2rem] border border-zinc-800 shadow-xl">
+                        <button class="zomato-add-btn">ADD +</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav flex justify-around items-center py-4">
+            <div class="flex flex-col items-center gap-1 text-[#1a9e3e]">
+                <i class="fa-solid fa-motorcycle text-2xl"></i>
+                <span class="text-[10px] font-black uppercase">Delivery</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 text-zinc-600">
+                <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
+                <span class="text-[10px] font-black uppercase">History</span>
+            </div>
+            <a href="profile.html" class="flex flex-col items-center gap-1 text-zinc-600">
+                <i class="fa-solid fa-user text-2xl"></i>
+                <span class="text-[10px] font-black uppercase">Profile</span>
+            </a>
+        </nav>
     </div>
 
     <script type="module">
@@ -113,133 +123,60 @@
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
-            authDomain: "freshfry-39a10.firebaseapp.com",
-            projectId: "freshfry-39a10",
-            storageBucket: "freshfry-39a10.firebasestorage.app",
-            messagingSenderId: "928483976893",
-            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+          apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+          authDomain: "freshfry-39a10.firebaseapp.com",
+          projectId: "freshfry-39a10",
+          storageBucket: "freshfry-39a10.firebasestorage.app",
+          messagingSenderId: "928483976893",
+          appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const momoMenu = [
-            { id: 1, name: "KFC Fried Momo", price: 120, old: 240, img: "https://images.unsplash.com/photo-1563245332-692546984812?w=400" },
-            { id: 2, name: "Steam Butter Momo", price: 70, old: 140, img: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=400" },
-            { id: 3, name: "Kurkure Paneer Momo", price: 150, old: 300, img: "https://foodiko.in/wp-content/uploads/2025/08/fry-momo.jpg" }
-        ];
+        window.submitToFirebase = async function() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const btn = document.getElementById('subBtn');
 
-        const drinkMenu = [
-            { name: "Mango Lassi", price: 89, img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400" },
-            { name: "Sweet Lassi", price: 79, img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400" }
-        ];
+            if (name === "" || phone.length !== 10) {
+                alert("Please enter Name and 10-digit Phone Number.");
+                return;
+            }
 
-        let cart = [];
-
-        window.handleLogin = () => {
-            const n = document.getElementById('user-name').value;
-            const p = document.getElementById('user-phone').value;
-            if(n && p.length === 10) {
-                localStorage.setItem('ffUser', n);
-                localStorage.setItem('ffPhone', p);
-                document.getElementById('login-modal').classList.add('hidden');
-                document.getElementById('display-user').innerText = `Hey, ${n}`;
-            } else { alert("Enter valid details"); }
-        };
-
-        window.renderApp = () => {
-            const mList = document.getElementById('momo-list');
-            mList.innerHTML = momoMenu.map(item => `
-                <div class="momo-card p-4 flex justify-between gap-4">
-                    <div class="flex-1">
-                        <span class="text-[8px] font-black border border-green-500 text-green-500 px-1 py-0.5 rounded">VEG</span>
-                        <h4 class="text-lg font-900 mt-1 uppercase italic tracking-tighter">${item.name}</h4>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="text-sm font-bold">₹${item.price}</span>
-                            <span class="text-[10px] text-gray-500 line-through">₹${item.old}</span>
-                        </div>
-                        <p class="text-[9px] text-green-500 font-bold mt-2 italic"><i class="fa-solid fa-star"></i> Highly Reordered</p>
-                    </div>
-                    <div class="relative w-28 h-28">
-                        <img src="${item.img}" class="w-full h-full object-cover rounded-2xl shadow-lg border border-zinc-800">
-                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.img}')" class="zomato-add-btn absolute -bottom-2 left-1/2 -translate-x-1/2 scale-90">ADD</button>
-                    </div>
-                </div>
-            `).join('');
-
-            const dList = document.getElementById('pairing-list');
-            dList.innerHTML = drinkMenu.map(d => `
-                <div class="min-w-[140px] bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
-                    <img src="${d.img}" class="w-full h-24 object-cover rounded-xl mb-2">
-                    <h5 class="text-[10px] font-900 uppercase italic">${d.name}</h5>
-                    <div class="flex justify-between items-center mt-2">
-                        <span class="text-xs font-bold">₹${d.price}</span>
-                        <button onclick="addToCart('${d.name}', ${d.price}, '${d.img}')" class="text-[9px] font-black text-green-500 border border-green-500 px-2 py-1 rounded-md">ADD +</button>
-                    </div>
-                </div>
-            `).join('');
-        };
-
-        window.addToCart = (name, price, img) => {
-            cart.push({name, price, img});
-            updateCartUI();
-            if(navigator.vibrate) navigator.vibrate(50);
-        };
-
-        window.updateCartUI = () => {
-            const total = cart.reduce((a,b) => a+b.price, 0);
-            document.getElementById('cart-badge').innerText = cart.length;
-            document.getElementById('float-count').innerText = `${cart.length} Item added`;
-            document.getElementById('float-total').innerText = `₹${total}`;
-            document.getElementById('grand-total').innerText = `₹${total}`;
-            document.getElementById('view-cart-bar').style.display = cart.length > 0 ? 'flex' : 'none';
-
-            document.getElementById('cart-items-display').innerHTML = cart.map(i => `
-                <div class="flex items-center gap-4 bg-zinc-900 p-4 rounded-2xl">
-                    <img src="${i.img}" class="w-12 h-12 object-cover rounded-lg">
-                    <span class="flex-1 font-800 italic uppercase text-[10px]">${i.name}</span>
-                    <span class="font-900 italic text-orange-500">₹${i.price}</span>
-                </div>
-            `).join('');
-        };
-
-        window.toggleCart = (show) => {
-            document.getElementById('cart-sidebar').classList.toggle('cart-open', show);
-        };
-
-        window.placeOrder = async (method) => {
-            const addr = document.getElementById('order-address').value;
-            if(!addr) return alert("Please enter address");
-
-            const pin = Math.floor(1000 + Math.random() * 9000);
-            const orderData = {
-                customerName: localStorage.getItem('ffUser'),
-                customerPhone: localStorage.getItem('ffPhone'),
-                address: addr,
-                items: cart,
-                total: cart.reduce((a,b) => a+b.price, 0),
-                method: method,
-                deliveryPin: pin,
-                status: 'pending',
-                timestamp: serverTimestamp()
-            };
+            btn.innerText = "Processing...";
+            btn.disabled = true;
 
             try {
-                await addDoc(collection(db, "orders"), orderData);
-                if(method === 'UPI') {
-                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${orderData.total}&cu=INR`;
-                }
-                document.getElementById('final-pin').innerText = pin;
-                document.getElementById('success-screen').classList.remove('hidden');
-            } catch(e) { alert("Error placing order"); }
+                // Firebase Store
+                await addDoc(collection(db, "users"), {
+                    fullName: name,
+                    phoneNumber: phone,
+                    createdAt: serverTimestamp()
+                });
+
+                localStorage.setItem('ff_user', name);
+                localStorage.setItem('ff_phone', phone);
+                
+                showDashboard();
+            } catch (e) {
+                alert("Error: " + e.message);
+                btn.innerText = "Continue";
+                btn.disabled = false;
+            }
         };
 
-        if(localStorage.getItem('ffPhone')) {
+        function showDashboard() {
             document.getElementById('login-modal').classList.add('hidden');
-            document.getElementById('display-user').innerText = `Hey, ${localStorage.getItem('ffUser')}`;
+            document.getElementById('main-dashboard').classList.remove('hidden');
+            const name = localStorage.getItem('ff_user');
+            document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
         }
-        renderApp();
+
+        // Auto-login check
+        if(localStorage.getItem('ff_phone')) {
+            showDashboard();
+        }
     </script>
 </body>
 </html>
