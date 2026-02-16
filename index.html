@@ -9,96 +9,135 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         :root { --primary: #FF5C00; --dark: #0A0F1D; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F0F4F8; color: var(--dark); overflow-x: hidden; }
-        .glass-nav { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255,255,255,0.3); }
-        .momo-card { border-radius: 2rem; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); background: #ffffff; }
-        .momo-card:hover { transform: translateY(-12px); box-shadow: 0 40px 80px -20px rgba(0,0,0,0.15); }
-        .cart-sidebar { transition: transform 0.8s cubic-bezier(0.8, 0, 0.1, 1); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: var(--dark); overflow-x: hidden; }
+        
+        .glass-nav { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .momo-card { border-radius: 2rem; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); background: #ffffff; border: 1px solid rgba(0,0,0,0.02); }
+        .momo-card:hover { transform: translateY(-10px); box-shadow: 0 40px 80px -20px rgba(0,0,0,0.1); }
+        .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
         .cart-closed { transform: translateX(110%); }
         .filter-active { background: var(--primary) !important; color: white !important; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .gradient-orange { background: linear-gradient(135deg, #FF8A00 0%, #FF5C00 100%); }
-        @keyframes pulse-custom { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .animate-wa { animation: pulse-custom 2s infinite; }
-        
-        /* Timer Style */
-        .timer-box { background: #0A0F1D; color: white; border-radius: 2rem; padding: 2rem; margin-bottom: 2rem; display: none; }
+        .animate-wa { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .timer-box { background: #0A0F1D; color: white; border-radius: 2.5rem; padding: 2.5rem; margin-bottom: 2rem; display: none; }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="login-modal" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-6">
         <div class="w-full max-w-sm text-center">
-            <h1 class="text-5xl font-800 tracking-tighter italic mb-10">F<span class="text-orange-500">f.</span></h1>
-            <input id="phone-input" type="tel" maxlength="10" placeholder="WhatsApp Number" class="w-full px-8 py-6 bg-slate-100 rounded-[2rem] focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center text-lg mb-4">
-            <button onclick="saveUser()" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800">Start Ordering</button>
+            <h1 class="text-5xl font-800 tracking-tighter italic mb-2">F<span class="text-orange-500">f.</span></h1>
+            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-10">Premium Momos Hub</p>
+            <input id="phone-input" type="tel" maxlength="10" placeholder="WhatsApp Number" 
+                class="w-full px-8 py-6 bg-slate-100 rounded-[2rem] focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center text-lg mb-4 transition-all">
+            <button onclick="saveUser()" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800 shadow-2xl active:scale-95 transition-all">Start Ordering</button>
+        </div>
+    </div>
+
+    <div id="loc-modal" class="fixed inset-0 z-[150] bg-slate-900/20 backdrop-blur-xl hidden flex items-end">
+        <div class="bg-white w-full rounded-t-[3.5rem] p-10 shadow-2xl">
+            <div class="w-16 h-1.5 bg-slate-100 rounded-full mx-auto mb-10"></div>
+            <h3 class="text-2xl font-800 mb-8 text-center italic">Select Your <span class="text-orange-500">Zone</span></h3>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <button onclick="setLoc('Murgabadi')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Murgabadi</button>
+                <button onclick="setLoc('Station Bazar')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Station Bazar</button>
+                <button onclick="setLoc('Lal Bazar')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Lal Bazar</button>
+                <button onclick="setLoc('Ambika Mandir')" class="p-6 border border-slate-100 rounded-[2rem] font-800 hover:bg-orange-500 hover:text-white transition-all text-[10px] uppercase tracking-widest">Ambika Mandir</button>
+            </div>
         </div>
     </div>
 
     <nav class="sticky top-0 z-[100] px-8 py-6 glass-nav flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-800 tracking-tighter italic">Fresh<span class="text-orange-500">fry.</span></h1>
-            <button onclick="showLocationPicker()" class="flex items-center gap-2 mt-1">
-                <span id="current-loc" class="text-[10px] font-800 uppercase text-slate-400">Choose Location</span>
+            <button onclick="showLocationPicker()" class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <span id="current-loc" class="text-[9px] font-800 uppercase text-slate-400 tracking-widest">Select Location</span>
             </button>
         </div>
-        <button onclick="toggleCart(true)" class="relative h-14 w-14 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-xl border border-slate-50">
+        <button onclick="toggleCart(true)" class="relative h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-xl border border-slate-50">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span id="cart-badge" class="absolute -top-1 -right-1 gradient-orange text-[10px] font-800 h-6 w-6 rounded-full flex items-center justify-center text-white border-4 border-white">0</span>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-800 h-6 w-6 rounded-full flex items-center justify-center text-white border-4 border-white">0</span>
         </button>
     </nav>
 
     <main class="max-w-6xl mx-auto px-8 mt-12">
-        
-        <div id="shop-timer" class="timer-box animate-fade shadow-2xl">
-            <p class="text-[10px] font-800 uppercase tracking-[0.3em] text-orange-500 mb-2">Opening Soon</p>
-            <h3 class="text-3xl font-800 italic mb-4">Evening 5:00 PM <span class="text-slate-400 font-normal text-xl">Order Starts In</span></h3>
-            <div class="flex gap-4 text-center">
-                <div class="bg-white/10 p-4 rounded-2xl min-w-[70px]">
-                    <span id="t-hours" class="text-3xl font-800 block">00</span>
-                    <span class="text-[8px] uppercase font-bold text-slate-400">Hours</span>
-                </div>
-                <div class="bg-white/10 p-4 rounded-2xl min-w-[70px]">
-                    <span id="t-mins" class="text-3xl font-800 block">00</span>
-                    <span class="text-[8px] uppercase font-bold text-slate-400">Mins</span>
-                </div>
-                <div class="bg-white/10 p-4 rounded-2xl min-w-[70px]">
-                    <span id="t-secs" class="text-3xl font-800 block text-orange-500">00</span>
-                    <span class="text-[8px] uppercase font-bold text-slate-400">Secs</span>
-                </div>
+        <div id="shop-timer" class="timer-box shadow-2xl">
+            <p class="text-[9px] font-800 uppercase tracking-[0.3em] text-orange-500 mb-3 text-center">Opening at 5:00 PM</p>
+            <div class="flex justify-center gap-6 text-center">
+                <div><span id="t-hours" class="text-4xl font-800 block">00</span><span class="text-[8px] uppercase text-slate-500">Hrs</span></div>
+                <div><span id="t-mins" class="text-4xl font-800 block">00</span><span class="text-[8px] uppercase text-slate-500">Mins</span></div>
+                <div><span id="t-secs" class="text-4xl font-800 block text-orange-500">00</span><span class="text-[8px] uppercase text-slate-500">Secs</span></div>
             </div>
         </div>
 
         <div class="mb-12">
-            <p class="text-orange-500 font-800 uppercase tracking-[0.3em] text-[10px] mb-2">Baripada's Favorite</p>
-            <h2 class="text-5xl font-800 tracking-tight italic leading-tight">Authentic<br>Momo <span class="text-orange-500">Cravings.</span></h2>
+            <h2 class="text-5xl font-800 tracking-tight italic leading-tight">Authentic<br>Momo <span class="text-orange-500">Bar.</span></h2>
         </div>
 
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
     </main>
 
-    <script type="module">
-        // Firebase Config and Initialization (Same as previous)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
-        const firebaseConfig = { /* Your Config Here */ };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[160] cart-sidebar cart-closed flex flex-col shadow-2xl">
+        <div class="p-10 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-800 italic">My <span class="text-orange-500">Box</span></h2>
+            <button onclick="toggleCart(false)" class="h-12 w-12 bg-slate-50 rounded-full text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-8 space-y-6"></div>
+        <div class="p-10 bg-white border-t space-y-6">
+            <input type="text" id="exact-address" placeholder="Delivery Address / Landmark" 
+                class="w-full px-6 py-5 bg-slate-50 rounded-[1.5rem] font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500">
+            <div class="flex justify-between items-center p-6 bg-slate-50 rounded-[1.5rem]">
+                <span class="text-xs font-800 uppercase text-slate-400 tracking-widest">Total Bill</span>
+                <span id="cart-total" class="text-2xl font-800">₹0</span>
+            </div>
+            <button onclick="finalCheckout()" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-800 shadow-2xl active:scale-95 transition-all uppercase tracking-widest text-[10px]">Confirm Order</button>
+        </div>
+    </div>
 
-        // --- ⏰ Timer Logic for 5:00 PM ---
+    <a href="https://wa.me/917008186187" class="fixed bottom-8 right-8 z-[140] flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-2xl animate-wa">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-slate-900/40 z-[155] hidden backdrop-blur-md"></div>
+
+    <script>
+        // GLOBAL FUNCTIONS (Fix for "Login nehin chal raha")
+        function saveUser() {
+            const ph = document.getElementById('phone-input').value.trim();
+            if(ph.length < 10) return alert("Enter valid 10-digit number");
+            localStorage.setItem('customerPhone', ph);
+            document.getElementById('login-modal').style.display = 'none';
+            showLocationPicker();
+        }
+
+        function showLocationPicker() {
+            document.getElementById('loc-modal').classList.remove('hidden');
+        }
+
+        function setLoc(loc) {
+            localStorage.setItem('customerLoc', loc);
+            document.getElementById('current-loc').innerText = loc;
+            document.getElementById('loc-modal').classList.add('hidden');
+            location.reload(); // Refresh to ensure data sync
+        }
+
+        function toggleCart(o) {
+            document.getElementById('cart-sidebar').classList.toggle('cart-closed', !o);
+            document.getElementById('cart-overlay').classList.toggle('hidden', !o);
+        }
+
+        // --- ⏰ Timer Logic ---
         function updateShopTimer() {
             const now = new Date();
             const openTime = new Date();
-            openTime.setHours(17, 0, 0); // 5:00 PM
-
+            openTime.setHours(17, 0, 0); // 5 PM
             if (now < openTime) {
                 document.getElementById('shop-timer').style.display = 'block';
                 const diff = openTime - now;
                 const h = Math.floor(diff / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((diff % (1000 * 60)) / 1000);
-
                 document.getElementById('t-hours').innerText = h.toString().padStart(2, '0');
                 document.getElementById('t-mins').innerText = m.toString().padStart(2, '0');
                 document.getElementById('t-secs').innerText = s.toString().padStart(2, '0');
@@ -107,9 +146,108 @@
             }
         }
         setInterval(updateShopTimer, 1000);
+        updateShopTimer();
+    </script>
 
-        // Rest of the functions (saveUser, renderMenu, etc.) as per previous code...
-        // Note: In renderMenu, check if 'now < openTime' to disable 'Add to Cart' buttons if you want.
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+            authDomain: "freshfry-39a10.firebaseapp.com",
+            projectId: "freshfry-39a10",
+            storageBucket: "freshfry-39a10.firebasestorage.app",
+            messagingSenderId: "928483976893",
+            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let cart = [];
+        let allMenuItems = [];
+
+        // Check Login State
+        if(localStorage.getItem('customerPhone')) {
+            document.getElementById('login-modal').style.display = 'none';
+            if(localStorage.getItem('customerLoc')) {
+                document.getElementById('current-loc').innerText = localStorage.getItem('customerLoc');
+            } else { showLocationPicker(); }
+        }
+
+        // Firebase Menu Snapshot
+        onSnapshot(collection(db, "menu"), (snap) => {
+            allMenuItems = [];
+            snap.forEach(d => allMenuItems.push({id: d.id, ...d.data()}));
+            renderMenu();
+        });
+
+        function renderMenu() {
+            const list = document.getElementById('menu-list');
+            list.innerHTML = '';
+            allMenuItems.forEach(item => {
+                const isStock = item.inStock !== false;
+                list.innerHTML += `
+                <div class="momo-card overflow-hidden ${!isStock ? 'opacity-50 grayscale' : ''}">
+                    <div class="h-64 overflow-hidden"><img src="${item.image}" class="w-full h-full object-cover"></div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="font-800 text-xl italic">${item.name}</h4>
+                            <span class="text-xl font-800">₹${item.price}</span>
+                        </div>
+                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" 
+                            class="w-full bg-slate-900 text-white py-5 rounded-[1.8rem] font-800 text-[10px] uppercase tracking-widest">
+                            ${isStock ? 'Add to Box +' : 'Sold Out'}
+                        </button>
+                    </div>
+                </div>`;
+            });
+        }
+
+        window.addToCart = (name, price, image) => {
+            const item = cart.find(i => i.name === name);
+            if(item) item.qty++; else cart.push({name, price, image, qty: 1});
+            updateCartUI();
+        };
+
+        function updateCartUI() {
+            const list = document.getElementById('cart-items-list');
+            let total = 0;
+            document.getElementById('cart-badge').innerText = cart.reduce((a, b) => a + b.qty, 0);
+            list.innerHTML = cart.map(item => {
+                total += (item.price * item.qty);
+                return `<div class="flex items-center gap-4 bg-slate-50 p-4 rounded-[1.5rem]">
+                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-xl">
+                    <div class="flex-1"><p class="text-[10px] font-800 uppercase italic">${item.name}</p></div>
+                    <div class="font-800 text-sm">₹${item.price * item.qty}</div>
+                </div>`;
+            }).join('');
+            document.getElementById('cart-total').innerText = "₹" + total;
+        }
+
+        window.finalCheckout = async () => {
+            const addr = document.getElementById('exact-address').value;
+            const phone = localStorage.getItem('customerPhone');
+            const loc = localStorage.getItem('customerLoc');
+            const totalVal = document.getElementById('cart-total').innerText.replace('₹', '');
+
+            if(cart.length === 0 || !addr) return alert("Fill details!");
+
+            try {
+                const docRef = await addDoc(collection(db, "orders"), {
+                    customer: phone, location: loc, address: addr, total: "₹" + totalVal,
+                    items: cart, status: 'pending', time: serverTimestamp()
+                });
+                
+                // UPI & WhatsApp Flow
+                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${totalVal}&cu=INR`;
+                setTimeout(() => {
+                    let msg = `*🍱 FRESHFRY ORDER*%0A*Phone:* ${phone}%0A*Address:* ${addr}%0A*Total:* ₹${totalVal}`;
+                    window.location.href = `https://wa.me/917008186187?text=${msg}`;
+                }, 4000);
+            } catch(e) { alert("Error!"); }
+        };
     </script>
 </body>
 </html>
