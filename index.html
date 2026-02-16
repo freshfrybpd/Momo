@@ -6,10 +6,6 @@
     <title>Freshfry | Crunchy & Steamy Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         body { font-family: 'Outfit', sans-serif; }
@@ -23,93 +19,15 @@
         <div class="text-3xl font-extrabold tracking-tight text-orange-500">
             Fresh<span class="text-gray-900">fry</span><span class="text-orange-500">.</span>
         </div>
+        <div class="hidden md:flex space-x-8 font-semibold text-gray-600">
+            <a href="#" class="hover:text-orange-500 transition">Explore</a>
+            <a href="#" class="hover:text-orange-500 transition">Best Sellers</a>
+            <a href="#" class="hover:text-orange-500 transition">Bulk Orders</a>
+        </div>
         <div class="flex items-center space-x-5">
-            <div id="user-display" class="hidden text-sm font-bold text-gray-600"></div>
-            <div class="relative bg-orange-100 p-2 rounded-full cursor-pointer" onclick="goToCheckout()">
-                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            <div class="bg-gray-100 p-2 rounded-full cursor-pointer hover:bg-gray-200">
+                <i class="fa-solid fa-user text-gray-700"></i>
             </div>
-        </div>
-    </nav>
-
-    <div id="login-section" class="max-w-md mx-auto mt-10 p-8 bg-white rounded-[2rem] shadow-xl border border-gray-100">
-        <h2 class="text-2xl font-extrabold mb-2">Welcome to Freshfry 🥟</h2>
-        <p class="text-gray-400 mb-6 font-medium text-sm">Enter details to explore Baripada's best momos.</p>
-        
-        <div class="space-y-4">
-            <input type="text" id="custName" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
-            <input type="tel" id="custPhone" placeholder="Phone Number" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400">
-            
-            <select id="custArea" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none font-semibold text-gray-700">
-                <option>Badbazar</option>
-                <option>Station Bazar</option>
-                <option>Bhanjpur</option>
-                <option>Baghra Road</option>
-                <option>Near Ambika Temple</option>
-                <option>Near Jagganath Temple</option>
-                <option>Other</option>
-            </select>
-
-            <button onclick="saveUser()" class="w-full freshfry-gradient text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-orange-200 active:scale-95 transition">
-                Start Eating
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // 2. YOUR FIREBASE CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
-            authDomain: "freshfry-39a10.firebaseapp.com",
-            projectId: "freshfry-39a10",
-            storageBucket: "freshfry-39a10.firebasestorage.app",
-            messagingSenderId: "928483976893",
-            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // 3. SAVE USER LOGIC
-        async function saveUser() {
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const area = document.getElementById('custArea').value;
-
-            if(!name || !phone) {
-                alert("Bhai, Details toh bharo!");
-                return;
-            }
-
-            try {
-                // Firebase Firestore mein user save karna
-                await db.collection("customers").doc(phone).set({
-                    name: name,
-                    phone: phone,
-                    area: area,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                // LocalStorage mein save karein checkout ke liye
-                localStorage.setItem('freshfry_user', JSON.stringify({name, phone, area}));
-
-                alert("Welcome " + name + "!");
-                
-                // Login form hide karein ya redirect karein
-                document.getElementById('login-section').innerHTML = `<p class='text-center font-bold text-green-600 py-10'>Logged in as ${name}. <br> Ab momos select karein!</p>`;
-                document.getElementById('user-display').innerText = `Hi, ${name}`;
-                document.getElementById('user-display').classList.remove('hidden');
-
-            } catch (error) {
-                console.error("Error saving user: ", error);
-                alert("Firebase Rules check karein!");
-            }
-        }
-
-        function goToCheckout() {
-            window.location.href = "order.html";
-        }
-    </script>
-</body>
-</html>
+            <div class="relative bg-orange-100 p-2 rounded-full cursor-pointer">
+                <i class="fa-solid fa-bag-shopping text-orange-600 text-xl"></i>
+                <span class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">2</span>
