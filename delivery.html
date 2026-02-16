@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry Rider | Duty App</title>
+    <title>Freshfry Rider | Secure Delivery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,21 +11,17 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         .rider-card { border-radius: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
         #main-app { display: none; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-24 no-scrollbar">
+<body class="pb-24">
 
     <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6 text-white text-center">
         <div class="w-full max-w-sm bg-white rounded-[3rem] p-10 shadow-2xl text-slate-800">
-            <div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-lg">
-                <i class="fa-solid fa-motorcycle"></i>
-            </div>
-            <h2 class="text-2xl font-800 mb-2 italic uppercase tracking-tighter">Rider Login</h2>
-            <div class="space-y-3 mt-6">
-                <input type="text" id="riderNameInput" placeholder="YOUR NAME" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-center uppercase focus:ring-2 focus:ring-orange-400 transition-all">
-                <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-center focus:ring-2 focus:ring-orange-400 transition-all">
-                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl uppercase text-[10px] tracking-widest active:scale-95 transition-transform">Start My Duty 🚀</button>
+            <h2 class="text-2xl font-800 mb-6 uppercase tracking-tighter">Rider Login</h2>
+            <div class="space-y-3">
+                <input type="text" id="riderNameInput" placeholder="NAME" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center uppercase">
+                <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center">
+                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest">Start Duty 🚀</button>
             </div>
         </div>
     </div>
@@ -33,39 +29,20 @@
     <div id="main-app">
         <nav class="bg-white p-6 sticky top-0 z-50 shadow-sm flex justify-between items-center rounded-b-[2.5rem]">
             <div>
-                <p id="currentDateDisplay" class="text-[9px] font-black text-orange-500 uppercase tracking-widest"></p>
+                <p id="currentDateDisplay" class="text-[9px] font-black text-orange-500 uppercase"></p>
                 <h1 id="displayRiderName" class="text-xl font-800 italic text-slate-900 uppercase tracking-tighter">Rider</h1>
             </div>
-            <button onclick="logoutRider()" class="text-red-500 bg-red-50 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-                <i class="fa-solid fa-power-off"></i>
-            </button>
+            <button onclick="logoutRider()" class="text-red-500 bg-red-50 p-3 rounded-xl"><i class="fa-solid fa-power-off"></i></button>
         </nav>
 
-        <section class="p-4 grid grid-cols-2 gap-3">
-            <div class="bg-slate-900 p-6 rounded-[2.5rem] text-white shadow-lg shadow-slate-200">
-                <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Today's Wallet</p>
-                <h3 id="todayEarning" class="text-3xl font-800 italic tracking-tighter">₹0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Lifetime</p>
-                <h3 id="lifetimeEarning" class="text-3xl font-800 italic text-slate-900 tracking-tighter">₹0</h3>
-            </div>
-        </section>
-
-        <main class="p-4 max-w-lg mx-auto">
-            <h2 class="text-xs font-900 text-slate-400 uppercase tracking-widest mb-4 px-2">Assigned Orders</h2>
-            <div id="rider-orders-list" class="space-y-5">
-                </div>
-        </main>
+        <main class="p-4 max-w-lg mx-auto space-y-5" id="rider-orders-list">
+            </main>
     </div>
-
-    <audio id="orderAudio" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where, doc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, where, doc, updateDoc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // 🔥 SAME CONFIG AS ADMIN & CUSTOMER
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
             authDomain: "freshfry-39a10.firebaseapp.com",
@@ -78,41 +55,24 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- LOGIN & DUTY START ---
+        // --- AUTH ---
         window.checkRiderLogin = async () => {
             const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
             const pass = document.getElementById('riderPassInput').value;
-            
-            if(!name) return alert("Enter your name!");
             if(pass === "freshfry2026") {
-                try {
-                    // FORCE UPDATE STATUS TO ONLINE (Exactly "Online" with Capital O)
-                    await setDoc(doc(db, "riders", name), {
-                        riderName: name,
-                        status: "Online", 
-                        lastLogin: serverTimestamp()
-                    }, { merge: true });
-
-                    sessionStorage.setItem('rider_auth', 'true');
-                    sessionStorage.setItem('rider_name', name);
-                    unlockUI(name);
-                } catch (e) { alert("Check internet connection!"); }
-            } else { alert("Incorrect Pass Key!"); }
+                await setDoc(doc(db, "riders", name), { riderName: name, status: "Online", lastLogin: serverTimestamp() }, { merge: true });
+                sessionStorage.setItem('rider_auth', 'true');
+                sessionStorage.setItem('rider_name', name);
+                unlockUI(name);
+            } else { alert("Wrong Key!"); }
         };
 
-        // --- 100% WORKING OFFLINE LOGIC ---
         window.logoutRider = async () => {
             const name = sessionStorage.getItem('rider_name');
-            if (name && confirm("End your duty and go offline?")) {
-                try {
-                    const riderRef = doc(db, "riders", name);
-                    await updateDoc(riderRef, { 
-                        status: "Offline", 
-                        lastLogout: serverTimestamp() 
-                    });
-                    sessionStorage.clear();
-                    window.location.reload();
-                } catch (error) { alert("Error: Could not update status."); }
+            if (confirm("Go Offline?")) {
+                await updateDoc(doc(db, "riders", name), { status: "Offline" });
+                sessionStorage.clear();
+                location.reload();
             }
         };
 
@@ -120,80 +80,60 @@
             document.getElementById('rider-login-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('displayRiderName').innerText = name;
-            document.getElementById('currentDateDisplay').innerText = new Date().toDateString();
-            loadEarningUI(name);
             loadMyOrders(name);
         }
 
-        // --- EARNINGS LOGIC ---
-        function loadEarningUI(name) {
-            const tKey = `ff_earn_${name}_${new Date().toLocaleDateString().replace(/\//g,'')}`;
-            const lKey = `ff_life_${name}`;
-            document.getElementById('todayEarning').innerText = `₹${localStorage.getItem(tKey) || 0}`;
-            document.getElementById('lifetimeEarning').innerText = `₹${localStorage.getItem(lKey) || 0}`;
-        }
-
-        function updateWallet(name) {
-            const tKey = `ff_earn_${name}_${new Date().toLocaleDateString().replace(/\//g,'')}`;
-            const lKey = `ff_life_${name}`;
-            localStorage.setItem(tKey, (parseInt(localStorage.getItem(tKey)||0) + 20));
-            localStorage.setItem(lKey, (parseInt(localStorage.getItem(lKey)||0) + 20));
-            loadEarningUI(name);
-        }
-
-        // --- REAL-TIME ORDER SYNC ---
+        // --- ORDER LIST WITH PIN INPUT ---
         function loadMyOrders(riderName) {
-            const q = query(collection(db, "orders"), 
-                        where("status", "==", "out_for_delivery"), 
-                        where("riderName", "==", riderName));
-
+            const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('rider-orders-list');
                 list.innerHTML = '';
                 
-                if(snap.empty) {
-                    list.innerHTML = `<div class="text-center py-20 bg-white rounded-[3rem] text-slate-300 font-bold border-2 border-dashed border-slate-50 uppercase text-[10px] tracking-widest">No Active Orders</div>`;
-                    return;
-                }
-
                 snap.forEach(d => {
                     const order = d.data();
                     list.innerHTML += `
-                    <div class="bg-white p-8 rider-card relative">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-800 text-slate-900 italic uppercase">${order.customerName}</h3>
-                                <p class="text-xs font-bold text-orange-500">${order.customer}</p>
-                            </div>
-                            <p class="text-2xl font-900">₹${order.total}</p>
+                    <div class="bg-white p-8 rider-card">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="text-xl font-800 uppercase italic">${order.customerName}</h3>
+                            <p class="text-2xl font-900 italic text-orange-500">₹${order.total}</p>
                         </div>
-                        <div class="bg-slate-50 p-4 rounded-2xl mb-6">
-                            <p class="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Address:</p>
-                            <p class="text-sm font-800 text-slate-700 leading-tight">${order.address}</p>
+                        <div class="bg-slate-50 p-4 rounded-2xl mb-6 text-sm font-bold text-slate-600">
+                            ${order.address}
                         </div>
-                        <div class="grid grid-cols-2 gap-3 mb-6">
-                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}" target="_blank" class="bg-slate-900 text-white py-4 rounded-2xl flex items-center justify-center gap-2 font-black text-[10px] uppercase">Navigate</a>
-                            <a href="tel:${order.customer}" class="bg-green-500 text-white py-4 rounded-2xl flex items-center justify-center gap-2 font-black text-[10px] uppercase">Call User</a>
+                        
+                        <div class="mb-6">
+                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Ask Customer for PIN:</p>
+                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="ENTER 4-DIGIT PIN" 
+                                class="w-full bg-slate-100 border-2 border-slate-100 focus:border-orange-500 rounded-2xl py-4 text-center text-xl font-900 tracking-[0.5em] outline-none transition-all">
                         </div>
-                        <button onclick="completeOrder('${d.id}')" class="w-full bg-orange-500 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-orange-100 active:scale-95 transition-transform">Delivered ✅</button>
+
+                        <button onclick="verifyAndDeliver('${d.id}', ${order.deliveryPin})" 
+                            class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">
+                            Verify & Deliver ✅
+                        </button>
                     </div>`;
                 });
             });
         }
 
-        window.completeOrder = async (id) => {
-            if(confirm("Confirm delivery? ₹20 will be added to your wallet.")) {
+        // --- PIN VERIFICATION LOGIC ---
+        window.verifyAndDeliver = async (orderId, correctPin) => {
+            const enteredPin = document.getElementById(`pin-${orderId}`).value;
+            
+            if(enteredPin == correctPin) {
                 try {
-                    await updateDoc(doc(db, "orders", id), { status: 'delivered' });
-                    updateWallet(sessionStorage.getItem('rider_name'));
-                } catch (e) { alert("Failed to update order."); }
+                    await updateDoc(doc(db, "orders", orderId), { status: 'delivered' });
+                    // Update Local Wallet Logic (Optional)
+                    alert("PIN Matched! Order Delivered Successfully 💸");
+                } catch (e) { alert("Error updating order."); }
+            } else {
+                alert("❌ Wrong PIN! Please ask the customer for the correct 4-digit code.");
+                document.getElementById(`pin-${orderId}`).classList.add('border-red-500');
             }
         };
 
-        // Check if already logged in
-        if(sessionStorage.getItem('rider_auth') === 'true') {
-            unlockUI(sessionStorage.getItem('rider_name'));
-        }
+        if(sessionStorage.getItem('rider_auth') === 'true') unlockUI(sessionStorage.getItem('rider_name'));
     </script>
 </body>
 </html>
