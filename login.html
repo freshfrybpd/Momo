@@ -8,137 +8,159 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #000; color: #fff; overflow: hidden; }
+        body { font-family: 'Outfit', sans-serif; background-color: #000; color: #fff; margin: 0; overflow: hidden; }
         
-        /* Background Image Styling (Ref: Image 4, 15) */
-        .bg-container {
-            height: 60vh;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 100%), 
-                        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80');
+        /* Background Image Layout (Reference: Screenshot 4 & 15) */
+        .hero-bg {
+            height: 65vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,1) 100%), 
+                        url('https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=800&q=80');
             background-size: cover;
             background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
-        .login-sheet {
+        .login-card {
             background: white;
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
-            color: #1c1c1c;
-            height: 45vh;
-            position: absolute;
+            border-top-left-radius: 35px;
+            border-top-right-radius: 35px;
+            height: 40vh;
+            position: fixed;
             bottom: 0;
             width: 100%;
-            padding: 24px;
+            padding: 30px 24px;
+            color: #1c1c1c;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
         }
 
-        .input-box {
-            border: 1px solid #e8e8e8;
-            border-radius: 12px;
-            padding: 12px 16px;
+        .input-group {
+            border: 1.5px solid #e8e8e8;
+            border-radius: 14px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            transition: 0.3s;
         }
+        
+        .input-group:focus-within { border-color: #ef4f5f; }
 
-        .btn-continue {
-            background-color: #ef4f5f; /* Zomato Red Style */
+        .btn-main {
+            background-color: #ef4f5f; /* Brand Red */
             color: white;
             width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 700;
             font-size: 16px;
-            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(239, 79, 95, 0.3);
+        }
+
+        /* Branding Animation */
+        .brand-tag {
+            background: #ef4f5f;
+            padding: 5px 20px;
+            transform: rotate(-2deg);
+            font-weight: 900;
+            font-style: italic;
+            font-size: 2.5rem;
+            letter-spacing: -2px;
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-container relative">
-        <button class="absolute top-5 right-5 bg-black/50 px-4 py-1 rounded-full text-xs font-bold">Skip</button>
-        <div class="absolute top-1/4 w-full text-center px-6">
-            <h1 class="text-4xl font-900 leading-tight uppercase tracking-tighter">India's #1 Food<br>Delivery App</h1>
-            <div class="mt-4 flex justify-center">
-                <div class="bg-[#ef4f5f] px-6 py-1 transform -rotate-2">
-                    <span class="text-3xl font-black italic tracking-tighter">freshfry</span>
-                </div>
-            </div>
+    <div class="hero-bg">
+        <h1 class="text-4xl font-900 tracking-tighter uppercase leading-tight">Your Daily Dose<br>Of Momos</h1>
+        <div class="mt-4">
+            <div class="brand-tag">freshfry</div>
         </div>
     </div>
 
-    <div class="login-sheet">
-        <h2 class="text-center font-bold text-gray-700 mb-6">Log in or sign up</h2>
+    <div class="login-card">
+        <h2 class="text-center font-bold text-gray-500 text-sm tracking-widest uppercase mb-6">Log in or sign up</h2>
         
-        <div class="input-box">
+        <div class="input-group">
             <i class="fa-regular fa-user text-gray-400"></i>
-            <input type="text" id="userName" placeholder="Enter Full Name" class="w-full outline-none text-sm font-medium">
+            <input type="text" id="custName" placeholder="Enter Your Name" class="w-full outline-none text-[15px] font-semibold bg-transparent">
         </div>
 
-        <div class="input-box">
-            <div class="flex items-center gap-1 border-r pr-2">
-                <img src="https://flagcdn.com/w20/in.png" class="w-5 h-3">
+        <div class="input-group">
+            <div class="flex items-center gap-2 border-r border-gray-200 pr-3">
+                <img src="https://flagcdn.com/w20/in.png" class="w-5 rounded-sm">
                 <span class="text-sm font-bold">+91</span>
-                <i class="fa-solid fa-caret-down text-[10px] text-gray-500"></i>
             </div>
-            <input type="number" id="userPhone" placeholder="Enter Mobile Number" class="w-full outline-none text-sm font-medium tracking-widest">
+            <input type="tel" id="custPhone" maxlength="10" placeholder="Enter Phone Number" class="w-full outline-none text-[15px] font-semibold tracking-widest bg-transparent">
         </div>
 
-        <button onclick="saveToFirebase()" class="btn-continue">Continue</button>
+        <button onclick="submitToFirebase()" id="subBtn" class="btn-main mt-2">
+            Continue
+        </button>
 
-        <div class="mt-6 flex items-center gap-4">
-            <hr class="flex-1"> <span class="text-xs text-gray-400 font-bold uppercase">or</span> <hr class="flex-1">
-        </div>
-
-        <div class="flex justify-center gap-10 mt-6">
-            <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center shadow-sm">
-                <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" class="w-6">
-            </div>
-            <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center shadow-sm">
-                <i class="fa-brands fa-apple text-2xl"></i>
-            </div>
-            <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center shadow-sm">
-                <i class="fa-solid fa-envelope text-xl text-gray-600"></i>
-            </div>
+        <div class="mt-8 flex items-center justify-center gap-6 opacity-40 grayscale">
+            <i class="fa-brands fa-google text-xl"></i>
+            <i class="fa-brands fa-apple text-2xl"></i>
+            <i class="fa-solid fa-envelope text-xl"></i>
         </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Your Exact Firebase Config
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_ID",
-            appId: "YOUR_APP_ID"
+          apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+          authDomain: "freshfry-39a10.firebaseapp.com",
+          projectId: "freshfry-39a10",
+          storageBucket: "freshfry-39a10.firebasestorage.app",
+          messagingSenderId: "928483976893",
+          appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.saveToFirebase = async function() {
-            const name = document.getElementById('userName').value;
-            const phone = document.getElementById('userPhone').value;
+        window.submitToFirebase = async function() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const btn = document.getElementById('subBtn');
 
-            if(name && phone.length === 10) {
-                try {
-                    await addDoc(collection(db, "users"), {
-                        fullName: name,
-                        phoneNumber: phone,
-                        timestamp: new Date()
-                    });
-                    alert("Data saved! Redirecting to OTP...");
-                    window.location.href = "otp.html"; // Redirect to your OTP page (Ref: Image 3)
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                }
-            } else {
-                alert("Please enter valid Name and 10-digit Phone Number");
+            if (name === "" || phone.length !== 10) {
+                alert("Please enter a valid Name and 10-digit Phone Number.");
+                return;
             }
-        }
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            try {
+                // Storing in 'users' collection
+                await addDoc(collection(db, "users"), {
+                    fullName: name,
+                    phoneNumber: phone,
+                    createdAt: serverTimestamp(),
+                    device: navigator.userAgent
+                });
+
+                // Local storage for session
+                localStorage.setItem('ff_user', name);
+                localStorage.setItem('ff_phone', phone);
+
+                alert("Welcome to Freshfry!");
+                window.location.href = "index.html"; // Yahan apne main menu page ka link dein
+            } catch (e) {
+                console.error("Firebase Error: ", e);
+                alert("Something went wrong. Please try again.");
+                btn.innerText = "Continue";
+                btn.disabled = false;
+            }
+        };
     </script>
 </body>
 </html>
