@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
         :root { --primary: #FF5C00; --dark: #0F172A; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: var(--dark); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: var(--dark); overflow-x: hidden; }
         
         .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         
@@ -21,64 +21,52 @@
             border: 1px solid rgba(0,0,0,0.03);
             overflow: hidden;
         }
-        .momo-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+        .momo-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
         
         .btn-primary { 
             background: linear-gradient(135deg, #FF8A00 0%, #FF5C00 100%);
             box-shadow: 0 10px 20px -5px rgba(255, 92, 0, 0.3);
         }
         
-        .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); box-shadow: -20px 0 50px rgba(0,0,0,0.1); }
+        .cart-sidebar { transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
         .cart-closed { transform: translateX(110%); }
         
-        .filter-active { background: var(--dark); color: white; transform: scale(1.05); }
+        .filter-active { background: var(--dark) !important; color: white !important; }
         
-        /* Custom Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
         .gradient-text { background: linear-gradient(to right, #FF8A00, #FF5C00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        @keyframes whatsapp-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .animate-whatsapp-pulse { animation: whatsapp-pulse 2s infinite; }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="login-modal" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
         <div class="w-full max-w-md bg-white rounded-[3rem] p-10 text-center shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange-100 rounded-full blur-3xl"></div>
             <h1 class="text-4xl font-800 tracking-tighter mb-2 italic">Fresh<span class="text-orange-500">fry.</span></h1>
-            <p class="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-10">Premium Momos Hub</p>
-            
+            <p class="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-10">Baripada's Premium Momos</p>
             <div class="space-y-4">
-                <div class="relative">
-                    <i class="fa-solid fa-phone absolute left-6 top-1/2 -translate-y-1/2 text-slate-300"></i>
-                    <input id="phone-input" type="tel" maxlength="10" placeholder="WhatsApp Number" 
-                        class="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-lg transition-all">
-                </div>
-                <button onclick="saveUser()" class="w-full btn-primary text-white py-5 rounded-2xl font-800 shadow-xl active:scale-95 transition-all uppercase tracking-widest">Explore Menu</button>
+                <input id="phone-input" type="tel" maxlength="10" placeholder="WhatsApp Number" 
+                    class="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center text-lg transition-all">
+                <button onclick="saveUser()" class="w-full btn-primary text-white py-5 rounded-2xl font-800 shadow-xl active:scale-95 transition-all uppercase tracking-widest">Start Ordering</button>
             </div>
         </div>
     </div>
 
     <div id="loc-modal" class="fixed inset-0 z-[90] bg-slate-900/40 backdrop-blur-sm hidden flex items-end">
-        <div class="bg-white w-full rounded-t-[3.5rem] p-10 animate-slide-up">
+        <div class="bg-white w-full rounded-t-[3.5rem] p-10 animate-slide-up shadow-2xl">
             <div class="w-12 h-1.5 bg-slate-100 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-800 mb-8 text-center italic">Select <span class="gradient-text">Delivery Zone</span></h3>
+            <h3 class="text-2xl font-800 mb-8 text-center italic">Delivery <span class="gradient-text">Zone</span></h3>
             <div class="grid grid-cols-2 gap-4 mb-6">
-                <button onclick="setLoc('Murgabadi')" class="group p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-center">
-                    <i class="fa-solid fa-building text-slate-200 group-hover:text-orange-500 mb-2 block text-xl"></i>
-                    <span class="text-xs uppercase">Murgabadi</span>
-                </button>
-                <button onclick="setLoc('Station Bazar')" class="group p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-center">
-                    <i class="fa-solid fa-train text-slate-200 group-hover:text-orange-500 mb-2 block text-xl"></i>
-                    <span class="text-xs uppercase">Station Bazar</span>
-                </button>
-                <button onclick="setLoc('Lal Bazar')" class="group p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-center">
-                    <i class="fa-solid fa-shop text-slate-200 group-hover:text-orange-500 mb-2 block text-xl"></i>
-                    <span class="text-xs uppercase">Lal Bazar</span>
-                </button>
-                <button onclick="setLoc('Ambika Mandir')" class="group p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-center">
-                    <i class="fa-solid fa-om text-slate-200 group-hover:text-orange-500 mb-2 block text-xl"></i>
-                    <span class="text-xs uppercase">Ambika Mandir</span>
-                </button>
+                <button onclick="setLoc('Murgabadi')" class="p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-xs uppercase tracking-widest">Murgabadi</button>
+                <button onclick="setLoc('Station Bazar')" class="p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-xs uppercase tracking-widest">Station Bazar</button>
+                <button onclick="setLoc('Lal Bazar')" class="p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-xs uppercase tracking-widest">Lal Bazar</button>
+                <button onclick="setLoc('Ambika Mandir')" class="p-6 border-2 border-slate-50 rounded-[2rem] font-800 hover:border-orange-500 transition-all text-xs uppercase tracking-widest">Ambika Mandir</button>
             </div>
         </div>
     </div>
@@ -89,7 +77,6 @@
             <button onclick="showLocationPicker()" class="flex items-center gap-1.5">
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                 <span id="current-loc" class="text-[10px] font-800 uppercase text-slate-400 tracking-widest">Select Location</span>
-                <i class="fa-solid fa-chevron-down text-[8px] text-slate-300"></i>
             </button>
         </div>
         <button onclick="toggleCart(true)" class="relative h-12 w-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white shadow-2xl active:scale-90 transition-all">
@@ -99,57 +86,53 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 mt-8">
-        <header class="mb-10">
-            <h2 class="text-4xl font-800 tracking-tight italic leading-tight">Authentic Momos<br><span class="gradient-text">Delivered Fast.</span></h2>
-        </header>
+        <h2 class="text-4xl font-800 tracking-tight italic leading-tight mb-8">Premium<br><span class="gradient-text">Momo Bar.</span></h2>
 
         <div class="flex gap-4 mb-10 overflow-x-auto no-scrollbar py-2">
-            <button onclick="filterMenu('all')" class="filter-btn filter-active px-8 py-3.5 rounded-2xl font-800 text-xs uppercase tracking-widest shadow-lg">Menu</button>
-            <button onclick="filterMenu('veg')" class="filter-btn bg-white border border-slate-100 px-8 py-3.5 rounded-2xl font-800 text-xs uppercase tracking-widest text-slate-400">Veg</button>
-            <button onclick="filterMenu('non-veg')" class="filter-btn bg-white border border-slate-100 px-8 py-3.5 rounded-2xl font-800 text-xs uppercase tracking-widest text-slate-400">Non-Veg</button>
+            <button onclick="filterMenu('all')" id="f-all" class="filter-btn filter-active px-8 py-3.5 rounded-2xl font-800 text-[10px] uppercase tracking-widest shadow-lg bg-white border border-slate-100">All</button>
+            <button onclick="filterMenu('veg')" id="f-veg" class="filter-btn px-8 py-3.5 rounded-2xl font-800 text-[10px] uppercase tracking-widest text-slate-400 bg-white border border-slate-100">Veg</button>
+            <button onclick="filterMenu('non-veg')" id="f-non-veg" class="filter-btn px-8 py-3.5 rounded-2xl font-800 text-[10px] uppercase tracking-widest text-slate-400 bg-white border border-slate-100">Non-Veg</button>
         </div>
 
-        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            </div>
+        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
     </main>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] cart-sidebar cart-closed flex flex-col">
-        <div class="p-8 border-b border-slate-50 flex justify-between items-center">
-            <h2 class="text-2xl font-800 italic">Your <span class="text-orange-500">Order</span></h2>
-            <button onclick="toggleCart(false)" class="h-12 w-12 bg-slate-50 rounded-2xl text-slate-400 hover:text-orange-500 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[110] cart-sidebar cart-closed flex flex-col shadow-2xl">
+        <div class="p-8 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-800 italic">Your <span class="text-orange-500">Box</span></h2>
+            <button onclick="toggleCart(false)" class="h-12 w-12 bg-slate-50 rounded-2xl text-slate-400"><i class="fa-solid fa-xmark"></i></button>
         </div>
         
-        <div id="cart-items-list" class="flex-1 overflow-y-auto p-8 space-y-6">
-            </div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-8 space-y-6"></div>
 
-        <div class="p-8 bg-white border-t border-slate-50 space-y-6">
-            <div class="relative">
-                <i class="fa-solid fa-location-arrow absolute left-5 top-1/2 -translate-y-1/2 text-orange-500"></i>
-                <input type="text" id="exact-address" placeholder="Door No / Landmark / Street" 
-                    class="w-full pl-12 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-[1.5rem] font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 transition-all">
-            </div>
+        <div class="p-8 bg-white border-t space-y-6">
+            <input type="text" id="exact-address" placeholder="Flat No / Landmark / Street" 
+                class="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-[1.5rem] font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 transition-all">
             
-            <div class="bg-orange-50 p-5 rounded-[1.5rem] border border-orange-100/50">
-                <div class="flex justify-between items-center font-800 text-2xl">
-                    <span class="text-slate-400 text-sm uppercase tracking-widest">Total Bill</span>
-                    <span id="cart-total" class="gradient-text">₹0</span>
-                </div>
+            <div class="flex justify-between items-center p-6 bg-orange-50 rounded-[1.5rem]">
+                <span class="text-sm font-800 uppercase text-slate-400">Total</span>
+                <span id="cart-total" class="text-2xl font-800 gradient-text">₹0</span>
             </div>
 
             <button onclick="finalCheckout()" class="w-full btn-primary text-white py-6 rounded-[1.8rem] font-800 shadow-2xl active:scale-95 transition-all uppercase tracking-[0.2em] text-xs">
                 Pay & Confirm Order 🚀
             </button>
-            <p class="text-[9px] text-center font-bold text-slate-300 uppercase tracking-widest">Prepaid Only • Secure UPI Payment</p>
+            <p class="text-[9px] text-center font-bold text-slate-300 uppercase tracking-widest italic">7008186187@ybl • Prepaid Only</p>
         </div>
     </div>
 
-    <div id="order-success" class="fixed inset-0 z-[110] bg-white hidden flex flex-col items-center justify-center p-10 text-center">
-        <div class="w-24 h-24 border-8 border-slate-50 border-t-orange-500 rounded-full animate-spin mb-8"></div>
-        <h2 class="text-3xl font-800 italic mb-2">Connecting to <span class="text-orange-500">Payment</span></h2>
-        <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Please do not refresh</p>
+    <a href="https://wa.me/917008186187?text=Hi Freshfry, I need help with my order." 
+       target="_blank" 
+       class="fixed bottom-6 right-6 z-[105] flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-110 transition-all animate-whatsapp-pulse">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <div id="order-success" class="fixed inset-0 z-[120] bg-white hidden flex flex-col items-center justify-center p-10 text-center">
+        <div class="w-20 h-20 border-8 border-slate-100 border-t-orange-500 rounded-full animate-spin mb-8"></div>
+        <h2 class="text-2xl font-800 italic">Connecting to <span class="text-orange-500">Payment</span></h2>
     </div>
 
-    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-slate-900/60 z-[95] hidden backdrop-blur-md"></div>
+    <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-slate-900/60 z-[100] hidden backdrop-blur-md"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -174,7 +157,7 @@
             location: localStorage.getItem('customerLoc') || '' 
         };
 
-        // --- Auth Check ---
+        // --- Auto Login ---
         window.onload = () => {
             if(userData.phone) {
                 document.getElementById('login-modal').style.display = 'none';
@@ -186,7 +169,7 @@
 
         window.saveUser = () => {
             const ph = document.getElementById('phone-input').value.trim();
-            if(ph.length < 10) return alert("Enter valid WhatsApp number");
+            if(ph.length < 10) return alert("Enter valid 10-digit number");
             userData.phone = ph;
             localStorage.setItem('customerPhone', ph);
             document.getElementById('login-modal').style.display = 'none';
@@ -202,7 +185,7 @@
             document.getElementById('loc-modal').classList.add('hidden');
         };
 
-        // --- Menu Rendering ---
+        // --- Menu Logic ---
         onSnapshot(collection(db, "menu"), (snap) => {
             allMenuItems = [];
             snap.forEach(d => allMenuItems.push({id: d.id, ...d.data()}));
@@ -213,29 +196,28 @@
             const list = document.getElementById('menu-list');
             list.innerHTML = '';
             
-            // UI Filter State Update
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('filter-active', 'bg-slate-900', 'text-white'));
-            
+            // Filter UI toggle
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('filter-active'));
+            const activeBtn = document.getElementById('f-' + filter);
+            if(activeBtn) activeBtn.classList.add('filter-active');
+
             const items = filter === 'all' ? allMenuItems : allMenuItems.filter(i => i.type === filter);
             
             items.forEach(item => {
                 const isStock = item.inStock !== false;
                 list.innerHTML += `
                 <div class="momo-card ${!isStock ? 'opacity-50 grayscale' : ''}">
-                    <div class="relative h-64 overflow-hidden">
+                    <div class="h-64 overflow-hidden relative">
                         <img src="${item.image}" class="w-full h-full object-cover">
-                        ${item.isBestseller ? '<div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-2xl text-[10px] font-800 tracking-widest text-orange-500 shadow-xl italic">BESTSELLER</div>' : ''}
+                        ${item.isBestseller ? '<div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1.5 rounded-xl text-[8px] font-800 tracking-widest text-orange-600 uppercase">Bestseller</div>' : ''}
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h4 class="font-800 text-lg italic">${item.name}</h4>
-                                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-1">${item.type || 'Freshfry Special'}</p>
-                            </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-800 text-lg italic uppercase">${item.name}</h4>
                             <span class="text-xl font-800 text-slate-900">₹${item.price}</span>
                         </div>
                         <button onclick="${isStock ? `addToCart('${item.name}', ${item.price}, '${item.image}')` : ''}" 
-                            class="w-full ${isStock ? 'btn-primary text-white' : 'bg-slate-100 text-slate-400'} py-4 rounded-2xl font-800 text-[10px] uppercase tracking-[0.2em] transition-all">
+                            class="w-full ${isStock ? 'btn-primary text-white' : 'bg-slate-100 text-slate-400'} py-4 rounded-2xl font-800 text-[10px] uppercase tracking-[0.2em]">
                             ${isStock ? 'Add to Box +' : 'Sold Out'}
                         </button>
                     </div>
@@ -255,18 +237,18 @@
             document.getElementById('cart-badge').innerText = cart.reduce((a, b) => a + b.qty, 0);
             
             if(cart.length === 0) {
-                list.innerHTML = `<div class="text-center py-20 opacity-20"><i class="fa-solid fa-bag-shopping text-6xl mb-4"></i><p class="font-800 uppercase text-xs tracking-widest">Empty Box</p></div>`;
+                list.innerHTML = `<div class="text-center py-20 opacity-20 font-800 text-xs uppercase tracking-widest">Your box is empty</div>`;
                 document.getElementById('cart-total').innerText = "₹0";
                 return;
             }
 
             list.innerHTML = cart.map(item => {
                 total += (item.price * item.qty);
-                return `<div class="flex items-center gap-4 bg-slate-50 p-4 rounded-3xl border border-slate-100">
-                    <img src="${item.image}" class="w-16 h-16 object-cover rounded-2xl">
+                return `<div class="flex items-center gap-4 bg-slate-50 p-4 rounded-[1.5rem] border border-slate-100">
+                    <img src="${item.image}" class="w-14 h-14 object-cover rounded-xl shadow-sm">
                     <div class="flex-1">
-                        <p class="text-xs font-800 italic uppercase">${item.name}</p>
-                        <p class="text-[10px] font-bold text-slate-400 mt-1">₹${item.price} × ${item.qty}</p>
+                        <p class="text-[10px] font-800 italic uppercase">${item.name}</p>
+                        <p class="text-[10px] font-bold text-slate-400 mt-0.5">₹${item.price} × ${item.qty}</p>
                     </div>
                     <div class="font-800 text-sm">₹${item.price * item.qty}</div>
                 </div>`;
@@ -279,9 +261,9 @@
             document.getElementById('cart-overlay').classList.toggle('hidden', !o);
         };
 
-        // --- Payment Flow ---
+        // --- Payment & Checkout ---
         window.finalCheckout = async () => {
-            const addr = document.getElementById('exact-address').value;
+            const addr = document.getElementById('exact-address').value.trim();
             const totalVal = document.getElementById('cart-total').innerText.replace('₹', '');
             if(cart.length === 0 || !addr) return alert("Enter address & items!");
 
@@ -303,16 +285,16 @@
                 localStorage.setItem('currentOrderId', docRef.id);
                 document.getElementById('order-success').classList.remove('hidden');
 
-                // Redirect Flow
+                // Flow: UPI Intent -> WhatsApp Notification -> Tracking
                 window.location.href = upiUrl;
                 
                 setTimeout(() => {
-                    let waMsg = `*🍱 FRESHFRY ORDER CONFIRMED*%0A------------------%0A*Phone:* ${userData.phone}%0A*Address:* ${addr}%0A*Total Paid:* ₹${totalVal}%0A------------------%0A`;
+                    let waMsg = `*🍱 FRESHFRY NEW ORDER*%0A------------------%0A*Phone:* ${userData.phone}%0A*Address:* ${addr}%0A*Total:* ₹${totalVal}%0A------------------%0A`;
                     cart.forEach(i => waMsg += `• ${i.name} (x${i.qty})%0A`);
                     window.location.href = `https://wa.me/917008186187?text=${waMsg}`;
                 }, 4000);
 
-            } catch(e) { alert("Checkout failed!"); }
+            } catch(e) { alert("Checkout error!"); }
         };
         
         window.filterMenu = (t) => renderMenu(t);
