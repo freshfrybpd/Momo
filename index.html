@@ -266,59 +266,81 @@
     const p = localStorage.getItem('ff_phone');
     if(!p) return;
 
+    // Firebase query to get user's orders
     const q = query(collection(db, "orders"), where("customerPhone", "==", p));
     
     onSnapshot(q, (snap) => {
         const list = document.getElementById('my-orders-list');
+        
         if(snap.empty) {
-            list.innerHTML = `<p class="text-center text-gray-400 font-bold mt-10 uppercase text-[10px]">No orders yet!</p>`;
+            list.innerHTML = `
+                <div class="text-center py-10">
+                    <i class="fa-solid fa-box-open text-gray-200 text-5xl mb-4"></i>
+                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">No orders yet!</p>
+                </div>`;
             return;
         }
 
         const ordersArray = [];
         snap.forEach(d => ordersArray.push({ id: d.id, ...d.data() }));
+        
+        // Latest orders first (Sorting by time)
         ordersArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
         list.innerHTML = ordersArray.map(o => {
+            // Status Styling
             let sCol = o.status === 'delivered' ? 'text-green-600' : 'text-orange-600';
             let sBg = o.status === 'delivered' ? 'bg-green-50' : 'bg-orange-50';
             
-            // --- RIDER INFO LOGIC (UPDATED) ---
+            // --- RIDER SECTION LOGIC ---
             let riderSection = "";
-            
-            // Status check: Out for delivery ya Delivered hone par rider dikhao
-            if (o.status === "out_for_delivery" || o.status === "delivered" || o.riderName) {
+            if (o.riderName) {
                 riderSection = `
-                    <div class="mt-4 p-4 bg-slate-900 rounded-[1.5rem] flex justify-between items-center border-l-4 border-orange-500 shadow-xl">
-                        <div>
-                            <p class="text-[7px] text-orange-400 font-black uppercase tracking-widest">Rider Assigned</p>
-                            <p class="text-sm text-white font-black italic uppercase">${o.riderName || 'Freshfry Rider'}</p>
-                            <p class="text-[9px] text-gray-400 font-bold">${o.riderPhone || 'Contact via Admin'}</p>
+                    <div class="mt-4 p-4 bg-slate-900 rounded-[1.8rem] flex justify-between items-center border-l-4 border-orange-500 shadow-xl transition-all animate-in fade-in slide-in-from-bottom-2">
+                        <div class="flex-1">
+                            <p class="text-[7px] text-orange-400 font-black uppercase tracking-widest opacity-80">Rider Assigned</p>
+                            <p class="text-sm text-white font-black italic uppercase leading-none mt-1">${o.riderName}</p>
+                            <p class="text-[10px] text-slate-400 font-bold mt-1.5 tracking-tight">
+                                ${o.riderPhone ? `<i class="fa-solid fa-phone-flip text-[8px] mr-1"></i> ${o.riderPhone}` : 'Contacting Rider...'}
+                            </p>
                         </div>
+                        
                         ${o.riderPhone ? `
-                        <a href="tel:${o.riderPhone}" class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
+                        <a href="tel:${o.riderPhone}" class="h-11 w-11 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all border-2 border-white/10">
                             <i class="fa-solid fa-phone"></i>
-                        </a>` : ''}
+                        </a>` : `
+                        <div class="h-11 w-11 bg-slate-800 text-slate-600 rounded-2xl flex items-center justify-center border border-slate-700">
+                            <i class="fa-solid fa-clock-rotate-left text-xs"></i>
+                        </div>`}
                     </div>
                 `;
             }
 
             return `
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-4 relative border border-gray-100">
-                    <div class="absolute top-4 right-4 bg-gray-900 text-white p-2 rounded-xl text-center min-w-[50px]">
-                        <p class="text-[7px] text-gray-400 uppercase">PIN</p>
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-5 relative border border-gray-100">
+                    <div class="absolute top-5 right-5 bg-gray-900 text-white p-2.5 rounded-2xl text-center min-w-[55px] shadow-lg">
+                        <p class="text-[7px] text-gray-500 font-black uppercase tracking-tighter">Order PIN</p>
                         <p class="text-xs font-black text-orange-400">${o.orderPin || '----'}</p>
                     </div>
-                    <span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current opacity-80">${o.status.replace(/_/g, ' ')}</span>
-                    <p class="font-900 text-xl italic mt-3">${o.total}</p>
-                    <p class="text-[10px] text-gray-400 uppercase font-black mt-1">
-                        ${o.items ? o.items.map(i => `${i.qty}x ${i.name}`).join(' • ') : 'Delicious Items'}
-                    </p>
+
+                    <span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current/20 tracking-wider">
+                        ${o.status.replace(/_/g, ' ')}
+                    </span>
+
+                    <p class="font-900 text-2xl italic mt-3 text-slate-800 tracking-tighter">${o.total}</p>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa-solid fa-utensils text-[8px] text-slate-300"></i>
+                        <p class="text-[10px] text-gray-400 uppercase font-black tracking-tight">
+                            ${o.items ? o.items.map(i => `${i.qty}x ${i.name}`).join(' • ') : 'Delicious Items'}
+                        </p>
+                    </div>
                     
                     ${riderSection}
                 </div>`;
         }).join('');
     });
+};
+
 };
 
 
