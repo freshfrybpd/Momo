@@ -234,15 +234,15 @@
         await updateDoc(doc(db, "orders", currentOrderId), { 
             status: 'out_for_delivery', 
             riderName: name,
-            riderPhone: phone // Ye line add karna zaroori hai!
+            riderPhone: phone // Ye line check karo, yahi number save karegi
         });
         document.getElementById('rider-modal').style.display = 'none';
-        alert("Order Assigned to " + name);
+        alert("Rider Assigned: " + name);
     } catch (e) {
-        console.error("Error assigning rider:", e);
-        alert("Assigning failed!");
+        console.error(e);
     }
 };
+
 
 
 
