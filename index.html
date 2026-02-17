@@ -171,30 +171,42 @@
 
         // Updated Menu Function with Filter & Correct Badge Colors
         function loadMenu() {
-            onSnapshot(collection(db, "menu"), (snap) => {
-                const list = document.getElementById('menu-list'); 
-                list.innerHTML = '';
-                snap.forEach(d => {
-                    const item = d.data();
-                    if(currentFilter !== 'All' && item.type !== currentFilter) return;
-                    const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+    onSnapshot(collection(db, "menu"), (snap) => {
+        const list = document.getElementById('menu-list'); 
+        list.innerHTML = '';
+        snap.forEach(d => {
+            const item = d.data();
+            
+            // Filter logic (All/Veg/Non-Veg)
+            if(currentFilter !== 'All' && item.type !== currentFilter) return;
 
-                    list.innerHTML += `<div class="momo-card p-4">
-                        <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                        <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4">
-                        <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
-                            <span>${item.name}</span><span class="text-orange-600">₹${item.price}</span>
-                        </div>
-                        ${item.inStock !== false ? 
-    `<button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
-    : 
-    `<button class="w-full bg-gray-100 text-gray-400 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
+            // 1. Badge Color Logic
+            const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+
+            // 2. Stock Logic (inStock agar undefined hai toh usey true maano)
+            const isAvailable = item.inStock !== false; 
+
+            list.innerHTML += `
+                <div class="momo-card p-4">
+                    <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
+                    
+                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
+                    
+                    <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
+                        <span class="${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
+                        <span class="text-orange-600">₹${item.price}</span>
+                    </div>
+
+                    ${isAvailable ? 
+                        `<button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
+                        : 
+                        `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
+                    }
+                </div>`;
+        });
+    });
 }
 
-                    </div>`;
-                });
-            });
-        }
 
         
         
