@@ -276,27 +276,29 @@
         }
 
         const ordersArray = [];
-        snap.forEach(d => ordersArray.push(d.data()));
+        snap.forEach(d => ordersArray.push({ id: d.id, ...d.data() }));
         ordersArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
         list.innerHTML = ordersArray.map(o => {
             let sCol = o.status === 'delivered' ? 'text-green-600' : 'text-orange-600';
             let sBg = o.status === 'delivered' ? 'bg-green-50' : 'bg-orange-50';
             
-            // --- RIDER INFO LOGIC ---
-            // Hum check kar rahe hain ki status "out for delivery" ho AUR rider ka number database mein maujood ho
+            // --- RIDER INFO LOGIC (UPDATED) ---
             let riderSection = "";
-            if ((o.status === "out for delivery" || o.status === "delivered") && o.riderPhone) {
+            
+            // Status check: Out for delivery ya Delivered hone par rider dikhao
+            if (o.status === "out_for_delivery" || o.status === "delivered" || o.riderName) {
                 riderSection = `
                     <div class="mt-4 p-4 bg-slate-900 rounded-[1.5rem] flex justify-between items-center border-l-4 border-orange-500 shadow-xl">
                         <div>
                             <p class="text-[7px] text-orange-400 font-black uppercase tracking-widest">Rider Assigned</p>
-                            <p class="text-sm text-white font-black italic uppercase">${o.riderName || 'Freshfry Hero'}</p>
-                            <p class="text-[9px] text-gray-400 font-bold">${o.riderPhone}</p>
+                            <p class="text-sm text-white font-black italic uppercase">${o.riderName || 'Freshfry Rider'}</p>
+                            <p class="text-[9px] text-gray-400 font-bold">${o.riderPhone || 'Contact via Admin'}</p>
                         </div>
+                        ${o.riderPhone ? `
                         <a href="tel:${o.riderPhone}" class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
                             <i class="fa-solid fa-phone"></i>
-                        </a>
+                        </a>` : ''}
                     </div>
                 `;
             }
@@ -307,7 +309,7 @@
                         <p class="text-[7px] text-gray-400 uppercase">PIN</p>
                         <p class="text-xs font-black text-orange-400">${o.orderPin || '----'}</p>
                     </div>
-                    <span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current opacity-80">${o.status}</span>
+                    <span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current opacity-80">${o.status.replace(/_/g, ' ')}</span>
                     <p class="font-900 text-xl italic mt-3">${o.total}</p>
                     <p class="text-[10px] text-gray-400 uppercase font-black mt-1">
                         ${o.items ? o.items.map(i => `${i.qty}x ${i.name}`).join(' • ') : 'Delicious Items'}
