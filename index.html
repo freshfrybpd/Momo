@@ -445,6 +445,53 @@ window.loadMyOrders = () => {
 
 
         window.onload = loadUserSession;
+        
+        
+        
+        let selectedRating = 0;
+let pendingFeedbackId = null;
+
+// Star Rating Select karne ke liye
+window.setStar = (num) => {
+    selectedRating = num;
+    document.querySelectorAll('.star-btn').forEach((btn, idx) => {
+        btn.classList.toggle('text-orange-500', idx < num);
+        btn.classList.toggle('text-slate-200', idx >= num);
+    });
+};
+
+// Order check karne ke liye ki feedback mangna hai ya nahi
+function checkForFeedback() {
+    const phone = localStorage.getItem('ff_phone');
+    if(!phone) return;
+
+    const q = query(collection(db, "orders"), where("customerPhone", "==", phone), where("showFeedback", "==", true));
+    onSnapshot(q, (snap) => {
+        snap.forEach(d => {
+            pendingFeedbackId = d.id;
+            document.getElementById('feedback-modal').classList.remove('hidden');
+        });
+    });
+}
+
+// Feedback Submit karne ke liye
+window.submitFeedback = async () => {
+    if(selectedRating === 0) return alert("Please select stars!");
+    
+    const text = document.getElementById('feedback-text').value;
+    await updateDoc(doc(db, "orders", pendingFeedbackId), {
+        rating: selectedRating,
+        feedback: text,
+        showFeedback: false // Modal band karne ke liye
+    });
+
+    document.getElementById('feedback-modal').classList.add('hidden');
+    alert("Bhai, Thank you for your feedback! ❤️");
+};
+
+// Function call shuru karein
+setInterval(checkForFeedback, 5000); // Har 5 second mein check karega
+
     </script>
     
     
