@@ -209,18 +209,26 @@
             window.location.href = `upi://pay?pa=${upi}&pn=${encodeURIComponent(name)}&am=${amt}&cu=INR`;
         };
         window.openRiderModal = (id) => {
-            currentOrderId = id;
-            document.getElementById('rider-modal').style.display = 'flex';
-            onSnapshot(collection(db, "riders"), (snap) => {
-                const container = document.getElementById('rider-list-container');
-                container.innerHTML = '';
-                snap.forEach(d => {
-                    container.innerHTML += `<button onclick="assignOrder('${d.data().riderName}')" class="w-full bg-slate-50 p-4 rounded-2xl font-900 uppercase text-xs flex justify-between items-center">
-                        ${d.data().riderName} <span class="${d.data().status === 'Online' ? 'text-green-500' : 'text-slate-300'} font-black">${d.data().status || 'OFF'}</span>
-                    </button>`;
-                });
-            });
-        };
+    currentOrderId = id;
+    document.getElementById('rider-modal').style.display = 'flex';
+    onSnapshot(collection(db, "riders"), (snap) => {
+        const container = document.getElementById('rider-list-container');
+        container.innerHTML = '';
+        snap.forEach(d => {
+            const rider = d.data();
+            // Yahan humne r.riderPhone bhi add kar diya hai taaki wo click par pass ho sake
+            container.innerHTML += `
+            <button onclick="assignOrder('${rider.riderName}', '${rider.riderPhone || ''}')" 
+                class="w-full bg-slate-50 p-4 rounded-2xl font-900 uppercase text-xs flex justify-between items-center mb-2 hover:bg-orange-50 border border-transparent hover:border-orange-200 transition">
+                <span>${rider.riderName}</span>
+                <span class="${rider.status === 'Online' ? 'text-green-500' : 'text-slate-300'} font-black italic">
+                    ${rider.status || 'OFF'}
+                </span>
+            </button>`;
+        });
+    });
+};
+
         window.assignOrder = async (name) => {
             await updateDoc(doc(db, "orders", currentOrderId), { status: 'out_for_delivery', riderName: name });
             document.getElementById('rider-modal').style.display = 'none';
