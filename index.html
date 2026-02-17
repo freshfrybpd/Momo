@@ -27,10 +27,8 @@
 
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px rgba(37,211,102,0.3); z-index: 100; transition: 0.3s; }
         
-        /* New Tracking Section Style */
-        #order-tracking-section { display: none; position: fixed; inset: 0; background: #f8fafc; z-index: 2000; overflow-y: auto; }
-        .status-dot { width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; position: relative; }
-        .status-active { background: #ff5e00; box-shadow: 0 0 10px #ff5e00; }
+        /* My Orders Section Overlay */
+        #my-orders-screen { display: none; position: fixed; inset: 0; background: #f8fafc; z-index: 2000; overflow-y: auto; padding-bottom: 100px; }
     </style>
 </head>
 <body class="pb-10">
@@ -46,38 +44,45 @@
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Finest</p>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="showMyOrders()" class="bg-orange-100 text-orange-600 px-3 py-2 rounded-xl text-[10px] font-900 uppercase">My Orders</button>
-            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
+            <button onclick="openMyOrders()" class="bg-orange-100 text-orange-600 px-4 py-2 rounded-xl text-[10px] font-900 uppercase">My Orders</button>
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-gray-200">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
+            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden shadow-sm active:scale-90 transition-all">
+                <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="w-full h-full object-cover">
+            </a>
         </div>
     </nav>
 
-    <main id="main-content" class="px-6 mt-8">
-        <div id="promo-banner" class="hidden mb-8 p-6 btn-gradient rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
-            <div class="relative z-10">
-                <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Limited Offer</span>
-                <h3 id="p-title" class="text-2xl font-900 mt-2 leading-tight">--</h3>
-                <div class="mt-4 inline-flex items-center gap-2 bg-black/10 px-4 py-2 rounded-xl border border-white/20">
-                    <span id="p-code" class="font-900 tracking-widest">--</span>
-                </div>
+    <div id="my-orders-screen" class="p-6">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-900 italic tracking-tighter uppercase">Order <span class="text-orange-500">History</span></h2>
+            <button onclick="closeMyOrders()" class="bg-white h-10 w-10 rounded-full shadow-sm flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="orders-container" class="space-y-6">
+            </div>
+    </div>
+
+    <div id="promo-banner" class="hidden mx-6 mt-6 p-6 btn-gradient rounded-[2.5rem] text-white shadow-2xl shadow-orange-200 relative overflow-hidden">
+        <div class="relative z-10">
+            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Limited Offer</span>
+            <h3 id="p-title" class="text-2xl font-900 mt-2 leading-tight">--</h3>
+            <div class="mt-4 inline-flex items-center gap-2 bg-black/10 px-4 py-2 rounded-xl border border-white/20">
+                <span class="text-[10px] opacity-70">USE CODE:</span>
+                <span id="p-code" class="font-900 tracking-widest">--</span>
             </div>
         </div>
-
-        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
-        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    </main>
-
-    <div id="order-tracking-section" class="p-6">
-        <div class="flex items-center gap-4 mb-8">
-            <button onclick="closeTracking()" class="h-10 w-10 bg-white shadow-sm rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-900 italic">Today's Orders</h2>
-        </div>
-        <div id="live-orders-container" class="space-y-4">
-            <p class="text-center text-gray-400 py-10 font-bold uppercase text-xs">No active orders found</p>
-        </div>
     </div>
+
+    <main class="px-6 mt-8">
+        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
+        <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full py-20 text-center">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
+            </div>
+        </div>
+    </main>
 
     <a href="https://wa.me/917008186187?text=Hi Freshfry, I need help!" class="whatsapp-float">
         <i class="fa-brands fa-whatsapp"></i>
@@ -85,15 +90,31 @@
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar">
         <div class="p-6 flex justify-between items-center border-b">
-            <h2 class="text-2xl font-900 italic">Your Box</h2>
-            <button onclick="toggleCart(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
+            <div>
+                <h2 class="text-2xl font-900 italic">Your Box</h2>
+                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Freshfry Baripada</p>
+            </div>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
         </div>
-        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
         <div class="p-8 bg-white border-t space-y-4">
-            <div class="flex justify-between font-bold text-sm text-gray-500"><span>Subtotal</span><span id="sub-total">₹0</span></div>
-            <div class="flex justify-between font-bold text-sm text-green-600"><span>Delivery</span><span>₹20</span></div>
-            <div class="flex justify-between font-900 text-2xl pt-2 border-t"><span>Total</span><span id="cart-total" class="text-orange-600">₹0</span></div>
-            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl">PAY & PLACE ORDER</button>
+            <div class="flex justify-between font-bold text-sm text-gray-500">
+                <span>Items Subtotal</span>
+                <span id="sub-total">₹0</span>
+            </div>
+            <div class="flex justify-between font-bold text-sm text-green-600">
+                <span>Delivery Charge (Fixed)</span>
+                <span>₹20</span>
+            </div>
+            <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
+                <span>Total</span>
+                <span id="cart-total" class="text-orange-600">₹0</span>
+            </div>
+            <button onclick="handleCheckout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl active:scale-95 transition-all">
+                PLACE ORDER <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
         </div>
     </div>
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-md"></div>
@@ -115,130 +136,164 @@
         const db = getFirestore(app);
         let cart = [];
 
-        // 1. Menu Sync
+        // Load Session
+        function loadUserSession() {
+            const userName = localStorage.getItem('ff_user') || "Guest";
+            const savedPhoto = localStorage.getItem('user_photo');
+            const profileImg = document.getElementById('user-profile-img');
+            if(savedPhoto) profileImg.src = savedPhoto;
+            else profileImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
+        }
+
+        // Menu Sync
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
+            const isVegOnly = localStorage.getItem('ff_veg_only') === 'true';
             list.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
+                const type = (item.type || 'non-veg').toLowerCase();
+                if (isVegOnly && type !== 'veg') return;
                 list.innerHTML += `<div class="momo-card p-4">
-                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem]">
-                    <div class="mt-5 px-2">
-                        <div class="flex justify-between items-center mb-1">
-                            <h4 class="font-900 text-xl uppercase italic">${item.name}</h4>
-                            <span class="font-900 text-xl text-orange-600">₹${item.price}</span>
+                        <div class="relative group cursor-pointer overflow-hidden rounded-[2rem]">
+                            <img src="${item.image}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700">
                         </div>
-                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black mt-4">ADD TO BOX</button>
-                    </div>
-                </div>`;
+                        <div class="mt-5 px-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-900 text-xl tracking-tight uppercase italic">${item.name}</h4>
+                                <span class="font-900 text-xl text-orange-600">₹${item.price}</span>
+                            </div>
+                            <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" 
+                                class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black mt-4 transition-all active:scale-95">
+                                ADD TO BOX
+                            </button>
+                        </div>
+                    </div>`;
             });
         });
 
-        // 2. PhonePe Payment & Firebase Order
-        window.checkout = async () => {
+        // --- NEW ORDER & CHECKOUT LOGIC ---
+        window.handleCheckout = async () => {
             if(cart.length === 0) return alert("Box is empty!");
+            
             let uName = localStorage.getItem('ff_user') || prompt("Enter Name:");
             let uPhone = localStorage.getItem('ff_phone') || prompt("Enter Phone:");
-            let uAddr = prompt("Enter Delivery Address:");
+            let uAddr = prompt("Enter Address:");
 
-            if(!uName || !uPhone || !uAddr) return alert("Details required!");
-            localStorage.setItem('ff_user', uName); localStorage.setItem('ff_phone', uPhone);
+            if(!uName || !uPhone || !uAddr) return alert("All fields are mandatory!");
+            
+            localStorage.setItem('ff_user', uName);
+            localStorage.setItem('ff_phone', uPhone);
 
-            const total = parseInt(document.getElementById('cart-total').innerText.replace('₹',''));
-            const upiId = "7008186187@ybl";
-            const upiLink = `upi://pay?pa=${upiId}&pn=Freshfry&am=${total}&cu=INR&tn=Order_from_Freshfry`;
+            const total = document.getElementById('cart-total').innerText;
+            const orderPayload = {
+                customerName: uName,
+                customer: uPhone,
+                address: uAddr,
+                items: cart,
+                total: total,
+                status: 'pending',
+                time: serverTimestamp(),
+                riderName: "Not Assigned",
+                riderPhone: "...",
+                deliveryPin: Math.floor(1000 + Math.random() * 9000)
+            };
 
-            // Open PhonePe/UPI Apps
-            window.location.href = upiLink;
-
-            // Save to Firebase
             try {
-                const orderData = {
-                    customerName: uName,
-                    customer: uPhone,
-                    address: uAddr,
-                    items: cart,
-                    total: total,
-                    status: 'pending',
-                    deliveryPin: Math.floor(1000 + Math.random() * 9000),
-                    time: serverTimestamp(),
-                    riderName: null,
-                    riderPhone: null
-                };
-                await addDoc(collection(db, "orders"), orderData);
-                cart = []; updateCartUI(); toggleCart(false);
-                alert("Order Placed! Track in 'My Orders'");
-                showMyOrders();
-            } catch(e) { console.error(e); }
+                // 1. Save to Firebase
+                const orderRef = await addDoc(collection(db, "orders"), orderPayload);
+                
+                // 2. Ask for Payment Method
+                const choice = confirm("Pay Online via PhonePe/UPI? (Cancel for WhatsApp)");
+                
+                if(choice) {
+                    // Online Mode
+                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total.replace('₹','')}&cu=INR`;
+                } else {
+                    // WhatsApp Mode
+                    let msg = `🍱 *Freshfry Order*%0A*Customer:* ${uName}%0A*Total:* ${total}%0A%0AItems:%0A`;
+                    cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
+                    window.open(`https://wa.me/917008186187?text=${msg}`);
+                }
+
+                // Cleanup
+                cart = [];
+                updateCartUI();
+                toggleCart(false);
+                openMyOrders();
+
+            } catch(e) { alert("Order Failed: " + e.message); }
         };
 
-        // 3. Live Order Tracking (My Orders Page)
-        window.showMyOrders = () => {
+        // Live My Orders
+        window.openMyOrders = () => {
+            document.getElementById('my-orders-screen').style.display = 'block';
             const uPhone = localStorage.getItem('ff_phone');
-            if(!uPhone) return alert("No orders found");
-            
-            document.getElementById('order-tracking-section').style.display = 'block';
-            const q = query(collection(db, "orders"), where("customer", "==", uPhone), orderBy("time", "desc"));
+            if(!uPhone) return;
 
+            const q = query(collection(db, "orders"), where("customer", "==", uPhone), orderBy("time", "desc"));
+            
             onSnapshot(q, (snap) => {
-                const container = document.getElementById('live-orders-container');
+                const container = document.getElementById('orders-container');
                 container.innerHTML = '';
+                
+                if(snap.empty) container.innerHTML = "<p class='text-center text-gray-400'>No orders yet</p>";
+
                 snap.forEach(d => {
                     const order = d.data();
-                    const date = order.time ? new Date(order.time.seconds * 1000).toLocaleString() : 'Just now';
-                    
                     container.innerHTML += `
-                    <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
-                        <div class="flex justify-between mb-4">
-                            <p class="text-[10px] font-900 text-gray-400 uppercase tracking-widest">${date}</p>
-                            <span class="bg-orange-100 text-orange-600 text-[10px] font-black px-3 py-1 rounded-full uppercase">${order.status}</span>
-                        </div>
-                        <div class="mb-4">
-                            <p class="text-xs font-bold text-gray-600">${order.items.map(i => i.name).join(', ')}</p>
-                            <p class="text-xl font-900">Total: ₹${order.total}</p>
-                        </div>
-                        
-                        ${order.riderName ? `
-                        <div class="bg-blue-50 p-4 rounded-2xl mb-4 flex items-center justify-between">
+                    <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-4">
                             <div>
-                                <p class="text-[9px] font-black text-blue-400 uppercase">Delivery Boy</p>
-                                <p class="font-900 text-sm">${order.riderName}</p>
+                                <p class="text-[10px] font-black text-orange-500 uppercase">Status: ${order.status}</p>
+                                <p class="text-xl font-900 italic tracking-tighter">${order.total}</p>
                             </div>
-                            <a href="tel:${order.riderPhone || '7008186187'}" class="bg-white h-10 w-10 rounded-xl flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-phone"></i></a>
-                        </div>` : '<p class="text-[10px] font-bold text-gray-400 italic mb-4">Finding near rider...</p>'}
-
-                        <div class="flex gap-2">
-                             <a href="https://wa.me/917008186187" class="flex-1 bg-slate-900 text-white py-3 rounded-xl text-center text-[10px] font-black uppercase">Help</a>
-                             <p class="flex-1 bg-orange-500 text-white py-3 rounded-xl text-center text-[10px] font-black uppercase tracking-widest">PIN: ${order.deliveryPin}</p>
+                            <div class="text-right">
+                                <p class="text-[10px] font-black text-gray-400">PIN: <span class="text-black">${order.deliveryPin}</span></p>
+                            </div>
                         </div>
+                        <div class="bg-gray-50 p-4 rounded-2xl mb-4 space-y-1">
+                            <p class="text-xs font-bold text-gray-500">Rider: <span class="text-slate-900">${order.riderName}</span></p>
+                            <p class="text-xs font-bold text-gray-500">Contact: <span class="text-slate-900">${order.riderPhone}</span></p>
+                            <p class="text-xs font-bold text-gray-500 text-blue-600">Restaurant: 7008186187</p>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">${order.items.map(i => i.name).join(', ')}</p>
                     </div>`;
                 });
             });
         };
 
-        window.closeTracking = () => document.getElementById('order-tracking-section').style.display = 'none';
+        window.closeMyOrders = () => document.getElementById('my-orders-screen').style.display = 'none';
+
         window.addToCart = (name, price, image) => {
             const existing = cart.find(i => i.name === name);
-            if(existing) existing.qty++; else cart.push({ name, price, image, qty: 1 });
+            if(existing) existing.qty++;
+            else cart.push({ name, price, image, qty: 1 });
             updateCartUI();
         };
+
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
-            let total = 0;
-            list.innerHTML = cart.map(item => {
-                total += (item.price * item.qty);
-                return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl"><img src="${item.image}" class="w-12 h-12 object-cover rounded-lg"><p class="text-xs font-900 flex-1">${item.name} (x${item.qty})</p></div>`;
+            let itemsSubtotal = 0;
+            list.innerHTML = cart.map((item, index) => {
+                itemsSubtotal += (item.price * item.qty);
+                return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
+                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-xl shadow-sm">
+                    <div class="flex-1 text-sm font-900 uppercase">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
+                </div>`;
             }).join('');
+            document.getElementById('sub-total').innerText = "₹" + itemsSubtotal;
+            document.getElementById('cart-total').innerText = "₹" + (itemsSubtotal > 0 ? (itemsSubtotal + 20) : 0);
             document.getElementById('cart-badge').innerText = cart.length;
-            document.getElementById('sub-total').innerText = '₹' + total;
-            document.getElementById('cart-total').innerText = '₹' + (total + 20);
         };
+
         window.toggleCart = (open) => {
             const sb = document.getElementById('cart-sidebar');
             const ov = document.getElementById('cart-overlay');
             if(open) { sb.classList.replace('cart-closed', 'cart-open'); ov.classList.remove('hidden'); }
             else { sb.classList.replace('cart-open', 'cart-closed'); ov.classList.add('hidden'); }
         };
+
         window.onload = loadUserSession;
     </script>
 </body>
