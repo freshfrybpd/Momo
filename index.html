@@ -11,14 +11,17 @@
         :root { --primary: #ff5e00; --dark: #0f172a; }
         body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); overflow-x: hidden; }
         
+        /* Marquee */
         .marquee-wrapper { background: #000; overflow: hidden; white-space: nowrap; padding: 12px 0; display: flex; border-bottom: 2px solid var(--primary); }
         .marquee-content { display: inline-block; animation: scroll-left 25s linear infinite; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: white; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
+        /* Momo Cards */
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); position: relative; overflow: hidden; }
         .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
         .food-badge { position: absolute; top: 20px; left: 20px; padding: 5px 12px; border-radius: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; z-index: 10; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         
+        /* Sidebar Navigation */
         .sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 420px; background: white; }
         .sidebar-open { transform: translateX(0); box-shadow: -20px 0 60px rgba(0,0,0,0.1); }
         .sidebar-closed { transform: translateX(100%); }
@@ -26,8 +29,9 @@
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
 
+        /* Style Qty Buttons */
         .qty-btn { width: 32px; height: 32px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; border: 1px solid #eee; }
-        .qty-btn:active { transform: scale(0.9); }
+        .qty-btn:active { transform: scale(0.9); background: #f8fafc; }
         
         #overlay { background: rgba(0,0,0,0.5); }
     </style>
@@ -35,26 +39,26 @@
 <body class="pb-10">
 
     <div class="marquee-wrapper">
-        <div id="promo-text" class="marquee-content italic uppercase font-black">FRESHFRY MOMOS IS LIVE! • FLAT ₹20 DELIVERY IN BARIPADA • 100% HYGIENIC •</div>
+        <div id="promo-text" class="marquee-content italic uppercase font-black">FRESHFRY MOMOS IS LIVE IN BARIPADA! • ORDER NOW • 100% PREMIUM QUALITY •</div>
     </div>
 
     <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 z-[3000]">
         <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
-            <h3 class="text-2xl font-900 italic uppercase">Setup <span class="text-orange-500">Profile</span></h3>
+            <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
             <div class="space-y-4 mt-6">
                 <input type="text" id="modal-name" placeholder="Full Name" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
                 <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
-                <textarea id="modal-location" rows="3" placeholder="Full Delivery Address" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
+                <textarea id="modal-location" rows="3" placeholder="Exact Delivery Location" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
             </div>
-            <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all italic">SAVE DETAILS</button>
+            <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all">START FEASTING</button>
         </div>
     </div>
 
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <h1 class="text-2xl font-900 tracking-tighter italic uppercase">Fresh<span class="text-orange-600">fry.</span></h1>
         <div class="flex items-center gap-3">
-            <button onclick="toggleOrders(true)" class="bg-gray-100 h-11 w-11 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-receipt text-lg"></i></button>
-            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-11 w-11 rounded-2xl cursor-pointer relative flex items-center justify-center">
+            <button onclick="toggleOrders(true)" class="bg-gray-100 text-gray-900 h-11 w-11 rounded-2xl flex items-center justify-center shadow-sm"><i class="fa-solid fa-receipt text-lg"></i></button>
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-11 w-11 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
@@ -74,20 +78,18 @@
             <button onclick="toggleCart(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-        <div class="p-8 bg-white border-t space-y-2">
-            <div class="flex justify-between text-xs font-bold text-gray-400 uppercase"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
-            <div class="flex justify-between text-xs font-bold text-green-600 uppercase"><span>Delivery Fee</span><span>₹20</span></div>
-            <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed uppercase italic"><span>Total Bill</span><span id="cart-total" class="text-orange-600">₹0</span></div>
-            <div class="grid grid-cols-2 gap-3 pt-4">
+        <div class="p-8 bg-white border-t space-y-3">
+            <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed uppercase italic italic"><span>Total</span><span id="cart-total" class="text-orange-600">₹0</span></div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
                 <button onclick="processOrder('whatsapp')" class="bg-green-600 text-white py-4 rounded-2xl font-black text-[11px] uppercase">WhatsApp</button>
-                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase">Pay UPI</button>
+                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase">Pay Online</button>
             </div>
         </div>
     </div>
 
     <div id="orders-sidebar" class="sidebar sidebar-closed flex flex-col">
         <div class="p-6 flex justify-between items-center border-b font-900 italic uppercase">
-            <h2 class="text-2xl tracking-tighter">Order History</h2>
+            <h2 class="text-2xl tracking-tighter">My Orders</h2>
             <button onclick="toggleOrders(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="my-orders-list" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"></div>
@@ -114,20 +116,21 @@
 
         window.loadUserSession = () => {
             const name = localStorage.getItem('ff_user');
-            if (name) {
+            if (!name) document.getElementById('user-info-modal').classList.remove('hidden');
+            else {
                 document.getElementById('modal-name').value = name;
                 document.getElementById('modal-phone').value = localStorage.getItem('ff_phone');
                 document.getElementById('modal-location').value = localStorage.getItem('ff_location');
                 document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
-            } else { document.getElementById('user-info-modal').classList.remove('hidden'); }
+            }
         };
 
         window.saveUserDetails = async () => {
             const name = document.getElementById('modal-name').value.trim();
             const phone = document.getElementById('modal-phone').value.trim();
             const loc = document.getElementById('modal-location').value.trim();
-            if(!name || !phone || !loc) return alert("Fill everything!");
-            await setDoc(doc(db, "users", phone), { name, phone, address: loc, lastSync: serverTimestamp() }, { merge: true });
+            if(!name || !phone || !loc) return alert("Fill all details!");
+            await setDoc(doc(db, "users", phone), { name, phone, location: loc, lastSync: serverTimestamp() }, { merge: true });
             localStorage.setItem('ff_user', name); localStorage.setItem('ff_phone', phone); localStorage.setItem('ff_location', loc);
             document.getElementById('user-info-modal').classList.add('hidden');
             loadUserSession();
@@ -139,10 +142,10 @@
                 const item = d.data();
                 const b = item.type === 'Veg' ? 'bg-green-500' : 'bg-red-500';
                 list.innerHTML += `<div class="momo-card p-4">
-                    <div class="food-badge ${b}">${item.type}</div>
+                    <div class="food-badge ${b}">${item.type || 'Veg'}</div>
                     <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4">
                     <div class="flex justify-between font-900 text-lg uppercase px-2 italic"><span>${item.name}</span><span class="text-orange-600">₹${item.price}</span></div>
-                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black">ADD TO BOX</button>
+                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>
                 </div>`;
             });
         });
@@ -155,19 +158,17 @@
             list.innerHTML = cart.map((i, idx) => {
                 sub += i.price * i.qty; count += i.qty;
                 return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
-                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl">
-                    <div class="flex-1 font-900 text-[11px] uppercase">${i.name}<br>₹${i.price}</div>
+                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl shadow-sm">
+                    <div class="flex-1 font-900 text-[11px] uppercase">${i.name}<br><span class="text-orange-600">₹${i.price}</span></div>
                     <div class="flex items-center gap-2">
-                        <button onclick="changeQty(${idx},-1)" class="qty-btn">-</button>
+                        <button onclick="changeQty(${idx},-1)" class="qty-btn text-gray-900">-</button>
                         <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
-                        <button onclick="changeQty(${idx},1)" class="qty-btn">+</button>
+                        <button onclick="changeQty(${idx},1)" class="qty-btn text-gray-900">+</button>
                     </div>
                 </div>`;
             }).join('');
             document.getElementById('cart-badge').innerText = count;
-            document.getElementById('cart-subtotal').innerText = "₹" + sub;
-            // FIX: Always ₹20 delivery fee if cart is not empty
-            document.getElementById('cart-total').innerText = "₹" + (sub > 0 ? (sub + 20) : 0);
+            document.getElementById('cart-total').innerText = "₹" + (sub > 0 ? sub + 20 : 0);
         };
 
         window.processOrder = async (method) => {
@@ -186,20 +187,37 @@
             setTimeout(() => toggleOrders(true), 2000);
         };
 
-        window.toggleCart = (s) => { document.getElementById('cart-sidebar').classList.toggle('sidebar-open', s); document.getElementById('overlay').classList.toggle('hidden', !s); };
-        window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); if(s) loadMyOrders(); document.getElementById('overlay').classList.toggle('hidden', !s); };
+        window.toggleCart = (s) => { document.getElementById('cart-sidebar').classList.toggle('sidebar-open', s); document.getElementById('cart-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); };
+        window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); document.getElementById('orders-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadMyOrders(); };
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
+        // FIX: Load ALL orders (New and Old) for this user
         window.loadMyOrders = () => {
             const p = localStorage.getItem('ff_phone');
+            // Querying by user phone and sorting by date (descending)
             const q = query(collection(db, "orders"), where("customerPhone", "==", p), orderBy("createdAt", "desc"));
+            
             onSnapshot(q, (snap) => {
-                const list = document.getElementById('my-orders-list'); list.innerHTML = '';
+                const list = document.getElementById('my-orders-list');
+                if (snap.empty) {
+                    list.innerHTML = `<div class="text-center py-10 text-gray-400 font-bold uppercase text-xs">No orders yet!</div>`;
+                    return;
+                }
+                list.innerHTML = '';
                 snap.forEach(d => {
                     const o = d.data();
+                    const statusColor = o.status === 'delivered' ? 'text-green-500' : 'text-orange-500';
                     list.innerHTML += `<div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm mb-3">
-                        <div class="flex justify-between font-900 text-xs uppercase italic"><span>${o.status}</span><span class="text-orange-600">${o.total}</span></div>
-                        <div class="mt-2 text-[10px] font-bold text-gray-400">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</div>
+                        <div class="flex justify-between font-900 text-xs uppercase italic">
+                            <span class="${statusColor}">${o.status}</span>
+                            <span class="text-gray-900">${o.total}</span>
+                        </div>
+                        <div class="mt-2 text-[10px] font-bold text-gray-400 border-t pt-2 mt-2">
+                            ${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}
+                        </div>
+                        <div class="text-[8px] text-gray-300 mt-1 uppercase font-black">
+                            ${o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleString() : 'Processing...'}
+                        </div>
                     </div>`;
                 });
             });
