@@ -27,6 +27,7 @@
             <div class="space-y-3">
                 <input type="text" id="riderNameInput" placeholder="FULL NAME" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center uppercase border focus:border-orange-500">
                 <input type="tel" id="riderPhoneInput" maxlength="10" placeholder="10 DIGIT PHONE" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center border focus:border-orange-500">
+                <input type="text" id="riderUpiInput" placeholder="UPI ID (e.g. 98xxxx@ybl)" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center border focus:border-orange-500 lowercase">
                 <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center border focus:border-orange-500">
                 <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest active:scale-95 transition">Start Duty 🚀</button>
             </div>
@@ -38,6 +39,7 @@
             <div>
                 <p id="currentDateDisplay" class="text-[9px] font-black text-orange-500 uppercase tracking-widest"></p>
                 <h1 id="displayRiderName" class="text-xl font-800 italic text-slate-900 uppercase tracking-tighter">Rider</h1>
+                <p id="displayRiderUpi" class="text-[8px] font-bold text-slate-400 mt-1"></p>
             </div>
             <div class="flex items-center gap-3">
                 <button id="statusToggle" onclick="toggleDuty()" class="px-4 py-2 rounded-full text-[10px] font-black uppercase transition-all bg-green-500 text-white">Online</button>
@@ -91,21 +93,25 @@
         window.checkRiderLogin = async () => {
             const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
             const phone = document.getElementById('riderPhoneInput').value.trim();
+            const upi = document.getElementById('riderUpiInput').value.trim().toLowerCase();
             const pass = document.getElementById('riderPassInput').value;
 
             if (name.length < 3) return alert("Enter valid name");
             if (phone.length !== 10) return alert("Enter valid 10-digit number");
+            if (!upi.includes('@')) return alert("Enter a valid UPI ID (e.g. 98xxxx@ybl)");
             if (pass !== "freshfry2026") return alert("Wrong Pass Key!");
 
             await setDoc(doc(db, "riders", name), { 
                 riderName: name, 
                 riderPhone: phone,
+                riderUpi: upi,
                 status: "Online", 
                 lastLogin: serverTimestamp() 
             }, { merge: true });
 
             sessionStorage.setItem('rider_auth', 'true');
             sessionStorage.setItem('rider_name', name);
+            sessionStorage.setItem('rider_upi', upi);
             unlockUI(name);
         };
 
@@ -130,8 +136,13 @@
             }
         };
 
-        // --- RESET TODAY EARNINGS AT MIDNIGHT ---
-        function checkMidnightReset(name) {
+        function unlockUI(name) {
+            document.getElementById('rider-login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('displayRiderName').innerText = name;
+            document.getElementById('displayRiderUpi').innerText = "UPI: " + sessionStorage.getItem('rider_upi');
+            document.getElementById('currentDateDisplay').innerText = new Date().toDateString();
+            
             const lastDate = localStorage.getItem(`ff_date_${name}`);
             const today = new Date().toLocaleDateString();
             if (lastDate !== today) {
@@ -139,14 +150,7 @@
                 localStorage.setItem(`ff_orders_${name}`, 0);
                 localStorage.setItem(`ff_date_${name}`, today);
             }
-        }
 
-        function unlockUI(name) {
-            document.getElementById('rider-login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('displayRiderName').innerText = name;
-            document.getElementById('currentDateDisplay').innerText = new Date().toDateString();
-            checkMidnightReset(name);
             loadEarningUI(name);
             loadMyOrders(name);
         }
@@ -162,18 +166,6 @@
             document.getElementById('goalFill').style.width = `${Math.min((orders / 10) * 100, 100)}%`;
         }
 
-        function updateWallet(name) {
-            const todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
-            const lifeEarn = parseInt(localStorage.getItem(`ff_life_${name}`) || 0) + 20;
-            const orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
-
-            localStorage.setItem(`ff_earn_${name}`, todayEarn);
-            localStorage.setItem(`ff_life_${name}`, lifeEarn);
-            localStorage.setItem(`ff_orders_${name}`, orders);
-            loadEarningUI(name);
-        }
-
-        // --- ORDER LIST WITH VIBRATION ---
         function loadMyOrders(riderName) {
             const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
             
@@ -181,7 +173,6 @@
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('rider-orders-list');
                 
-                // Vibrate on New Order
                 if (!firstLoad && !snap.empty) {
                     if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
                 }
@@ -196,28 +187,32 @@
                 snap.forEach(d => {
                     const order = d.data();
                     list.innerHTML += `
-                    <div class="bg-white p-8 rider-card border-t-8 border-orange-500 animate-pulse-once">
+                    <div class="bg-white p-8 rider-card border-t-8 border-orange-500">
                         <div class="flex justify-between items-start mb-6">
                             <div>
                                 <h3 class="text-2xl font-900 uppercase italic tracking-tighter">${order.customerName}</h3>
-                                <p class="text-[10px] font-black text-orange-500 uppercase">${order.customer}</p>
+                                <p class="text-[10px] font-black text-orange-500 uppercase">${order.customerPhone}</p>
                             </div>
                             <div class="text-right">
                                 <p class="text-2xl font-900 text-slate-900 tracking-tighter">₹${order.total}</p>
-                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${order.paymentMethod}</p>
+                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${order.paymentMethod || 'Online'}</p>
                             </div>
                         </div>
 
                         <div class="bg-slate-50 p-5 rounded-[1.5rem] mb-6">
-                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Customer Phone:</p>
-                            <a href="tel:${order.customer}" class="text-blue-600 font-800 text-sm flex items-center gap-2 mb-4">
-                                <i class="fa-solid fa-phone"></i> ${order.customer}
+                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Customer Details:</p>
+                            <a href="tel:${order.customerPhone}" class="text-blue-600 font-800 text-sm flex items-center gap-2 mb-4">
+                                <i class="fa-solid fa-phone"></i> ${order.customerPhone}
                             </a>
-                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Delivery Address:</p>
-                            <p class="text-sm font-bold text-slate-700 leading-tight mb-4">${order.address}</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}" target="_blank" class="text-orange-500 font-900 text-[10px] uppercase flex items-center gap-2">
-                                <i class="fa-solid fa-location-arrow"></i> Navigate to Location
-                            </a>
+                            <p class="text-sm font-bold text-slate-700 leading-tight mb-4">${order.customerLocation}</p>
+                            
+                            <div class="mt-4 p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center">
+                                 <div>
+                                    <p class="text-[7px] font-black text-slate-400 uppercase">Rider UPI for Payment</p>
+                                    <p class="text-[10px] font-bold text-slate-800">${sessionStorage.getItem('rider_upi')}</p>
+                                 </div>
+                                 <i class="fa-solid fa-qrcode text-slate-400"></i>
+                            </div>
                         </div>
                         
                         <div class="bg-orange-50 p-6 rounded-[2rem] border-2 border-orange-100 mb-6 text-center">
@@ -226,12 +221,10 @@
                                 class="w-full bg-transparent text-center text-4xl font-900 tracking-[1rem] outline-none text-slate-800 placeholder-orange-200">
                         </div>
 
-                        <div class="flex gap-2">
-                            <button onclick="verifyAndDeliver('${d.id}', ${order.deliveryPin})" 
-                                class="flex-1 bg-slate-900 text-white py-5 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-lg">
-                                Delivered (Earn ₹20)
-                            </button>
-                        </div>
+                        <button onclick="verifyAndDeliver('${d.id}', ${order.deliveryPin})" 
+                            class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition">
+                            Delivered (Earn ₹20)
+                        </button>
                     </div>`;
                 });
             });
@@ -240,8 +233,19 @@
         window.verifyAndDeliver = async (orderId, correctPin) => {
             const pinInput = document.getElementById(`pin-${orderId}`);
             if(pinInput.value == correctPin) {
+                const name = sessionStorage.getItem('rider_name');
                 await updateDoc(doc(db, "orders", orderId), { status: 'delivered' });
-                updateWallet(sessionStorage.getItem('rider_name'));
+                
+                // Update Local Wallet
+                const todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
+                const lifeEarn = parseInt(localStorage.getItem(`ff_life_${name}`) || 0) + 20;
+                const orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
+
+                localStorage.setItem(`ff_earn_${name}`, todayEarn);
+                localStorage.setItem(`ff_life_${name}`, lifeEarn);
+                localStorage.setItem(`ff_orders_${name}`, orders);
+                
+                loadEarningUI(name);
                 alert("Order Successful! ₹20 added.");
             } else {
                 alert("Incorrect PIN!");
