@@ -21,7 +21,6 @@
         .marquee span { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px rgba(37,211,102,0.3); z-index: 100; transition: 0.3s; }
-        #order-tracking-screen { display: none; position: fixed; inset: 0; background: #f8fafc; z-index: 2000; overflow-y: auto; padding-bottom: 40px; }
         #user-info-modal { z-index: 3000; }
     </style>
 </head>
@@ -55,64 +54,42 @@
                 <span class="text-orange-500"><i class="fa-solid fa-dumpling"></i></span>
                 Fresh<span class="text-orange-600">fry.</span>
             </h1>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Finest</p>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="openMyOrders()" class="bg-orange-100 text-orange-600 px-3 py-2 rounded-xl text-[10px] font-900 uppercase tracking-tighter">My Orders</button>
             <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-gray-200">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
-            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden shadow-sm active:scale-90 transition-all">
-                <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="w-full h-full object-cover">
-            </a>
+            <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-11 w-11 rounded-2xl border-2 border-orange-500 object-cover">
         </div>
     </nav>
 
-    <div id="order-tracking-screen" class="p-6">
-        <div class="flex items-center justify-between mb-8">
-            <h2 class="text-3xl font-900 italic uppercase">Your <span class="text-orange-500">Orders</span></h2>
-            <button onclick="closeMyOrders()" class="h-12 w-12 bg-white rounded-2xl shadow-sm flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="order-list-container" class="space-y-6"></div>
-    </div>
-
     <main class="px-6 mt-8">
-        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
+        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Our <span class="text-orange-500">Menu</span></h2>
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-    <a href="https://wa.me/917008186187?text=Hi Freshfry, I need help!" class="whatsapp-float">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar">
         <div class="p-6 flex justify-between items-center border-b">
-            <div>
-                <h2 class="text-2xl font-900 italic">Your Box</h2>
-                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Freshfry Baripada</p>
-            </div>
-            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-colors">
+            <h2 class="text-2xl font-900 italic">Your Box</h2>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:text-red-500 transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
-        <div class="p-8 bg-white border-t space-y-4">
-            <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
+        <div class="p-8 bg-white border-t">
+            <div class="flex justify-between font-900 text-2xl mb-4">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="processOrder('whatsapp')" class="bg-green-600 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg shadow-green-100 active:scale-95 transition-all">WhatsApp Order</button>
-                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg shadow-orange-100 active:scale-95 transition-all">Pay Online</button>
-            </div>
+            <button onclick="processOrder()" class="w-full btn-gradient text-white py-4 rounded-2xl font-black uppercase tracking-widest">Order Now</button>
         </div>
     </div>
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-md"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, addDoc, setDoc, serverTimestamp, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -127,36 +104,20 @@
         const db = getFirestore(app);
         let cart = [];
 
-        window.getGPSLocation = () => {
-            const btn = document.getElementById('gps-btn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-                const data = await res.json();
-                document.getElementById('modal-location').value = data.display_name;
-                btn.innerHTML = 'DONE';
-            });
-        };
-
-        // --- UPDATED SAVE FUNCTION ---
+        // Save User Details to Firebase
         window.saveUserDetails = async () => {
             const name = document.getElementById('modal-name').value.trim();
             const phone = document.getElementById('modal-phone').value.trim();
             const loc = document.getElementById('modal-location').value.trim();
             const btn = document.getElementById('save-user-btn');
 
-            if (!name || !phone || !loc) return alert("Please fill all details!");
+            if (!name || !phone || !loc) return alert("Fill all details!");
 
             btn.disabled = true;
-            btn.innerText = "SAVING TO SERVER...";
+            btn.innerText = "SAVING...";
 
             try {
-                // Save to Firestore 'users' collection
-                await setDoc(doc(db, "users", phone), {
-                    name, phone, location: loc, updatedAt: serverTimestamp()
-                }, { merge: true });
-
-                // Save to LocalStorage
+                await setDoc(doc(db, "users", phone), { name, phone, location: loc, createdAt: serverTimestamp() }, { merge: true });
                 localStorage.setItem('ff_user', name);
                 localStorage.setItem('ff_phone', phone);
                 localStorage.setItem('ff_location', loc);
@@ -165,8 +126,7 @@
                 document.getElementById('user-info-modal').classList.add('hidden');
                 loadUserSession();
             } catch (e) {
-                console.error("Firebase Error:", e);
-                alert("Failed to save data. Check internet or Firebase Rules.");
+                alert("Error saving data!");
             } finally {
                 btn.disabled = false;
                 btn.innerText = "SAVE & CONTINUE";
@@ -179,34 +139,59 @@
             document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user || 'Guest'}`;
         }
 
+        // Real-time Menu
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
             list.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
-                list.innerHTML += `<div class="momo-card p-4">
-                    <img src="${item.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
-                    <div class="flex justify-between font-900 text-lg uppercase italic"><span>${item.name}</span><span class="text-orange-600">₹${item.price}</span></div>
-                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl mt-4 font-black">ADD TO BOX</button>
-                </div>`;
+                list.innerHTML += `
+                    <div class="momo-card p-4">
+                        <img src="${item.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
+                        <div class="flex justify-between font-900 text-lg uppercase mb-4">
+                            <span>${item.name}</span>
+                            <span class="text-orange-600">₹${item.price}</span>
+                        </div>
+                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl font-black active:scale-95 transition-all">ADD TO BOX</button>
+                    </div>`;
             });
         });
 
+        // Cart Logic
         window.addToCart = (name, price, image) => {
-            const item = cart.find(i => i.name === name);
-            if(item) item.qty++; else cart.push({name, price, image, qty: 1});
+            const existing = cart.find(i => i.name === name);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ name, price, image, qty: 1 });
+            }
             updateCartUI();
         };
 
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
+            const badge = document.getElementById('cart-badge');
             let total = 0;
-            list.innerHTML = cart.map(i => {
-                total += i.price * i.qty;
-                return `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-2xl font-bold text-sm"><span>${i.name} (x${i.qty})</span><span>₹${i.price * i.qty}</span></div>`;
+            let totalQty = 0;
+
+            list.innerHTML = cart.map((item, index) => {
+                total += item.price * item.qty;
+                totalQty += item.qty;
+                return `
+                    <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
+                        <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
+                        <div class="flex-1 font-bold text-sm">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 px-2"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>`;
             }).join('');
+
+            badge.innerText = totalQty; // Ab ye har click pe badhega
             document.getElementById('cart-total').innerText = "₹" + (total > 0 ? total + 20 : 0);
-            document.getElementById('cart-badge').innerText = cart.length;
+        };
+
+        window.removeFromCart = (index) => {
+            cart.splice(index, 1);
+            updateCartUI();
         };
 
         window.toggleCart = (show) => {
@@ -215,19 +200,12 @@
             document.getElementById('cart-overlay').classList.toggle('hidden', !show);
         };
 
-        window.processOrder = async (method) => {
-            const name = localStorage.getItem('ff_user');
-            const phone = localStorage.getItem('ff_phone');
-            const loc = localStorage.getItem('ff_location');
-            const total = document.getElementById('cart-total').innerText;
-
-            await addDoc(collection(db, "orders"), {
-                customerName: name, customerPhone: phone, customerLocation: loc,
-                items: cart, total, status: 'pending', createdAt: serverTimestamp()
+        window.getGPSLocation = () => {
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
+                const data = await res.json();
+                document.getElementById('modal-location').value = data.display_name;
             });
-
-            alert("Order Placed! Check 'My Orders'");
-            cart = []; updateCartUI(); toggleCart(false);
         };
 
         window.onload = loadUserSession;
