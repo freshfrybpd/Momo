@@ -154,22 +154,37 @@
         window.changeQty = (idx, d) => { cart[idx].qty += d; if(cart[idx].qty < 1) cart.splice(idx, 1); updateCartUI(); };
         
         window.updateCartUI = () => {
-            const list = document.getElementById('cart-items-list'); let sub = 0, count = 0;
-            list.innerHTML = cart.map((i, idx) => {
-                sub += i.price * i.qty; count += i.qty;
-                return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
-                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl shadow-sm">
-                    <div class="flex-1 font-900 text-[11px] uppercase">${i.name}<br><span class="text-orange-600">₹${i.price}</span></div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="changeQty(${idx},-1)" class="qty-btn text-gray-900">-</button>
-                        <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
-                        <button onclick="changeQty(${idx},1)" class="qty-btn text-gray-900">+</button>
-                    </div>
-                </div>`;
-            }).join('');
-            document.getElementById('cart-badge').innerText = count;
-            document.getElementById('cart-total').innerText = "₹" + (sub > 0 ? sub + 20 : 0);
-        };
+    const list = document.getElementById('cart-items-list');
+    let subtotal = 0;
+    let count = 0;
+    const deliveryFee = 20; // Fixed Delivery Charge
+
+    list.innerHTML = cart.map((i, idx) => {
+        subtotal += i.price * i.qty;
+        count += i.qty;
+        return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
+            <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl shadow-sm">
+            <div class="flex-1 font-900 text-[11px] uppercase">${i.name}<br>₹${i.price}</div>
+            <div class="flex items-center gap-2">
+                <button onclick="changeQty(${idx},-1)" class="qty-btn">-</button>
+                <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
+                <button onclick="changeQty(${idx},1)" class="qty-btn">+</button>
+            </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('cart-badge').innerText = count;
+    
+    // UI mein Subtotal dikhane ke liye (Optional)
+    if(document.getElementById('cart-subtotal')) {
+        document.getElementById('cart-subtotal').innerText = "₹" + subtotal;
+    }
+
+    // FINAL TOTAL: Agar cart khali nahi hai, toh subtotal + 20 karega
+    const finalTotal = subtotal > 0 ? (subtotal + deliveryFee) : 0;
+    document.getElementById('cart-total').innerText = "₹" + finalTotal;
+};
+
 
         window.processOrder = async (method) => {
             if(cart.length === 0) return alert("Empty Box!");
