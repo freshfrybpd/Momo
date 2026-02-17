@@ -154,19 +154,27 @@
             loadUserSession();
         };
 
-        onSnapshot(collection(db, "menu"), (snap) => {
-            const list = document.getElementById('menu-list'); list.innerHTML = '';
+                onSnapshot(collection(db, "menu"), (snap) => {
+            const list = document.getElementById('menu-list'); 
+            list.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
-                const b = item.type === 'Veg' ? 'bg-green-500' : 'bg-red-500';
+                
+                // 1. Color Logic yahan define hai
+                const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+
                 list.innerHTML += `<div class="momo-card p-4">
-                    <div class="food-badge ${b}">${item.type || 'Veg'}</div>
+                    <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
                     <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4">
-                    <div class="flex justify-between font-900 text-lg uppercase px-2 italic"><span>${item.name}</span><span class="text-orange-600">₹${item.price}</span></div>
+                    <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
+                        <span>${item.name}</span>
+                        <span class="text-orange-600">₹${item.price}</span>
+                    </div>
                     <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>
                 </div>`;
             });
         });
+
 
         window.addToCart = (n, p, i) => { const ex = cart.find(x => x.name === n); if(ex) ex.qty++; else cart.push({name:n, price:p, image:i, qty:1}); updateCartUI(); };
         window.changeQty = (idx, d) => { cart[idx].qty += d; if(cart[idx].qty < 1) cart.splice(idx, 1); updateCartUI(); };
