@@ -185,7 +185,12 @@
                         <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
                             <span>${item.name}</span><span class="text-orange-600">₹${item.price}</span>
                         </div>
-                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>
+                        ${item.inStock !== false ? 
+    `<button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
+    : 
+    `<button class="w-full bg-gray-100 text-gray-400 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
+}
+
                     </div>`;
                 });
             });
