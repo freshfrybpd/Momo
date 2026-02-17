@@ -12,49 +12,88 @@
         .order-card { border-radius: 2rem; transition: all 0.3s ease; border: 1px solid #e2e8f0; }
         .status-pill { font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; padding: 6px 12px; border-radius: 12px; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .admin-tab { display: none; }
+        .active-tab { display: block; }
     </style>
 </head>
 <body class="pb-20">
 
     <nav class="bg-white p-6 sticky top-0 z-50 shadow-sm flex justify-between items-center">
         <h1 class="text-2xl font-900 italic tracking-tighter">Freshfry <span class="text-orange-500 underline">Admin</span></h1>
-        <div class="flex gap-4">
-             <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-2xl text-xs font-900">Live Kitchen</div>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar">
+             <button onclick="showTab('orders')" class="bg-orange-500 text-white px-4 py-2 rounded-xl text-[10px] font-900 uppercase">Orders</button>
+             <button onclick="showTab('menu')" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-900 uppercase">Menu</button>
+             <button onclick="showTab('users')" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-900 uppercase">Users</button>
+             <button onclick="showTab('riders')" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-900 uppercase">Riders</button>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto p-4">
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white p-6 rounded-[2rem] border-b-4 border-orange-500 shadow-sm">
-                <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Active Orders</p>
-                <h2 id="active-orders-count" class="text-4xl font-900 italic">0</h2>
+        
+        <div id="tab-orders" class="admin-tab active-tab">
+            <div class="bg-white p-6 rounded-[2rem] shadow-sm mb-6 border border-orange-100">
+                <p class="text-[10px] font-900 text-slate-400 uppercase mb-3">Set Homepage Scrolling Text</p>
+                <div class="flex gap-2">
+                    <input type="text" id="scroll-text-input" placeholder="Welcome to Freshfry..." class="flex-1 bg-slate-50 border p-3 rounded-xl text-sm font-bold">
+                    <button onclick="updateScrollText()" class="bg-orange-500 text-white px-6 rounded-xl font-900 text-[10px] uppercase">Update</button>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-[2rem] border-b-4 border-green-500 shadow-sm">
-                <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Delivered Today</p>
-                <h2 id="delivered-count" class="text-4xl font-900 italic">0</h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-white p-6 rounded-[2rem] border-b-4 border-orange-500 shadow-sm">
+                    <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Active Orders</p>
+                    <h2 id="active-orders-count" class="text-4xl font-900 italic">0</h2>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border-b-4 border-green-500 shadow-sm">
+                    <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Delivered Today</p>
+                    <h2 id="delivered-count" class="text-4xl font-900 italic">0</h2>
+                </div>
             </div>
+            <h3 class="text-xs font-900 text-slate-400 uppercase tracking-widest mb-4 px-2">Kitchen Feed</h3>
+            <div id="admin-orders-list" class="space-y-4"></div>
         </div>
 
-        <h3 class="text-xs font-900 text-slate-400 uppercase tracking-widest mb-4 px-2">Kitchen Feed</h3>
-        <div id="admin-orders-list" class="space-y-4">
+        <div id="tab-menu" class="admin-tab">
+            <div class="bg-white p-6 rounded-[2rem] shadow-sm mb-6">
+                <h3 class="font-900 italic mb-4">Add New Item</h3>
+                <div class="space-y-3">
+                    <input type="text" id="m-name" placeholder="Momo Name" class="w-full bg-slate-50 p-3 rounded-xl text-sm font-bold border">
+                    <input type="text" id="m-price" placeholder="Price" class="w-full bg-slate-50 p-3 rounded-xl text-sm font-bold border">
+                    <input type="text" id="m-img" placeholder="Image URL" class="w-full bg-slate-50 p-3 rounded-xl text-sm font-bold border">
+                    <select id="m-badge" class="w-full bg-slate-50 p-3 rounded-xl text-sm font-bold border">
+                        <option value="Veg">Veg</option>
+                        <option value="Non-Veg">Non-Veg</option>
+                    </select>
+                    <button onclick="addNewMomo()" class="w-full bg-orange-500 text-white py-4 rounded-xl font-900 uppercase text-[10px]">Add Item</button>
+                </div>
             </div>
+            <div id="menu-management-list" class="grid grid-cols-1 gap-3"></div>
+        </div>
+
+        <div id="tab-users" class="admin-tab">
+            <h3 class="font-900 italic mb-4">Registered Customers</h3>
+            <div id="user-list" class="space-y-3"></div>
+        </div>
+
+        <div id="tab-riders" class="admin-tab">
+            <h3 class="font-900 italic mb-4">Delivery Riders</h3>
+            <div id="rider-management-list" class="space-y-3"></div>
+        </div>
+
     </main>
 
     <div id="rider-modal" class="modal p-6">
         <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl">
             <h3 class="text-2xl font-900 italic mb-1 uppercase tracking-tighter">Select Rider</h3>
-            <p class="text-[9px] font-900 text-slate-400 uppercase tracking-widest mb-6">Showing Online Riders Only</p>
-            
-            <div id="rider-list-container" class="space-y-3 max-h-60 overflow-y-auto pr-2">
-                </div>
-
+            <p class="text-[9px] font-900 text-slate-400 uppercase tracking-widest mb-6">Assigning for Delivery</p>
+            <div id="rider-list-container" class="space-y-3 max-h-60 overflow-y-auto pr-2"></div>
             <button onclick="closeRiderModal()" class="w-full mt-6 py-4 text-slate-400 font-900 uppercase text-[10px] tracking-widest">Cancel</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, where, orderBy, doc, updateDoc, deleteDoc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -67,52 +106,48 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
         let currentOrderId = null;
 
-        // --- FETCH ORDERS ---
-        function loadAdminOrders() {
-            const q = query(collection(db, "orders"), orderBy("time", "desc"));
-            onSnapshot(q, (snap) => {
-                const list = document.getElementById('admin-orders-list');
-                let activeCount = 0;
-                let delCount = 0;
-                list.innerHTML = '';
+        // --- TAB SYSTEM ---
+        window.showTab = (tabName) => {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById('tab-' + tabName).classList.add('active-tab');
+        };
 
+        // --- 1. SCROLLING TEXT ---
+        window.updateScrollText = async () => {
+            const text = document.getElementById('scroll-text-input').value;
+            await setDoc(doc(db, "settings", "promo"), { text: text }, { merge: true });
+            alert("Homepage text updated!");
+        };
+
+        // --- 2. ORDER MANAGEMENT ---
+        function loadAdminOrders() {
+            onSnapshot(query(collection(db, "orders"), orderBy("time", "desc")), (snap) => {
+                const list = document.getElementById('admin-orders-list');
+                let activeCount = 0; let delCount = 0;
+                list.innerHTML = '';
                 snap.forEach(d => {
                     const order = d.data();
                     if(order.status !== 'delivered') activeCount++; else delCount++;
-
                     list.innerHTML += `
-                    <div class="bg-white p-6 order-card shadow-sm">
-                        <div class="flex justify-between items-start mb-4">
+                    <div class="bg-white p-6 order-card shadow-sm mb-4">
+                        <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="text-xl font-900 italic uppercase tracking-tighter">${order.customerName}</h4>
-                                <p class="text-[10px] font-bold text-slate-400">${order.customer} | ${order.paymentMethod}</p>
+                                <h4 class="text-xl font-900 italic uppercase">${order.customerName}</h4>
+                                <span class="status-pill ${getStatusClass(order.status)}">${order.status}</span>
                             </div>
-                            <span class="status-pill ${getStatusClass(order.status)}">${order.status.replace(/_/g,' ')}</span>
+                            <h5 class="text-xl font-900 italic">₹${order.total}</h5>
                         </div>
-                        
-                        <div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-100">
-                             <p class="text-[9px] font-900 text-slate-400 uppercase mb-1">Items:</p>
-                             <p class="text-xs font-bold text-slate-700">${order.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</p>
-                             <p class="mt-3 text-[9px] font-900 text-slate-400 uppercase mb-1">Address:</p>
-                             <p class="text-xs font-bold text-slate-800">${order.address}</p>
+                        <div class="my-4 text-xs font-bold text-slate-600 bg-slate-50 p-3 rounded-xl">
+                            ${order.items.map(i => `${i.qty}x ${i.name}`).join(', ')}
                         </div>
-
-                        <div class="flex items-center justify-between gap-3">
-                            <h5 class="text-2xl font-900 italic">₹${order.total}</h5>
-                            <div class="flex gap-2">
-                                ${order.status === 'pending' ? 
-                                `<button onclick="updateStatus('${d.id}', 'preparing')" class="bg-orange-500 text-white px-4 py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest">Accept</button>` : ''}
-                                
-                                ${order.status === 'preparing' ? 
-                                `<button onclick="openRiderModal('${d.id}')" class="bg-slate-900 text-white px-4 py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest">Assign Rider</button>` : ''}
-                                
-                                <button onclick="deleteOrder('${d.id}')" class="bg-red-50 text-red-500 p-3 rounded-xl"><i class="fa-solid fa-trash"></i></button>
-                            </div>
+                        <div class="flex gap-2 flex-wrap">
+                            ${order.status === 'pending' ? `<button onclick="updateStatus('${d.id}', 'preparing')" class="bg-blue-500 text-white px-3 py-2 rounded-lg text-[10px] font-900 uppercase">Accept</button>` : ''}
+                            ${order.status === 'preparing' ? `<button onclick="openRiderModal('${d.id}')" class="bg-orange-500 text-white px-3 py-2 rounded-lg text-[10px] font-900 uppercase">Send to Delivery</button>` : ''}
+                            ${order.status === 'out_for_delivery' ? `<button onclick="updateStatus('${d.id}', 'delivered')" class="bg-green-500 text-white px-3 py-2 rounded-lg text-[10px] font-900 uppercase">Mark Delivered</button>` : ''}
+                            <button onclick="deleteOrder('${d.id}')" class="bg-red-50 text-red-500 px-3 py-2 rounded-lg text-[10px] font-900"><i class="fa-solid fa-trash"></i></button>
                         </div>
-                        ${order.riderName ? `<p class="mt-3 text-[9px] font-900 text-blue-500 uppercase tracking-widest italic">Rider: ${order.riderName}</p>` : ''}
                     </div>`;
                 });
                 document.getElementById('active-orders-count').innerText = activeCount;
@@ -120,61 +155,87 @@
             });
         }
 
+        // --- 3. MENU CONTROL ---
+        window.addNewMomo = async () => {
+            const name = document.getElementById('m-name').value;
+            const price = document.getElementById('m-price').value;
+            const img = document.getElementById('m-img').value;
+            const badge = document.getElementById('m-badge').value;
+            if(!name || !price) return alert("Fill details");
+            await addDoc(collection(db, "menu"), { name, price: parseInt(price), image: img, type: badge });
+            alert("Momo Added!");
+        };
+
+        onSnapshot(collection(db, "menu"), (snap) => {
+            const list = document.getElementById('menu-management-list');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                const item = d.data();
+                list.innerHTML += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" class="w-10 h-10 rounded-full object-cover">
+                        <div>
+                            <p class="font-900 text-sm uppercase">${item.name}</p>
+                            <p class="text-[10px] font-bold text-orange-500">₹${item.price} | ${item.type}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteMenu('${d.id}')" class="text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                </div>`;
+            });
+        });
+
+        // --- 4. USER & RIDER CONTROL ---
+        onSnapshot(collection(db, "users"), (snap) => {
+            const list = document.getElementById('user-list');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                list.innerHTML += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
+                    <p class="font-900 text-sm uppercase">${d.data().name || 'Unknown User'}</p>
+                    <button onclick="deleteItem('users', '${d.id}')" class="text-red-500"><i class="fa-solid fa-user-minus"></i></button>
+                </div>`;
+            });
+        });
+
+        onSnapshot(collection(db, "riders"), (snap) => {
+            const list = document.getElementById('rider-management-list');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                list.innerHTML += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
+                    <p class="font-900 text-sm uppercase text-blue-600">${d.data().riderName}</p>
+                    <button onclick="deleteItem('riders', '${d.id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            });
+        });
+
+        // --- HELPERS ---
+        window.deleteMenu = async (id) => { if(confirm("Remove from menu?")) await deleteDoc(doc(db, "menu", id)); };
+        window.deleteItem = async (coll, id) => { if(confirm("Remove this permanently?")) await deleteDoc(doc(db, coll, id)); };
+        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); };
+        window.deleteOrder = async (id) => { if(confirm("Delete Order?")) await deleteDoc(doc(db, "orders", id)); };
+        
         function getStatusClass(s) {
             if(s === 'pending') return 'bg-yellow-100 text-yellow-600';
             if(s === 'preparing') return 'bg-blue-100 text-blue-600';
-            if(s === 'out_for_delivery') return 'bg-purple-100 text-purple-600';
             return 'bg-green-100 text-green-600';
         }
 
-        // --- RIDER MODAL LOGIC (FIXED) ---
+        // Rider Modal functions same as previous code
         window.openRiderModal = (orderId) => {
             currentOrderId = orderId;
             document.getElementById('rider-modal').style.display = 'flex';
-            
-            // "Online" match with Rider App exactly
-            const q = query(collection(db, "riders"), where("status", "==", "Online"));
-            
-            onSnapshot(q, (snap) => {
+            onSnapshot(collection(db, "riders"), (snap) => {
                 const container = document.getElementById('rider-list-container');
                 container.innerHTML = '';
-                
-                if(snap.empty) {
-                    container.innerHTML = `
-                        <div class="text-center py-6">
-                            <p class="text-red-500 font-900 text-xs uppercase mb-2">No Riders Online ❌</p>
-                            <p class="text-[9px] text-slate-400 px-4 font-bold">Ask rider to login and 'Start Duty'</p>
-                        </div>`;
-                    return;
-                }
-
                 snap.forEach(d => {
-                    const rider = d.data();
-                    container.innerHTML += `
-                        <button onclick="confirmRider('${rider.riderName}')" class="w-full bg-slate-50 hover:bg-orange-500 hover:text-white transition-all p-5 rounded-2xl flex justify-between items-center group mb-2 border border-slate-100">
-                            <span class="font-900 text-sm uppercase tracking-tighter">${rider.riderName}</span>
-                            <span class="bg-green-500 w-2 h-2 rounded-full animate-pulse"></span>
-                        </button>`;
+                    container.innerHTML += `<button onclick="confirmRider('${d.data().riderName}')" class="w-full bg-slate-50 p-4 rounded-2xl font-900 uppercase text-xs hover:bg-orange-500 hover:text-white mb-2">${d.data().riderName}</button>`;
                 });
             });
         };
-
-        window.confirmRider = async (riderName) => {
-            if(!currentOrderId) return;
-            try {
-                await updateDoc(doc(db, "orders", currentOrderId), {
-                    status: 'out_for_delivery',
-                    riderName: riderName
-                });
-                closeRiderModal();
-                alert(`Order assigned to ${riderName} 🏍️`);
-            } catch (e) { alert("Assignment Failed!"); }
+        window.confirmRider = async (name) => {
+            await updateDoc(doc(db, "orders", currentOrderId), { status: 'out_for_delivery', riderName: name });
+            document.getElementById('rider-modal').style.display = 'none';
         };
-
         window.closeRiderModal = () => { document.getElementById('rider-modal').style.display = 'none'; };
-
-        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); };
-        window.deleteOrder = async (id) => { if(confirm("Delete this order?")) await deleteDoc(doc(db, "orders", id)); };
 
         loadAdminOrders();
     </script>
