@@ -199,26 +199,34 @@
         }
 
         window.verifyAndDeliver = async (orderId, correctPin) => {
-            const inputPin = document.getElementById(`pin-${orderId}`).value;
-            // FIX: String comparison taaki type error na aaye
-            if(String(inputPin) === String(correctPin)) {
-                const name = sessionStorage.getItem('rider_name');
-                await updateDoc(doc(db, "orders", orderId), { status: 'delivered', deliveredAt: serverTimestamp() });
-                
-                const todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
-                const lifeEarn = parseInt(localStorage.getItem(`ff_life_${name}`) || 0) + 20;
-                const orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
+    const inputPin = document.getElementById(`pin-${orderId}`).value;
+    
+    if(String(inputPin) === String(correctPin)) {
+        const name = sessionStorage.getItem('rider_name');
+        
+        // --- YE WALA SECTION UPDATE HUA HAI ---
+        await updateDoc(doc(db, "orders", orderId), { 
+            status: 'delivered', 
+            deliveredAt: serverTimestamp(),
+            showFeedback: true // Isse Customer ke phone par popup khulega
+        });
+        
+        // Earnings Update Logic
+        const todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
+        const lifeEarn = parseInt(localStorage.getItem(`ff_life_${name}`) || 0) + 20;
+        const orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
 
-                localStorage.setItem(`ff_earn_${name}`, todayEarn);
-                localStorage.setItem(`ff_life_${name}`, lifeEarn);
-                localStorage.setItem(`ff_orders_${name}`, orders);
-                
-                loadEarningUI(name);
-                alert("Order Successful! ₹20 added.");
-            } else {
-                alert("Incorrect PIN! Customer se check karein.");
-            }
-        };
+        localStorage.setItem(`ff_earn_${name}`, todayEarn);
+        localStorage.setItem(`ff_life_${name}`, lifeEarn);
+        localStorage.setItem(`ff_orders_${name}`, orders);
+        
+        loadEarningUI(name);
+        alert("Order Successful! Customer ko feedback mangne ka message bhej diya gaya hai.");
+    } else {
+        alert("Incorrect PIN! Customer se sahi PIN maangein.");
+    }
+};
+
 
         if(sessionStorage.getItem('rider_auth') === 'true') unlockUI(sessionStorage.getItem('rider_name'));
     </script>
