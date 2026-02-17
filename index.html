@@ -12,7 +12,7 @@
         body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); overflow-x: hidden; }
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); }
         .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
-        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1000; }
+        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1000; position: fixed; top: 0; right: 0; height: 100%; }
         .cart-open { transform: translateX(0); }
         .cart-closed { transform: translateX(100%); }
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
@@ -20,14 +20,12 @@
         .marquee { white-space: nowrap; overflow: hidden; position: relative; background: #fff1e6; color: #ff5e00; padding: 8px 0; font-size: 12px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #ffe0cc; }
         .marquee span { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px rgba(37,211,102,0.3); z-index: 100; transition: 0.3s; }
-        #user-info-modal { z-index: 3000; }
     </style>
 </head>
 <body class="pb-10">
 
-    <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6">
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl animate-in fade-in zoom-in duration-300">
+    <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 z-[3000]">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
             <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">Enter details for faster delivery</p>
             <div class="space-y-4">
@@ -35,46 +33,37 @@
                 <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
                 <div class="relative">
                     <textarea id="modal-location" rows="3" placeholder="Exact Location / Landmark" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
-                    <button onclick="getGPSLocation()" id="gps-btn" class="absolute right-3 bottom-3 bg-white shadow-sm text-[10px] font-black px-3 py-2 rounded-xl text-orange-600 border border-orange-100 active:scale-90 transition-all">
-                        <i class="fa-solid fa-location-crosshairs mr-1"></i> USE GPS
-                    </button>
+                    <button onclick="getGPSLocation()" id="gps-btn" class="absolute right-3 bottom-3 bg-white shadow-sm text-[10px] font-black px-3 py-2 rounded-xl text-orange-600 border border-orange-100">USE GPS</button>
                 </div>
             </div>
-            <button id="save-user-btn" onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all uppercase italic">
-                Save & Continue <i class="fa-solid fa-chevron-right ml-2 text-sm"></i>
-            </button>
+            <button id="save-user-btn" onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all">SAVE & CONTINUE</button>
         </div>
     </div>
 
     <div class="marquee"><span id="scrolling-text">Welcome to Freshfry Baripada - Handcrafted Premium Momos!</span></div>
 
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-900 tracking-tighter flex items-center gap-1">
-                <span class="text-orange-500"><i class="fa-solid fa-dumpling"></i></span>
-                Fresh<span class="text-orange-600">fry.</span>
-            </h1>
-        </div>
+        <h1 class="text-2xl font-900 tracking-tighter">Fresh<span class="text-orange-600">fry.</span></h1>
         <div class="flex items-center gap-4">
-            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-gray-200">
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
-            <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-11 w-11 rounded-2xl border-2 border-orange-500 object-cover">
+            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden shadow-sm active:scale-90 transition-all">
+                <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="w-full h-full object-cover">
+            </a>
         </div>
     </nav>
 
     <main class="px-6 mt-8">
-        <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Our <span class="text-orange-500">Menu</span></h2>
+        <h2 class="text-2xl font-900 mb-6 uppercase italic">Our <span class="text-orange-500">Menu</span></h2>
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar">
+    <div id="cart-sidebar" class="w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar transition-transform duration-500">
         <div class="p-6 flex justify-between items-center border-b">
             <h2 class="text-2xl font-900 italic">Your Box</h2>
-            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl hover:text-red-500 transition-colors">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
         <div class="p-8 bg-white border-t">
@@ -82,7 +71,7 @@
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="processOrder()" class="w-full btn-gradient text-white py-4 rounded-2xl font-black uppercase tracking-widest">Order Now</button>
+            <button onclick="processOrder()" class="w-full btn-gradient text-white py-4 rounded-2xl font-black uppercase">Place Order</button>
         </div>
     </div>
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-md"></div>
@@ -104,7 +93,6 @@
         const db = getFirestore(app);
         let cart = [];
 
-        // Save User Details to Firebase
         window.saveUserDetails = async () => {
             const name = document.getElementById('modal-name').value.trim();
             const phone = document.getElementById('modal-phone').value.trim();
@@ -112,25 +100,19 @@
             const btn = document.getElementById('save-user-btn');
 
             if (!name || !phone || !loc) return alert("Fill all details!");
-
             btn.disabled = true;
             btn.innerText = "SAVING...";
 
             try {
-                await setDoc(doc(db, "users", phone), { name, phone, location: loc, createdAt: serverTimestamp() }, { merge: true });
+                await setDoc(doc(db, "users", phone), { name, phone, location: loc, updatedAt: serverTimestamp() }, { merge: true });
                 localStorage.setItem('ff_user', name);
                 localStorage.setItem('ff_phone', phone);
                 localStorage.setItem('ff_location', loc);
-
                 alert("Data saved to server ✅");
                 document.getElementById('user-info-modal').classList.add('hidden');
                 loadUserSession();
-            } catch (e) {
-                alert("Error saving data!");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "SAVE & CONTINUE";
-            }
+            } catch (e) { alert("Database Error! Check Rules."); }
+            finally { btn.disabled = false; btn.innerText = "SAVE & CONTINUE"; }
         };
 
         function loadUserSession() {
@@ -139,7 +121,6 @@
             document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user || 'Guest'}`;
         }
 
-        // Real-time Menu
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
             list.innerHTML = '';
@@ -148,55 +129,39 @@
                 list.innerHTML += `
                     <div class="momo-card p-4">
                         <img src="${item.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
-                        <div class="flex justify-between font-900 text-lg uppercase mb-4">
-                            <span>${item.name}</span>
-                            <span class="text-orange-600">₹${item.price}</span>
-                        </div>
+                        <div class="flex justify-between font-900 text-lg uppercase mb-4"><span>${item.name}</span><span class="text-orange-600">₹${item.price}</span></div>
                         <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl font-black active:scale-95 transition-all">ADD TO BOX</button>
                     </div>`;
             });
         });
 
-        // Cart Logic
         window.addToCart = (name, price, image) => {
             const existing = cart.find(i => i.name === name);
-            if (existing) {
-                existing.qty++;
-            } else {
-                cart.push({ name, price, image, qty: 1 });
-            }
+            if (existing) existing.qty++; else cart.push({ name, price, image, qty: 1 });
             updateCartUI();
         };
 
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
             const badge = document.getElementById('cart-badge');
-            let total = 0;
-            let totalQty = 0;
-
-            list.innerHTML = cart.map((item, index) => {
+            let total = 0, totalQty = 0;
+            list.innerHTML = cart.map((item, idx) => {
                 total += item.price * item.qty;
                 totalQty += item.qty;
-                return `
-                    <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
-                        <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
-                        <div class="flex-1 font-bold text-sm">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 px-2"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>`;
+                return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
+                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
+                    <div class="flex-1 font-bold text-sm">${item.name} (x${item.qty})</div>
+                    <button onclick="removeFromCart(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
             }).join('');
-
-            badge.innerText = totalQty; // Ab ye har click pe badhega
+            badge.innerText = totalQty;
             document.getElementById('cart-total').innerText = "₹" + (total > 0 ? total + 20 : 0);
         };
 
-        window.removeFromCart = (index) => {
-            cart.splice(index, 1);
-            updateCartUI();
-        };
-
+        window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); };
         window.toggleCart = (show) => {
-            const sb = document.getElementById('cart-sidebar');
-            show ? sb.classList.replace('cart-closed', 'cart-open') : sb.classList.replace('cart-open', 'cart-closed');
+            document.getElementById('cart-sidebar').classList.toggle('cart-open', show);
+            document.getElementById('cart-sidebar').classList.toggle('cart-closed', !show);
             document.getElementById('cart-overlay').classList.toggle('hidden', !show);
         };
 
