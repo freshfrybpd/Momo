@@ -172,22 +172,45 @@
         window.changeQty = (idx, d) => { cart[idx].qty += d; if(cart[idx].qty < 1) cart.splice(idx, 1); updateCartUI(); };
         
         window.updateCartUI = () => {
-            const list = document.getElementById('cart-items-list'); let sub = 0, count = 0;
-            list.innerHTML = cart.map((i, idx) => {
-                sub += i.price * i.qty; count += i.qty;
-                return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
-                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl shadow-sm">
-                    <div class="flex-1 font-900 text-[11px] uppercase">${i.name}<br><span class="text-orange-600">₹${i.price}</span></div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="changeQty(${idx},-1)" class="qty-btn text-gray-900">-</button>
-                        <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
-                        <button onclick="changeQty(${idx},1)" class="qty-btn text-gray-900">+</button>
-                    </div>
-                </div>`;
-            }).join('');
-            document.getElementById('cart-badge').innerText = count;
-            document.getElementById('cart-total').innerText = "₹" + (sub > 0 ? sub + 20 : 0);
-        };
+    const list = document.getElementById('cart-items-list');
+    let subtotal = 0;
+    let count = 0;
+    const deliveryFee = 20;
+
+    list.innerHTML = cart.map((i, idx) => {
+        const itemPrice = Number(i.price) * Number(i.qty);
+        subtotal += itemPrice; // Yahan calculation ho rahi hai
+        count += i.qty;
+        
+        return `
+            <div class="flex items-center gap-4 bg-white p-4 rounded-[2rem] border border-gray-50 shadow-sm">
+                <img src="${i.image}" class="w-16 h-16 object-cover rounded-[1.2rem] shadow-sm">
+                <div class="flex-1">
+                    <p class="font-900 text-[11px] uppercase tracking-tight text-gray-800">${i.name}</p>
+                    <p class="text-orange-500 font-900 text-[10px]">₹${i.price}</p>
+                </div>
+                <div class="flex items-center gap-2 bg-gray-50 p-1 rounded-xl">
+                    <button onclick="changeQty(${idx},-1)" class="qty-btn">-</button>
+                    <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
+                    <button onclick="changeQty(${idx},1)" class="qty-btn">+</button>
+                </div>
+            </div>`;
+    }).join('');
+
+    // --- YE LINES ZAROORI HAIN ---
+    document.getElementById('cart-badge').innerText = count;
+    
+    // Items Total ko update karne ke liye
+    const subtotalElement = document.getElementById('cart-subtotal');
+    if (subtotalElement) {
+        subtotalElement.innerText = "₹" + subtotal;
+    }
+    
+    // Final Bill: Agar cart empty hai toh 0, warna subtotal + 20
+    const finalTotal = subtotal > 0 ? (subtotal + deliveryFee) : 0;
+    document.getElementById('cart-total').innerText = "₹" + finalTotal;
+};
+
 
         window.processOrder = async (method) => {
             if(cart.length === 0) return alert("Empty Box!");
