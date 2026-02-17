@@ -253,24 +253,46 @@ window.loadMyOrders = () => {
             ordersArray.push({ id: d.id, ...d.data() });
         });
 
-        // Sorting by Time
+        // Sabse naya order sabse upar dikhane ke liye sorting
         ordersArray.sort((a, b) => {
             const timeA = a.createdAt?.seconds || 0;
             const timeB = b.createdAt?.seconds || 0;
             return timeB - timeA;
         });
 
-        // --- YAHAN SE PREMIUM UI START ---
         list.innerHTML = ordersArray.map(o => {
-            let statusClass = "bg-orange-50 text-orange-600"; // Pending
+            // Status Styling Logic
+            let statusClass = "bg-orange-50 text-orange-600"; // Default: Pending
             if(o.status === 'preparing') statusClass = "bg-blue-50 text-blue-600";
+            if(o.status === 'out_for_delivery') statusClass = "bg-purple-50 text-purple-600";
             if(o.status === 'delivered') statusClass = "bg-green-50 text-green-600";
+
+            // Delivery Boy Section (Sirf Out for Delivery hone par dikhega)
+            let deliveryBoyHTML = "";
+            if(o.status === 'out_for_delivery') {
+                deliveryBoyHTML = `
+                    <div class="mt-4 p-4 bg-purple-50 rounded-3xl border border-purple-100 flex items-center justify-between animate-pulse">
+                        <div class="flex items-center gap-3">
+                            <div class="h-10 w-10 bg-purple-200 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-motorcycle text-purple-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-900 text-purple-600 uppercase">Delivery Partner</p>
+                                <p class="text-[11px] font-black text-gray-800">${o.riderName || 'Arjun (Freshfry)'}</p>
+                            </div>
+                        </div>
+                        <a href="tel:${o.riderPhone || '7008186187'}" class="h-10 w-10 bg-purple-600 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
+                            <i class="fa-solid fa-phone"></i>
+                        </a>
+                    </div>
+                `;
+            }
 
             return `
                 <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] mb-5 relative overflow-hidden">
                     <div class="flex justify-between items-center mb-4">
                         <span class="${statusClass} px-4 py-1.5 rounded-full text-[10px] font-900 uppercase tracking-widest italic">
-                            ${o.status || 'pending'}
+                            ${o.status?.replace(/_/g, ' ') || 'pending'}
                         </span>
                         <span class="text-gray-900 font-900 text-lg tracking-tighter italic">
                             ${o.total}
@@ -283,6 +305,8 @@ window.loadMyOrders = () => {
                             ${o.items.map(i => `<span class="text-orange-500">${i.qty}x</span> ${i.name}`).join(' <span class="text-gray-300 mx-1">•</span> ')}
                         </p>
                     </div>
+
+                    ${deliveryBoyHTML}
 
                     <div class="mt-4 flex justify-between items-center">
                         <div class="flex items-center gap-2 text-gray-400">
@@ -299,6 +323,7 @@ window.loadMyOrders = () => {
         }).join('');
     });
 };
+
 
 
         window.onload = loadUserSession;
