@@ -213,20 +213,66 @@
 
 
         window.processOrder = async (method) => {
-            if(cart.length === 0) return alert("Empty Box!");
-            const total = document.getElementById('cart-total').innerText;
-            await addDoc(collection(db, "orders"), {
-                customerName: localStorage.getItem('ff_user'),
-                customerPhone: localStorage.getItem('ff_phone'),
-                customerLocation: localStorage.getItem('ff_location'),
-                items: cart, total: total, status: 'pending', createdAt: serverTimestamp()
-            });
-            if(method === 'online') window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total.replace('₹','')}&cu=INR`;
-            else window.open(`https://wa.me/917008186187?text=New Freshfry Order!`);
+    // Check if cart is empty
+    if (cart.length === 0) {
+        alert("Aapka Box khali hai!");
+        return;
+    }
+
+    // 1. Generate 4-Digit Secret PIN
+    const orderPin = Math.floor(1000 + Math.random() * 9000);
+
+    // 2. Calculations (Subtotal + Fixed Delivery Charge)
+    const subtotal = cart.reduce((acc, i) => acc + (Number(i.price) * i.qty), 0);
+    const deliveryFee = 20;
+    const totalBill = "₹" + (subtotal + deliveryFee);
+
+    // 3. Prepare Order Object
+    const orderData = {
+        customerName: localStorage.getItem('ff_user') || 'Customer',
+        customerPhone: localStorage.getItem('ff_phone'),
+        customerLocation: localStorage.getItem('ff_location') || 'Not Provided',
+        items: cart,
+        total: totalBill,
+        subtotal: "₹" + subtotal,
+        deliveryCharge: "₹" + deliveryFee,
+        status: 'pending',
+        orderPin: orderPin, // Ye PIN ab Firebase mein save hoga
+        createdAt: new Date(), // Sorting ke liye
+        riderName: '', 
+        riderPhone: ''
+    };
+
+    try {
+        // 4. Save to Firebase
+        const docRef = await addDoc(collection(db, "orders"), orderData);
+        const orderId = docRef.id.slice(0, 5);
+
+        if (method === 'whatsapp') {
+            // WhatsApp Message Formatting
+            const itemDetails = cart.map(i => `${i.qty}x ${i.name}`).join('%0A');
+            const message = `*NEW ORDER - FRESH FRY*%0A--------------------------%0A*Order ID:* %23${orderId}%0A*Items:*%0A${itemDetails}%0A--------------------------%0A*Subtotal:* ₹${subtotal}%0A*Delivery:* ₹${deliveryFee}%0A*Total Bill:* ${totalBill}%0A--------------------------%0A*Your Secret PIN:* ${orderPin}%0A--------------------------%0A*Location:* ${orderData.customerLocation}`;
             
-            cart = []; updateCartUI(); toggleCart(false);
-            setTimeout(() => toggleOrders(true), 2000);
-        };
+            window.open(`https://wa.me/917008186187?text=${message}`, '_blank');
+        } else {
+            // Agar online payment integrate karna ho toh yahan logic aayega
+            alert(`Order Placed! Your Secret PIN is ${orderPin}`);
+        }
+
+        // 5. Success - Clear Cart & UI
+        cart = [];
+        updateCartUI();
+        toggleCart(false); // Sidebar close karein
+        
+        // Show Success Alert
+        alert(`Order Success! ID: #${orderId}. Check 'My Orders' for PIN.`);
+
+    } catch (error) {
+        console.error("Firebase Error: ", error);
+        alert("Kuch galat hua! Please dubara try karein.");
+    }
+};
+
 
         window.toggleCart = (s) => { document.getElementById('cart-sidebar').classList.toggle('sidebar-open', s); document.getElementById('cart-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); };
         window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); document.getElementById('orders-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadMyOrders(); };
