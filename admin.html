@@ -105,6 +105,12 @@
         window.deleteItem = async (coll, id) => {
             if(confirm("Permanently Delete?")) await deleteDoc(doc(db, coll, id));
         };
+        
+        window.toggleStock = async (id, currentStatus) => {
+    // Ye line database mein stock status update karegi
+    await updateDoc(doc(db, "menu", id), { inStock: !currentStatus });
+};
+
 
         window.showTab = (name) => {
             document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active-tab'));
