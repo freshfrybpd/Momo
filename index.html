@@ -197,7 +197,6 @@ window.loadMyOrders = () => {
     const p = localStorage.getItem('ff_phone');
     if(!p) return;
 
-    // 1. Simple query rakhi hai (Indexing ki zaroorat nahi padegi)
     const q = query(collection(db, "orders"), where("customerPhone", "==", p));
     
     onSnapshot(q, (snap) => {
@@ -208,39 +207,55 @@ window.loadMyOrders = () => {
             return;
         }
 
-        // 2. Data ko manually sort kar rahe hain (Newest Order sabse upar)
         let ordersArray = [];
         snap.forEach(d => {
             ordersArray.push({ id: d.id, ...d.data() });
         });
 
-        // Manual Sort: CreatedAt ke hisaab se
+        // Sorting by Time
         ordersArray.sort((a, b) => {
             const timeA = a.createdAt?.seconds || 0;
             const timeB = b.createdAt?.seconds || 0;
             return timeB - timeA;
         });
 
-        list.innerHTML = '';
-        ordersArray.forEach(o => {
-            const statusColor = o.status === 'delivered' ? 'text-green-500' : 'text-orange-500';
-            list.innerHTML += `
-                <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm mb-4">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="${statusColor} font-900 text-[10px] uppercase italic tracking-tighter">${o.status || 'pending'}</span>
-                        <span class="text-gray-900 font-900 text-xs">${o.total}</span>
+        // --- YAHAN SE PREMIUM UI START ---
+        list.innerHTML = ordersArray.map(o => {
+            let statusClass = "bg-orange-50 text-orange-600"; // Pending
+            if(o.status === 'preparing') statusClass = "bg-blue-50 text-blue-600";
+            if(o.status === 'delivered') statusClass = "bg-green-50 text-green-600";
+
+            return `
+                <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] mb-5 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="${statusClass} px-4 py-1.5 rounded-full text-[10px] font-900 uppercase tracking-widest italic">
+                            ${o.status || 'pending'}
+                        </span>
+                        <span class="text-gray-900 font-900 text-lg tracking-tighter italic">
+                            ${o.total}
+                        </span>
                     </div>
-                    <div class="border-t border-dashed border-gray-100 pt-2 mt-2">
-                        <p class="text-[9px] font-bold text-gray-400 mb-1">ITEMS:</p>
-                        <p class="text-[10px] font-black text-gray-700">
-                            ${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}
+
+                    <div class="space-y-1.5 py-3 border-y border-dashed border-gray-100">
+                        <p class="text-[9px] font-900 text-gray-400 uppercase tracking-widest italic">Order Details</p>
+                        <p class="text-xs font-900 text-gray-800 leading-relaxed uppercase tracking-tight">
+                            ${o.items.map(i => `<span class="text-orange-500">${i.qty}x</span> ${i.name}`).join(' <span class="text-gray-300 mx-1">•</span> ')}
                         </p>
                     </div>
-                    <div class="mt-3 text-[8px] text-gray-300 font-black uppercase tracking-widest italic">
-                        ${o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleString() : 'Just Now'}
+
+                    <div class="mt-4 flex justify-between items-center">
+                        <div class="flex items-center gap-2 text-gray-400">
+                            <i class="fa-regular fa-clock text-[10px]"></i>
+                            <span class="text-[9px] font-bold uppercase tracking-wider italic">
+                                ${o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just Now'}
+                            </span>
+                        </div>
+                        <span class="text-[8px] font-bold text-gray-300 uppercase tracking-widest">
+                            ID: #${o.id.slice(0, 5)}
+                        </span>
                     </div>
                 </div>`;
-        });
+        }).join('');
     });
 };
 
