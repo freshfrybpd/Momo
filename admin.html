@@ -161,6 +161,12 @@
                             <h4 class="font-900 uppercase italic text-sm">${item.name}</h4>
                             <span class="text-orange-600 font-900">₹${item.price}</span>
                         </div>
+                        
+                        <button onclick="toggleStock('${d.id}', ${item.inStock !== false})" 
+    class="w-full mb-2 ${item.inStock !== false ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'} py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest">
+    ${item.inStock !== false ? '● In Stock' : '○ Out of Stock'}
+</button>
+
                         <button onclick="deleteItem('menu', '${d.id}')" class="w-full bg-red-50 text-red-500 py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest active:bg-red-100 transition"><i class="fa-solid fa-trash-can mr-2"></i> Remove</button>
                     </div>
                 </div>`;
