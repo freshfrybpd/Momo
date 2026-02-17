@@ -157,7 +157,7 @@
     const list = document.getElementById('cart-items-list');
     let subtotal = 0;
     let count = 0;
-    const deliveryFee = 20; // Fixed Delivery Charge
+    const deliveryFee = 20;
 
     list.innerHTML = cart.map((i, idx) => {
         subtotal += i.price * i.qty;
@@ -173,17 +173,15 @@
         </div>`;
     }).join('');
 
+    // Update the UI Elements
     document.getElementById('cart-badge').innerText = count;
+    document.getElementById('cart-subtotal').innerText = "₹" + subtotal;
     
-    // UI mein Subtotal dikhane ke liye (Optional)
-    if(document.getElementById('cart-subtotal')) {
-        document.getElementById('cart-subtotal').innerText = "₹" + subtotal;
-    }
-
-    // FINAL TOTAL: Agar cart khali nahi hai, toh subtotal + 20 karega
+    // Agar cart mein items hain tabhi total mein 20 jode, warna 0 dikhaye
     const finalTotal = subtotal > 0 ? (subtotal + deliveryFee) : 0;
     document.getElementById('cart-total').innerText = "₹" + finalTotal;
 };
+
 
 
         window.processOrder = async (method) => {
