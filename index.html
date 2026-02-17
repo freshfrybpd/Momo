@@ -263,26 +263,47 @@
         };
 
         window.loadMyOrders = () => {
-            const p = localStorage.getItem('ff_phone');
-            if(!p) return;
-            const q = query(collection(db, "orders"), where("customerPhone", "==", p), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snap) => {
-                const list = document.getElementById('my-orders-list');
-                list.innerHTML = snap.docs.map(d => {
-                    const o = d.data();
-                    return `
-                        <div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-4 relative">
-                            <div class="absolute top-4 right-4 bg-gray-900 text-white p-2 rounded-xl text-center">
-                                <p class="text-[7px] text-gray-400 uppercase">PIN</p>
-                                <p class="text-xs font-black text-orange-400">${o.orderPin}</p>
-                            </div>
-                            <span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[9px] font-900 uppercase">${o.status}</span>
-                            <p class="font-900 text-lg italic mt-2">${o.total}</p>
-                            <p class="text-[10px] text-gray-400 uppercase font-bold mt-1">${o.items.map(i => `${i.qty}x ${i.name}`).join(' • ')}</p>
-                        </div>`;
-                }).join('');
-            });
-        };
+    const p = localStorage.getItem('ff_phone');
+    if(!p) return;
+
+    // Humne 'orderBy' hata diya hai taaki Index ka error na aaye
+    // Data ko hum JavaScript ke through reverse kar denge (latest upar)
+    const q = query(collection(db, "orders"), where("customerPhone", "==", p));
+    
+    onSnapshot(q, (snap) => {
+        const list = document.getElementById('my-orders-list');
+        
+        // Agar koi order nahi hai
+        if(snap.empty) {
+            list.innerHTML = `<p class="text-center text-gray-400 font-bold mt-10 uppercase text-[10px]">No orders yet!</p>`;
+            return;
+        }
+
+        // Sabhi orders ko array mein lekar reverse kar rahe hain (Latest First)
+        const ordersArray = [];
+        snap.forEach(d => ordersArray.push(d.data()));
+        ordersArray.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
+
+        list.innerHTML = ordersArray.map(o => {
+            let sCol = o.status === 'delivered' ? 'text-green-600' : 'text-orange-600';
+            let sBg = o.status === 'delivered' ? 'bg-green-50' : 'bg-orange-50';
+            
+            return `
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-4 relative border border-gray-50">
+                    <div class="absolute top-4 right-4 bg-gray-900 text-white p-2 rounded-xl text-center">
+                        <p class="text-[7px] text-gray-400 uppercase">PIN</p>
+                        <p class="text-xs font-black text-orange-400">${o.orderPin || '----'}</p>
+                    </div>
+                    <span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current opacity-80">${o.status}</span>
+                    <p class="font-900 text-xl italic mt-3">${o.total}</p>
+                    <p class="text-[10px] text-gray-400 uppercase font-black mt-1 tracking-tight">
+                        ${o.items ? o.items.map(i => `${i.qty}x ${i.name}`).join(' • ') : 'Momo Box'}
+                    </p>
+                </div>`;
+        }).join('');
+    });
+};
+
 
         // User Session & Feedback
         window.loadUserSession = () => {
