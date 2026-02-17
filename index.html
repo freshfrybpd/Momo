@@ -17,9 +17,6 @@
         .cart-closed { transform: translateX(100%); }
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .marquee { white-space: nowrap; overflow: hidden; position: relative; background: #fff1e6; color: #ff5e00; padding: 8px 0; font-size: 12px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #ffe0cc; }
-        .marquee span { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
-        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
     </style>
 </head>
 <body class="pb-10">
@@ -27,51 +24,49 @@
     <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 z-[3000]">
         <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
             <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">Enter details for faster delivery</p>
             <div class="space-y-4">
                 <input type="text" id="modal-name" placeholder="Full Name" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
                 <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
-                <div class="relative">
-                    <textarea id="modal-location" rows="3" placeholder="Exact Location / Landmark" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
-                    <button onclick="getGPSLocation()" id="gps-btn" class="absolute right-3 bottom-3 bg-white shadow-sm text-[10px] font-black px-3 py-2 rounded-xl text-orange-600 border border-orange-100">USE GPS</button>
-                </div>
+                <textarea id="modal-location" rows="3" placeholder="Exact Location / Landmark" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
             </div>
             <button id="save-user-btn" onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all">SAVE & CONTINUE</button>
         </div>
     </div>
 
-    <div class="marquee"><span id="scrolling-text">Welcome to Freshfry Baripada - Handcrafted Premium Momos!</span></div>
-
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <h1 class="text-2xl font-900 tracking-tighter">Fresh<span class="text-orange-600">fry.</span></h1>
         <div class="flex items-center gap-4">
-            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
-            <a href="profile.html" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden shadow-sm active:scale-90 transition-all">
-                <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="w-full h-full object-cover">
-            </a>
+            <a href="profile.html"><img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-11 w-11 rounded-2xl border-2 border-orange-500"></a>
         </div>
     </nav>
 
     <main class="px-6 mt-8">
-        <h2 class="text-2xl font-900 mb-6 uppercase italic">Our <span class="text-orange-500">Menu</span></h2>
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-    <div id="cart-sidebar" class="w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar transition-transform duration-500">
+    <div id="cart-sidebar" class="w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar transition-transform">
         <div class="p-6 flex justify-between items-center border-b">
-            <h2 class="text-2xl font-900 italic">Your Box</h2>
-            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-2xl font-900 italic uppercase">Your Box</h2>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
-        <div class="p-8 bg-white border-t">
-            <div class="flex justify-between font-900 text-2xl mb-4">
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-8 bg-white border-t space-y-4">
+            <div class="flex justify-between font-900 text-2xl">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="processOrder()" class="w-full btn-gradient text-white py-4 rounded-2xl font-black uppercase">Place Order</button>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="processOrder('whatsapp')" class="bg-green-600 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg active:scale-95 transition-all">
+                    WhatsApp <i class="fa-brands fa-whatsapp ml-1"></i>
+                </button>
+                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg active:scale-95 transition-all">
+                    Pay Online <i class="fa-solid fa-bolt ml-1"></i>
+                </button>
+            </div>
         </div>
     </div>
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-md"></div>
@@ -94,25 +89,20 @@
         let cart = [];
 
         window.saveUserDetails = async () => {
-            const name = document.getElementById('modal-name').value.trim();
-            const phone = document.getElementById('modal-phone').value.trim();
-            const loc = document.getElementById('modal-location').value.trim();
-            const btn = document.getElementById('save-user-btn');
-
-            if (!name || !phone || !loc) return alert("Fill all details!");
-            btn.disabled = true;
-            btn.innerText = "SAVING...";
-
+            const name = document.getElementById('modal-name').value;
+            const phone = document.getElementById('modal-phone').value;
+            const loc = document.getElementById('modal-location').value;
+            if(!name || !phone || !loc) return alert("Fill all!");
+            
             try {
                 await setDoc(doc(db, "users", phone), { name, phone, location: loc, updatedAt: serverTimestamp() }, { merge: true });
                 localStorage.setItem('ff_user', name);
                 localStorage.setItem('ff_phone', phone);
                 localStorage.setItem('ff_location', loc);
-                alert("Data saved to FreshFry server ✅");
+                alert("Data saved to server ✅");
                 document.getElementById('user-info-modal').classList.add('hidden');
                 loadUserSession();
-            } catch (e) { alert("Database Error! Check Rules."); }
-            finally { btn.disabled = false; btn.innerText = "SAVE & CONTINUE"; }
+            } catch (e) { alert("Error!"); }
         };
 
         function loadUserSession() {
@@ -126,51 +116,70 @@
             list.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
-                list.innerHTML += `
-                    <div class="momo-card p-4">
-                        <img src="${item.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
-                        <div class="flex justify-between font-900 text-lg uppercase mb-4"><span>${item.name}</span><span class="text-orange-600">₹${item.price}</span></div>
-                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl font-black active:scale-95 transition-all">ADD TO BOX</button>
-                    </div>`;
+                list.innerHTML += `<div class="momo-card p-4">
+                    <img src="${item.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
+                    <div class="flex justify-between font-900 text-lg uppercase"><span>${item.name}</span><span>₹${item.price}</span></div>
+                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl mt-4 font-black">ADD TO BOX</button>
+                </div>`;
             });
         });
 
         window.addToCart = (name, price, image) => {
-            const existing = cart.find(i => i.name === name);
-            if (existing) existing.qty++; else cart.push({ name, price, image, qty: 1 });
+            const item = cart.find(i => i.name === name);
+            if(item) item.qty++; else cart.push({name, price, image, qty: 1});
+            updateCartUI();
+        };
+
+        window.changeQty = (idx, delta) => {
+            cart[idx].qty += delta;
+            if(cart[idx].qty < 1) cart.splice(idx, 1);
             updateCartUI();
         };
 
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
-            const badge = document.getElementById('cart-badge');
             let total = 0, totalQty = 0;
-            list.innerHTML = cart.map((item, idx) => {
-                total += item.price * item.qty;
-                totalQty += item.qty;
-                return `<div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl">
-                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg">
-                    <div class="flex-1 font-bold text-sm">${item.name} (x${item.qty})</div>
-                    <button onclick="removeFromCart(${idx})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+            list.innerHTML = cart.map((i, idx) => {
+                total += i.price * i.qty;
+                totalQty += i.qty;
+                return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
+                    <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl">
+                    <div class="flex-1 font-bold text-sm">${i.name}<br>₹${i.price}</div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="changeQty(${idx}, -1)" class="w-8 h-8 bg-white rounded-lg shadow-sm font-black">-</button>
+                        <span class="font-black">${i.qty}</span>
+                        <button onclick="changeQty(${idx}, 1)" class="w-8 h-8 bg-white rounded-lg shadow-sm font-black">+</button>
+                    </div>
                 </div>`;
             }).join('');
-            badge.innerText = totalQty;
+            document.getElementById('cart-badge').innerText = totalQty;
             document.getElementById('cart-total').innerText = "₹" + (total > 0 ? total + 20 : 0);
         };
 
-        window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); };
         window.toggleCart = (show) => {
             document.getElementById('cart-sidebar').classList.toggle('cart-open', show);
             document.getElementById('cart-sidebar').classList.toggle('cart-closed', !show);
             document.getElementById('cart-overlay').classList.toggle('hidden', !show);
         };
 
-        window.getGPSLocation = () => {
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-                const data = await res.json();
-                document.getElementById('modal-location').value = data.display_name;
+        window.processOrder = async (method) => {
+            if(cart.length === 0) return alert("Box is empty!");
+            const totalAmt = document.getElementById('cart-total').innerText;
+            
+            await addDoc(collection(db, "orders"), {
+                customerName: localStorage.getItem('ff_user'),
+                customerPhone: localStorage.getItem('ff_phone'),
+                customerLocation: localStorage.getItem('ff_location'),
+                items: cart, total: totalAmt, status: 'pending', createdAt: serverTimestamp()
             });
+
+            if(method === 'online') {
+                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${totalAmt.replace('₹','')}&cu=INR`;
+            } else {
+                let msg = `Hi Freshfry, New Order:%0ATotal: ${totalAmt}%0AAddress: ${localStorage.getItem('ff_location')}`;
+                window.open(`https://wa.me/917008186187?text=${msg}`);
+            }
+            cart = []; updateCartUI(); toggleCart(false);
         };
 
         window.onload = loadUserSession;
