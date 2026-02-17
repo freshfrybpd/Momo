@@ -229,10 +229,23 @@
     });
 };
 
-        window.assignOrder = async (name) => {
-            await updateDoc(doc(db, "orders", currentOrderId), { status: 'out_for_delivery', riderName: name });
-            document.getElementById('rider-modal').style.display = 'none';
-        };
+        window.assignOrder = async (name, phone) => {
+    try {
+        await updateDoc(doc(db, "orders", currentOrderId), { 
+            status: 'out_for_delivery', 
+            riderName: name,
+            riderPhone: phone // Ye line add karna zaroori hai!
+        });
+        document.getElementById('rider-modal').style.display = 'none';
+        alert("Order Assigned to " + name);
+    } catch (e) {
+        console.error("Error assigning rider:", e);
+        alert("Assigning failed!");
+    }
+};
+
+
+
         window.closeRiderModal = () => document.getElementById('rider-modal').style.display = 'none';
 
         function loadRiders() {
