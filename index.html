@@ -11,7 +11,6 @@
         :root { --primary: #ff5e00; --dark: #0f172a; }
         body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); overflow-x: hidden; }
         
-        /* Premium Card Design Same As Previous */
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); }
         .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
         
@@ -21,10 +20,20 @@
         
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Scrolling Text Animation */
+        .marquee { white-space: nowrap; overflow: hidden; position: relative; background: #fff1e6; color: #ff5e00; padding: 8px 0; font-size: 12px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #ffe0cc; }
+        .marquee span { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        /* Floating Button */
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px rgba(37,211,102,0.3); z-index: 100; transition: 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.1); }
     </style>
 </head>
 <body class="pb-10">
+
+    <div class="marquee"><span id="scrolling-text">Welcome to Freshfry Baripada - Handcrafted Premium Momos!</span></div>
 
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <div>
@@ -66,6 +75,10 @@
         </div>
     </main>
 
+    <a href="https://wa.me/918984225363?text=Hi Freshfry, I need help!" class="whatsapp-float">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar">
         <div class="p-6 flex justify-between items-center border-b">
             <div>
@@ -77,7 +90,15 @@
             </button>
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-5"></div>
-        <div class="p-8 bg-white border-t space-y-6">
+        <div class="p-8 bg-white border-t space-y-4">
+            <div class="flex justify-between font-bold text-sm text-gray-500">
+                <span>Items Subtotal</span>
+                <span id="sub-total">₹0</span>
+            </div>
+            <div class="flex justify-between font-bold text-sm text-green-600">
+                <span>Delivery Charge (Fixed)</span>
+                <span>₹20</span>
+            </div>
             <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
@@ -106,43 +127,36 @@
         const db = getFirestore(app);
         let cart = [];
 
-        // 1. Sync User Data (Photo & Name)
+        // 1. Sync User Data
         function loadUserSession() {
             const userName = localStorage.getItem('ff_user') || "Guest";
             const savedPhoto = localStorage.getItem('user_photo');
             const profileImg = document.getElementById('user-profile-img');
-            
-            if(savedPhoto) {
-                profileImg.src = savedPhoto;
-            } else {
-                profileImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
-            }
+            if(savedPhoto) profileImg.src = savedPhoto;
+            else profileImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
         }
 
-        // 2. Promo Sync
+        // 2. Admin Settings Sync (Promo & Scrolling Text)
         onSnapshot(doc(db, "settings", "promo"), (d) => {
             if(d.exists()) {
+                const data = d.data();
                 document.getElementById('promo-banner').classList.remove('hidden');
-                document.getElementById('p-title').innerText = d.data().text;
-                document.getElementById('p-code').innerText = d.data().code;
+                document.getElementById('p-title').innerText = data.text;
+                document.getElementById('p-code').innerText = data.code;
+                document.getElementById('scrolling-text').innerText = data.text; // Same text for marquee
             }
         });
 
         // 3. Menu Fetch with Veg Filter
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
-            const isVegOnly = localStorage.getItem('ff_veg_only') === 'true'; // From Profile switch
+            const isVegOnly = localStorage.getItem('ff_veg_only') === 'true';
             list.innerHTML = '';
-            
             snap.forEach(d => {
                 const item = d.data();
                 const type = (item.type || 'non-veg').toLowerCase();
-
-                // Backend Filter Logic
                 if (isVegOnly && type !== 'veg') return;
-
-                list.innerHTML += `
-                    <div class="momo-card p-4">
+                list.innerHTML += `<div class="momo-card p-4">
                         <div class="relative group cursor-pointer overflow-hidden rounded-[2rem]">
                             <img src="${item.image}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
@@ -166,7 +180,6 @@
             });
         });
 
-        // Cart Backend
         window.addToCart = (name, price, image) => {
             const existing = cart.find(i => i.name === name);
             if(existing) existing.qty++;
@@ -176,13 +189,14 @@
 
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
+            const subTotalEl = document.getElementById('sub-total');
             const totalEl = document.getElementById('cart-total');
             const badge = document.getElementById('cart-badge');
-            let total = 0;
+            let itemsSubtotal = 0;
             
             badge.innerText = cart.reduce((sum, i) => sum + i.qty, 0);
             list.innerHTML = cart.map((item, index) => {
-                total += (item.price * item.qty);
+                itemsSubtotal += (item.price * item.qty);
                 return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
                     <img src="${item.image}" class="w-16 h-16 object-cover rounded-xl shadow-sm">
                     <div class="flex-1 text-sm font-900 uppercase">${item.name}<br><span class="text-orange-600">₹${item.price} x ${item.qty}</span></div>
@@ -193,7 +207,9 @@
                     </div>
                 </div>`;
             }).join('');
-            totalEl.innerText = "₹" + total;
+            
+            subTotalEl.innerText = "₹" + itemsSubtotal;
+            totalEl.innerText = "₹" + (itemsSubtotal > 0 ? (itemsSubtotal + 20) : 0);
         };
 
         window.changeQty = (index, delta) => {
@@ -211,10 +227,23 @@
 
         window.checkout = () => {
             if(cart.length === 0) return alert("Box is empty!");
-            const uName = localStorage.getItem('ff_user') || "Guest";
-            let msg = `🍱 *Freshfry Order*%0A*Customer:* ${uName}%0A%0A`;
+            
+            let uName = localStorage.getItem('ff_user');
+            let uPhone = localStorage.getItem('ff_phone');
+
+            if(!uName || !uPhone) {
+                uName = prompt("Please enter your name:");
+                uPhone = prompt("Please enter your phone number:");
+                if(!uName || !uPhone) return alert("Details required for order!");
+                localStorage.setItem('ff_user', uName);
+                localStorage.setItem('ff_phone', uPhone);
+            }
+
+            let msg = `🍱 *Freshfry Order*%0A*Customer:* ${uName}%0A*Phone:* ${uPhone}%0A%0A`;
             cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-            msg += `%0A*Total: ${document.getElementById('cart-total').innerText}*`;
+            msg += `%0A*Delivery Charge:* ₹20%0A*Total Payable: ${document.getElementById('cart-total').innerText}*%0A%0A`;
+            msg += `💳 *Pay via UPI:* 7008186187@ybl%0A%0A_Please share screenshot after payment!_`;
+            
             window.open(`https://wa.me/918984225363?text=${msg}`);
         };
 
