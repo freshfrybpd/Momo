@@ -29,23 +29,14 @@
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
 
-        /* Style Qty Buttons */
         .qty-btn { width: 32px; height: 32px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; border: 1px solid #eee; }
         .qty-btn:active { transform: scale(0.9); background: #f8fafc; }
         
         #overlay { background: rgba(0,0,0,0.5); }
         
-                /* --- Filter Button & Badge Styling --- */
         .filter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .active-filter { 
-            background: #0f172a !important; 
-            color: white !important; 
-            border-color: #0f172a !important; 
-            transform: scale(1.05); 
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
+        .active-filter { background: #0f172a !important; color: white !important; border-color: #0f172a !important; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-
     </style>
 </head>
 <body class="pb-10">
@@ -81,48 +72,42 @@
     </nav>
     
     <div class="flex justify-center gap-2 px-6 mt-8 overflow-x-auto no-scrollbar">
-    <button onclick="filterMenu('All')" id="btn-all" class="filter-btn active-filter px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white shadow-sm">All</button>
-    <button onclick="filterMenu('Veg')" id="btn-veg" class="filter-btn px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white text-slate-400 shadow-sm">Veg Only 🥗</button>
-    <button onclick="filterMenu('Non-Veg')" id="btn-nonveg" class="filter-btn px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white text-slate-400 shadow-sm">Non-Veg 🍗</button>
-</div>
-
+        <button onclick="filterMenu('All')" id="btn-all" class="filter-btn active-filter px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white shadow-sm">All</button>
+        <button onclick="filterMenu('Veg')" id="btn-veg" class="filter-btn px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white text-slate-400 shadow-sm">Veg Only 🥗</button>
+        <button onclick="filterMenu('Non-Veg')" id="btn-nonveg" class="filter-btn px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white text-slate-400 shadow-sm">Non-Veg 🍗</button>
+    </div>
 
     <main class="px-6 mt-8 max-w-6xl mx-auto">
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-  <div id="cart-sidebar" class="sidebar sidebar-closed flex flex-col">
-    <div class="p-6 flex justify-between items-center border-b font-900 italic uppercase">
-        <h2 class="text-2xl tracking-tighter">Your Box</h2>
-        <button onclick="toggleCart(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    
-    <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-
-    <div class="p-8 bg-white border-t space-y-3 shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
-        <div class="flex justify-between text-[11px] font-900 text-gray-400 uppercase tracking-widest">
-            <span>Items Total</span>
-            <span id="cart-subtotal">₹0</span>
+    <div id="cart-sidebar" class="sidebar sidebar-closed flex flex-col">
+        <div class="p-6 flex justify-between items-center border-b font-900 italic uppercase">
+            <h2 class="text-2xl tracking-tighter">Your Box</h2>
+            <button onclick="toggleCart(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="flex justify-between text-[11px] font-900 text-green-600 uppercase tracking-widest">
-            <span>Delivery Fee (Fixed)</span>
-            <span>₹20</span>
-        </div>
-        <div class="flex justify-between font-900 text-2xl pt-3 border-t border-dashed border-gray-100 uppercase italic">
-            <span class="tracking-tighter text-gray-900">Total Bill</span>
-            <span id="cart-total" class="text-orange-600">₹0</span>
-        </div>
-        <div class="grid grid-cols-2 gap-3 pt-4">
-            <button onclick="processOrder('whatsapp')" class="bg-[#25D366] text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
-                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
-            </button>
-            <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg active:scale-95 transition-all">
-                Pay Online
-            </button>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-8 bg-white border-t space-y-3">
+            <div class="flex justify-between text-[11px] font-900 text-gray-400 uppercase tracking-widest">
+                <span>Items Total</span>
+                <span id="cart-subtotal">₹0</span>
+            </div>
+            <div class="flex justify-between text-[11px] font-900 text-green-600 uppercase tracking-widest">
+                <span>Delivery Fee</span>
+                <span>₹20</span>
+            </div>
+            <div class="flex justify-between font-900 text-2xl pt-3 border-t border-dashed border-gray-100 uppercase italic">
+                <span>Total Bill</span>
+                <span id="cart-total" class="text-orange-600">₹0</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-4">
+                <button onclick="processOrder('whatsapp')" class="bg-[#25D366] text-white py-4 rounded-2xl font-black text-[11px] uppercase flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </button>
+                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase">Pay Online</button>
+            </div>
         </div>
     </div>
-    </div>
-
 
     <div id="orders-sidebar" class="sidebar sidebar-closed flex flex-col">
         <div class="p-6 flex justify-between items-center border-b font-900 italic uppercase">
@@ -134,10 +119,27 @@
 
     <div id="overlay" onclick="closeAllSidebars()" class="fixed inset-0 z-50 hidden backdrop-blur-sm"></div>
 
+    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-6 z-[5000]">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 text-center shadow-2xl">
+            <div class="w-20 h-20 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <h3 class="text-2xl font-900 italic uppercase">How was the <span class="text-orange-500">Taste?</span></h3>
+            <div class="flex justify-center gap-2 my-6">
+                <button onclick="setStar(1)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
+                <button onclick="setStar(2)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
+                <button onclick="setStar(3)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
+                <button onclick="setStar(4)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
+                <button onclick="setStar(5)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
+            </div>
+            <textarea id="feedback-text" placeholder="Anything else? (Optional)" class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm font-bold mb-4 focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
+            <button onclick="submitFeedback()" class="w-full btn-gradient text-white py-4 rounded-2xl font-black uppercase text-[11px] shadow-lg active:scale-95 transition">Submit Review</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot, query, where, orderBy, doc, setDoc, addDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -151,390 +153,177 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         let cart = [];
-        
-        
-                let currentFilter = 'All';
+        let currentFilter = 'All';
 
-        // Filter Logic Function
+        // Filter Logic
         window.filterMenu = (type) => {
             currentFilter = type;
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active-filter');
                 btn.classList.add('text-slate-400');
             });
-            const activeBtnId = type === 'All' ? 'btn-all' : type === 'Veg' ? 'btn-veg' : 'btn-nonveg';
-            const activeBtn = document.getElementById(activeBtnId);
-            activeBtn.classList.add('active-filter');
-            activeBtn.classList.remove('text-slate-400');
+            document.getElementById(`btn-${type.toLowerCase().replace('-','')}`).classList.add('active-filter');
             loadMenu(); 
         };
 
-        // Updated Menu Function with Filter & Correct Badge Colors
+        // Real-time Menu Loader (Corrected)
         function loadMenu() {
-    onSnapshot(collection(db, "menu"), (snap) => {
-        const list = document.getElementById('menu-list'); 
-        list.innerHTML = '';
-        snap.forEach(d => {
-            const item = d.data();
+            onSnapshot(collection(db, "menu"), (snap) => {
+                const list = document.getElementById('menu-list'); 
+                list.innerHTML = '';
+                snap.forEach(d => {
+                    const item = d.data();
+                    if(currentFilter !== 'All' && item.type !== currentFilter) return;
+
+                    const isAvailable = item.inStock !== false; 
+                    const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+
+                    list.innerHTML += `
+                        <div class="momo-card p-4">
+                            <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
+                            <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
+                            <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
+                                <span class="${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
+                                <span class="text-orange-600">₹${item.price}</span>
+                            </div>
+                            ${isAvailable ? 
+                                `<button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
+                                : 
+                                `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
+                            }
+                        </div>`;
+                });
+            });
+        }
+
+        // Cart & Orders Logic
+        window.addToCart = (n, p, i) => { 
+            const ex = cart.find(x => x.name === n); 
+            if(ex) ex.qty++; else cart.push({name:n, price:p, image:i, qty:1}); 
+            updateCartUI(); 
+        };
+        
+        window.changeQty = (idx, d) => { 
+            cart[idx].qty += d; 
+            if(cart[idx].qty < 1) cart.splice(idx, 1); 
+            updateCartUI(); 
+        };
+        
+        window.updateCartUI = () => {
+            const list = document.getElementById('cart-items-list');
+            let subtotal = 0, count = 0;
+            list.innerHTML = cart.map((i, idx) => {
+                subtotal += (i.price * i.qty);
+                count += i.qty;
+                return `
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-[2rem] border border-gray-50">
+                        <img src="${i.image}" class="w-16 h-16 object-cover rounded-[1.2rem]">
+                        <div class="flex-1">
+                            <p class="font-900 text-[11px] uppercase">${i.name}</p>
+                            <p class="text-orange-500 font-900 text-[10px]">₹${i.price}</p>
+                        </div>
+                        <div class="flex items-center gap-2 bg-gray-50 p-1 rounded-xl">
+                            <button onclick="changeQty(${idx},-1)" class="qty-btn">-</button>
+                            <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
+                            <button onclick="changeQty(${idx},1)" class="qty-btn">+</button>
+                        </div>
+                    </div>`;
+            }).join('');
+            document.getElementById('cart-badge').innerText = count;
+            document.getElementById('cart-subtotal').innerText = "₹" + subtotal;
+            document.getElementById('cart-total').innerText = "₹" + (subtotal > 0 ? subtotal + 20 : 0);
+        };
+
+        window.processOrder = async (method) => {
+            if (cart.length === 0) return alert("Box khali hai!");
+            const phone = localStorage.getItem('ff_phone');
+            if(!phone) return document.getElementById('user-info-modal').classList.remove('hidden');
+
+            const orderPin = Math.floor(1000 + Math.random() * 9000);
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
             
-            // Filter logic (All/Veg/Non-Veg)
-            if(currentFilter !== 'All' && item.type !== currentFilter) return;
+            const orderData = {
+                customerName: localStorage.getItem('ff_user'),
+                customerPhone: phone,
+                customerLocation: localStorage.getItem('ff_location'),
+                items: cart,
+                total: "₹" + (subtotal + 20),
+                status: 'pending',
+                orderPin: orderPin,
+                createdAt: serverTimestamp()
+            };
 
-            // 1. Badge Color Logic
-            const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+            const docRef = await addDoc(collection(db, "orders"), orderData);
+            if (method === 'whatsapp') {
+                const msg = `*NEW ORDER*%0AOrder ID: #${docRef.id.slice(0,5)}%0APIN: ${orderPin}%0AItems: ${cart.map(i => `${i.qty}x ${i.name}`).join(', ')}`;
+                window.open(`https://wa.me/917008186187?text=${msg}`);
+            }
+            cart = []; updateCartUI(); toggleCart(false);
+            alert(`Order Placed! Your PIN is ${orderPin}`);
+        };
 
-            // 2. Stock Logic (inStock agar undefined hai toh usey true maano)
-            const isAvailable = item.inStock !== false; 
+        window.loadMyOrders = () => {
+            const p = localStorage.getItem('ff_phone');
+            if(!p) return;
+            const q = query(collection(db, "orders"), where("customerPhone", "==", p), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snap) => {
+                const list = document.getElementById('my-orders-list');
+                list.innerHTML = snap.docs.map(d => {
+                    const o = d.data();
+                    return `
+                        <div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-4 relative">
+                            <div class="absolute top-4 right-4 bg-gray-900 text-white p-2 rounded-xl text-center">
+                                <p class="text-[7px] text-gray-400 uppercase">PIN</p>
+                                <p class="text-xs font-black text-orange-400">${o.orderPin}</p>
+                            </div>
+                            <span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[9px] font-900 uppercase">${o.status}</span>
+                            <p class="font-900 text-lg italic mt-2">${o.total}</p>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold mt-1">${o.items.map(i => `${i.qty}x ${i.name}`).join(' • ')}</p>
+                        </div>`;
+                }).join('');
+            });
+        };
 
-            list.innerHTML += `
-                <div class="momo-card p-4">
-                    <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                    
-                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
-                    
-                    <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
-                        <span class="${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
-                        <span class="text-orange-600">₹${item.price}</span>
-                    </div>
-
-                    ${isAvailable ? 
-                        `<button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
-                        : 
-                        `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
-                    }
-                </div>`;
-        });
-    });
-}
-
-
-        
-        
-        
-        
-        
-
+        // User Session & Feedback
         window.loadUserSession = () => {
             const name = localStorage.getItem('ff_user');
             if (!name) document.getElementById('user-info-modal').classList.remove('hidden');
-            else {
-                document.getElementById('modal-name').value = name;
-                document.getElementById('modal-phone').value = localStorage.getItem('ff_phone');
-                document.getElementById('modal-location').value = localStorage.getItem('ff_location');
-                document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
-            }
+            else document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
         };
 
         window.saveUserDetails = async () => {
-            const name = document.getElementById('modal-name').value.trim();
-            const phone = document.getElementById('modal-phone').value.trim();
-            const loc = document.getElementById('modal-location').value.trim();
+            const name = document.getElementById('modal-name').value, phone = document.getElementById('modal-phone').value, loc = document.getElementById('modal-location').value;
             if(!name || !phone || !loc) return alert("Fill all details!");
-            await setDoc(doc(db, "users", phone), { name, phone, location: loc, lastSync: serverTimestamp() }, { merge: true });
             localStorage.setItem('ff_user', name); localStorage.setItem('ff_phone', phone); localStorage.setItem('ff_location', loc);
             document.getElementById('user-info-modal').classList.add('hidden');
             loadUserSession();
         };
 
-                onSnapshot(collection(db, "menu"), (snap) => {
-            const list = document.getElementById('menu-list'); 
-            list.innerHTML = '';
-            snap.forEach(d => {
-                const item = d.data();
-                
-                // 1. Color Logic yahan define hai
-                const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+        let selectedRating = 0, pendingFeedbackId = null;
+        window.setStar = (n) => {
+            selectedRating = n;
+            document.querySelectorAll('.star-btn').forEach((b, i) => b.classList.toggle('text-orange-500', i < n));
+        };
 
-                list.innerHTML += `<div class="momo-card p-4">
-                    <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4">
-                    <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
-                        <span>${item.name}</span>
-                        <span class="text-orange-600">₹${item.price}</span>
-                    </div>
-                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>
-                </div>`;
+        window.submitFeedback = async () => {
+            if(!selectedRating) return alert("Select Stars!");
+            await updateDoc(doc(db, "orders", pendingFeedbackId), { rating: selectedRating, feedback: document.getElementById('feedback-text').value, showFeedback: false });
+            document.getElementById('feedback-modal').classList.add('hidden');
+        };
+
+        setInterval(() => {
+            const p = localStorage.getItem('ff_phone');
+            if(!p) return;
+            onSnapshot(query(collection(db, "orders"), where("customerPhone", "==", p), where("showFeedback", "==", true)), snap => {
+                snap.forEach(d => { pendingFeedbackId = d.id; document.getElementById('feedback-modal').classList.remove('hidden'); });
             });
-        });
-
-
-        window.addToCart = (n, p, i) => { const ex = cart.find(x => x.name === n); if(ex) ex.qty++; else cart.push({name:n, price:p, image:i, qty:1}); updateCartUI(); };
-        window.changeQty = (idx, d) => { cart[idx].qty += d; if(cart[idx].qty < 1) cart.splice(idx, 1); updateCartUI(); };
-        
-        window.updateCartUI = () => {
-    const list = document.getElementById('cart-items-list');
-    let subtotal = 0;
-    let count = 0;
-    const deliveryFee = 20;
-
-    list.innerHTML = cart.map((i, idx) => {
-        const itemPrice = Number(i.price) * Number(i.qty);
-        subtotal += itemPrice; // Yahan calculation ho rahi hai
-        count += i.qty;
-        
-        return `
-            <div class="flex items-center gap-4 bg-white p-4 rounded-[2rem] border border-gray-50 shadow-sm">
-                <img src="${i.image}" class="w-16 h-16 object-cover rounded-[1.2rem] shadow-sm">
-                <div class="flex-1">
-                    <p class="font-900 text-[11px] uppercase tracking-tight text-gray-800">${i.name}</p>
-                    <p class="text-orange-500 font-900 text-[10px]">₹${i.price}</p>
-                </div>
-                <div class="flex items-center gap-2 bg-gray-50 p-1 rounded-xl">
-                    <button onclick="changeQty(${idx},-1)" class="qty-btn">-</button>
-                    <span class="font-900 text-xs w-5 text-center">${i.qty}</span>
-                    <button onclick="changeQty(${idx},1)" class="qty-btn">+</button>
-                </div>
-            </div>`;
-    }).join('');
-
-    // --- YE LINES ZAROORI HAIN ---
-    document.getElementById('cart-badge').innerText = count;
-    
-    // Items Total ko update karne ke liye
-    const subtotalElement = document.getElementById('cart-subtotal');
-    if (subtotalElement) {
-        subtotalElement.innerText = "₹" + subtotal;
-    }
-    
-    // Final Bill: Agar cart empty hai toh 0, warna subtotal + 20
-    const finalTotal = subtotal > 0 ? (subtotal + deliveryFee) : 0;
-    document.getElementById('cart-total').innerText = "₹" + finalTotal;
-};
-
-
-        window.processOrder = async (method) => {
-    // Check if cart is empty
-    if (cart.length === 0) {
-        alert("Aapka Box khali hai!");
-        return;
-    }
-
-    // 1. Generate 4-Digit Secret PIN
-    const orderPin = Math.floor(1000 + Math.random() * 9000);
-
-    // 2. Calculations (Subtotal + Fixed Delivery Charge)
-    const subtotal = cart.reduce((acc, i) => acc + (Number(i.price) * i.qty), 0);
-    const deliveryFee = 20;
-    const totalBill = "₹" + (subtotal + deliveryFee);
-
-    // 3. Prepare Order Object
-    const orderData = {
-        customerName: localStorage.getItem('ff_user') || 'Customer',
-        customerPhone: localStorage.getItem('ff_phone'),
-        customerLocation: localStorage.getItem('ff_location') || 'Not Provided',
-        items: cart,
-        total: totalBill,
-        subtotal: "₹" + subtotal,
-        deliveryCharge: "₹" + deliveryFee,
-        status: 'pending',
-        orderPin: orderPin, // Ye PIN ab Firebase mein save hoga
-        createdAt: new Date(), // Sorting ke liye
-        riderName: '', 
-        riderPhone: ''
-    };
-
-    try {
-        // 4. Save to Firebase
-        const docRef = await addDoc(collection(db, "orders"), orderData);
-        const orderId = docRef.id.slice(0, 5);
-
-        if (method === 'whatsapp') {
-            // WhatsApp Message Formatting
-            const itemDetails = cart.map(i => `${i.qty}x ${i.name}`).join('%0A');
-            const message = `*NEW ORDER - FRESH FRY*%0A--------------------------%0A*Order ID:* %23${orderId}%0A*Items:*%0A${itemDetails}%0A--------------------------%0A*Subtotal:* ₹${subtotal}%0A*Delivery:* ₹${deliveryFee}%0A*Total Bill:* ${totalBill}%0A--------------------------%0A*Your Secret PIN:* ${orderPin}%0A--------------------------%0A*Location:* ${orderData.customerLocation}`;
-            
-            window.open(`https://wa.me/917008186187?text=${message}`, '_blank');
-        } else {
-            // Agar online payment integrate karna ho toh yahan logic aayega
-            alert(`Order Placed! Your Secret PIN is ${orderPin}`);
-        }
-
-        // 5. Success - Clear Cart & UI
-        cart = [];
-        updateCartUI();
-        toggleCart(false); // Sidebar close karein
-        
-        // Show Success Alert
-        alert(`Order Success! ID: #${orderId}. Check 'My Orders' for PIN.`);
-
-    } catch (error) {
-        console.error("Firebase Error: ", error);
-        alert("Kuch galat hua! Please dubara try karein.");
-    }
-};
-
+        }, 10000);
 
         window.toggleCart = (s) => { document.getElementById('cart-sidebar').classList.toggle('sidebar-open', s); document.getElementById('cart-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); };
         window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); document.getElementById('orders-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadMyOrders(); };
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
-        // FIX: Load ALL orders (New and Old) for this user
-        // IS WALE FUNCTION KO PURANE WALE SE REPLACE KAR DO
-window.loadMyOrders = () => {
-    const p = localStorage.getItem('ff_phone');
-    if(!p) return;
-
-    const q = query(collection(db, "orders"), where("customerPhone", "==", p));
-    
-    onSnapshot(q, (snap) => {
-        const list = document.getElementById('my-orders-list');
-        
-        if (snap.empty) {
-            list.innerHTML = `<div class="text-center py-20 text-gray-400 font-black uppercase text-[10px] tracking-widest">No Orders Yet!</div>`;
-            return;
-        }
-
-        let ordersArray = [];
-        snap.forEach(d => {
-            ordersArray.push({ id: d.id, ...d.data() });
-        });
-
-        // Sorting: Newest first
-        ordersArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-
-        list.innerHTML = ordersArray.map(o => {
-            let statusClass = "bg-orange-50 text-orange-600";
-            if(o.status === 'preparing') statusClass = "bg-blue-50 text-blue-600";
-            if(o.status === 'out_for_delivery') statusClass = "bg-purple-50 text-purple-600";
-            if(o.status === 'delivered') statusClass = "bg-green-50 text-green-600";
-
-            let deliveryBoyHTML = "";
-            if(o.status === 'out_for_delivery') {
-                deliveryBoyHTML = `
-                    <div class="mt-4 p-4 bg-purple-50 rounded-3xl border border-purple-100 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 bg-purple-200 rounded-full flex items-center justify-center">
-                                <i class="fa-solid fa-motorcycle text-purple-600"></i>
-                            </div>
-                            <div>
-                                <p class="text-[9px] font-900 text-purple-600 uppercase">Delivery Partner</p>
-                                <p class="text-[11px] font-black text-gray-800">${o.riderName || 'Dipu'}</p>
-                            </div>
-                        </div>
-                        <a href="tel:${o.riderPhone || '7008186187'}" class="h-10 w-10 bg-purple-600 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>
-                    </div>`;
-            }
-
-            return `
-                <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] mb-5 relative overflow-hidden">
-                    
-                    <div class="absolute top-6 right-6 bg-gray-900 text-white px-3 py-1 rounded-xl shadow-xl text-center min-w-[60px]">
-                        <p class="text-[7px] font-900 text-gray-400 uppercase tracking-tighter">SECURE PIN</p>
-                        <p class="text-xs font-black text-orange-400 tracking-[0.2em]">${o.orderPin || '----'}</p>
-                    </div>
-
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="${statusClass} px-4 py-1.5 rounded-full text-[10px] font-900 uppercase tracking-widest italic">
-                            ${o.status?.replace(/_/g, ' ') || 'pending'}
-                        </span>
-                        <span class="text-gray-900 font-900 text-lg italic mr-16">
-                            ${o.total}
-                        </span>
-                    </div>
-
-                    <div class="space-y-1.5 py-3 border-y border-dashed border-gray-100">
-                        <p class="text-[9px] font-900 text-gray-400 uppercase tracking-widest italic">Order Details</p>
-                        <p class="text-xs font-900 text-gray-800 uppercase tracking-tight leading-relaxed">
-                            ${o.items.map(i => `<span class="text-orange-500">${i.qty}x</span> ${i.name}`).join(' • ')}
-                        </p>
-                    </div>
-
-                    ${deliveryBoyHTML}
-
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center gap-2 text-gray-400">
-                            <i class="fa-regular fa-clock text-[10px]"></i>
-                            <span class="text-[9px] font-bold uppercase italic tracking-wider">
-                                ${o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just Now'}
-                            </span>
-                        </div>
-                        <span class="text-[8px] font-bold text-gray-300 uppercase tracking-widest">
-                            ID: #${o.id.slice(0, 5)}
-                        </span>
-                    </div>
-                </div>`;
-        }).join('');
-    });
-};
-
-
-
-
-        window.onload = loadUserSession;
-        
-        
-        
-        let selectedRating = 0;
-let pendingFeedbackId = null;
-
-// Star Rating Select karne ke liye
-window.setStar = (num) => {
-    selectedRating = num;
-    document.querySelectorAll('.star-btn').forEach((btn, idx) => {
-        btn.classList.toggle('text-orange-500', idx < num);
-        btn.classList.toggle('text-slate-200', idx >= num);
-    });
-};
-
-// Order check karne ke liye ki feedback mangna hai ya nahi
-function checkForFeedback() {
-    const phone = localStorage.getItem('ff_phone');
-    if(!phone) return;
-
-    const q = query(collection(db, "orders"), where("customerPhone", "==", phone), where("showFeedback", "==", true));
-    onSnapshot(q, (snap) => {
-        snap.forEach(d => {
-            pendingFeedbackId = d.id;
-            document.getElementById('feedback-modal').classList.remove('hidden');
-        });
-    });
-}
-
-// Feedback Submit karne ke liye
-window.submitFeedback = async () => {
-    if(selectedRating === 0) return alert("Please select stars!");
-    
-    const text = document.getElementById('feedback-text').value;
-    await updateDoc(doc(db, "orders", pendingFeedbackId), {
-        rating: selectedRating,
-        feedback: text,
-        showFeedback: false // Modal band karne ke liye
-    });
-
-    document.getElementById('feedback-modal').classList.add('hidden');
-    alert("Bhai, Thank you for your feedback! ❤️");
-};
-
-// Function call shuru karein
-setInterval(checkForFeedback, 5000); // Har 5 second mein check karega
-
+        window.onload = () => { loadUserSession(); loadMenu(); };
     </script>
-    
-    
-    
-    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-6 z-[5000]">
-    <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 text-center shadow-2xl">
-        <div class="w-20 h-20 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-            <i class="fa-solid fa-star"></i>
-        </div>
-        <h3 class="text-2xl font-900 italic uppercase italic tracking-tighter">How was the <span class="text-orange-500">Taste?</span></h3>
-        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">Rate your experience</p>
-        
-        <div class="flex justify-center gap-2 my-6">
-            <button onclick="setStar(1)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
-            <button onclick="setStar(2)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
-            <button onclick="setStar(3)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
-            <button onclick="setStar(4)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
-            <button onclick="setStar(5)" class="star-btn text-2xl text-slate-200"><i class="fa-solid fa-star"></i></button>
-        </div>
-
-        <textarea id="feedback-text" placeholder="Anything else? (Optional)" class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm font-bold mb-4 focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
-        
-        <button onclick="submitFeedback()" class="w-full btn-gradient text-white py-4 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-lg active:scale-95 transition">Submit Review</button>
-    </div>
-</div>
-
 </body>
 </html>
