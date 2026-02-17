@@ -106,11 +106,14 @@
             if(confirm("Permanently Delete?")) await deleteDoc(doc(db, coll, id));
         };
         
+        // --- UPDATED TOGGLE STOCK FUNCTION ---
         window.toggleStock = async (id, currentStatus) => {
-    // Ye line database mein stock status update karegi
-    await updateDoc(doc(db, "menu", id), { inStock: !currentStatus });
-};
-
+            try {
+                await updateDoc(doc(db, "menu", id), { inStock: !currentStatus });
+            } catch (e) {
+                console.error("Error updating stock", e);
+            }
+        };
 
         window.showTab = (name) => {
             document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active-tab'));
@@ -151,27 +154,31 @@
             document.getElementById('delivered-count').innerText = delivered;
         });
 
-        // --- MENU (With Veg/Non-Veg Badge) ---
+        // --- MENU (With Fix for Stock Toggle) ---
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-management-list');
             list.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
                 const badgeColor = item.type === 'Veg' ? 'bg-green-500' : 'bg-red-500';
+                
+                // Real-time value check for stock
+                const isAvailable = item.inStock !== false;
+
                 list.innerHTML += `
                 <div class="momo-card overflow-hidden shadow-lg border-none">
                     <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                    <img src="${item.image}" class="w-full h-44 object-cover">
+                    <img src="${item.image}" class="w-full h-44 object-cover ${isAvailable ? '' : 'grayscale opacity-50'}">
                     <div class="p-5">
                         <div class="flex justify-between items-center mb-4">
-                            <h4 class="font-900 uppercase italic text-sm">${item.name}</h4>
+                            <h4 class="font-900 uppercase italic text-sm ${isAvailable ? '' : 'text-slate-400'}">${item.name}</h4>
                             <span class="text-orange-600 font-900">₹${item.price}</span>
                         </div>
                         
-                        <button onclick="toggleStock('${d.id}', ${item.inStock !== false})" 
-    class="w-full mb-2 ${item.inStock !== false ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'} py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest">
-    ${item.inStock !== false ? '● In Stock' : '○ Out of Stock'}
-</button>
+                        <button onclick="toggleStock('${d.id}', ${isAvailable})" 
+                            class="w-full mb-2 ${isAvailable ? 'bg-green-100 text-green-600 border border-green-200' : 'bg-slate-100 text-slate-400 border border-slate-200'} py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest transition-all">
+                            ${isAvailable ? '● In Stock' : '○ Out of Stock'}
+                        </button>
 
                         <button onclick="deleteItem('menu', '${d.id}')" class="w-full bg-red-50 text-red-500 py-3 rounded-xl font-900 text-[10px] uppercase tracking-widest active:bg-red-100 transition"><i class="fa-solid fa-trash-can mr-2"></i> Remove</button>
                     </div>
@@ -179,7 +186,47 @@
             });
         });
 
-        // --- RIDERS ---
+        // --- RIDERS & USERS logic... (same as before) ---
+        // ... (Rider and User code included correctly in final check) ...
+        
+        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); };
+        window.addNewMomo = async () => {
+            const n = document.getElementById('m-name').value;
+            const p = document.getElementById('m-price').value;
+            const i = document.getElementById('m-img').value;
+            const t = document.getElementById('m-type').value;
+            if(!n || !p) return alert("Enter Details");
+            // Default inStock: true for new items
+            await addDoc(collection(db, "menu"), { name: n, price: parseInt(p), image: i, type: t, inStock: true });
+            alert("Added!");
+            document.getElementById('m-name').value = '';
+            document.getElementById('m-price').value = '';
+            document.getElementById('m-img').value = '';
+        };
+
+        // (Keeping remaining functions loadRiders, payRider etc.)
+        window.payRider = (upi, name, amt) => {
+            window.location.href = `upi://pay?pa=${upi}&pn=${encodeURIComponent(name)}&am=${amt}&cu=INR`;
+        };
+        window.openRiderModal = (id) => {
+            currentOrderId = id;
+            document.getElementById('rider-modal').style.display = 'flex';
+            onSnapshot(collection(db, "riders"), (snap) => {
+                const container = document.getElementById('rider-list-container');
+                container.innerHTML = '';
+                snap.forEach(d => {
+                    container.innerHTML += `<button onclick="assignOrder('${d.data().riderName}')" class="w-full bg-slate-50 p-4 rounded-2xl font-900 uppercase text-xs flex justify-between items-center">
+                        ${d.data().riderName} <span class="${d.data().status === 'Online' ? 'text-green-500' : 'text-slate-300'} font-black">${d.data().status || 'OFF'}</span>
+                    </button>`;
+                });
+            });
+        };
+        window.assignOrder = async (name) => {
+            await updateDoc(doc(db, "orders", currentOrderId), { status: 'out_for_delivery', riderName: name });
+            document.getElementById('rider-modal').style.display = 'none';
+        };
+        window.closeRiderModal = () => document.getElementById('rider-modal').style.display = 'none';
+
         function loadRiders() {
             const today = new Date(); today.setHours(0,0,0,0);
             onSnapshot(collection(db, "riders"), (riderSnap) => {
@@ -209,7 +256,6 @@
             });
         }
 
-        // --- USERS ---
         onSnapshot(collection(db, "users"), (snap) => {
             const list = document.getElementById('user-list');
             list.innerHTML = '';
@@ -225,42 +271,6 @@
                 </div>`;
             });
         });
-
-        // --- FUNCTIONS ---
-        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); };
-        window.addNewMomo = async () => {
-            const n = document.getElementById('m-name').value;
-            const p = document.getElementById('m-price').value;
-            const i = document.getElementById('m-img').value;
-            const t = document.getElementById('m-type').value;
-            if(!n || !p) return alert("Enter Details");
-            await addDoc(collection(db, "menu"), { name: n, price: parseInt(p), image: i, type: t });
-            alert("Added!");
-            document.getElementById('m-name').value = '';
-            document.getElementById('m-price').value = '';
-            document.getElementById('m-img').value = '';
-        };
-        window.payRider = (upi, name, amt) => {
-            window.location.href = `upi://pay?pa=${upi}&pn=${encodeURIComponent(name)}&am=${amt}&cu=INR`;
-        };
-        window.openRiderModal = (id) => {
-            currentOrderId = id;
-            document.getElementById('rider-modal').style.display = 'flex';
-            onSnapshot(collection(db, "riders"), (snap) => {
-                const container = document.getElementById('rider-list-container');
-                container.innerHTML = '';
-                snap.forEach(d => {
-                    container.innerHTML += `<button onclick="assignOrder('${d.data().riderName}')" class="w-full bg-slate-50 p-4 rounded-2xl font-900 uppercase text-xs flex justify-between items-center">
-                        ${d.data().riderName} <span class="${d.data().status === 'Online' ? 'text-green-500' : 'text-slate-300'} font-black">${d.data().status || 'OFF'}</span>
-                    </button>`;
-                });
-            });
-        };
-        window.assignOrder = async (name) => {
-            await updateDoc(doc(db, "orders", currentOrderId), { status: 'out_for_delivery', riderName: name });
-            document.getElementById('rider-modal').style.display = 'none';
-        };
-        window.closeRiderModal = () => document.getElementById('rider-modal').style.display = 'none';
 
         loadRiders();
     </script>
