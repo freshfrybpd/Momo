@@ -21,14 +21,14 @@
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         
-        /* Scrolling Text Animation */
         .marquee { white-space: nowrap; overflow: hidden; position: relative; background: #fff1e6; color: #ff5e00; padding: 8px 0; font-size: 12px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #ffe0cc; }
         .marquee span { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        /* Floating Button */
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 25px rgba(37,211,102,0.3); z-index: 100; transition: 0.3s; }
-        .whatsapp-float:hover { transform: scale(1.1); }
+        
+        /* New Tracking Section Style */
+        #order-tracking-screen { display: none; position: fixed; inset: 0; background: #f8fafc; z-index: 2000; overflow-y: auto; padding-bottom: 40px; }
     </style>
 </head>
 <body class="pb-10">
@@ -44,6 +44,7 @@
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Baripada's Finest</p>
         </div>
         <div class="flex items-center gap-4">
+            <button onclick="openMyOrders()" class="bg-orange-100 text-orange-600 px-3 py-2 rounded-xl text-[10px] font-900 uppercase tracking-tighter">My Orders</button>
             <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-gray-200">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
@@ -53,6 +54,16 @@
             </a>
         </div>
     </nav>
+
+    <div id="order-tracking-screen" class="p-6">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-900 italic uppercase">Your <span class="text-orange-500">Orders</span></h2>
+            <button onclick="closeMyOrders()" class="h-12 w-12 bg-white rounded-2xl shadow-sm flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="order-list-container" class="space-y-6">
+            <div class="text-center py-20 opacity-30 font-bold uppercase tracking-widest text-xs">No active orders</div>
+        </div>
+    </div>
 
     <div id="promo-banner" class="hidden mx-6 mt-6 p-6 btn-gradient rounded-[2.5rem] text-white shadow-2xl shadow-orange-200 relative overflow-hidden">
         <div class="relative z-10">
@@ -67,7 +78,6 @@
 
     <main class="px-6 mt-8">
         <h2 class="text-2xl font-900 mb-6 uppercase italic tracking-tighter">Handcrafted <span class="text-orange-500 underline decoration-orange-200 decoration-4 underline-offset-4">Momos</span></h2>
-        
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div class="col-span-full py-20 text-center">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
@@ -103,16 +113,22 @@
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <button onclick="checkout()" class="w-full btn-gradient text-white py-5 rounded-3xl font-black text-lg shadow-xl active:scale-95 transition-all">
-                PLACE ORDER <i class="fa-solid fa-arrow-right ml-2"></i>
-            </button>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="processOrder('whatsapp')" class="bg-green-600 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg shadow-green-100 active:scale-95 transition-all">
+                    WhatsApp Order <i class="fa-brands fa-whatsapp ml-1"></i>
+                </button>
+                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg shadow-orange-100 active:scale-95 transition-all">
+                    Pay Online (UPI) <i class="fa-solid fa-bolt ml-1"></i>
+                </button>
+            </div>
         </div>
     </div>
     <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-md"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, addDoc, serverTimestamp, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -136,18 +152,18 @@
             else profileImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
         }
 
-        // 2. Admin Settings Sync (Promo & Scrolling Text)
+        // 2. Admin Settings Sync
         onSnapshot(doc(db, "settings", "promo"), (d) => {
             if(d.exists()) {
                 const data = d.data();
                 document.getElementById('promo-banner').classList.remove('hidden');
                 document.getElementById('p-title').innerText = data.text;
                 document.getElementById('p-code').innerText = data.code;
-                document.getElementById('scrolling-text').innerText = data.text; // Same text for marquee
+                document.getElementById('scrolling-text').innerText = data.text;
             }
         });
 
-        // 3. Menu Fetch with Veg Filter
+        // 3. Menu Fetch
         onSnapshot(collection(db, "menu"), (snap) => {
             const list = document.getElementById('menu-list');
             const isVegOnly = localStorage.getItem('ff_veg_only') === 'true';
@@ -179,6 +195,120 @@
                     </div>`;
             });
         });
+
+        // --- CORE LOGIC START ---
+
+        window.processOrder = async (method) => {
+            if(cart.length === 0) return alert("Box is empty!");
+            
+            let uName = localStorage.getItem('ff_user');
+            let uPhone = localStorage.getItem('ff_phone');
+
+            if(!uName || !uPhone) {
+                uName = prompt("Name:");
+                uPhone = prompt("Phone:");
+                if(!uName || !uPhone) return alert("Required!");
+                localStorage.setItem('ff_user', uName);
+                localStorage.setItem('ff_phone', uPhone);
+            }
+
+            const totalAmt = document.getElementById('cart-total').innerText;
+            const deliveryPin = Math.floor(1000 + Math.random() * 9000); // Random PIN
+
+            // 1. Save to Firebase
+            const orderData = {
+                customerName: uName,
+                customerPhone: uPhone,
+                items: cart,
+                total: totalAmt,
+                status: 'pending', // preparing, out_for_delivery, delivered
+                paymentMethod: method,
+                deliveryPin: deliveryPin,
+                riderName: "Searching...",
+                riderPhone: "...",
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "orders"), orderData);
+                
+                // 2. Redirect based on method
+                if(method === 'online') {
+                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${totalAmt.replace('₹','')}&cu=INR&tn=FreshfryOrder`;
+                } else {
+                    let msg = `🍱 *Freshfry Order*%0A*Customer:* ${uName}%0A*Total:* ${totalAmt}%0A%0AItems:%0A`;
+                    cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
+                    window.open(`https://wa.me/917008186187?text=${msg}`);
+                }
+
+                // Clear Cart & Open Tracking
+                cart = [];
+                updateCartUI();
+                toggleCart(false);
+                openMyOrders();
+
+            } catch(e) { console.error("Error saving order:", e); }
+        };
+
+        window.openMyOrders = () => {
+            document.getElementById('order-tracking-screen').style.display = 'block';
+            const uPhone = localStorage.getItem('ff_phone');
+            if(!uPhone) return;
+
+            // Fetch orders for this phone number (latest first)
+            const q = query(collection(db, "orders"), where("customerPhone", "==", uPhone), orderBy("createdAt", "desc"));
+            
+            onSnapshot(q, (snap) => {
+                const container = document.getElementById('order-list-container');
+                container.innerHTML = '';
+                
+                if(snap.empty) container.innerHTML = '<div class="text-center py-20 font-bold uppercase text-xs opacity-20">No orders found</div>';
+
+                snap.forEach(d => {
+                    const order = d.data();
+                    const statusColors = {
+                        pending: 'bg-orange-100 text-orange-600',
+                        preparing: 'bg-blue-100 text-blue-600',
+                        out_for_delivery: 'bg-purple-100 text-purple-600',
+                        delivered: 'bg-green-100 text-green-600'
+                    };
+
+                    container.innerHTML += `
+                        <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${statusColors[order.status] || statusColors.pending}">${order.status.replace(/_/g, ' ')}</span>
+                                    <h3 class="text-xl font-900 mt-2">${order.total}</h3>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Delivery PIN</p>
+                                    <p class="text-lg font-900 text-orange-600 tracking-widest">${order.deliveryPin}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-3xl mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="text-xs font-bold text-gray-400 uppercase"><i class="fa-solid fa-motorcycle mr-1"></i> Rider</p>
+                                    <a href="tel:${order.riderPhone}" class="text-[10px] font-black text-blue-600 uppercase underline">Call Rider</a>
+                                </div>
+                                <p class="text-sm font-900 uppercase">${order.riderName}</p>
+                            </div>
+
+                            <div class="flex items-center justify-between border-t border-dashed pt-4">
+                                <a href="tel:7008186187" class="text-[10px] font-black uppercase text-gray-400"><i class="fa-solid fa-shop mr-1"></i> Hotel</a>
+                                <a href="https://wa.me/917008186187" class="text-[10px] font-black uppercase text-green-600"><i class="fa-brands fa-whatsapp mr-1"></i> Help</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        };
+
+        window.closeMyOrders = () => {
+            document.getElementById('order-tracking-screen').style.display = 'none';
+        };
+
+        // --- CORE LOGIC END ---
 
         window.addToCart = (name, price, image) => {
             const existing = cart.find(i => i.name === name);
@@ -225,31 +355,7 @@
             else { sb.classList.replace('cart-open', 'cart-closed'); ov.classList.add('hidden'); }
         };
 
-        window.checkout = () => {
-            if(cart.length === 0) return alert("Box is empty!");
-            
-            let uName = localStorage.getItem('ff_user');
-            let uPhone = localStorage.getItem('ff_phone');
-
-            if(!uName || !uPhone) {
-                uName = prompt("Please enter your name:");
-                uPhone = prompt("Please enter your phone number:");
-                if(!uName || !uPhone) return alert("Details required for order!");
-                localStorage.setItem('ff_user', uName);
-                localStorage.setItem('ff_phone', uPhone);
-            }
-
-            let msg = `🍱 *Freshfry Order*%0A*Customer:* ${uName}%0A*Phone:* ${uPhone}%0A%0A`;
-            cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-            msg += `%0A*Delivery Charge:* ₹20%0A*Total Payable: ${document.getElementById('cart-total').innerText}*%0A%0A`;
-            msg += `💳 *Pay via UPI:* 7008186187@ybl%0A%0A_Please share screenshot after payment!_`;
-            
-            window.open(`https://wa.me/917008186187?text=${msg}`);
-        };
-
         window.onload = loadUserSession;
     </script>
 </body>
 </html>
-
-
