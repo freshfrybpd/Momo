@@ -150,6 +150,51 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         let cart = [];
+        
+        
+                let currentFilter = 'All';
+
+        // Filter Logic Function
+        window.filterMenu = (type) => {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active-filter');
+                btn.classList.add('text-slate-400');
+            });
+            const activeBtnId = type === 'All' ? 'btn-all' : type === 'Veg' ? 'btn-veg' : 'btn-nonveg';
+            const activeBtn = document.getElementById(activeBtnId);
+            activeBtn.classList.add('active-filter');
+            activeBtn.classList.remove('text-slate-400');
+            loadMenu(); 
+        };
+
+        // Updated Menu Function with Filter & Correct Badge Colors
+        function loadMenu() {
+            onSnapshot(collection(db, "menu"), (snap) => {
+                const list = document.getElementById('menu-list'); 
+                list.innerHTML = '';
+                snap.forEach(d => {
+                    const item = d.data();
+                    if(currentFilter !== 'All' && item.type !== currentFilter) return;
+                    const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+
+                    list.innerHTML += `<div class="momo-card p-4">
+                        <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
+                        <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4">
+                        <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
+                            <span>${item.name}</span><span class="text-orange-600">₹${item.price}</span>
+                        </div>
+                        <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>
+                    </div>`;
+                });
+            });
+        }
+
+        
+        
+        
+        
+        
 
         window.loadUserSession = () => {
             const name = localStorage.getItem('ff_user');
