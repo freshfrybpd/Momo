@@ -299,56 +299,55 @@ window.loadMyOrders = () => {
             ordersArray.push({ id: d.id, ...d.data() });
         });
 
-        // Sabse naya order sabse upar dikhane ke liye sorting
-        ordersArray.sort((a, b) => {
-            const timeA = a.createdAt?.seconds || 0;
-            const timeB = b.createdAt?.seconds || 0;
-            return timeB - timeA;
-        });
+        // Sorting: Newest first
+        ordersArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
         list.innerHTML = ordersArray.map(o => {
-            // Status Styling Logic
-            let statusClass = "bg-orange-50 text-orange-600"; // Default: Pending
+            let statusClass = "bg-orange-50 text-orange-600";
             if(o.status === 'preparing') statusClass = "bg-blue-50 text-blue-600";
             if(o.status === 'out_for_delivery') statusClass = "bg-purple-50 text-purple-600";
             if(o.status === 'delivered') statusClass = "bg-green-50 text-green-600";
 
-            // Delivery Boy Section (Sirf Out for Delivery hone par dikhega)
             let deliveryBoyHTML = "";
             if(o.status === 'out_for_delivery') {
                 deliveryBoyHTML = `
-                    <div class="mt-4 p-4 bg-purple-50 rounded-3xl border border-purple-100 flex items-center justify-between animate-pulse">
+                    <div class="mt-4 p-4 bg-purple-50 rounded-3xl border border-purple-100 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="h-10 w-10 bg-purple-200 rounded-full flex items-center justify-center">
                                 <i class="fa-solid fa-motorcycle text-purple-600"></i>
                             </div>
                             <div>
                                 <p class="text-[9px] font-900 text-purple-600 uppercase">Delivery Partner</p>
-                                <p class="text-[11px] font-black text-gray-800">${o.riderName || 'Arjun (Freshfry)'}</p>
+                                <p class="text-[11px] font-black text-gray-800">${o.riderName || 'Dipu'}</p>
                             </div>
                         </div>
                         <a href="tel:${o.riderPhone || '7008186187'}" class="h-10 w-10 bg-purple-600 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
                             <i class="fa-solid fa-phone"></i>
                         </a>
-                    </div>
-                `;
+                    </div>`;
             }
 
             return `
                 <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] mb-5 relative overflow-hidden">
+                    
+                    <div class="absolute top-6 right-6 bg-gray-900 text-white px-3 py-1 rounded-xl shadow-xl text-center min-w-[60px]">
+                        <p class="text-[7px] font-900 text-gray-400 uppercase tracking-tighter">SECURE PIN</p>
+                        <p class="text-xs font-black text-orange-400 tracking-[0.2em]">${o.orderPin || '----'}</p>
+                    </div>
+
                     <div class="flex justify-between items-center mb-4">
                         <span class="${statusClass} px-4 py-1.5 rounded-full text-[10px] font-900 uppercase tracking-widest italic">
                             ${o.status?.replace(/_/g, ' ') || 'pending'}
                         </span>
-                        <span class="text-gray-900 font-900 text-lg tracking-tighter italic">
+                        <span class="text-gray-900 font-900 text-lg italic mr-16">
                             ${o.total}
                         </span>
                     </div>
 
                     <div class="space-y-1.5 py-3 border-y border-dashed border-gray-100">
                         <p class="text-[9px] font-900 text-gray-400 uppercase tracking-widest italic">Order Details</p>
-                        <p class="text-xs font-900 text-gray-800 leading-relaxed uppercase tracking-tight">
-                            ${o.items.map(i => `<span class="text-orange-500">${i.qty}x</span> ${i.name}`).join(' <span class="text-gray-300 mx-1">•</span> ')}
+                        <p class="text-xs font-900 text-gray-800 uppercase tracking-tight leading-relaxed">
+                            ${o.items.map(i => `<span class="text-orange-500">${i.qty}x</span> ${i.name}`).join(' • ')}
                         </p>
                     </div>
 
@@ -357,7 +356,7 @@ window.loadMyOrders = () => {
                     <div class="mt-4 flex justify-between items-center">
                         <div class="flex items-center gap-2 text-gray-400">
                             <i class="fa-regular fa-clock text-[10px]"></i>
-                            <span class="text-[9px] font-bold uppercase tracking-wider italic">
+                            <span class="text-[9px] font-bold uppercase italic tracking-wider">
                                 ${o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just Now'}
                             </span>
                         </div>
@@ -369,6 +368,7 @@ window.loadMyOrders = () => {
         }).join('');
     });
 };
+
 
 
 
