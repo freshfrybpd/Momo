@@ -36,11 +36,11 @@
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <h1 class="text-2xl font-900 tracking-tighter">Fresh<span class="text-orange-600">fry.</span></h1>
         <div class="flex items-center gap-4">
-            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center">
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-12 w-12 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
-            <a href="profile.html"><img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-11 w-11 rounded-2xl border-2 border-orange-500"></a>
+            <a href="profile.html"><img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-11 w-11 rounded-2xl border-2 border-orange-500 object-cover"></a>
         </div>
     </nav>
 
@@ -48,18 +48,29 @@
         <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-    <div id="cart-sidebar" class="w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar transition-transform">
+    <div id="cart-sidebar" class="w-full md:w-[450px] bg-white z-[100] shadow-2xl cart-closed flex flex-col cart-sidebar transition-transform duration-500">
         <div class="p-6 flex justify-between items-center border-b">
             <h2 class="text-2xl font-900 italic uppercase">Your Box</h2>
             <button onclick="toggleCart(false)" class="bg-gray-50 h-12 w-12 rounded-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-        <div class="p-8 bg-white border-t space-y-4">
-            <div class="flex justify-between font-900 text-2xl">
+
+        <div class="p-8 bg-white border-t space-y-3">
+            <div class="flex justify-between font-bold text-gray-500 text-sm">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">₹0</span>
+            </div>
+            <div class="flex justify-between font-bold text-green-600 text-sm">
+                <span>Delivery Charge</span>
+                <span>₹20</span>
+            </div>
+            <div class="flex justify-between font-900 text-2xl pt-2 border-t border-dashed">
                 <span>Total</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            
+            <div class="grid grid-cols-2 gap-3 pt-2">
                 <button onclick="processOrder('whatsapp')" class="bg-green-600 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-tighter shadow-lg active:scale-95 transition-all">
                     WhatsApp <i class="fa-brands fa-whatsapp ml-1"></i>
                 </button>
@@ -92,7 +103,7 @@
             const name = document.getElementById('modal-name').value;
             const phone = document.getElementById('modal-phone').value;
             const loc = document.getElementById('modal-location').value;
-            if(!name || !phone || !loc) return alert("Fill all!");
+            if(!name || !phone || !loc) return alert("Fill all details!");
             
             try {
                 await setDoc(doc(db, "users", phone), { name, phone, location: loc, updatedAt: serverTimestamp() }, { merge: true });
@@ -102,7 +113,7 @@
                 alert("Data saved to server ✅");
                 document.getElementById('user-info-modal').classList.add('hidden');
                 loadUserSession();
-            } catch (e) { alert("Error!"); }
+            } catch (e) { alert("Error saving data!"); }
         };
 
         function loadUserSession() {
@@ -119,7 +130,7 @@
                 list.innerHTML += `<div class="momo-card p-4">
                     <img src="${item.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
                     <div class="flex justify-between font-900 text-lg uppercase"><span>${item.name}</span><span>₹${item.price}</span></div>
-                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl mt-4 font-black">ADD TO BOX</button>
+                    <button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl mt-4 font-black active:scale-95">ADD TO BOX</button>
                 </div>`;
             });
         });
@@ -138,22 +149,27 @@
 
         window.updateCartUI = () => {
             const list = document.getElementById('cart-items-list');
-            let total = 0, totalQty = 0;
+            const badge = document.getElementById('cart-badge');
+            let subtotal = 0, totalQty = 0;
+            const deliveryCharge = 20;
+
             list.innerHTML = cart.map((i, idx) => {
-                total += i.price * i.qty;
+                subtotal += i.price * i.qty;
                 totalQty += i.qty;
                 return `<div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl">
                     <img src="${i.image}" class="w-12 h-12 object-cover rounded-xl">
                     <div class="flex-1 font-bold text-sm">${i.name}<br>₹${i.price}</div>
                     <div class="flex items-center gap-3">
                         <button onclick="changeQty(${idx}, -1)" class="w-8 h-8 bg-white rounded-lg shadow-sm font-black">-</button>
-                        <span class="font-black">${i.qty}</span>
+                        <span class="font-black text-xs">${i.qty}</span>
                         <button onclick="changeQty(${idx}, 1)" class="w-8 h-8 bg-white rounded-lg shadow-sm font-black">+</button>
                     </div>
                 </div>`;
             }).join('');
-            document.getElementById('cart-badge').innerText = totalQty;
-            document.getElementById('cart-total').innerText = "₹" + (total > 0 ? total + 20 : 0);
+
+            badge.innerText = totalQty;
+            document.getElementById('cart-subtotal').innerText = "₹" + subtotal;
+            document.getElementById('cart-total').innerText = "₹" + (subtotal > 0 ? (subtotal + deliveryCharge) : 0);
         };
 
         window.toggleCart = (show) => {
@@ -164,19 +180,23 @@
 
         window.processOrder = async (method) => {
             if(cart.length === 0) return alert("Box is empty!");
-            const totalAmt = document.getElementById('cart-total').innerText;
+            const finalTotal = document.getElementById('cart-total').innerText;
+            const userName = localStorage.getItem('ff_user');
+            const userPhone = localStorage.getItem('ff_phone');
+            const userLoc = localStorage.getItem('ff_location');
             
             await addDoc(collection(db, "orders"), {
-                customerName: localStorage.getItem('ff_user'),
-                customerPhone: localStorage.getItem('ff_phone'),
-                customerLocation: localStorage.getItem('ff_location'),
-                items: cart, total: totalAmt, status: 'pending', createdAt: serverTimestamp()
+                customerName: userName,
+                customerPhone: userPhone,
+                customerLocation: userLoc,
+                items: cart, total: finalTotal, status: 'pending', createdAt: serverTimestamp()
             });
 
             if(method === 'online') {
-                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${totalAmt.replace('₹','')}&cu=INR`;
+                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${finalTotal.replace('₹','')}&cu=INR&tn=FreshfryOrder`;
             } else {
-                let msg = `Hi Freshfry, New Order:%0ATotal: ${totalAmt}%0AAddress: ${localStorage.getItem('ff_location')}`;
+                let itemsList = cart.map(i => `${i.name} x${i.qty}`).join(', ');
+                let msg = `🍱 *New Freshfry Order*%0A*Name:* ${userName}%0A*Phone:* ${userPhone}%0A*Items:* ${itemsList}%0A*Total:* ${finalTotal}%0A*Address:* ${userLoc}`;
                 window.open(`https://wa.me/917008186187?text=${msg}`);
             }
             cart = []; updateCartUI(); toggleCart(false);
