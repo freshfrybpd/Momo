@@ -46,22 +46,39 @@
     </div>
 
     <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 z-[3000]">
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
-            <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
-            <div class="space-y-4 mt-6">
-                <input type="text" id="modal-name" placeholder="Full Name" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
-                <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500">
-                <textarea id="modal-location" rows="3" placeholder="Exact Delivery Location" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
+    <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 btn-gradient"></div>
+        
+        <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">Enter your details to start ordering</p>
+
+        <div class="space-y-4">
+            <div class="relative">
+                <i class="fa-solid fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
+                <input type="text" id="modal-name" placeholder="Full Name" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
             </div>
-            <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all">START FEASTING</button>
-            <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-6 shadow-xl active:scale-95 transition-all uppercase italic">Start Feasting</button>
+            
+            <div class="relative">
+                <i class="fa-solid fa-phone absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
+                <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
 
-<button onclick="logoutUser()" class="w-full mt-4 py-2 text-[10px] font-black text-red-500 uppercase tracking-[0.2em] hover:bg-red-50 rounded-xl transition-all">
-    <i class="fa-solid fa-power-off mr-1"></i> Logout Account
-</button>
-
+            <div class="relative">
+                <i class="fa-solid fa-location-dot absolute left-5 top-5 text-gray-300 text-xs"></i>
+                <textarea id="modal-location" rows="3" placeholder="Exact Delivery Location" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none transition-all"></textarea>
+            </div>
         </div>
+
+        <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-8 shadow-xl active:scale-95 transition-all uppercase italic tracking-tight">
+            Start Feasting
+        </button>
+
+        <button onclick="logoutUser()" id="logout-btn" class="w-full mt-4 py-2 text-[10px] font-black text-red-500 uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-power-off"></i> Logout Account
+        </button>
     </div>
+</div>
+
 
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <h1 class="text-2xl font-900 tracking-tighter italic uppercase">Fresh<span class="text-orange-600">fry.</span></h1>
