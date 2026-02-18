@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshfry | Admin Panel Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #f8fafc; }
+        .admin-card { border-radius: 2rem; background: white; border: 1px solid #e2e8f0; overflow: hidden; transition: 0.3s; }
+        .input-style { width: 100%; background: #f1f5f9; border: 2px solid transparent; padding: 12px 18px; border-radius: 1.2rem; font-weight: 600; font-size: 14px; outline: none; transition: 0.3s; }
+        .input-style:focus { border-color: #ff5e00; background: white; }
+        .btn-add { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); color: white; font-weight: 900; }
+    </style>
+</head>
+<body class="p-4 pb-20">
+
+    <div class="max-w-xl mx-auto">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-900 italic uppercase">Menu <span class="text-orange-500">Control</span></h1>
+            <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
+                <i class="fa-solid fa-plus"></i>
+            </div>
+        </header>
+
+        <div class="admin-card p-6 mb-10 shadow-xl border-t-4 border-orange-500">
+            <h2 id="form-title" class="font-900 uppercase italic text-xs mb-6 text-gray-400">Add New Momo</h2>
+            <input type="hidden" id="edit-id"> <div class="space-y-4">
+                <input type="text" id="m-name" placeholder="Item Name (e.g. Chicken Steam)" class="input-style">
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-[10px] font-black uppercase ml-2 mb-1 text-gray-400">Half Price (₹)</p>
+                        <input type="number" id="m-half-price" placeholder="40" class="input-style">
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase ml-2 mb-1 text-gray-400">Full Price (₹)</p>
+                        <input type="number" id="m-full-price" placeholder="80" class="input-style">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <select id="m-type" class="input-style">
+                        <option value="Non-Veg">Non-Veg 🍗</option>
+                        <option value="Veg">Veg 🥗</option>
+                    </select>
+                    <input type="text" id="m-image" placeholder="Image URL" class="input-style">
+                </div>
+
+                <div class="flex gap-2">
+                    <button id="submit-btn" onclick="saveItem()" class="flex-1 btn-add py-4 rounded-2xl shadow-lg active:scale-95 transition-all uppercase text-xs tracking-widest">Add Item</button>
+                    <button id="cancel-btn" onclick="resetForm()" class="hidden bg-gray-200 text-gray-600 px-6 rounded-2xl font-black text-xs uppercase">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-menu-list" class="space-y-4"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+            authDomain: "freshfry-39a10.firebaseapp.com",
+            projectId: "freshfry-39a10",
+            storageBucket: "freshfry-39a10.firebasestorage.app",
+            messagingSenderId: "928483976893",
+            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Save or Update Function
+        window.saveItem = async () => {
+            const id = document.getElementById('edit-id').value;
+            const data = {
+                name: document.getElementById('m-name').value,
+                halfPrice: Number(document.getElementById('m-half-price').value) || 0,
+                fullPrice: Number(document.getElementById('m-full-price').value) || 0,
+                type: document.getElementById('m-type').value,
+                image: document.getElementById('m-image').value || 'https://via.placeholder.com/150',
+                inStock: true
+            };
+
+            if(!data.name || (!data.halfPrice && !data.fullPrice)) return alert("Naam aur ek price zaroori hai!");
+
+            try {
+                if(id) {
+                    await updateDoc(doc(db, "menu", id), data);
+                    alert("Updated! ✅");
+                } else {
+                    await addDoc(collection(db, "menu"), data);
+                    alert("Added! 🔥");
+                }
+                resetForm();
+            } catch (e) { console.error(e); }
+        };
+
+        // Load Items
+        onSnapshot(collection(db, "menu"), (snap) => {
+            const list = document.getElementById('admin-menu-list');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                const item = d.data();
+                list.innerHTML += `
+                    <div class="admin-card p-4 flex items-center gap-4 shadow-sm">
+                        <img src="${item.image}" class="w-16 h-16 object-cover rounded-2xl">
+                        <div class="flex-1">
+                            <h3 class="font-900 uppercase text-xs tracking-tight">${item.name}</h3>
+                            <p class="text-[10px] font-bold text-gray-400">H: ₹${item.halfPrice} | F: ₹${item.fullPrice}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editItem('${d.id}', \`${JSON.stringify(item)}\`)" class="h-9 w-9 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
+                            <button onclick="deleteItem('${d.id}')" class="h-9 w-9 bg-red-50 text-red-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        </div>
+                    </div>`;
+            });
+        });
+
+        window.editItem = (id, itemStr) => {
+            const item = JSON.parse(itemStr);
+            document.getElementById('edit-id').value = id;
+            document.getElementById('m-name').value = item.name;
+            document.getElementById('m-half-price').value = item.halfPrice;
+            document.getElementById('m-full-price').value = item.fullPrice;
+            document.getElementById('m-type').value = item.type;
+            document.getElementById('m-image').value = item.image;
+            
+            document.getElementById('form-title').innerText = "Edit Momo Details";
+            document.getElementById('submit-btn').innerText = "Update Item";
+            document.getElementById('cancel-btn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.resetForm = () => {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('m-name').value = '';
+            document.getElementById('m-half-price').value = '';
+            document.getElementById('m-full-price').value = '';
+            document.getElementById('form-title').innerText = "Add New Momo";
+            document.getElementById('submit-btn').innerText = "Add Item";
+            document.getElementById('cancel-btn').classList.add('hidden');
+        };
+
+        window.deleteItem = async (id) => {
+            if(confirm("Bhai, uda dein?")) await deleteDoc(doc(db, "menu", id));
+        };
+    </script>
+</body>
+</html>
