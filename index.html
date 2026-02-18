@@ -209,24 +209,13 @@
         let cart = [];
         let currentFilter = 'All';
 
-        // Filter Logic
-        window.filterMenu = (type) => {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active-filter');
-                btn.classList.add('text-slate-400');
-            });
-            document.getElementById(`btn-${type.toLowerCase().replace('-','')}`).classList.add('active-filter');
-            loadMenu(); 
-        };
-
-        // Real-time Menu Loader (Corrected)
-        function loadMenu() {
+        // 1. Updated loadMenu (Fixing variable from 'momo' to 'item')
+function loadMenu() {
     onSnapshot(collection(db, "menu"), (snap) => {
         const list = document.getElementById('menu-list'); 
         list.innerHTML = '';
         snap.forEach(d => {
-            const item = d.data();
+            const item = d.data(); // Yahan variable 'item' hai
             if(currentFilter !== 'All' && item.type !== currentFilter) return;
 
             const isAvailable = item.inStock !== false; 
@@ -240,7 +229,7 @@
                     
                     <div class="px-2">
                         <div class="flex justify-between font-900 text-lg uppercase italic">
-                            <span class="${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
+                            <span class="momo-name-text ${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
                         </div>
                         
                         <div class="flex gap-2 mt-3">
@@ -275,32 +264,29 @@
     });
 }
 
-        
-        
-        window.searchMenu = () => {
+// 2. Updated Search Logic (Fixing class selection)
+window.searchMenu = () => {
     const input = document.getElementById('menu-search').value.toLowerCase();
     const cards = document.querySelectorAll('.momo-card');
-
     cards.forEach(card => {
-        // Card ke andar jo momo ka naam hai usse fetch kar rahe hain
-        const name = card.querySelector('.font-900.text-lg').innerText.toLowerCase();
-        
-        if (name.includes(input)) {
-            card.style.display = "block";
-            card.style.animation = "fadeIn 0.4s ease";
-        } else {
-            card.style.display = "none";
-        }
+        const name = card.querySelector('.momo-name-text').innerText.toLowerCase();
+        card.style.display = name.includes(input) ? "block" : "none";
     });
 };
 
-        window.prepareAddToCart = (id, name, hPrice, fPrice, image) => {
-    const variant = document.querySelector(`input[name="variant-${id}"]:checked`).value;
+// 3. Prepare Add To Cart (Final Check)
+window.prepareAddToCart = (id, name, hPrice, fPrice, image) => {
+    const variantEl = document.querySelector(`input[name="variant-${id}"]:checked`);
+    if(!variantEl) return alert("Pehle variant chuno!");
+    
+    const variant = variantEl.value;
     const finalName = `${name} (${variant})`;
     const finalPrice = variant === 'Half' ? hPrice : fPrice;
     
     addToCart(finalName, finalPrice, image);
+    toggleCart(true); // Cart automatic khul jayega
 };
+
 
 
         // Cart & Orders Logic
