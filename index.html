@@ -239,6 +239,26 @@
                 });
             });
         }
+        
+        
+        window.searchMenu = () => {
+    const input = document.getElementById('menu-search').value.toLowerCase();
+    const cards = document.querySelectorAll('.momo-card');
+
+    cards.forEach(card => {
+        // Card ke andar jo momo ka naam hai usse fetch kar rahe hain
+        const name = card.querySelector('.font-900.text-lg').innerText.toLowerCase();
+        
+        if (name.includes(input)) {
+            card.style.display = "block";
+            card.style.animation = "fadeIn 0.4s ease";
+        } else {
+            card.style.display = "none";
+        }
+    });
+};
+
+        
 
         // Cart & Orders Logic
         window.addToCart = (n, p, i) => { 
