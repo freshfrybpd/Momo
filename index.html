@@ -358,18 +358,17 @@
     const loc = localStorage.getItem('ff_location');
 
     if (name) {
-        // 1. Profile Image update karein
         document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
         
-        // 2. Modal ke inputs mein purana data bhar dein (Blank nahi dikhega ab)
+        // Inputs fill karein
         if(document.getElementById('modal-name')) document.getElementById('modal-name').value = name;
         if(document.getElementById('modal-phone')) document.getElementById('modal-phone').value = phone;
         if(document.getElementById('modal-location')) document.getElementById('modal-location').value = loc;
     } else {
-        // Agar user naya hai toh modal dikhao
         document.getElementById('user-info-modal').classList.remove('hidden');
     }
 };
+
 
 
         window.saveUserDetails = async () => {
