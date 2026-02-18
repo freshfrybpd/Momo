@@ -114,6 +114,16 @@
     </div>
 </nav>
 
+<div class="px-6 mt-6 max-w-xl mx-auto">
+    <div class="relative group">
+        <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-orange-500 transition-colors"></i>
+        <input type="text" id="menu-search" onkeyup="searchMenu()" placeholder="Search your favorite momos..." 
+            class="w-full bg-white border border-gray-100 py-4 pl-14 pr-6 rounded-[2rem] font-bold text-sm shadow-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+        >
+    </div>
+</div>
+
+
     
     <div class="flex justify-center gap-2 px-6 mt-8 overflow-x-auto no-scrollbar">
         <button onclick="filterMenu('All')" id="btn-all" class="filter-btn active-filter px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white shadow-sm">All</button>
