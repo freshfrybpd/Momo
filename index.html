@@ -222,33 +222,59 @@
 
         // Real-time Menu Loader (Corrected)
         function loadMenu() {
-            onSnapshot(collection(db, "menu"), (snap) => {
-                const list = document.getElementById('menu-list'); 
-                list.innerHTML = '';
-                snap.forEach(d => {
-                    const item = d.data();
-                    if(currentFilter !== 'All' && item.type !== currentFilter) return;
+    onSnapshot(collection(db, "menu"), (snap) => {
+        const list = document.getElementById('menu-list'); 
+        list.innerHTML = '';
+        snap.forEach(d => {
+            const item = d.data();
+            if(currentFilter !== 'All' && item.type !== currentFilter) return;
 
-                    const isAvailable = item.inStock !== false; 
-                    const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+            const isAvailable = item.inStock !== false; 
+            const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+            const itemId = d.id;
 
-                    list.innerHTML += `
-                        <div class="momo-card p-4">
-                            <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                            <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
-                            <div class="flex justify-between font-900 text-lg uppercase px-2 italic">
-                                <span class="${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
-                                <span class="text-orange-600">₹${item.price}</span>
-                            </div>
-                            ${isAvailable ? 
-                                `<button onclick="addToCart('${item.name}', ${item.price}, '${item.image}')" class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
-                                : 
-                                `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
-                            }
-                        </div>`;
-                });
-            });
-        }
+            list.innerHTML += `
+                <div class="momo-card p-4">
+                    <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
+                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
+                    
+                    <div class="px-2">
+                        <div class="flex justify-between font-900 text-lg uppercase italic">
+                            <span class="${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-3">
+                            ${item.halfPrice ? `
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="variant-${itemId}" value="Half" class="hidden peer" checked>
+                                <div class="text-center p-2 rounded-xl border border-gray-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                    <p class="text-[8px] font-black uppercase text-gray-400">Half</p>
+                                    <p class="font-900 text-xs">₹${item.halfPrice}</p>
+                                </div>
+                            </label>` : ''}
+                            
+                            ${item.fullPrice ? `
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="variant-${itemId}" value="Full" class="hidden peer" ${!item.halfPrice ? 'checked' : ''}>
+                                <div class="text-center p-2 rounded-xl border border-gray-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                    <p class="text-[8px] font-black uppercase text-gray-400">Full</p>
+                                    <p class="font-900 text-xs">₹${item.fullPrice}</p>
+                                </div>
+                            </label>` : ''}
+                        </div>
+
+                        ${isAvailable ? 
+                            `<button onclick="prepareAddToCart('${itemId}', '${item.name}', ${item.halfPrice || 0}, ${item.fullPrice || 0}, '${item.image}')" 
+                                class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
+                            : 
+                            `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
+                        }
+                    </div>
+                </div>`;
+        });
+    });
+}
+
         
         
         window.searchMenu = () => {
