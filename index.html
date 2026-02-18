@@ -472,6 +472,19 @@ function showSuccessToast(userName) {
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
         window.onload = () => { loadUserSession(); loadMenu(); };
+        
+        
+        window.logoutUser = () => {
+    // 1. Confirm karein ki logout karna hai
+    if(confirm("Bhai, logout karna chahte ho? 🥺")) {
+        // 2. Browser se saara data uda dein
+        localStorage.clear();
+        
+        // 3. Page ko refresh karein taaki fresh login screen aaye
+        window.location.reload();
+    }
+};
+
     </script>
 </body>
 </html>
