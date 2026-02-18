@@ -353,12 +353,61 @@
         };
 
         window.saveUserDetails = async () => {
-            const name = document.getElementById('modal-name').value, phone = document.getElementById('modal-phone').value, loc = document.getElementById('modal-location').value;
-            if(!name || !phone || !loc) return alert("Fill all details!");
-            localStorage.setItem('ff_user', name); localStorage.setItem('ff_phone', phone); localStorage.setItem('ff_location', loc);
-            document.getElementById('user-info-modal').classList.add('hidden');
-            loadUserSession();
-        };
+    const name = document.getElementById('modal-name').value;
+    const phone = document.getElementById('modal-phone').value;
+    const loc = document.getElementById('modal-location').value;
+
+    if(!name || !phone || !loc) {
+        alert("Bhai, saari details bharna zaroori hai! 😊");
+        return;
+    }
+
+    try {
+        // 1. Firebase mein store karna (Phone number ko Unique ID maante hue)
+        await setDoc(doc(db, "users", phone), {
+            name: name,
+            phone: phone,
+            location: loc,
+            joinedAt: serverTimestamp()
+        });
+
+        // 2. Local browser mein save karna taaki baar-baar login na maange
+        localStorage.setItem('ff_user', name);
+        localStorage.setItem('ff_phone', phone);
+        localStorage.setItem('ff_location', loc);
+
+        // 3. Modal band karna
+        document.getElementById('user-info-modal').classList.add('hidden');
+
+        // 4. Beautiful Success UI dikhana
+        showSuccessToast(name);
+
+        loadUserSession();
+    } catch (error) {
+        console.error("Firebase Error:", error);
+        alert("Data store nahi ho paya. Connection check karein.");
+    }
+};
+
+// Beautiful Toast Notification Function
+function showSuccessToast(userName) {
+    const toast = document.createElement('div');
+    toast.className = "fixed top-10 left-1/2 -translate-x-1/2 z-[9999] animate-bounce";
+    toast.innerHTML = `
+        <div class="bg-white border-b-4 border-orange-500 shadow-2xl rounded-[2rem] px-8 py-4 flex items-center gap-4">
+            <div class="bg-orange-100 text-orange-600 h-10 w-10 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Database Synced</p>
+                <p class="text-sm font-black italic uppercase">Welcome, ${userName}! 🔥</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+}
+
 
         let selectedRating = 0, pendingFeedbackId = null;
         window.setStar = (n) => {
