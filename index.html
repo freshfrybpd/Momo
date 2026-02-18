@@ -258,32 +258,69 @@
         };
 
         window.processOrder = async (method) => {
-            if (cart.length === 0) return alert("Box khali hai!");
-            const phone = localStorage.getItem('ff_phone');
-            if(!phone) return document.getElementById('user-info-modal').classList.remove('hidden');
+    if (cart.length === 0) return alert("Bhai, box khali hai! Kuch toh add karo 🥟");
 
-            const orderPin = Math.floor(1000 + Math.random() * 9000);
-            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+    // 1. Details fetch karein
+    const name = localStorage.getItem('ff_user');
+    const phone = localStorage.getItem('ff_phone');
+    const location = localStorage.getItem('ff_location');
+
+    if(!phone) return document.getElementById('user-info-modal').classList.remove('hidden');
+
+    const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+    const totalBill = subtotal + 20;
+    const orderPin = Math.floor(1000 + Math.random() * 9000);
+
+    // 2. Firebase mein order save karein
+    const orderData = {
+        customerName: name,
+        customerPhone: phone,
+        customerLocation: location,
+        items: cart,
+        total: "₹" + totalBill,
+        status: 'pending',
+        orderPin: orderPin,
+        createdAt: serverTimestamp()
+    };
+
+    try {
+        const docRef = await addDoc(collection(db, "orders"), orderData);
+
+        if (method === 'whatsapp') {
+            // 3. WhatsApp Message Format (Bold and Clean)
+            let itemDetails = cart.map(i => `✅ *${i.qty}x ${i.name}* (₹${i.price * i.qty})`).join('%0A');
             
-            const orderData = {
-                customerName: localStorage.getItem('ff_user'),
-                customerPhone: phone,
-                customerLocation: localStorage.getItem('ff_location'),
-                items: cart,
-                total: "₹" + (subtotal + 20),
-                status: 'pending',
-                orderPin: orderPin,
-                createdAt: serverTimestamp()
-            };
+            const message = `*🔥 NEW ORDER - FRESHFRY MOMOS 🔥*%0A%0A` +
+                            `*--- CUSTOMER DETAILS ---*%0A` +
+                            `👤 Name: ${name}%0A` +
+                            `📞 Phone: ${phone}%0A` +
+                            `📍 Loc: ${location}%0A%0A` +
+                            `*--- ORDER ITEMS ---*%0A` +
+                            `${itemDetails}%0A%0A` +
+                            `*--- BILL SUMMARY ---*%0A` +
+                            `💰 Items Total: ₹${subtotal}%0A` +
+                            `🚚 Delivery Fee: ₹20%0A` +
+                            `⭐ *TOTAL BILL: ₹${totalBill}*%0A%0A` +
+                            `🔑 *ORDER PIN: ${orderPin}*%0A` +
+                            `🆔 Order ID: #${docRef.id.slice(-5)}%0A%0A` +
+                            `_Please confirm my order!_`;
 
-            const docRef = await addDoc(collection(db, "orders"), orderData);
-            if (method === 'whatsapp') {
-                const msg = `*NEW ORDER*%0AOrder ID: #${docRef.id.slice(0,5)}%0APIN: ${orderPin}%0AItems: ${cart.map(i => `${i.qty}x ${i.name}`).join(', ')}`;
-                window.open(`https://wa.me/917008186187?text=${msg}`);
-            }
-            cart = []; updateCartUI(); toggleCart(false);
-            alert(`Order Placed! Your PIN is ${orderPin}`);
-        };
+            // WhatsApp Redirect
+            window.open(`https://wa.me/917008186187?text=${message}`);
+        }
+
+        // Cart clear aur UI update
+        cart = []; 
+        updateCartUI(); 
+        toggleCart(false);
+        alert(`Order Placed Successfully! Your PIN is: ${orderPin}`);
+        
+    } catch (e) {
+        console.error("Order Error: ", e);
+        alert("Server error, please try again!");
+    }
+};
+
 
         window.loadMyOrders = () => {
     const p = localStorage.getItem('ff_phone');
