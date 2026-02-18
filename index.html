@@ -37,23 +37,6 @@
         .filter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .active-filter { background: #0f172a !important; color: white !important; border-color: #0f172a !important; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        @keyframes iconGlow {
-    0% { transform: scale(1); shadow: none; }
-    50% { 
-        transform: scale(1.2); 
-        filter: drop-shadow(0 0 15px #f97316);
-        color: #f97316;
-    }
-    100% { transform: scale(1); shadow: none; }
-}
-
-.glow-animation {
-    animation: iconGlow 1.5s infinite ease-in-out;
-    background-color: #fff7ed !important; /* Light orange background */
-    border: 2px solid #f97316 !important;
-}
-
     </style>
 </head>
 <body class="pb-10">
@@ -62,8 +45,7 @@
         <div id="promo-text" class="marquee-content italic uppercase font-black">FRESHFRY MOMOS IS LIVE IN BARIPADA! • ORDER NOW • 100% PREMIUM QUALITY •</div>
     </div>
 
-   <div id="user-info-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xl hidden flex items-center justify-center p-6 z-[3000]">
-
+    <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 z-[3000]">
     <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-2 btn-gradient"></div>
         
@@ -150,24 +132,13 @@
         </div>
     </div>
 
- <div id="orders-sidebar" class="sidebar sidebar-closed flex flex-col z-[4000]">
-    <div class="p-6 flex justify-between items-center border-b border-gray-100 bg-white">
-        <h2 class="text-2xl font-900 italic uppercase tracking-tighter">
-            My <span class="text-orange-500">Orders</span>
-        </h2>
-        <button onclick="toggleOrders(false)" class="bg-slate-100 h-10 w-10 rounded-xl hover:bg-orange-100 hover:text-orange-600 transition-all active:scale-90 flex items-center justify-center">
-            <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-    </div>
-
-    <div id="my-orders-btn" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50">
-        <div class="text-center py-10 opacity-20">
-            <i class="fa-solid fa-receipt text-4xl mb-2"></i>
-            <p class="text-[10px] font-black uppercase tracking-widest">No active orders</p>
+    <div id="orders-sidebar" class="sidebar sidebar-closed flex flex-col">
+        <div class="p-6 flex justify-between items-center border-b font-900 italic uppercase">
+            <h2 class="text-2xl tracking-tighter">My Orders</h2>
+            <button onclick="toggleOrders(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div id="my-orders-list" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"></div>
     </div>
-</div>
-
 
     <div id="overlay" onclick="closeAllSidebars()" class="fixed inset-0 z-50 hidden backdrop-blur-sm"></div>
 
@@ -314,22 +285,6 @@
 
     try {
         const docRef = await addDoc(collection(db, "orders"), orderData);
-        
-        // Ye line processOrder function ke andar, success alert se pehle daalein
-const orderIcon = document.getElementById('my-orders-btn');
-if(orderIcon) {
-    orderIcon.classList.add('glow-animation');
-}
-
-// Optional: Jab user icon pe click karke orders dekh le, tab animation rok dein
-window.showOrdersModal = () => {
-    const orderIcon = document.getElementById('my-orders-btn');
-    if(orderIcon) orderIcon.classList.remove('glow-animation');
-    
-    document.getElementById('orders-modal').classList.remove('hidden');
-    // Baaki ka load orders logic...
-};
-
 
         if (method === 'whatsapp') {
             // 3. WhatsApp Message Format (Bold and Clean)
@@ -601,7 +556,8 @@ function showSuccessToast(userName) {
 
     </script>
     
-
+    <div id="user-info-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xl hidden flex items-center justify-center p-6 z-[3000]">
+   </div>
 
 </body>
 </html>
