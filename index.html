@@ -209,6 +209,26 @@
         let cart = [];
         let currentFilter = 'All';
         
+        import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Store Status Live Check
+onSnapshot(doc(db, "settings", "store_config"), (d) => {
+    const isOpen = d.exists() ? d.data().isOpen : true;
+    const overlay = document.getElementById('shop-closed-overlay');
+    
+    if(!isOpen) {
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden'; // Scroll band karne ke liye
+    } else {
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = 'auto'; // Scroll chalu karne ke liye
+    }
+});
+
+        
+        
         // Filter Logic - Isse buttons activate honge
 window.filterMenu = (type) => {
     currentFilter = type; // 'All', 'Veg', ya 'Non-Veg' set karega
