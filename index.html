@@ -37,6 +37,20 @@
         .filter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .active-filter { background: #0f172a !important; color: white !important; border-color: #0f172a !important; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* Glow Animation Logic */
+@keyframes iconGlow {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0)); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 15px #f97316); color: #f97316; }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0)); }
+}
+
+.glow-animation { 
+    animation: iconGlow 1.5s infinite ease-in-out; 
+    border: 2px solid #f97316 !important; 
+    background-color: #fff7ed !important; 
+}
+
+        
     </style>
 </head>
 <body class="pb-10">
