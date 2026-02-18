@@ -149,13 +149,24 @@
         </div>
     </div>
 
-    <div id="orders-sidebar" class="sidebar sidebar-closed flex flex-col">
-        <div class="p-6 flex justify-between items-center border-b font-900 italic uppercase">
-            <h2 class="text-2xl tracking-tighter">My Orders</h2>
-            <button onclick="toggleOrders(false)" class="bg-gray-50 h-10 w-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="my-orders-list" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"></div>
+ <div id="orders-sidebar" class="sidebar sidebar-closed flex flex-col z-[4000]">
+    <div class="p-6 flex justify-between items-center border-b border-gray-100 bg-white">
+        <h2 class="text-2xl font-900 italic uppercase tracking-tighter">
+            My <span class="text-orange-500">Orders</span>
+        </h2>
+        <button onclick="toggleOrders(false)" class="bg-slate-100 h-10 w-10 rounded-xl hover:bg-orange-100 hover:text-orange-600 transition-all active:scale-90 flex items-center justify-center">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
     </div>
+
+    <div id="my-orders-list" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+        <div class="text-center py-10 opacity-20">
+            <i class="fa-solid fa-receipt text-4xl mb-2"></i>
+            <p class="text-[10px] font-black uppercase tracking-widest">No active orders</p>
+        </div>
+    </div>
+</div>
+
 
     <div id="overlay" onclick="closeAllSidebars()" class="fixed inset-0 z-50 hidden backdrop-blur-sm"></div>
 
