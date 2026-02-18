@@ -391,22 +391,40 @@
 
 // Beautiful Toast Notification Function
 function showSuccessToast(userName) {
+    // Purane toast ko remove karne ke liye agar koi screen par ho
+    const oldToast = document.getElementById('ff-toast');
+    if(oldToast) oldToast.remove();
+
     const toast = document.createElement('div');
-    toast.className = "fixed top-10 left-1/2 -translate-x-1/2 z-[9999] animate-bounce";
+    toast.id = "ff-toast";
+    // Styling: Bottom center, Glass effect, Bold Border
+    toast.className = "fixed bottom-10 left-1/2 -translate-x-1/2 z-[9999] w-[90%] max-w-[350px] animate-bounce";
+    
     toast.innerHTML = `
-        <div class="bg-white border-b-4 border-orange-500 shadow-2xl rounded-[2rem] px-8 py-4 flex items-center gap-4">
-            <div class="bg-orange-100 text-orange-600 h-10 w-10 rounded-full flex items-center justify-center">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
+        <div class="bg-slate-900/95 backdrop-blur-xl border-t-4 border-orange-500 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] p-5 flex items-center gap-4 border border-white/10">
+            <div class="bg-gradient-to-tr from-orange-500 to-yellow-400 h-12 w-12 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <i class="fa-solid fa-check text-white text-xl"></i>
             </div>
-            <div>
-                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Database Synced</p>
-                <p class="text-sm font-black italic uppercase">Welcome, ${userName}! 🔥</p>
+            <div class="flex-1">
+                <p class="text-[8px] font-black uppercase tracking-[0.2em] text-orange-400 opacity-80">System Secured</p>
+                <p class="text-[13px] font-black text-white italic uppercase tracking-tight">
+                    Welcome to <span class="text-orange-500">Freshfry</span>, ${userName}!
+                </p>
+                <p class="text-[9px] text-slate-400 font-bold">Data synced to Baripada HQ</p>
             </div>
         </div>
     `;
+
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 4000);
+
+    // 4 second baad fade out hokar remove ho jayega
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = '0.5s all ease';
+        setTimeout(() => toast.remove(), 500);
+    }, 4000);
 }
+
 
 
         let selectedRating = 0, pendingFeedbackId = null;
