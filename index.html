@@ -540,7 +540,21 @@ function showSuccessToast(userName) {
         }, 10000);
 
         window.toggleCart = (s) => { document.getElementById('cart-sidebar').classList.toggle('sidebar-open', s); document.getElementById('cart-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); };
-        window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); document.getElementById('orders-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadMyOrders(); };
+        window.toggleOrders = (s) => { 
+    const sidebar = document.getElementById('orders-sidebar');
+    const orderBtn = document.getElementById('my-orders-btn');
+
+    sidebar.classList.toggle('sidebar-open', s); 
+    sidebar.classList.toggle('sidebar-closed', !s); 
+    document.getElementById('overlay').classList.toggle('hidden', !s);
+    
+    if(s) {
+        // Jab user orders khol le, toh chamakna band kar do
+        if(orderBtn) orderBtn.classList.remove('glow-animation');
+        loadMyOrders();
+    }
+};
+
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
         window.onload = () => {
