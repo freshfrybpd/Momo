@@ -301,6 +301,10 @@
 
     try {
         const docRef = await addDoc(collection(db, "orders"), orderData);
+        // Order hone ke baad button chamkana shuru karega
+const orderBtn = document.getElementById('my-orders-btn');
+if(orderBtn) orderBtn.classList.add('glow-animation');
+
 
         if (method === 'whatsapp') {
             // 3. WhatsApp Message Format (Bold and Clean)
