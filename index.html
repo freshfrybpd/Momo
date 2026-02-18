@@ -37,20 +37,6 @@
         .filter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .active-filter { background: #0f172a !important; color: white !important; border-color: #0f172a !important; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        /* Glow Animation Logic */
-@keyframes iconGlow {
-    0% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0)); }
-    50% { transform: scale(1.2); filter: drop-shadow(0 0 15px #f97316); color: #f97316; }
-    100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0)); }
-}
-
-.glow-animation { 
-    animation: iconGlow 1.5s infinite ease-in-out; 
-    border: 2px solid #f97316 !important; 
-    background-color: #fff7ed !important; 
-}
-
-        
     </style>
 </head>
 <body class="pb-10">
@@ -97,12 +83,6 @@
     <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
         <h1 class="text-2xl font-900 tracking-tighter italic uppercase">Fresh<span class="text-orange-600">fry.</span></h1>
         <div class="flex items-center gap-3">
-          
-        <button id="my-orders-btn" onclick="toggleOrders(true)" class="bg-gray-100 text-gray-900 h-11 w-11 rounded-2xl flex items-center justify-center shadow-sm transition-all duration-300">
-    <i class="fa-solid fa-receipt text-lg"></i>
-</button>
-
-     
             <button onclick="toggleOrders(true)" class="bg-gray-100 text-gray-900 h-11 w-11 rounded-2xl flex items-center justify-center shadow-sm"><i class="fa-solid fa-receipt text-lg"></i></button>
             <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-11 w-11 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
                 <i class="fa-solid fa-bag-shopping"></i>
@@ -305,10 +285,6 @@
 
     try {
         const docRef = await addDoc(collection(db, "orders"), orderData);
-        // Order hone ke baad button chamkana shuru karega
-const orderBtn = document.getElementById('my-orders-btn');
-if(orderBtn) orderBtn.classList.add('glow-animation');
-
 
         if (method === 'whatsapp') {
             // 3. WhatsApp Message Format (Bold and Clean)
@@ -546,21 +522,7 @@ function showSuccessToast(userName) {
         }, 10000);
 
         window.toggleCart = (s) => { document.getElementById('cart-sidebar').classList.toggle('sidebar-open', s); document.getElementById('cart-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); };
-        window.toggleOrders = (s) => { 
-    const sidebar = document.getElementById('orders-sidebar');
-    const orderBtn = document.getElementById('my-orders-btn');
-
-    sidebar.classList.toggle('sidebar-open', s); 
-    sidebar.classList.toggle('sidebar-closed', !s); 
-    document.getElementById('overlay').classList.toggle('hidden', !s);
-    
-    if(s) {
-        // Jab user orders khol le, toh chamakna band kar do
-        if(orderBtn) orderBtn.classList.remove('glow-animation');
-        loadMyOrders();
-    }
-};
-
+        window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); document.getElementById('orders-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadMyOrders(); };
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
         window.onload = () => {
@@ -594,7 +556,8 @@ function showSuccessToast(userName) {
 
     </script>
     
-  
+    <div id="user-info-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xl hidden flex items-center justify-center p-6 z-[3000]">
+   </div>
 
 </body>
 </html>
