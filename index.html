@@ -208,6 +208,31 @@
         const db = getFirestore(app);
         let cart = [];
         let currentFilter = 'All';
+        
+        // Filter Logic - Isse buttons activate honge
+window.filterMenu = (type) => {
+    currentFilter = type; // 'All', 'Veg', ya 'Non-Veg' set karega
+    
+    // Sabhi buttons se active class hatao aur gray color do
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active-filter');
+        btn.classList.add('text-slate-400');
+    });
+
+    // Clicked button ko dhoondo aur highlight karo
+    // Note: Hum ID se select kar rahe hain jo aapke HTML mein hai (btn-all, btn-veg, btn-nonveg)
+    const targetId = type === 'All' ? 'btn-all' : (type === 'Veg' ? 'btn-veg' : 'btn-nonveg');
+    const activeBtn = document.getElementById(targetId);
+    
+    if(activeBtn) {
+        activeBtn.classList.add('active-filter');
+        activeBtn.classList.remove('text-slate-400');
+    }
+
+    // Naya menu load karo filter ke saath
+    loadMenu(); 
+};
+
 
         // 1. Updated loadMenu (Fixing variable from 'momo' to 'item')
 function loadMenu() {
