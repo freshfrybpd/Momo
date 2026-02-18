@@ -488,7 +488,22 @@ function showSuccessToast(userName) {
         window.toggleOrders = (s) => { document.getElementById('orders-sidebar').classList.toggle('sidebar-open', s); document.getElementById('orders-sidebar').classList.toggle('sidebar-closed', !s); document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadMyOrders(); };
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
-        window.onload = () => { loadUserSession(); loadMenu(); };
+        window.onload = () => {
+    loadUserSession(); // User ki purani session check karega
+    loadMenu();        // Menu load karega
+    
+    // --- Auto Popup Logic for New Users ---
+    const isNewUser = !localStorage.getItem('ff_phone'); 
+    if (isNewUser) {
+        // 1 second ke delay ke baad modal dikhayenge (premium feel ke liye)
+        setTimeout(() => {
+            const modal = document.getElementById('user-info-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex'); // Hidden hatakar flex add karna zaroori hai
+        }, 1000);
+    }
+};
+
         
         
         window.logoutUser = () => {
