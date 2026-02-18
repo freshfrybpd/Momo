@@ -27,7 +27,9 @@
 
         <div class="admin-card p-6 mb-10 shadow-xl border-t-4 border-orange-500">
             <h2 id="form-title" class="font-900 uppercase italic text-xs mb-6 text-gray-400">Add New Momo</h2>
-            <input type="hidden" id="edit-id"> <div class="space-y-4">
+            <input type="hidden" id="edit-id"> 
+            
+            <div class="space-y-4">
                 <input type="text" id="m-name" placeholder="Item Name (e.g. Chicken Steam)" class="input-style">
                 
                 <div class="grid grid-cols-2 gap-3">
@@ -61,7 +63,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -87,18 +89,21 @@
                 inStock: true
             };
 
-            if(!data.name || (!data.halfPrice && !data.fullPrice)) return alert("Naam aur ek price zaroori hai!");
+            if(!data.name) return alert("Bhai, naam likhna zaroori hai!");
 
             try {
                 if(id) {
                     await updateDoc(doc(db, "menu", id), data);
-                    alert("Updated! ✅");
+                    alert("Updated Successfully! ✅");
                 } else {
                     await addDoc(collection(db, "menu"), data);
-                    alert("Added! 🔥");
+                    alert("Added Successfully! 🔥");
                 }
                 resetForm();
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error(e);
+                alert("Error saving data!"); 
+            }
         };
 
         // Load Items
@@ -107,6 +112,7 @@
             list.innerHTML = '';
             snap.forEach(d => {
                 const item = d.data();
+                const itemId = d.id;
                 list.innerHTML += `
                     <div class="admin-card p-4 flex items-center gap-4 shadow-sm">
                         <img src="${item.image}" class="w-16 h-16 object-cover rounded-2xl">
@@ -115,40 +121,65 @@
                             <p class="text-[10px] font-bold text-gray-400">H: ₹${item.halfPrice} | F: ₹${item.fullPrice}</p>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="editItem('${d.id}', \`${JSON.stringify(item)}\`)" class="h-9 w-9 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                            <button onclick="deleteItem('${d.id}')" class="h-9 w-9 bg-red-50 text-red-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                            <button onclick="editItem('${itemId}')" class="h-9 w-9 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
+                            <button onclick="deleteItem('${itemId}')" class="h-9 w-9 bg-red-50 text-red-500 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
                         </div>
                     </div>`;
             });
         });
 
-        window.editItem = (id, itemStr) => {
-            const item = JSON.parse(itemStr);
-            document.getElementById('edit-id').value = id;
-            document.getElementById('m-name').value = item.name;
-            document.getElementById('m-half-price').value = item.halfPrice;
-            document.getElementById('m-full-price').value = item.fullPrice;
-            document.getElementById('m-type').value = item.type;
-            document.getElementById('m-image').value = item.image;
-            
-            document.getElementById('form-title').innerText = "Edit Momo Details";
-            document.getElementById('submit-btn').innerText = "Update Item";
-            document.getElementById('cancel-btn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Edit Function (Fixed)
+        window.editItem = async (id) => {
+            try {
+                const docRef = doc(db, "menu", id);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const item = docSnap.data();
+                    
+                    document.getElementById('edit-id').value = id;
+                    document.getElementById('m-name').value = item.name;
+                    document.getElementById('m-half-price').value = item.halfPrice;
+                    document.getElementById('m-full-price').value = item.fullPrice;
+                    document.getElementById('m-type').value = item.type;
+                    document.getElementById('m-image').value = item.image;
+                    
+                    document.getElementById('form-title').innerText = "Edit Momo Details";
+                    document.getElementById('submit-btn').innerText = "Update Item";
+                    document.getElementById('cancel-btn').classList.remove('hidden');
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (e) {
+                console.error(e);
+            }
         };
 
+        // Reset Form
         window.resetForm = () => {
             document.getElementById('edit-id').value = '';
             document.getElementById('m-name').value = '';
             document.getElementById('m-half-price').value = '';
             document.getElementById('m-full-price').value = '';
+            document.getElementById('m-image').value = '';
             document.getElementById('form-title').innerText = "Add New Momo";
             document.getElementById('submit-btn').innerText = "Add Item";
             document.getElementById('cancel-btn').classList.add('hidden');
         };
 
+        // Delete Function
         window.deleteItem = async (id) => {
-            if(confirm("Bhai, uda dein?")) await deleteDoc(doc(db, "menu", id));
+            if(confirm("Bhai, pakka uda dein?")) {
+                try {
+                    await deleteDoc(doc(db, "menu", id));
+                } catch (e) {
+                    console.error(e);
+                }
+            }
         };
     </script>
 </body>
