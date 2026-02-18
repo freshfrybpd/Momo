@@ -3,74 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry Rider | Secure Delivery</title>
+    <title>Freshfry Partner | Rider App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .rider-card { border-radius: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 15px 35px -5px rgba(0,0,0,0.05); overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .rider-card { background: white; border-radius: 2.5rem; box-shadow: 0 15px 35px -5px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
+        .wallet-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff8a00, #ff5e00); transition: width 0.8s ease; }
         #main-app { display: none; }
-        .wallet-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
-        .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: #ff5e00; transition: width 0.5s ease; }
+        .pulse-online { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-32">
 
-    <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6 text-white text-center">
-        <div class="w-full max-w-sm bg-white rounded-[3rem] p-10 shadow-2xl text-slate-800">
-            <div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+    <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6 text-white">
+        <div class="w-full max-w-sm bg-white rounded-[3.5rem] p-10 shadow-2xl text-slate-800">
+            <div class="w-20 h-20 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center text-3xl mx-auto mb-6">
                 <i class="fa-solid fa-motorcycle"></i>
             </div>
-            <h2 class="text-2xl font-800 mb-6 uppercase tracking-tighter">Rider Login</h2>
+            <h2 class="text-3xl font-800 mb-2 text-center tracking-tighter uppercase italic">Fresh<span class="text-orange-500">fry</span></h2>
+            <p class="text-slate-400 text-center text-[10px] font-black mb-8 uppercase tracking-widest">Rider Authentication</p>
+            
             <div class="space-y-3">
-                <input type="text" id="riderNameInput" placeholder="FULL NAME" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center uppercase border focus:border-orange-500">
-                <input type="tel" id="riderPhoneInput" maxlength="10" placeholder="10 DIGIT PHONE" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center border focus:border-orange-500">
-                <input type="text" id="riderUpiInput" placeholder="UPI ID (e.g. 98xxxx@ybl)" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center border focus:border-orange-500 lowercase">
-                <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold text-center border focus:border-orange-500">
-                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest active:scale-95 transition">Start Duty 🚀</button>
+                <input type="text" id="riderNameInput" placeholder="YOUR FULL NAME" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 uppercase text-sm">
+                <input type="tel" id="riderPhoneInput" maxlength="10" placeholder="10 DIGIT PHONE" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 text-sm">
+                <input type="text" id="riderUpiInput" placeholder="UPI ID (for payments)" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 text-sm">
+                <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 text-sm">
+                
+                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-black uppercase text-[11px] tracking-widest mt-4 shadow-xl active:scale-95 transition-all">Start Duty 🚀</button>
             </div>
         </div>
     </div>
 
     <div id="main-app">
-        <nav class="bg-white p-6 sticky top-0 z-50 shadow-sm flex justify-between items-center rounded-b-[2.5rem]">
+        <nav class="glass-nav p-6 sticky top-0 z-50 flex justify-between items-center rounded-b-[2.5rem]">
             <div>
-                <p id="currentDateDisplay" class="text-[9px] font-black text-orange-500 uppercase tracking-widest"></p>
-                <h1 id="displayRiderName" class="text-xl font-800 italic text-slate-900 uppercase tracking-tighter">Rider</h1>
-                <p id="displayRiderUpi" class="text-[8px] font-bold text-slate-400 mt-1"></p>
+                <h1 id="displayRiderName" class="text-lg font-800 text-slate-900 uppercase leading-none italic">Rider</h1>
+                <p id="displayRiderUpi" class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest"></p>
             </div>
-            <div class="flex items-center gap-3">
-                <button id="statusToggle" onclick="toggleDuty()" class="px-4 py-2 rounded-full text-[10px] font-black uppercase transition-all bg-green-500 text-white">Online</button>
-                <button onclick="logoutRider()" class="text-red-500 bg-red-50 p-3 rounded-xl active:scale-90 transition"><i class="fa-solid fa-power-off"></i></button>
-            </div>
+            <button id="statusToggle" onclick="toggleDuty()" class="px-5 py-2.5 rounded-full text-[10px] font-black uppercase transition-all bg-green-500 text-white pulse-online shadow-lg">Online</button>
         </nav>
 
-        <section class="p-4 space-y-4">
-            <div class="grid grid-cols-2 gap-3">
-                <div class="wallet-card p-6 rounded-[2.5rem] text-white shadow-xl">
-                    <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Today's Earnings</p>
+        <section class="p-6 space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="wallet-gradient p-7 rounded-[3rem] text-white">
+                    <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Today's Pay</p>
                     <h3 id="todayEarning" class="text-3xl font-800 italic tracking-tighter">₹0</h3>
                 </div>
-                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                    <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Lifetime</p>
-                    <h3 id="lifetimeEarning" class="text-3xl font-800 italic text-slate-900 tracking-tighter">₹0</h3>
+                <div class="bg-white p-7 rounded-[3rem] shadow-sm border border-slate-100">
+                    <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Orders Done</p>
+                    <h3 id="orderCountDisplay" class="text-3xl font-800 italic text-slate-900 tracking-tighter">0</h3>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-[2rem] border border-slate-100">
-                <div class="flex justify-between items-center mb-2">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Daily Goal (10 Orders)</p>
-                    <p id="orderCountDisplay" class="text-[10px] font-black text-orange-500">0/10</p>
-                </div>
-                <div class="progress-bar">
-                    <div id="goalFill" class="progress-fill" style="width: 0%"></div>
-                </div>
-            </div>
+            <h2 class="text-xs font-900 uppercase text-slate-400 px-2 tracking-[0.2em] flex items-center gap-2">
+                <span class="w-2 h-2 bg-orange-500 rounded-full"></span> Active Deliveries
+            </h2>
+            
+            <div id="rider-orders-list" class="space-y-6"></div>
         </section>
 
-        <main class="p-4 max-w-lg mx-auto space-y-6" id="rider-orders-list"></main>
+        <div class="fixed bottom-6 left-6 right-6 bg-slate-900 rounded-[2rem] p-4 flex justify-around items-center shadow-2xl z-50">
+            <button class="text-orange-500 text-xl"><i class="fa-solid fa-house-chimney"></i></button>
+            <button onclick="location.reload()" class="text-slate-500 text-xl"><i class="fa-solid fa-rotate-right"></i></button>
+            <button onclick="logoutRider()" class="text-red-400 text-xl"><i class="fa-solid fa-power-off"></i></button>
+        </div>
     </div>
 
     <script type="module">
@@ -89,23 +90,22 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- LOGIN LOGIC WITH PHONE VALIDATION ---
         window.checkRiderLogin = async () => {
             const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
             const phone = document.getElementById('riderPhoneInput').value.trim();
             const upi = document.getElementById('riderUpiInput').value.trim().toLowerCase();
             const pass = document.getElementById('riderPassInput').value;
 
-            if (name.length < 3) return alert("Enter valid name");
-            if (phone.length !== 10) return alert("Enter valid 10-digit number");
-            if (!upi.includes('@')) return alert("Enter a valid UPI ID");
-            if (pass !== "freshfry2026") return alert("Wrong Pass Key!");
+            const phoneRegex = /^[6-9]\d{9}$/; // Starts with 6-9 and is 10 digits
+
+            if (name.length < 3) return alert("Enter full name!");
+            if (!phoneRegex.test(phone)) return alert("Enter valid 10-digit Indian phone number!");
+            if (!upi.includes('@')) return alert("Enter valid UPI ID!");
+            if (pass !== "freshfry2026") return alert("Incorrect Pass Key!");
 
             await setDoc(doc(db, "riders", name), { 
-                riderName: name, 
-                riderPhone: phone,
-                riderUpi: upi,
-                status: "Online", 
-                lastLogin: serverTimestamp() 
+                riderName: name, riderPhone: phone, riderUpi: upi, status: "Online", lastLogin: serverTimestamp() 
             }, { merge: true });
 
             sessionStorage.setItem('rider_auth', 'true');
@@ -114,31 +114,12 @@
             unlockUI(name);
         };
 
-        window.toggleDuty = async () => {
-            const name = sessionStorage.getItem('rider_name');
-            const btn = document.getElementById('statusToggle');
-            const isOnline = btn.innerText === "Online";
-            const newStatus = isOnline ? "Offline" : "Online";
-            await updateDoc(doc(db, "riders", name), { status: newStatus });
-            btn.innerText = newStatus;
-            btn.className = `px-4 py-2 rounded-full text-[10px] font-black uppercase transition-all ${newStatus === 'Online' ? 'bg-green-500' : 'bg-slate-400'} text-white`;
-        };
-
-        window.logoutRider = async () => {
-            if (confirm("Go Offline and Logout?")) {
-                const name = sessionStorage.getItem('rider_name');
-                await updateDoc(doc(db, "riders", name), { status: "Offline" });
-                sessionStorage.clear();
-                location.reload();
-            }
-        };
-
+        // --- UI LOGIC ---
         function unlockUI(name) {
             document.getElementById('rider-login-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('displayRiderName').innerText = name;
             document.getElementById('displayRiderUpi').innerText = "UPI: " + sessionStorage.getItem('rider_upi');
-            document.getElementById('currentDateDisplay').innerText = new Date().toDateString();
             
             const today = new Date().toLocaleDateString();
             if (localStorage.getItem(`ff_date_${name}`) !== today) {
@@ -152,81 +133,93 @@
 
         function loadEarningUI(name) {
             document.getElementById('todayEarning').innerText = `₹${localStorage.getItem(`ff_earn_${name}`) || 0}`;
-            document.getElementById('lifetimeEarning').innerText = `₹${localStorage.getItem(`ff_life_${name}`) || 0}`;
-            const orders = localStorage.getItem(`ff_orders_${name}`) || 0;
-            document.getElementById('orderCountDisplay').innerText = `${orders}/10`;
-            document.getElementById('goalFill').style.width = `${Math.min((orders / 10) * 100, 100)}%`;
+            document.getElementById('orderCountDisplay').innerText = localStorage.getItem(`ff_orders_${name}`) || 0;
         }
 
+        // --- ORDER LIST TEMPLATE ---
         function loadMyOrders(riderName) {
             const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('rider-orders-list');
                 list.innerHTML = '';
                 if(snap.empty) {
-                    list.innerHTML = `<div class="text-center py-20 text-slate-300 font-bold uppercase text-[10px] tracking-widest">Waiting for orders...</div>`;
+                    list.innerHTML = `<div class="bg-white p-16 rounded-[3rem] text-center text-slate-300 font-black uppercase text-[10px] tracking-widest shadow-sm italic">Waiting for new tasks...</div>`;
                     return;
                 }
                 snap.forEach(d => {
-                    const order = d.data();
-                    // FIX: 'orderPin' variable ko correctly yahan set kiya gaya hai
-                    const pinFromDb = order.orderPin; 
+                    const o = d.data();
                     list.innerHTML += `
-                    <div class="bg-white p-8 rider-card border-t-8 border-orange-500">
+                    <div class="rider-card p-8 border-t-[12px] border-orange-500">
                         <div class="flex justify-between items-start mb-6">
                             <div>
-                                <h3 class="text-2xl font-900 uppercase italic tracking-tighter">${order.customerName}</h3>
-                                <p class="text-[10px] font-black text-orange-500 uppercase">${order.customerPhone}</p>
+                                <h3 class="text-2xl font-800 text-slate-900 tracking-tighter uppercase italic">${o.customerName}</h3>
+                                <p class="text-[10px] font-black text-orange-500 uppercase mt-1 tracking-widest">ORDER ID #${d.id.slice(-5)}</p>
                             </div>
-                            <div class="text-right">
-                                <h3 class="text-2xl font-900 text-slate-900 tracking-tighter">${order.total}</h3>
-                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">PREPAID</p>
+                            <div class="text-right italic">
+                                <h3 class="text-2xl font-900 text-slate-900">₹${o.total}</h3>
+                                <p class="text-[8px] font-black text-blue-500 uppercase">PREPAID</p>
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-5 rounded-[1.5rem] mb-6">
-                            <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Customer Details:</p>
-                            <a href="tel:${order.customerPhone}" class="text-blue-600 font-800 text-sm flex items-center gap-2 mb-4"><i class="fa-solid fa-phone"></i> ${order.customerPhone}</a>
-                            <p class="text-sm font-bold text-slate-700 leading-tight">${order.customerLocation}</p>
+
+                        <div class="space-y-3 mb-8">
+                            <a href="tel:${o.customerPhone}" class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100 active:scale-95 transition">
+                                <div class="h-10 w-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div>
+                                <span class="font-800 text-sm text-blue-700">CALL CUSTOMER</span>
+                            </a>
+                            <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <div class="h-10 w-10 bg-slate-200 text-slate-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
+                                <span class="font-700 text-xs text-slate-500 leading-snug pt-1">${o.customerLocation}</span>
+                            </div>
                         </div>
-                        <div class="bg-orange-50 p-6 rounded-[2rem] border-2 border-orange-100 mb-6 text-center">
-                            <label class="text-[10px] font-black text-orange-600 uppercase tracking-widest">Verification PIN</label>
-                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="XXXX" class="w-full bg-transparent text-center text-4xl font-900 tracking-[1rem] outline-none text-slate-800 placeholder-orange-200">
+
+                        <div class="bg-slate-900 p-8 rounded-[2.5rem] shadow-xl">
+                            <p class="text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Enter Verification PIN</p>
+                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="••••" class="w-full bg-white/5 border border-white/10 text-center text-4xl font-900 tracking-[1.5rem] outline-none text-white py-4 rounded-2xl focus:bg-white/10 transition-all">
+                            <button onclick="verifyAndDeliver('${d.id}', '${o.orderPin}')" class="w-full bg-orange-500 text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-widest mt-6 active:scale-95 transition-all italic">Complete Delivery 🔥</button>
                         </div>
-                        <button onclick="verifyAndDeliver('${d.id}', '${pinFromDb}')" class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition">Delivered (Earn ₹20)</button>
                     </div>`;
                 });
             });
         }
 
+        // --- DELIVERY VERIFICATION ---
         window.verifyAndDeliver = async (orderId, correctPin) => {
-    const inputPin = document.getElementById(`pin-${orderId}`).value;
-    
-    if(String(inputPin) === String(correctPin)) {
-        const name = sessionStorage.getItem('rider_name');
-        
-        // --- YE WALA SECTION UPDATE HUA HAI ---
-        await updateDoc(doc(db, "orders", orderId), { 
-            status: 'delivered', 
-            deliveredAt: serverTimestamp(),
-            showFeedback: true // Isse Customer ke phone par popup khulega
-        });
-        
-        // Earnings Update Logic
-        const todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
-        const lifeEarn = parseInt(localStorage.getItem(`ff_life_${name}`) || 0) + 20;
-        const orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
+            const inputPin = document.getElementById(`pin-${orderId}`).value;
+            if(String(inputPin) === String(correctPin)) {
+                const name = sessionStorage.getItem('rider_name');
+                await updateDoc(doc(db, "orders", orderId), { status: 'delivered', deliveredAt: serverTimestamp() });
+                
+                let todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
+                let orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
 
-        localStorage.setItem(`ff_earn_${name}`, todayEarn);
-        localStorage.setItem(`ff_life_${name}`, lifeEarn);
-        localStorage.setItem(`ff_orders_${name}`, orders);
-        
-        loadEarningUI(name);
-        alert("Order Successful! Customer ko feedback mangne ka message bhej diya gaya hai.");
-    } else {
-        alert("Incorrect PIN! Customer se sahi PIN maangein.");
-    }
-};
+                localStorage.setItem(`ff_earn_${name}`, todayEarn);
+                localStorage.setItem(`ff_orders_${name}`, orders);
+                
+                loadEarningUI(name);
+                alert("Order Delivered Successfully! ₹20 added to wallet.");
+            } else {
+                alert("Incorrect PIN! Ask customer for their 4-digit code.");
+            }
+        };
 
+        window.toggleDuty = async () => {
+            const name = sessionStorage.getItem('rider_name');
+            const btn = document.getElementById('statusToggle');
+            const isOnline = btn.innerText === "Online";
+            const newStatus = isOnline ? "Offline" : "Online";
+            await updateDoc(doc(db, "riders", name), { status: newStatus });
+            btn.innerText = newStatus;
+            btn.className = `px-5 py-2.5 rounded-full text-[10px] font-black uppercase transition-all ${newStatus === 'Online' ? 'bg-green-500 pulse-online' : 'bg-slate-400'} text-white shadow-lg`;
+        };
+
+        window.logoutRider = async () => {
+            if (confirm("Go Offline and Logout?")) {
+                const name = sessionStorage.getItem('rider_name');
+                await updateDoc(doc(db, "riders", name), { status: "Offline" });
+                sessionStorage.clear();
+                location.reload();
+            }
+        };
 
         if(sessionStorage.getItem('rider_auth') === 'true') unlockUI(sessionStorage.getItem('rider_name'));
     </script>
