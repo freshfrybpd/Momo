@@ -291,8 +291,15 @@
     try {
         const docRef = await addDoc(collection(db, "orders"), orderData);
 
-        if (method === 'whatsapp') {
-            // 3. WhatsApp Message Format (Bold and Clean)
+        // --- ONE TAP PAY LOGIC START ---
+        if (method === 'online') {
+            // UPI URL format: pa = UPI ID, pn = Name, am = Amount, tn = Note
+            const upiUrl = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=Freshfry_Order_${orderPin}`;
+            window.location.href = upiUrl; 
+        } 
+        // --- ONE TAP PAY LOGIC END ---
+        
+        else if (method === 'whatsapp') {
             let itemDetails = cart.map(i => `✅ *${i.qty}x ${i.name}* (₹${i.price * i.qty})`).join('%0A');
             
             const message = `*🔥 NEW ORDER - FRESHFRY MOMOS 🔥*%0A%0A` +
@@ -310,7 +317,6 @@
                             `🆔 Order ID: #${docRef.id.slice(-5)}%0A%0A` +
                             `_Please confirm my order!_`;
 
-            // WhatsApp Redirect
             window.open(`https://wa.me/917008186187?text=${message}`);
         }
 
@@ -325,6 +331,7 @@
         alert("Server error, please try again!");
     }
 };
+
 
 
         window.loadMyOrders = () => {
