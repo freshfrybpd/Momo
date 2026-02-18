@@ -393,37 +393,38 @@
     const phone = document.getElementById('modal-phone').value;
     const loc = document.getElementById('modal-location').value;
 
-    if(!name || !phone || !loc) {
-        alert("Bhai, saari details bharna zaroori hai! 😊");
-        return;
-    }
+    if(!name || !phone || !loc) return alert("Bhai, details toh bhar do! 😊");
 
     try {
-        // 1. Firebase mein store karna (Phone number ko Unique ID maante hue)
+        // Firebase sync
         await setDoc(doc(db, "users", phone), {
             name: name,
             phone: phone,
             location: loc,
-            joinedAt: serverTimestamp()
+            updatedAt: serverTimestamp()
         });
 
-        // 2. Local browser mein save karna taaki baar-baar login na maange
+        // Local Storage sync
         localStorage.setItem('ff_user', name);
         localStorage.setItem('ff_phone', phone);
         localStorage.setItem('ff_location', loc);
 
-        // 3. Modal band karna
         document.getElementById('user-info-modal').classList.add('hidden');
-
-        // 4. Beautiful Success UI dikhana
-        showSuccessToast(name);
-
+        showSuccessToast(name); // Wo naya wala beautiful toast
         loadUserSession();
-    } catch (error) {
-        console.error("Firebase Error:", error);
-        alert("Data store nahi ho paya. Connection check karein.");
+    } catch (e) {
+        console.error(e);
+        alert("Firebase connection error!");
     }
 };
+
+window.logoutUser = () => {
+    if(confirm("Logout kar dein, Bhai?")) {
+        localStorage.clear();
+        window.location.reload();
+    }
+};
+
 
 // Beautiful Toast Notification Function
 function showSuccessToast(userName) {
