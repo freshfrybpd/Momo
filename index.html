@@ -302,6 +302,22 @@
 
     try {
         const docRef = await addDoc(collection(db, "orders"), orderData);
+        
+        // Ye line processOrder function ke andar, success alert se pehle daalein
+const orderIcon = document.getElementById('my-orders-btn');
+if(orderIcon) {
+    orderIcon.classList.add('glow-animation');
+}
+
+// Optional: Jab user icon pe click karke orders dekh le, tab animation rok dein
+window.showOrdersModal = () => {
+    const orderIcon = document.getElementById('my-orders-btn');
+    if(orderIcon) orderIcon.classList.remove('glow-animation');
+    
+    document.getElementById('orders-modal').classList.remove('hidden');
+    // Baaki ka load orders logic...
+};
+
 
         if (method === 'whatsapp') {
             // 3. WhatsApp Message Format (Bold and Clean)
