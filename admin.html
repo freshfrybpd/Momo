@@ -249,33 +249,73 @@
         window.closeRiderModal = () => document.getElementById('rider-modal').style.display = 'none';
 
         function loadRiders() {
-            const today = new Date(); today.setHours(0,0,0,0);
-            onSnapshot(collection(db, "riders"), (riderSnap) => {
-                onSnapshot(query(collection(db, "orders"), where("status", "==", "delivered")), (orderSnap) => {
-                    const list = document.getElementById('rider-management-list');
-                    list.innerHTML = '';
-                    riderSnap.forEach(rDoc => {
-                        const r = rDoc.data();
-                        let count = 0;
-                        orderSnap.forEach(oDoc => { if(oDoc.data().riderName === r.riderName && oDoc.data().createdAt?.toDate() >= today) count++; });
-                        const earnings = count * 20;
-                        const online = r.status === "Online";
+    // 1. Aaj ki date nikalna (Baripada/India Timezone ke hisaab se)
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
 
-                        list.innerHTML += `
-                        <div class="bg-white p-6 momo-card shadow-sm border-l-8 ${online ? 'border-green-500' : 'border-slate-300'}">
-                            <div class="flex justify-between items-center mb-4">
-                                <div><h4 class="font-900 uppercase italic">${r.riderName}</h4><p class="text-[10px] font-bold text-slate-400">${r.riderUpi || 'No UPI'}</p></div>
-                                <div class="text-right"><p class="text-[8px] font-black text-slate-400 uppercase">Today</p><p class="text-xl font-900 text-orange-600 italic">₹${earnings}</p></div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="payRider('${r.riderUpi}', '${r.riderName}', ${earnings})" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-900 text-[10px] uppercase ${earnings <= 0 ? 'opacity-20' : ''}" ${earnings <= 0 ? 'disabled' : ''}>Pay ₹${earnings}</button>
-                                <button onclick="deleteItem('riders', '${rDoc.id}')" class="bg-red-50 text-red-500 px-4 rounded-xl"><i class="fa-solid fa-trash-can"></i></button>
-                            </div>
-                        </div>`;
-                    });
+    onSnapshot(collection(db, "riders"), (riderSnap) => {
+        // Sabhi Delivered orders ka listener
+        onSnapshot(query(collection(db, "orders"), where("status", "==", "delivered")), (orderSnap) => {
+            const list = document.getElementById('rider-management-list');
+            list.innerHTML = '';
+
+            riderSnap.forEach(rDoc => {
+                const r = rDoc.data();
+                let count = 0;
+
+                // Har rider ke liye orders match karna jo AAJ deliver huye hain
+                orderSnap.forEach(oDoc => {
+                    const order = oDoc.data();
+                    
+                    // Check: Kya ye order isi rider ne deliver kiya hai?
+                    if (order.riderName === r.riderName) {
+                        // Use deliveredAt if available, otherwise fallback to createdAt
+                        const timestamp = order.deliveredAt || order.createdAt;
+                        
+                        if (timestamp) {
+                            const orderDate = timestamp.toDate();
+                            if (orderDate >= startOfToday) {
+                                count++;
+                            }
+                        }
+                    }
                 });
+
+                const earnings = count * 20; // ₹20 per order
+                const online = r.status === "Online";
+
+                list.innerHTML += `
+                <div class="bg-white p-6 momo-card shadow-sm border-l-8 ${online ? 'border-green-500' : 'border-slate-300'} mb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="font-900 uppercase italic text-sm">${r.riderName}</h4>
+                            <p class="text-[10px] font-bold text-slate-400 tracking-widest">${r.riderUpi || 'No UPI ID'}</p>
+                            <span class="text-[9px] font-black ${online ? 'text-green-500' : 'text-slate-300'} uppercase underline italic">
+                                ${online ? 'Active Now' : 'Offline'}
+                            </span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[8px] font-black text-slate-400 uppercase">Today's Pay</p>
+                            <p class="text-2xl font-900 text-orange-600 italic">₹${earnings}</p>
+                            <p class="text-[9px] font-bold text-slate-300 uppercase">${count} Orders</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="payRider('${r.riderUpi}', '${r.riderName}', ${earnings})" 
+                            class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-900 text-[10px] uppercase shadow-lg active:scale-95 transition ${earnings <= 0 ? 'opacity-20' : ''}" 
+                            ${earnings <= 0 ? 'disabled' : ''}>
+                            Pay via UPI
+                        </button>
+                        <button onclick="deleteItem('riders', '${rDoc.id}')" class="bg-red-50 text-red-500 px-5 rounded-2xl transition hover:bg-red-100">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>`;
             });
-        }
+        });
+    });
+}
+
 
         onSnapshot(collection(db, "users"), (snap) => {
             const list = document.getElementById('user-list');
