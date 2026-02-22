@@ -670,5 +670,11 @@ function showSuccessToast(userName) {
     <div id="user-info-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xl hidden flex items-center justify-center p-6 z-[3000]">
    </div>
 
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("SW Registered"));
+}
+</script>
 </body>
 </html>
