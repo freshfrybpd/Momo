@@ -2,73 +2,50 @@
 <html lang="en">
 <head>
     <title>Freshfry | Baripada Premium Momos</title>
-<meta name="title" content="Freshfry | Baripada Premium Momos">
-<meta name="description" content="Craving for the best momos in Baripada? Order from Freshfry now! 🥟🔥">
-    
-    
-    
+    <meta name="title" content="Freshfry | Baripada Premium Momos">
+    <meta name="description" content="Craving for the best momos in Baripada? Order from Freshfry now! 🥟🔥">
     <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="FreshFry">
-
-<link rel="apple-touch-startup-image" href="logo.png">
-    
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://freshfrymomo.food/">
-<meta property="og:title" content="🔥 Freshfry Momos - Baripada's Finest 🥟">
-<meta property="og:description" content="Premium quality momos delivered hot to your doorstep. Order now and feast!">
-<meta property="og:image" content="https://freshfrymomo.food/banner.PNG">
-    
-    
-      <!-- Favicon / Logo -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="FreshFry">
+    <link rel="apple-touch-startup-image" href="logo.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://freshfrymomo.food/">
+    <meta property="og:title" content="🔥 Freshfry Momos - Baripada's Finest 🥟">
+    <meta property="og:description" content="Premium quality momos delivered hot to your doorstep. Order now and feast!">
+    <meta property="og:image" content="https://freshfrymomo.food/banner.PNG">
     <link rel="icon" type="image/png" sizes="512x512" href="logo.png">
     <link rel="icon" type="image/png" sizes="192x192" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
-
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://freshfrymomo.food/">
-<meta property="twitter:title" content="Freshfry Momos | Baripada">
-<meta property="twitter:description" content="Premium quality momos delivered hot to your doorstep.">
-<meta property="twitter:image" content="https://freshfrymomo.food/banner.PNG">
-    
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://freshfrymomo.food/">
+    <meta property="twitter:title" content="Freshfry Momos | Baripada">
+    <meta property="twitter:description" content="Premium quality momos delivered hot to your doorstep.">
+    <meta property="twitter:image" content="https://freshfrymomo.food/banner.PNG">
     <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff5e00">
-
+    <meta name="theme-color" content="#ff5e00">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Baripada Premium Momos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
         :root { --primary: #ff5e00; --dark: #0f172a; }
         body { font-family: 'Outfit', sans-serif; background-color: #fcfcfd; color: var(--dark); overflow-x: hidden; }
-        
-        /* Marquee */
         .marquee-wrapper { background: #000; overflow: hidden; white-space: nowrap; padding: 12px 0; display: flex; border-bottom: 2px solid var(--primary); }
         .marquee-content { display: inline-block; animation: scroll-left 25s linear infinite; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: white; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* Momo Cards */
         .momo-card { border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: white; border: 1px solid rgba(0,0,0,0.03); position: relative; overflow: hidden; }
         .momo-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(255, 94, 0, 0.15); }
         .food-badge { position: absolute; top: 20px; left: 20px; padding: 5px 12px; border-radius: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; z-index: 10; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        
-        /* Sidebar Navigation */
         .sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 420px; background: white; }
         .sidebar-open { transform: translateX(0); box-shadow: -20px 0 60px rgba(0,0,0,0.1); }
         .sidebar-closed { transform: translateX(100%); }
-        
         .btn-gradient { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
-
         .qty-btn { width: 32px; height: 32px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; border: 1px solid #eee; }
         .qty-btn:active { transform: scale(0.9); background: #f8fafc; }
-        
         #overlay { background: rgba(0,0,0,0.5); }
-        
-        .filter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .filter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .active-filter { background: #0f172a !important; color: white !important; border-color: #0f172a !important; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
@@ -80,69 +57,58 @@
     </div>
 
     <div id="user-info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 z-[3000]">
-    <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-2 btn-gradient"></div>
-        
-        <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
-        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">Enter your details to start ordering</p>
-
-        <div class="space-y-4">
-            <div class="relative">
-                <i class="fa-solid fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
-                <input type="text" id="modal-name" placeholder="Full Name" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 btn-gradient"></div>
+            <h3 class="text-2xl font-900 italic uppercase mb-2">Welcome to <span class="text-orange-500">Freshfry</span></h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">Enter your details to start ordering</p>
+            <div class="space-y-4">
+                <div class="relative">
+                    <i class="fa-solid fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
+                    <input type="text" id="modal-name" placeholder="Full Name" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
+                </div>
+                <div class="relative">
+                    <i class="fa-solid fa-phone absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
+                    <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
+                </div>
+                <div class="relative">
+                    <i class="fa-solid fa-location-dot absolute left-5 top-5 text-gray-300 text-xs"></i>
+                    <textarea id="modal-location" rows="3" placeholder="Exact Delivery Location" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none transition-all"></textarea>
+                </div>
             </div>
-            
-            <div class="relative">
-                <i class="fa-solid fa-phone absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
-                <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
-            </div>
-
-            <div class="relative">
-                <i class="fa-solid fa-location-dot absolute left-5 top-5 text-gray-300 text-xs"></i>
-                <textarea id="modal-location" rows="3" placeholder="Exact Delivery Location" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none transition-all"></textarea>
-            </div>
-        </div>
-
-        <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-8 shadow-xl active:scale-95 transition-all uppercase italic tracking-tight">
-            Start Feasting
-        </button>
-
-        <button onclick="logoutUser()" id="logout-btn" class="w-full mt-4 py-2 text-[10px] font-black text-red-500 uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-power-off"></i> Logout Account
-        </button>
-    </div>
-</div>
-
-
-  <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
-    <h1 class="text-2xl font-900 tracking-tighter italic uppercase">Fresh<span class="text-orange-600">fry.</span></h1>
-    <div class="flex items-center gap-3">
-        <button id="my-orders-btn" onclick="toggleOrders(true)" class="bg-gray-100 text-gray-900 h-11 w-11 rounded-2xl flex items-center justify-center shadow-sm transition-all">
-            <i class="fa-solid fa-receipt text-lg"></i>
-        </button>
-
-        <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-11 w-11 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
-        </div>
-        
-        <div onclick="document.getElementById('user-info-modal').classList.remove('hidden')" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden cursor-pointer">
-            <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-full w-full object-cover">
+            <button onclick="saveUserDetails()" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-black text-lg mt-8 shadow-xl active:scale-95 transition-all uppercase italic tracking-tight">
+                Start Feasting
+            </button>
+            <button onclick="logoutUser()" id="logout-btn" class="w-full mt-4 py-2 text-[10px] font-black text-red-500 uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-power-off"></i> Logout Account
+            </button>
         </div>
     </div>
-</nav>
 
-<div class="px-6 mt-6 max-w-xl mx-auto">
-    <div class="relative group">
-        <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-orange-500 transition-colors"></i>
-        <input type="text" id="menu-search" onkeyup="searchMenu()" placeholder="Search your favorite momos..." 
-            class="w-full bg-white border border-gray-100 py-4 pl-14 pr-6 rounded-[2rem] font-bold text-sm shadow-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
-        >
+    <nav class="sticky top-0 z-40 px-6 py-4 glass-nav border-b border-gray-100 flex justify-between items-center">
+        <h1 class="text-2xl font-900 tracking-tighter italic uppercase">Fresh<span class="text-orange-600">fry.</span></h1>
+        <div class="flex items-center gap-3">
+            <button id="my-orders-btn" onclick="toggleOrders(true)" class="bg-gray-100 text-gray-900 h-11 w-11 rounded-2xl flex items-center justify-center shadow-sm transition-all">
+                <i class="fa-solid fa-receipt text-lg"></i>
+            </button>
+            <div onclick="toggleCart(true)" class="bg-gray-900 text-white h-11 w-11 rounded-2xl cursor-pointer relative flex items-center justify-center shadow-lg">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-orange-500 text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+            </div>
+            <div onclick="document.getElementById('user-info-modal').classList.remove('hidden')" class="h-11 w-11 rounded-2xl border-2 border-orange-500 overflow-hidden cursor-pointer">
+                <img id="user-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="h-full w-full object-cover">
+            </div>
+        </div>
+    </nav>
+
+    <div class="px-6 mt-6 max-w-xl mx-auto">
+        <div class="relative group">
+            <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-orange-500 transition-colors"></i>
+            <input type="text" id="menu-search" onkeyup="searchMenu()" placeholder="Search your favorite momos..." 
+                class="w-full bg-white border border-gray-100 py-4 pl-14 pr-6 rounded-[2rem] font-bold text-sm shadow-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+            >
+        </div>
     </div>
-</div>
 
-
-    
     <div class="flex justify-center gap-2 px-6 mt-8 overflow-x-auto no-scrollbar">
         <button onclick="filterMenu('All')" id="btn-all" class="filter-btn active-filter px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white shadow-sm">All</button>
         <button onclick="filterMenu('Veg')" id="btn-veg" class="filter-btn px-6 py-3 rounded-2xl text-[10px] font-900 uppercase tracking-widest border border-slate-100 bg-white text-slate-400 shadow-sm">Veg Only 🥗</button>
@@ -227,112 +193,89 @@
         let cart = [];
         let currentFilter = 'All';
         
-        // Filter Logic - Isse buttons activate honge
-window.filterMenu = (type) => {
-    currentFilter = type; // 'All', 'Veg', ya 'Non-Veg' set karega
-    
-    // Sabhi buttons se active class hatao aur gray color do
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active-filter');
-        btn.classList.add('text-slate-400');
-    });
+        // --- Improved Filter Logic ---
+        window.filterMenu = (type) => {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active-filter');
+                btn.classList.add('text-slate-400');
+            });
+            const targetId = type === 'All' ? 'btn-all' : (type === 'Veg' ? 'btn-veg' : 'btn-nonveg');
+            const activeBtn = document.getElementById(targetId);
+            if(activeBtn) {
+                activeBtn.classList.add('active-filter');
+                activeBtn.classList.remove('text-slate-400');
+            }
+            loadMenu(); 
+        };
 
-    // Clicked button ko dhoondo aur highlight karo
-    // Note: Hum ID se select kar rahe hain jo aapke HTML mein hai (btn-all, btn-veg, btn-nonveg)
-    const targetId = type === 'All' ? 'btn-all' : (type === 'Veg' ? 'btn-veg' : 'btn-nonveg');
-    const activeBtn = document.getElementById(targetId);
-    
-    if(activeBtn) {
-        activeBtn.classList.add('active-filter');
-        activeBtn.classList.remove('text-slate-400');
-    }
-
-    // Naya menu load karo filter ke saath
-    loadMenu(); 
-};
-
-
-        // 1. Updated loadMenu (Fixing variable from 'momo' to 'item')
-function loadMenu() {
-    onSnapshot(collection(db, "menu"), (snap) => {
-        const list = document.getElementById('menu-list'); 
-        list.innerHTML = '';
-        snap.forEach(d => {
-            const item = d.data(); // Yahan variable 'item' hai
-            if(currentFilter !== 'All' && item.type !== currentFilter) return;
-
-            const isAvailable = item.inStock !== false; 
-            const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
-            const itemId = d.id;
-
-            list.innerHTML += `
-                <div class="momo-card p-4">
-                    <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                    <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
-                    
-                    <div class="px-2">
-                        <div class="flex justify-between font-900 text-lg uppercase italic">
-                            <span class="momo-name-text ${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
-                        </div>
-                        
-                        <div class="flex gap-2 mt-3">
-                            ${item.halfPrice ? `
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="variant-${itemId}" value="Half" class="hidden peer" checked>
-                                <div class="text-center p-2 rounded-xl border border-gray-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
-                                    <p class="text-[8px] font-black uppercase text-gray-400">Half</p>
-                                    <p class="font-900 text-xs">₹${item.halfPrice}</p>
+        window.loadMenu = () => {
+            onSnapshot(collection(db, "menu"), (snap) => {
+                const list = document.getElementById('menu-list'); 
+                list.innerHTML = '';
+                snap.forEach(d => {
+                    const item = d.data();
+                    if(currentFilter !== 'All' && item.type !== currentFilter) return;
+                    const isAvailable = item.inStock !== false; 
+                    const badgeColor = item.type === 'Veg' ? 'bg-green-600' : 'bg-red-600';
+                    const itemId = d.id;
+                    list.innerHTML += `
+                        <div class="momo-card p-4">
+                            <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
+                            <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
+                            <div class="px-2">
+                                <div class="flex justify-between font-900 text-lg uppercase italic">
+                                    <span class="momo-name-text ${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
                                 </div>
-                            </label>` : ''}
-                            
-                            ${item.fullPrice ? `
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="variant-${itemId}" value="Full" class="hidden peer" ${!item.halfPrice ? 'checked' : ''}>
-                                <div class="text-center p-2 rounded-xl border border-gray-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
-                                    <p class="text-[8px] font-black uppercase text-gray-400">Full</p>
-                                    <p class="font-900 text-xs">₹${item.fullPrice}</p>
+                                <div class="flex gap-2 mt-3">
+                                    ${item.halfPrice ? `
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="variant-${itemId}" value="Half" class="hidden peer" checked>
+                                        <div class="text-center p-2 rounded-xl border border-gray-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                            <p class="text-[8px] font-black uppercase text-gray-400">Half</p>
+                                            <p class="font-900 text-xs">₹${item.halfPrice}</p>
+                                        </div>
+                                    </label>` : ''}
+                                    ${item.fullPrice ? `
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="variant-${itemId}" value="Full" class="hidden peer" ${!item.halfPrice ? 'checked' : ''}>
+                                        <div class="text-center p-2 rounded-xl border border-gray-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                            <p class="text-[8px] font-black uppercase text-gray-400">Full</p>
+                                            <p class="font-900 text-xs">₹${item.fullPrice}</p>
+                                        </div>
+                                    </label>` : ''}
                                 </div>
-                            </label>` : ''}
-                        </div>
+                                ${isAvailable ? 
+                                    `<button onclick="prepareAddToCart('${itemId}', '${item.name}', ${item.halfPrice || 0}, ${item.fullPrice || 0}, '${item.image}')" 
+                                        class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
+                                    : 
+                                    `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
+                                }
+                            </div>
+                        </div>`;
+                });
+            });
+        }
 
-                        ${isAvailable ? 
-                            `<button onclick="prepareAddToCart('${itemId}', '${item.name}', ${item.halfPrice || 0}, ${item.fullPrice || 0}, '${item.image}')" 
-                                class="w-full bg-gray-900 text-white py-4 rounded-2xl mt-4 font-black active:scale-95 shadow-lg">ADD TO BOX</button>` 
-                            : 
-                            `<button class="w-full bg-gray-200 text-gray-500 py-4 rounded-2xl mt-4 font-black cursor-not-allowed" disabled>SOLD OUT</button>`
-                        }
-                    </div>
-                </div>`;
-        });
-    });
-}
+        window.searchMenu = () => {
+            const input = document.getElementById('menu-search').value.toLowerCase();
+            const cards = document.querySelectorAll('.momo-card');
+            cards.forEach(card => {
+                const name = card.querySelector('.momo-name-text').innerText.toLowerCase();
+                card.style.display = name.includes(input) ? "block" : "none";
+            });
+        };
 
-// 2. Updated Search Logic (Fixing class selection)
-window.searchMenu = () => {
-    const input = document.getElementById('menu-search').value.toLowerCase();
-    const cards = document.querySelectorAll('.momo-card');
-    cards.forEach(card => {
-        const name = card.querySelector('.momo-name-text').innerText.toLowerCase();
-        card.style.display = name.includes(input) ? "block" : "none";
-    });
-};
+        window.prepareAddToCart = (id, name, hPrice, fPrice, image) => {
+            const variantEl = document.querySelector(`input[name="variant-${id}"]:checked`);
+            if(!variantEl) return alert("Pehle variant chuno!");
+            const variant = variantEl.value;
+            const finalName = `${name} (${variant})`;
+            const finalPrice = variant === 'Half' ? hPrice : fPrice;
+            addToCart(finalName, finalPrice, image);
+            toggleCart(true);
+        };
 
-// 3. Prepare Add To Cart (Final Check)
-window.prepareAddToCart = (id, name, hPrice, fPrice, image) => {
-    const variantEl = document.querySelector(`input[name="variant-${id}"]:checked`);
-    if(!variantEl) return alert("Pehle variant chuno!");
-    
-    const variant = variantEl.value;
-    const finalName = `${name} (${variant})`;
-    const finalPrice = variant === 'Half' ? hPrice : fPrice;
-    
-    addToCart(finalName, finalPrice, image);
-    toggleCart(true); // Cart automatic khul jayega
-};
-
-
-
-        // Cart & Orders Logic
         window.addToCart = (n, p, i) => { 
             const ex = cart.find(x => x.name === n); 
             if(ex) ex.qty++; else cart.push({name:n, price:p, image:i, qty:1}); 
@@ -371,262 +314,89 @@ window.prepareAddToCart = (id, name, hPrice, fPrice, image) => {
         };
 
         window.processOrder = async (method) => {
-    if (cart.length === 0) return alert("Bhai, box khali hai! Kuch toh add karo 🥟");
-
-    // 1. Details fetch karein
-    const name = localStorage.getItem('ff_user');
-    const phone = localStorage.getItem('ff_phone');
-    const location = localStorage.getItem('ff_location');
-
-    if(!phone) return document.getElementById('user-info-modal').classList.remove('hidden');
-
-    const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-    const totalBill = subtotal + 20;
-    const orderPin = Math.floor(1000 + Math.random() * 9000);
-
-    // 2. Firebase mein order save karein
-    const orderData = {
-        customerName: name,
-        customerPhone: phone,
-        customerLocation: location,
-        items: cart,
-        total: "₹" + totalBill,
-        status: 'pending',
-        orderPin: orderPin,
-        createdAt: serverTimestamp()
-    };
-
-    try {
-        const docRef = await addDoc(collection(db, "orders"), orderData);
-
-        // --- ONE TAP PAY LOGIC START ---
-        if (method === 'online') {
-            // UPI URL format: pa = UPI ID, pn = Name, am = Amount, tn = Note
-            const upiUrl = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=Freshfry_Order_${orderPin}`;
-            window.location.href = upiUrl; 
-        } 
-        // --- ONE TAP PAY LOGIC END ---
-        
-        else if (method === 'whatsapp') {
-            let itemDetails = cart.map(i => `✅ *${i.qty}x ${i.name}* (₹${i.price * i.qty})`).join('%0A');
-            
-            const message = `*🔥 NEW ORDER - FRESHFRY MOMOS 🔥*%0A%0A` +
-                            `*--- CUSTOMER DETAILS ---*%0A` +
-                            `👤 Name: ${name}%0A` +
-                            `📞 Phone: ${phone}%0A` +
-                            `📍 Loc: ${location}%0A%0A` +
-                            `*--- ORDER ITEMS ---*%0A` +
-                            `${itemDetails}%0A%0A` +
-                            `*--- BILL SUMMARY ---*%0A` +
-                            `💰 Items Total: ₹${subtotal}%0A` +
-                            `🚚 Delivery Fee: ₹20%0A` +
-                            `⭐ *TOTAL BILL: ₹${totalBill}*%0A%0A` +
-                            `🔑 *ORDER PIN: ${orderPin}*%0A` +
-                            `🆔 Order ID: #${docRef.id.slice(-5)}%0A%0A` +
-                            `_Please confirm my order!_`;
-
-            window.open(`https://wa.me/917008186187?text=${message}`);
-        }
-
-        // Cart clear aur UI update
-        cart = []; 
-        updateCartUI(); 
-        toggleCart(false);
-        alert(`Order Placed Successfully! Your PIN is: ${orderPin}`);
-        
-    } catch (e) {
-        console.error("Order Error: ", e);
-        alert("Server error, please try again!");
-    }
-};
-
-
-
-        window.loadMyOrders = () => {
-    const p = localStorage.getItem('ff_phone');
-    if(!p) return;
-
-    // Firebase query to get user's orders
-    const q = query(collection(db, "orders"), where("customerPhone", "==", p));
-    
-    onSnapshot(q, (snap) => {
-        const list = document.getElementById('my-orders-list');
-        
-        if(snap.empty) {
-            list.innerHTML = `
-                <div class="text-center py-10">
-                    <i class="fa-solid fa-box-open text-gray-200 text-5xl mb-4"></i>
-                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">No orders yet!</p>
-                </div>`;
-            return;
-        }
-
-        const ordersArray = [];
-        snap.forEach(d => ordersArray.push({ id: d.id, ...d.data() }));
-        
-        // Latest orders first (Sorting by time)
-        ordersArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-
-        list.innerHTML = ordersArray.map(o => {
-            // Status Styling
-            let sCol = o.status === 'delivered' ? 'text-green-600' : 'text-orange-600';
-            let sBg = o.status === 'delivered' ? 'bg-green-50' : 'bg-orange-50';
-            
-            // --- RIDER SECTION LOGIC ---
-            let riderSection = "";
-            if (o.riderName) {
-                riderSection = `
-                    <div class="mt-4 p-4 bg-slate-900 rounded-[1.8rem] flex justify-between items-center border-l-4 border-orange-500 shadow-xl transition-all animate-in fade-in slide-in-from-bottom-2">
-                        <div class="flex-1">
-                            <p class="text-[7px] text-orange-400 font-black uppercase tracking-widest opacity-80">Rider Assigned</p>
-                            <p class="text-sm text-white font-black italic uppercase leading-none mt-1">${o.riderName}</p>
-                            <p class="text-[10px] text-slate-400 font-bold mt-1.5 tracking-tight">
-                                ${o.riderPhone ? `<i class="fa-solid fa-phone-flip text-[8px] mr-1"></i> ${o.riderPhone}` : 'Contacting Rider...'}
-                            </p>
-                        </div>
-                        
-                        ${o.riderPhone ? `
-                        <a href="tel:${o.riderPhone}" class="h-11 w-11 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all border-2 border-white/10">
-                            <i class="fa-solid fa-phone"></i>
-                        </a>` : `
-                        <div class="h-11 w-11 bg-slate-800 text-slate-600 rounded-2xl flex items-center justify-center border border-slate-700">
-                            <i class="fa-solid fa-clock-rotate-left text-xs"></i>
-                        </div>`}
-                    </div>
-                `;
-            }
-
-            return `
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-5 relative border border-gray-100">
-                    <div class="absolute top-5 right-5 bg-gray-900 text-white p-2.5 rounded-2xl text-center min-w-[55px] shadow-lg">
-                        <p class="text-[7px] text-gray-500 font-black uppercase tracking-tighter">Order PIN</p>
-                        <p class="text-xs font-black text-orange-400">${o.orderPin || '----'}</p>
-                    </div>
-
-                    <span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current/20 tracking-wider">
-                        ${o.status.replace(/_/g, ' ')}
-                    </span>
-
-                    <p class="font-900 text-2xl italic mt-3 text-slate-800 tracking-tighter">${o.total}</p>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa-solid fa-utensils text-[8px] text-slate-300"></i>
-                        <p class="text-[10px] text-gray-400 uppercase font-black tracking-tight">
-                            ${o.items ? o.items.map(i => `${i.qty}x ${i.name}`).join(' • ') : 'Delicious Items'}
-                        </p>
-                    </div>
-                    
-                    ${riderSection}
-                </div>`;
-        }).join('');
-    });
-};
-
-
-
-
-
-        // User Session & Feedback
-        window.loadUserSession = () => {
-    const name = localStorage.getItem('ff_user');
-    const phone = localStorage.getItem('ff_phone');
-    const loc = localStorage.getItem('ff_location');
-
-    if (name) {
-        document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
-        
-        // Inputs fill karein
-        if(document.getElementById('modal-name')) document.getElementById('modal-name').value = name;
-        if(document.getElementById('modal-phone')) document.getElementById('modal-phone').value = phone;
-        if(document.getElementById('modal-location')) document.getElementById('modal-location').value = loc;
-    } else {
-        document.getElementById('user-info-modal').classList.remove('hidden');
-    }
-};
-
-
-
-        window.saveUserDetails = async () => {
-    const name = document.getElementById('modal-name').value;
-    const phone = document.getElementById('modal-phone').value;
-    const loc = document.getElementById('modal-location').value;
-
-    if(!name || !phone || !loc) return alert("Bhai, details toh bhar do! 😊");
-
-    try {
-        // Firebase sync
-        await setDoc(doc(db, "users", phone), {
-            name: name,
-            phone: phone,
-            location: loc,
-            updatedAt: serverTimestamp()
-        });
-
-        // Local Storage sync
-        localStorage.setItem('ff_user', name);
-        localStorage.setItem('ff_phone', phone);
-        localStorage.setItem('ff_location', loc);
-
-        document.getElementById('user-info-modal').classList.add('hidden');
-        showSuccessToast(name); // Wo naya wala beautiful toast
-        loadUserSession();
-    } catch (e) {
-        console.error(e);
-        alert("Firebase connection error!");
-    }
-};
-
-window.logoutUser = () => {
-    if(confirm("Logout kar dein, Bhai?")) {
-        localStorage.clear();
-        window.location.reload();
-    }
-};
-
-
-// Beautiful Toast Notification Function
-function showSuccessToast(userName) {
-    // Purane toast ko remove karne ke liye agar koi screen par ho
-    const oldToast = document.getElementById('ff-toast');
-    if(oldToast) oldToast.remove();
-
-    const toast = document.createElement('div');
-    toast.id = "ff-toast";
-    // Styling: Bottom center, Glass effect, Bold Border
-    toast.className = "fixed bottom-10 left-1/2 -translate-x-1/2 z-[9999] w-[90%] max-w-[350px] animate-bounce";
-    
-    toast.innerHTML = `
-        <div class="bg-slate-900/95 backdrop-blur-xl border-t-4 border-orange-500 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] p-5 flex items-center gap-4 border border-white/10">
-            <div class="bg-gradient-to-tr from-orange-500 to-yellow-400 h-12 w-12 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/20">
-                <i class="fa-solid fa-check text-white text-xl"></i>
-            </div>
-            <div class="flex-1">
-                <p class="text-[8px] font-black uppercase tracking-[0.2em] text-orange-400 opacity-80">System Secured</p>
-                <p class="text-[13px] font-black text-white italic uppercase tracking-tight">
-                    Welcome to <span class="text-orange-500">Freshfry</span>, ${userName}!
-                </p>
-                <p class="text-[9px] text-slate-400 font-bold">Data synced to Baripada HQ</p>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(toast);
-
-    // 4 second baad fade out hokar remove ho jayega
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = '0.5s all ease';
-        setTimeout(() => toast.remove(), 500);
-    }, 4000);
-}
-
-
-
-        let selectedRating = 0, pendingFeedbackId = null;
-        window.setStar = (n) => {
-            selectedRating = n;
-            document.querySelectorAll('.star-btn').forEach((b, i) => b.classList.toggle('text-orange-500', i < n));
+            if (cart.length === 0) return alert("Bhai, box khali hai! Kuch toh add karo 🥟");
+            const name = localStorage.getItem('ff_user');
+            const phone = localStorage.getItem('ff_phone');
+            const location = localStorage.getItem('ff_location');
+            if(!phone) return document.getElementById('user-info-modal').classList.remove('hidden');
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const totalBill = subtotal + 20;
+            const orderPin = Math.floor(1000 + Math.random() * 9000);
+            const orderData = { customerName: name, customerPhone: phone, customerLocation: location, items: cart, total: "₹" + totalBill, status: 'pending', orderPin: orderPin, createdAt: serverTimestamp(), showFeedback: false };
+            try {
+                const docRef = await addDoc(collection(db, "orders"), orderData);
+                if (method === 'online') {
+                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=Freshfry_Order_${orderPin}`;
+                } else if (method === 'whatsapp') {
+                    let itemDetails = cart.map(i => `✅ *${i.qty}x ${i.name}* (₹${i.price * i.qty})`).join('%0A');
+                    const message = `*🔥 NEW ORDER - FRESHFRY MOMOS 🔥*%0A%0A*--- CUSTOMER DETAILS ---*%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A📍 Loc: ${location}%0A%0A*--- ORDER ITEMS ---*%0A${itemDetails}%0A%0A*--- BILL SUMMARY ---*%0A💰 Items Total: ₹${subtotal}%0A🚚 Delivery Fee: ₹20%0A⭐ *TOTAL BILL: ₹${totalBill}*%0A%0A🔑 *ORDER PIN: ${orderPin}*%0A🆔 Order ID: #${docRef.id.slice(-5)}%0A%0APlease confirm my order!`;
+                    window.open(`https://wa.me/917008186187?text=${message}`);
+                }
+                cart = []; updateCartUI(); toggleCart(false);
+                alert(`Order Placed Successfully! PIN: ${orderPin}`);
+            } catch (e) { alert("Server error, please try again!"); }
         };
 
+        window.loadMyOrders = () => {
+            const p = localStorage.getItem('ff_phone');
+            if(!p) return;
+            const q = query(collection(db, "orders"), where("customerPhone", "==", p));
+            onSnapshot(q, (snap) => {
+                const list = document.getElementById('my-orders-list');
+                if(snap.empty) {
+                    list.innerHTML = `<div class="text-center py-10"><i class="fa-solid fa-box-open text-gray-200 text-5xl mb-4"></i><p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">No orders yet!</p></div>`;
+                    return;
+                }
+                const ordersArray = [];
+                snap.forEach(d => ordersArray.push({ id: d.id, ...d.data() }));
+                ordersArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+                list.innerHTML = ordersArray.map(o => {
+                    let sCol = o.status === 'delivered' ? 'text-green-600' : 'text-orange-600';
+                    let sBg = o.status === 'delivered' ? 'bg-green-50' : 'bg-orange-50';
+                    let riderSection = o.riderName ? `<div class="mt-4 p-4 bg-slate-900 rounded-[1.8rem] flex justify-between items-center border-l-4 border-orange-500 shadow-xl"><div class="flex-1"><p class="text-[7px] text-orange-400 font-black uppercase tracking-widest">Rider Assigned</p><p class="text-sm text-white font-black italic uppercase leading-none mt-1">${o.riderName}</p><p class="text-[10px] text-slate-400 font-bold mt-1.5">${o.riderPhone ? o.riderPhone : 'Contacting...'}</p></div>${o.riderPhone ? `<a href="tel:${o.riderPhone}" class="h-11 w-11 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-phone"></i></a>` : ''}</div>` : "";
+                    return `<div class="bg-white p-6 rounded-[2.5rem] shadow-sm mb-5 relative border border-gray-100"><div class="absolute top-5 right-5 bg-gray-900 text-white p-2.5 rounded-2xl text-center min-w-[55px] shadow-lg"><p class="text-[7px] text-gray-500 font-black uppercase tracking-tighter">Order PIN</p><p class="text-xs font-black text-orange-400">${o.orderPin || '----'}</p></div><span class="${sBg} ${sCol} px-3 py-1 rounded-full text-[9px] font-900 uppercase italic border border-current/20 tracking-wider">${o.status}</span><p class="font-900 text-2xl italic mt-3 text-slate-800 tracking-tighter">${o.total}</p><div class="flex items-center gap-2 mt-1"><i class="fa-solid fa-utensils text-[8px] text-slate-300"></i><p class="text-[10px] text-gray-400 uppercase font-black tracking-tight">${o.items ? o.items.map(i => `${i.qty}x ${i.name}`).join(' • ') : 'Delicious Items'}</p></div>${riderSection}</div>`;
+                }).join('');
+            });
+        };
+
+        window.loadUserSession = () => {
+            const name = localStorage.getItem('ff_user');
+            if (name) {
+                document.getElementById('user-profile-img').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
+                if(document.getElementById('modal-name')) document.getElementById('modal-name').value = name;
+                if(document.getElementById('modal-phone')) document.getElementById('modal-phone').value = localStorage.getItem('ff_phone');
+                if(document.getElementById('modal-location')) document.getElementById('modal-location').value = localStorage.getItem('ff_location');
+            } else {
+                document.getElementById('user-info-modal').classList.remove('hidden');
+            }
+        };
+
+        window.saveUserDetails = async () => {
+            const n = document.getElementById('modal-name').value;
+            const p = document.getElementById('modal-phone').value;
+            const l = document.getElementById('modal-location').value;
+            if(!n || !p || !l) return alert("Fill details!");
+            try {
+                await setDoc(doc(db, "users", p), { name: n, phone: p, location: l, updatedAt: serverTimestamp() });
+                localStorage.setItem('ff_user', n); localStorage.setItem('ff_phone', p); localStorage.setItem('ff_location', l);
+                document.getElementById('user-info-modal').classList.add('hidden');
+                showSuccessToast(n); loadUserSession();
+            } catch (e) { alert("Firebase error!"); }
+        };
+
+        window.logoutUser = () => { if(confirm("Logout?")) { localStorage.clear(); window.location.reload(); } };
+
+        function showSuccessToast(userName) {
+            const old = document.getElementById('ff-toast'); if(old) old.remove();
+            const toast = document.createElement('div'); toast.id = "ff-toast";
+            toast.className = "fixed bottom-10 left-1/2 -translate-x-1/2 z-[9999] w-[90%] max-w-[350px] animate-bounce";
+            toast.innerHTML = `<div class="bg-slate-900/95 backdrop-blur-xl border-t-4 border-orange-500 shadow-2xl rounded-[2.5rem] p-5 flex items-center gap-4 border border-white/10"><div class="bg-gradient-to-tr from-orange-500 to-yellow-400 h-12 w-12 rounded-full flex items-center justify-center"><i class="fa-solid fa-check text-white"></i></div><div class="flex-1"><p class="text-[8px] font-black uppercase text-orange-400">System Secured</p><p class="text-[13px] font-black text-white italic uppercase">Welcome, ${userName}!</p></div></div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = '0.5s'; setTimeout(() => toast.remove(), 500); }, 4000);
+        }
+
+        let selectedRating = 0, pendingFeedbackId = null;
+        window.setStar = (n) => { selectedRating = n; document.querySelectorAll('.star-btn').forEach((b, i) => b.classList.toggle('text-orange-500', i < n)); };
         window.submitFeedback = async () => {
             if(!selectedRating) return alert("Select Stars!");
             await updateDoc(doc(db, "orders", pendingFeedbackId), { rating: selectedRating, feedback: document.getElementById('feedback-text').value, showFeedback: false });
@@ -634,8 +404,7 @@ function showSuccessToast(userName) {
         };
 
         setInterval(() => {
-            const p = localStorage.getItem('ff_phone');
-            if(!p) return;
+            const p = localStorage.getItem('ff_phone'); if(!p) return;
             onSnapshot(query(collection(db, "orders"), where("customerPhone", "==", p), where("showFeedback", "==", true)), snap => {
                 snap.forEach(d => { pendingFeedbackId = d.id; document.getElementById('feedback-modal').classList.remove('hidden'); });
             });
@@ -646,69 +415,40 @@ function showSuccessToast(userName) {
         window.closeAllSidebars = () => { toggleCart(false); toggleOrders(false); };
 
         window.onload = () => {
-    loadUserSession(); // User ki purani session check karega
-    loadMenu();        // Menu load karega
-    
-    // --- Auto Popup Logic for New Users ---
-    const isNewUser = !localStorage.getItem('ff_phone'); 
-    if (isNewUser) {
-        // 1 second ke delay ke baad modal dikhayenge (premium feel ke liye)
-        setTimeout(() => {
-            const modal = document.getElementById('user-info-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex'); // Hidden hatakar flex add karna zaroori hai
-        }, 1000);
-    }
-};
+            loadUserSession(); loadMenu();
+            if (!localStorage.getItem('ff_phone')) { setTimeout(() => { document.getElementById('user-info-modal').classList.remove('hidden'); }, 1000); }
+        };
 
-        
-        
-        window.logoutUser = () => {
-    // 1. Confirm karein ki logout karna hai
-    if(confirm("Bhai, logout karna chahte ho? 🥺")) {
-        // 2. Browser se saara data uda dein
-        localStorage.clear();
-        
-        // 3. Page ko refresh karein taaki fresh login screen aaye
-        window.location.reload();
-    }
-};
+        // --- PWA INSTALLATION LOGIC ---
+        let deferredPrompt;
+        const installBox = document.getElementById("installBox");
 
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBox.style.display = "block";
+        });
+
+        installBox.addEventListener("click", async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') console.log('User installed');
+                deferredPrompt = null;
+                installBox.style.display = "none";
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => console.log("SW Registered"));
+        }
     </script>
-    
-    <div id="user-info-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xl hidden flex items-center justify-center p-6 z-[3000]">
-   </div>
 
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log("SW Registered"));
-}
-</script>
+    <div id="installBox" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+        background:black;color:white;padding:14px 25px;border-radius:40px;font-weight:900;
+        z-index:9999;box-shadow:0 10px 25px rgba(0,0,0,0.3);cursor:pointer;">
+        📲 Install FreshFry App
+    </div>
 
-<!-- INSTALL APP BUTTON -->
-<div id="installBox" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-background:black;color:white;padding:14px 25px;border-radius:40px;font-weight:900;
-z-index:9999;box-shadow:0 10px 25px rgba(0,0,0,0.3)">
-📲 Install FreshFry App
-</div>
-
-<script>
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById("installBox").style.display="block";
-});
-
-document.getElementById("installBox").addEventListener("click", async () => {
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-    document.getElementById("installBox").style.display="none";
-  }
-});
-</script>
 </body>
 </html>
