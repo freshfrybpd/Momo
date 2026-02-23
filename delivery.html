@@ -7,165 +7,75 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        
-        :root {
-            --zomato-red: #E23744;
-            --premium-dark: #0F172A;
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #F4F7FE; 
-            color: #1e293b; 
-        }
-
-        .glass-nav { 
-            background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(20px); 
-            border-bottom: 1px solid rgba(0,0,0,0.05); 
-        }
-
-        .premium-card { 
-            background: white; 
-            border-radius: 2rem; 
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.04); 
-            transition: transform 0.2s ease;
-        }
-
-        .rider-card:active { transform: scale(0.98); }
-
-        .wallet-gradient { 
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-        }
-
-        .progress-container { 
-            height: 8px; 
-            background: #f1f5f9; 
-            border-radius: 20px; 
-            overflow: hidden; 
-        }
-
-        .progress-fill { 
-            height: 100%; 
-            background: linear-gradient(90deg, #ff8a00, #ff5e00); 
-            box-shadow: 0 0 15px rgba(255, 138, 0, 0.4);
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .rider-card { background: white; border-radius: 2.5rem; box-shadow: 0 15px 35px -5px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
+        .wallet-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff8a00, #ff5e00); transition: width 0.8s ease; }
         #main-app { display: none; }
-
-        .pulse-online { 
-            animation: pulse 2s infinite; 
-        }
-
-        @keyframes pulse { 
-            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 
-            70% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } 
-        }
-
-        /* Zomato style bottom tab bar */
-        .bottom-nav {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        .pulse-online { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+        .history-card { background: white; border-radius: 1.5rem; border: 1px dashed #e2e8f0; }
     </style>
 </head>
-<body class="pb-36">
+<body class="pb-32">
 
-    <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6">
-        <div class="w-full max-w-sm bg-white rounded-[3rem] p-8 shadow-2xl overflow-hidden relative">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full -mr-16 -mt-16"></div>
-            <div class="w-20 h-20 bg-orange-500 text-white rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-xl shadow-orange-200">
+    <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6 text-white">
+        <div class="w-full max-w-sm bg-white rounded-[3.5rem] p-10 shadow-2xl text-slate-800">
+            <div class="w-20 h-20 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center text-3xl mx-auto mb-6">
                 <i class="fa-solid fa-motorcycle"></i>
             </div>
-            <h2 class="text-3xl font-800 mb-2 text-center tracking-tighter italic">FRESH<span class="text-orange-500">FRY</span></h2>
-            <p class="text-slate-400 text-center text-[10px] font-bold mb-8 uppercase tracking-[0.2em]">Partner Dashboard</p>
+            <h2 class="text-3xl font-800 mb-2 text-center tracking-tighter uppercase italic">Fresh<span class="text-orange-500">fry</span></h2>
+            <p class="text-slate-400 text-center text-[10px] font-black mb-8 uppercase tracking-widest">Rider Authentication</p>
             
-            <div class="space-y-4">
-                <input type="text" id="riderNameInput" placeholder="Full Name" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-semibold border-2 border-transparent focus:border-orange-500 transition-all uppercase text-sm">
-                <input type="tel" id="riderPhoneInput" maxlength="10" placeholder="Phone Number" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-semibold border-2 border-transparent focus:border-orange-500 transition-all text-sm">
-                <input type="text" id="riderUpiInput" placeholder="UPI ID (for payments)" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-semibold border-2 border-transparent focus:border-orange-500 transition-all text-sm">
-                <input type="password" id="riderPassInput" placeholder="Security Pass Key" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-semibold border-2 border-transparent focus:border-orange-500 transition-all text-sm">
+            <div class="space-y-3">
+                <input type="text" id="riderNameInput" placeholder="YOUR FULL NAME" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 uppercase text-sm">
+                <input type="tel" id="riderPhoneInput" maxlength="10" placeholder="10 DIGIT PHONE" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 text-sm">
+                <input type="text" id="riderUpiInput" placeholder="UPI ID (for payments)" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 text-sm">
+                <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-6 py-4 bg-slate-50 rounded-2xl outline-none font-bold border focus:border-orange-500 text-sm">
                 
-                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold uppercase text-xs tracking-widest mt-4 shadow-xl active:scale-95 transition-all">Start My Shift 🚀</button>
+                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-black uppercase text-[11px] tracking-widest mt-4 shadow-xl active:scale-95 transition-all">Start Duty 🚀</button>
             </div>
         </div>
     </div>
 
     <div id="main-app">
-        <nav class="glass-nav px-6 py-5 sticky top-0 z-50 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200">
-                    <i class="fa-solid fa-user-ninja"></i>
-                </div>
-                <div>
-                    <h1 id="displayRiderName" class="text-sm font-800 text-slate-900 uppercase italic leading-none">Rider</h1>
-                    <p id="displayRiderUpi" class="text-[9px] font-bold text-slate-400 mt-1"></p>
-                </div>
+        <nav class="glass-nav p-6 sticky top-0 z-50 flex justify-between items-center rounded-b-[2.5rem]">
+            <div>
+                <h1 id="displayRiderName" class="text-lg font-800 text-slate-900 uppercase leading-none italic">Rider</h1>
+                <p id="displayRiderUpi" class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest"></p>
             </div>
-            <button id="statusToggle" onclick="toggleDuty()" class="px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all bg-green-500 text-white pulse-online">Online</button>
+            <button id="statusToggle" onclick="toggleDuty()" class="px-5 py-2.5 rounded-full text-[10px] font-black uppercase transition-all bg-green-500 text-white pulse-online shadow-lg">Online</button>
         </nav>
 
         <section class="p-6 space-y-6">
-            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 relative overflow-hidden">
-                <div class="relative z-10">
-                    <div class="flex justify-between items-end mb-3">
-                        <div>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Daily Earnings Goal</p>
-                            <h4 class="text-xl font-800 text-slate-900">₹500.00</h4>
-                        </div>
-                        <p id="goalPercent" class="text-lg font-900 text-orange-500 italic">0%</p>
-                    </div>
-                    <div class="progress-container">
-                        <div id="goalProgress" class="progress-fill" style="width: 0%"></div>
-                    </div>
-                    <p class="text-[10px] font-bold text-slate-500 mt-3 flex items-center gap-2" id="goalMessage">
-                        <i class="fa-solid fa-fire text-orange-500"></i> Fetching progress...
-                    </p>
-                </div>
-            </div>
-
             <div class="grid grid-cols-2 gap-4">
-                <div class="wallet-gradient p-6 rounded-[2.5rem] text-white shadow-lg shadow-slate-200">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Total Payout</p>
-                    <h3 id="todayEarning" class="text-3xl font-800 italic tracking-tight">₹0</h3>
+                <div class="wallet-gradient p-7 rounded-[3rem] text-white">
+                    <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Today's Pay</p>
+                    <h3 id="todayEarning" class="text-3xl font-800 italic tracking-tighter">₹0</h3>
                 </div>
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Deliveries</p>
-                    <h3 id="orderCountDisplay" class="text-3xl font-800 italic text-slate-900 tracking-tight">0</h3>
+                <div class="bg-white p-7 rounded-[3rem] shadow-sm border border-slate-100">
+                    <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Orders Done</p>
+                    <h3 id="orderCountDisplay" class="text-3xl font-800 italic text-slate-900 tracking-tighter">0</h3>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between px-2">
-                <h2 class="text-xs font-900 uppercase text-slate-400 tracking-[0.2em] flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> New Tasks
-                </h2>
-                <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-lg">Real-time</span>
-            </div>
-            
+            <h2 class="text-xs font-900 uppercase text-slate-400 px-2 tracking-[0.2em] flex items-center gap-2">
+                <span class="w-2 h-2 bg-orange-500 rounded-full"></span> Active Deliveries
+            </h2>
             <div id="rider-orders-list" class="space-y-6"></div>
 
-            <div class="mt-10">
-                <h2 class="text-xs font-900 uppercase text-slate-400 px-2 tracking-[0.2em] flex items-center gap-2 mb-4">
-                    <i class="fa-solid fa-clock-rotate-left"></i> Recent Activity
-                </h2>
-                <div id="rider-history-list" class="space-y-3"></div>
-            </div>
+            <h2 class="text-xs font-900 uppercase text-slate-400 px-2 tracking-[0.2em] flex items-center gap-2 mt-8">
+                <i class="fa-solid fa-clock-rotate-left"></i> Today's History
+            </h2>
+            <div id="rider-history-list" class="space-y-3 pb-10"></div>
         </section>
 
-        <div class="fixed bottom-6 left-6 right-6 bottom-nav rounded-[2rem] p-4 flex justify-around items-center shadow-2xl z-50">
-            <button class="w-12 h-12 flex items-center justify-center text-orange-500 bg-white/10 rounded-2xl transition-all">
-                <i class="fa-solid fa-house-chimney text-xl"></i>
-            </button>
-            <button onclick="location.reload()" class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-white transition-all">
-                <i class="fa-solid fa-arrows-rotate text-xl"></i>
-            </button>
-            <button onclick="logoutRider()" class="w-12 h-12 flex items-center justify-center text-red-400 hover:text-red-300 transition-all">
-                <i class="fa-solid fa-power-off text-xl"></i>
-            </button>
+        <div class="fixed bottom-6 left-6 right-6 bg-slate-900 rounded-[2rem] p-4 flex justify-around items-center shadow-2xl z-50">
+            <button class="text-orange-500 text-xl"><i class="fa-solid fa-house-chimney"></i></button>
+            <button onclick="location.reload()" class="text-slate-500 text-xl"><i class="fa-solid fa-rotate-right"></i></button>
+            <button onclick="logoutRider()" class="text-red-400 text-xl"><i class="fa-solid fa-power-off"></i></button>
         </div>
     </div>
 
@@ -185,27 +95,23 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- DISTANCE LOGIC ---
-        function calculateDistance(lat2, lon2) {
-            const shopLat = 21.9348; 
-            const shopLon = 86.7513; 
-            const R = 6371; 
-            const dLat = (lat2 - shopLat) * Math.PI / 180;
-            const dLon = (lon2 - shopLon) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(shopLat * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return (R * c).toFixed(1);
-        }
-
+        // --- LOGIN LOGIC ---
         window.checkRiderLogin = async () => {
             const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
             const phone = document.getElementById('riderPhoneInput').value.trim();
             const upi = document.getElementById('riderUpiInput').value.trim().toLowerCase();
             const pass = document.getElementById('riderPassInput').value;
-            if (!name || !/^[6-9]\d{9}$/.test(phone) || !upi.includes('@') || pass !== "freshfry2026") return alert("Check all fields!");
-            
-            await setDoc(doc(db, "riders", name), { riderName: name, riderPhone: phone, riderUpi: upi, status: "Online", lastLogin: serverTimestamp() }, { merge: true });
+            const phoneRegex = /^[6-9]\d{9}$/;
+
+            if (name.length < 3) return alert("Enter full name!");
+            if (!phoneRegex.test(phone)) return alert("Enter valid 10-digit Indian phone number!");
+            if (!upi.includes('@')) return alert("Enter valid UPI ID!");
+            if (pass !== "freshfry2026") return alert("Incorrect Pass Key!");
+
+            await setDoc(doc(db, "riders", name), { 
+                riderName: name, riderPhone: phone, riderUpi: upi, status: "Online", lastLogin: serverTimestamp() 
+            }, { merge: true });
+
             sessionStorage.setItem('rider_auth', 'true');
             sessionStorage.setItem('rider_name', name);
             sessionStorage.setItem('rider_upi', upi);
@@ -217,6 +123,7 @@
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('displayRiderName').innerText = name;
             document.getElementById('displayRiderUpi').innerText = "UPI: " + sessionStorage.getItem('rider_upi');
+            
             const today = new Date().toLocaleDateString();
             if (localStorage.getItem(`ff_date_${name}`) !== today) {
                 localStorage.setItem(`ff_earn_${name}`, 0);
@@ -229,116 +136,123 @@
         }
 
         function loadEarningUI(name) {
-            const earn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0);
-            const orders = localStorage.getItem(`ff_orders_${name}`) || 0;
-            document.getElementById('todayEarning').innerText = `₹${earn}`;
-            document.getElementById('orderCountDisplay').innerText = orders;
-            
-            const goal = 500;
-            const percent = Math.min((earn / goal) * 100, 100).toFixed(0);
-            document.getElementById('goalProgress').style.width = percent + '%';
-            document.getElementById('goalPercent').innerText = percent + '%';
-            
-            const msg = document.getElementById('goalMessage');
-            if(earn >= goal) {
-                msg.innerText = "Target hit! Bonus unlocked 🏆";
-                msg.className = "text-[10px] font-bold text-green-500 mt-3 flex items-center gap-2";
-            } else {
-                msg.innerText = `${Math.ceil((goal - earn) / 20)} more orders to hit daily goal`;
-            }
+            document.getElementById('todayEarning').innerText = `₹${localStorage.getItem(`ff_earn_${name}`) || 0}`;
+            document.getElementById('orderCountDisplay').innerText = localStorage.getItem(`ff_orders_${name}`) || 0;
         }
 
+        // --- ACTIVE ORDERS ---
         function loadMyOrders(riderName) {
             const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('rider-orders-list');
                 list.innerHTML = '';
                 if(snap.empty) {
-                    list.innerHTML = `<div class="bg-white p-12 rounded-[2.5rem] text-center text-slate-300 font-bold uppercase text-[10px] tracking-widest border border-dashed border-slate-200">No active orders right now</div>`;
+                    list.innerHTML = `<div class="bg-white p-16 rounded-[3rem] text-center text-slate-300 font-black uppercase text-[10px] tracking-widest shadow-sm italic">Waiting for new tasks...</div>`;
                     return;
                 }
                 snap.forEach(d => {
                     const o = d.data();
+                    
+                    // SMART NAVIGATION LOGIC
                     let navBtnHtml = '';
-                    let distBadge = '';
-                    const mapLinkMatch = o.customerLocation.match(/q=([\d.-]+),([\d.-]+)/);
+                    const mapLinkMatch = o.customerLocation.match(/https?:\/\/[\w\/\.]+/);
                     
                     if(mapLinkMatch) {
-                        const dist = calculateDistance(parseFloat(mapLinkMatch[1]), parseFloat(mapLinkMatch[2]));
-                        distBadge = `<span class="bg-orange-100 text-orange-600 px-2 py-1 rounded-lg text-[9px] font-black">${dist} KM</span>`;
-                        navBtnHtml = `<a href="${o.customerLocation}" target="_blank" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-center gap-4 active:bg-slate-100 transition-all">
-                            <div class="w-10 h-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-orange-100"><i class="fa-solid fa-location-arrow"></i></div>
-                            <div class="text-left"><p class="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">Navigation</p><p class="text-sm font-bold text-slate-700">Open Google Maps</p></div>
+                        navBtnHtml = `
+                        <a href="${mapLinkMatch[0]}" target="_blank" class="flex items-center gap-4 bg-orange-50 p-4 rounded-2xl border border-orange-100 active:scale-95 transition mb-3">
+                            <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-orange-200"><i class="fa-solid fa-location-arrow"></i></div>
+                            <span class="font-800 text-sm text-orange-700 italic uppercase">Navigate to Location</span>
                         </a>`;
                     } else {
-                        navBtnHtml = `<a href="https://www.google.com/maps/search/$${encodeURIComponent(o.customerLocation)}" target="_blank" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-center gap-4">
-                            <div class="w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass"></i></div>
-                            <div class="text-left"><p class="text-[10px] font-black text-slate-400 uppercase mb-1">Address</p><p class="text-sm font-bold text-slate-700">Search Location</p></div>
+                        // If no link, create a search button using address text
+                        const searchUrl = `https://www.google.com/maps/search/${encodeURIComponent(o.customerLocation)}`;
+                        navBtnHtml = `
+                        <a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 active:scale-95 transition mb-3">
+                            <div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div>
+                            <span class="font-800 text-sm text-slate-700 italic uppercase">Search Address on Maps</span>
                         </a>`;
                     }
 
-                    list.innerHTML += `<div class="premium-card p-6 border-l-8 border-orange-500">
+                    list.innerHTML += `
+                    <div class="rider-card p-8 border-t-[12px] border-orange-500">
                         <div class="flex justify-between items-start mb-6">
                             <div>
-                                <h3 class="text-xl font-800 text-slate-900 tracking-tighter uppercase italic">${o.customerName}</h3>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Order #${d.id.slice(-5)}</p>
+                                <h3 class="text-2xl font-800 text-slate-900 tracking-tighter uppercase italic">${o.customerName}</h3>
+                                <p class="text-[10px] font-black text-orange-500 uppercase mt-1 tracking-widest">ORDER ID #${d.id.slice(-5)}</p>
                             </div>
-                            <div class="text-right">
-                                ${distBadge}
-                                <p class="text-lg font-900 text-slate-900 mt-1">₹${o.total}</p>
+                            <div class="text-right italic">
+                                <h3 class="text-2xl font-900 text-slate-900">₹${o.total}</h3>
+                                <p class="text-[8px] font-black text-blue-500 uppercase">PREPAID</p>
                             </div>
                         </div>
-                        <div class="space-y-3 mb-6">
-                            <a href="tel:${o.customerPhone}" class="w-full bg-blue-50 border border-blue-100 p-4 rounded-2xl flex items-center gap-4 active:bg-blue-100 transition-all">
-                                <div class="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div>
-                                <div class="text-left"><p class="text-[10px] font-black text-blue-400 uppercase leading-none mb-1">Customer</p><p class="text-sm font-bold text-blue-700 italic uppercase tracking-tighter">Call Now</p></div>
+
+                        <div class="space-y-3 mb-8">
+                            <a href="tel:${o.customerPhone}" class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100 active:scale-95 transition">
+                                <div class="h-10 w-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div>
+                                <span class="font-800 text-sm text-blue-700 uppercase italic">CALL CUSTOMER</span>
                             </a>
                             ${navBtnHtml}
+                            <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <div class="h-10 w-10 bg-slate-200 text-slate-600 rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot"></i></div>
+                                <span class="font-700 text-xs text-slate-500 leading-snug pt-1">${o.customerLocation}</span>
+                            </div>
                         </div>
-                        <div class="bg-slate-900 p-6 rounded-[2rem] shadow-xl">
-                            <p class="text-center text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Enter 4-Digit Customer PIN</p>
-                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="••••" class="w-full bg-white/5 border border-white/10 text-center text-3xl font-900 tracking-[1rem] outline-none text-white py-4 rounded-2xl focus:bg-white/10 transition-all">
-                            <button onclick="verifyAndDeliver('${d.id}', '${o.orderPin}')" class="w-full bg-orange-500 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest mt-6 active:scale-95 transition-all">Complete Delivery 🔥</button>
+
+                        <div class="bg-slate-900 p-8 rounded-[2.5rem] shadow-xl">
+                            <p class="text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Enter Verification PIN</p>
+                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="••••" class="w-full bg-white/5 border border-white/10 text-center text-4xl font-900 tracking-[1.5rem] outline-none text-white py-4 rounded-2xl focus:bg-white/10 transition-all">
+                            <button onclick="verifyAndDeliver('${d.id}', '${o.orderPin}')" class="w-full bg-orange-500 text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-widest mt-6 active:scale-95 transition-all italic">Complete Delivery 🔥</button>
                         </div>
                     </div>`;
                 });
             });
         }
 
+        // --- ORDER HISTORY ---
         function loadHistory(riderName) {
-            const q = query(collection(db, "orders"), where("status", "==", "delivered"), where("riderName", "==", riderName), orderBy("deliveredAt", "desc"), limit(5));
+            const q = query(collection(db, "orders"), where("status", "==", "delivered"), where("riderName", "==", riderName), orderBy("deliveredAt", "desc"), limit(10));
             onSnapshot(q, (snap) => {
                 const histList = document.getElementById('rider-history-list');
                 histList.innerHTML = '';
-                if(snap.empty) { histList.innerHTML = `<p class="text-center text-[10px] text-slate-400 font-bold py-4">No recent deliveries</p>`; return; }
+                if(snap.empty) {
+                    histList.innerHTML = `<p class="text-center text-[10px] text-slate-400 font-bold uppercase py-4">No deliveries yet today</p>`;
+                    return;
+                }
                 snap.forEach(d => {
                     const o = d.data();
-                    histList.innerHTML += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center border border-slate-50 shadow-sm">
+                    histList.innerHTML += `
+                    <div class="history-card p-4 flex justify-between items-center">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-green-50 text-green-500 rounded-xl flex items-center justify-center text-sm"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
                             <div>
-                                <p class="text-xs font-800 text-slate-800 uppercase italic">${o.customerName}</p>
-                                <p class="text-[8px] font-bold text-slate-400 uppercase">DELIVERED SUCCESSFULLY</p>
+                                <p class="text-[11px] font-800 text-slate-800 uppercase italic">${o.customerName}</p>
+                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">ID: #${d.id.slice(-5)}</p>
                             </div>
                         </div>
-                        <p class="font-900 text-sm text-green-600">+₹20</p>
+                        <p class="font-900 text-sm text-slate-900 italic">+₹20</p>
                     </div>`;
                 });
             });
         }
 
+        // --- DELIVERY VERIFICATION ---
         window.verifyAndDeliver = async (orderId, correctPin) => {
             const inputPin = document.getElementById(`pin-${orderId}`).value;
             if(String(inputPin) === String(correctPin)) {
                 const name = sessionStorage.getItem('rider_name');
                 await updateDoc(doc(db, "orders", orderId), { status: 'delivered', deliveredAt: serverTimestamp() });
+                
                 let todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
                 let orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
+
                 localStorage.setItem(`ff_earn_${name}`, todayEarn);
                 localStorage.setItem(`ff_orders_${name}`, orders);
+                
                 loadEarningUI(name);
-                alert("Success! Earnings updated.");
-            } else { alert("Wrong PIN! Ask customer again."); }
+                alert("Order Delivered Successfully! ₹20 added to wallet.");
+            } else {
+                alert("Incorrect PIN! Ask customer for their 4-digit code.");
+            }
         };
 
         window.toggleDuty = async () => {
@@ -348,11 +262,11 @@
             const newStatus = isOnline ? "Offline" : "Online";
             await updateDoc(doc(db, "riders", name), { status: newStatus });
             btn.innerText = newStatus;
-            btn.className = `px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${newStatus === 'Online' ? 'bg-green-500 pulse-online' : 'bg-slate-400'} text-white`;
+            btn.className = `px-5 py-2.5 rounded-full text-[10px] font-black uppercase transition-all ${newStatus === 'Online' ? 'bg-green-500 pulse-online' : 'bg-slate-400'} text-white shadow-lg`;
         };
 
         window.logoutRider = async () => {
-            if (confirm("End your shift?")) {
+            if (confirm("Go Offline and Logout?")) {
                 const name = sessionStorage.getItem('rider_name');
                 await updateDoc(doc(db, "riders", name), { status: "Offline" });
                 sessionStorage.clear();
