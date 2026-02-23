@@ -168,17 +168,23 @@
                     let navBtnHtml = '';
                     let distHtml = '';
                     
-                    // FIXED NAVIGATION LOGIC
-                    if(o.customerLocation && o.customerLocation.includes('q=')) {
-                        const coords = o.customerLocation.split('q=')[1].split(',');
-                        const dist = calculateDistance(parseFloat(coords[0]), parseFloat(coords[1]));
-                        distHtml = `<div class="bg-orange-500 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-tighter italic">📍 ${dist} KM AWAY</div>`;
+                    // --- RE-FIXED NAVIGATION LOGIC ---
+                    if (o.customerLocation && o.customerLocation.includes('q=')) {
+                        try {
+                            const latLongPart = o.customerLocation.split('q=')[1];
+                            const coords = latLongPart.split(',');
+                            const dist = calculateDistance(parseFloat(coords[0]), parseFloat(coords[1]));
+                            distHtml = `<div class="bg-orange-500 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-tighter italic">📍 ${dist} KM AWAY</div>`;
+                        } catch(e) { console.log("Distance error"); }
+
                         navBtnHtml = `<a href="${o.customerLocation}" target="_blank" class="flex items-center gap-4 bg-orange-50 p-4 rounded-2xl border border-orange-100 active:scale-95 transition">
                             <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-location-arrow"></i></div>
                             <span class="font-800 text-sm text-orange-700 italic uppercase">Navigate to Location</span>
                         </a>`;
                     } else {
-                        const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.customerLocation || 'Baripada')}`;
+                        // Agar sirf text address hai
+                        const cleanAddress = encodeURIComponent(o.customerLocation || 'Baripada');
+                        const searchUrl = `https://www.google.com/maps/search/?api=1&query=${cleanAddress}`;
                         navBtnHtml = `<a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 active:scale-95 transition">
                             <div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div>
                             <span class="font-800 text-sm text-slate-700 italic uppercase">Search Address</span>
