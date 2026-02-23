@@ -70,6 +70,11 @@
                     <i class="fa-solid fa-phone absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
                     <input type="tel" id="modal-phone" placeholder="Mobile Number" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 transition-all">
                 </div>
+                <div class="flex justify-end">
+                    <button onclick="getLocation()" id="fetch-loc-btn" class="text-[9px] font-black text-orange-600 uppercase tracking-widest flex items-center gap-1 bg-orange-50 px-3 py-1.5 rounded-xl border border-orange-100 active:scale-95 transition-all">
+                        <i class="fa-solid fa-location-crosshairs"></i> Fetch My Location
+                    </button>
+                </div>
                 <div class="relative">
                     <i class="fa-solid fa-location-dot absolute left-5 top-5 text-gray-300 text-xs"></i>
                     <textarea id="modal-location" rows="3" placeholder="Exact Delivery Location" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-sm focus:ring-2 focus:ring-orange-500 resize-none transition-all"></textarea>
@@ -192,6 +197,41 @@
         const db = getFirestore(app);
         let cart = [];
         let currentFilter = 'All';
+
+        // --- NEW GEOLOCATION FUNCTION ---
+        window.getLocation = () => {
+            const btn = document.getElementById('fetch-loc-btn');
+            const textarea = document.getElementById('modal-location');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Fetching...';
+            btn.disabled = true;
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                        
+                        // Textarea update with Google Maps link
+                        textarea.value = `📍 Google Maps: ${mapsLink}\n🏠 Address: Baripada, `;
+                        
+                        btn.innerHTML = '<i class="fa-solid fa-check"></i> Fetched';
+                        btn.classList.replace('text-orange-600', 'text-green-600');
+                        btn.classList.replace('bg-orange-50', 'bg-green-50');
+                        textarea.focus();
+                    },
+                    (error) => {
+                        alert("Location access denied. Please type manually.");
+                        btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Try Again';
+                        btn.disabled = false;
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                alert("Geolocation not supported by this browser.");
+            }
+        };
         
         window.filterMenu = (type) => {
             currentFilter = type;
@@ -312,7 +352,6 @@
             document.getElementById('cart-total').innerText = "₹" + (subtotal > 0 ? subtotal + 20 : 0);
         };
 
-        // --- UPDATED PROCESS ORDER LOGIC ---
         window.processOrder = async (method) => {
             if (cart.length === 0) return alert("Bhai, box khali hai! Kuch toh add karo 🥟");
             const name = localStorage.getItem('ff_user');
@@ -324,7 +363,6 @@
             const totalBill = subtotal + 20;
             const orderPin = Math.floor(1000 + Math.random() * 9000);
 
-            // 1. Direct Redirect for Online Payment (No alert)
             if (method === 'online') {
                 window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=Freshfry_Order_${orderPin}`;
             }
@@ -350,12 +388,10 @@
                     window.open(`https://wa.me/917008186187?text=${message}`);
                 }
 
-                // UI Cleanup
                 cart = []; 
                 updateCartUI(); 
                 toggleCart(false);
 
-                // WhatsApp ke liye hi alert dikhayein
                 if (method === 'whatsapp') {
                     alert(`Order Placed Successfully! PIN: ${orderPin}`);
                 }
