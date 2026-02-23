@@ -8,7 +8,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F4F7FE; color: #1e293b; }
         .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .premium-card { background: white; border-radius: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.04); }
@@ -101,7 +100,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- DISTANCE CALCULATION (HAIVERSINE) ---
         function calculateDistance(lat2, lon2) {
             const shopLat = 21.9348; 
             const shopLon = 86.7513; 
@@ -149,7 +147,6 @@
             const orders = localStorage.getItem(`ff_orders_${name}`) || 0;
             document.getElementById('todayEarning').innerText = `₹${earn}`;
             document.getElementById('orderCountDisplay').innerText = orders;
-            
             const goal = 500;
             const percent = Math.min((earn / goal) * 100, 100).toFixed(0);
             document.getElementById('goalProgress').style.width = percent + '%';
@@ -171,7 +168,7 @@
                     let navBtnHtml = '';
                     let distHtml = '';
                     
-                    // Same OLD logic for Map & Distance
+                    // FIXED: Map & Navigation Logic
                     const mapLinkMatch = o.customerLocation.match(/q=([\d.-]+),([\d.-]+)/);
                     if(mapLinkMatch) {
                         const dist = calculateDistance(parseFloat(mapLinkMatch[1]), parseFloat(mapLinkMatch[2]));
@@ -182,7 +179,10 @@
                         </a>`;
                     } else {
                         const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.customerLocation)}`;
-                        navBtnHtml = `<a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200"><div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div><span class="font-800 text-sm text-slate-700 italic uppercase">Search Address</span></a>`;
+                        navBtnHtml = `<a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200">
+                            <div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div>
+                            <span class="font-800 text-sm text-slate-700 italic uppercase">Search Address</span>
+                        </a>`;
                     }
 
                     list.innerHTML += `<div class="premium-card p-6 border-l-8 border-orange-500">
@@ -199,10 +199,6 @@
                         <div class="space-y-3 mb-6">
                             <a href="tel:${o.customerPhone}" class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100 active:scale-95 transition"><div class="h-10 w-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div><span class="font-800 text-sm text-blue-700 uppercase italic">CALL CUSTOMER</span></a>
                             ${navBtnHtml}
-                            <div class="flex items-start gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                <i class="fa-solid fa-location-dot text-slate-400 mt-1"></i>
-                                <span class="text-[11px] font-bold text-slate-500 leading-tight">${o.customerLocation}</span>
-                            </div>
                         </div>
                         <div class="bg-slate-900 p-6 rounded-[1.5rem] shadow-xl">
                             <p class="text-center text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Verification PIN</p>
@@ -237,7 +233,7 @@
                 localStorage.setItem(`ff_earn_${name}`, todayEarn);
                 localStorage.setItem(`ff_orders_${name}`, orders);
                 loadEarningUI(name);
-                alert("Order Delivered! ₹20 added to your wallet.");
+                alert("Order Delivered! ₹20 added.");
             } else { alert("Incorrect PIN!"); }
         };
 
