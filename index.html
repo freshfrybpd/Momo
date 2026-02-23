@@ -158,7 +158,7 @@
     <div id="overlay" onclick="closeAllSidebars()" class="fixed inset-0 z-50 hidden backdrop-blur-sm"></div>
 
     <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-6 z-[5000]">
-        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 text-center shadow-2xl">
+        <div class="bg-white w-full max-sm rounded-[3rem] p-8 text-center shadow-2xl">
             <div class="w-20 h-20 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
                 <i class="fa-solid fa-star"></i>
             </div>
@@ -193,7 +193,6 @@
         let cart = [];
         let currentFilter = 'All';
         
-        // --- Improved Filter Logic ---
         window.filterMenu = (type) => {
             currentFilter = type;
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -313,28 +312,57 @@
             document.getElementById('cart-total').innerText = "₹" + (subtotal > 0 ? subtotal + 20 : 0);
         };
 
+        // --- UPDATED PROCESS ORDER LOGIC ---
         window.processOrder = async (method) => {
             if (cart.length === 0) return alert("Bhai, box khali hai! Kuch toh add karo 🥟");
             const name = localStorage.getItem('ff_user');
             const phone = localStorage.getItem('ff_phone');
             const location = localStorage.getItem('ff_location');
             if(!phone) return document.getElementById('user-info-modal').classList.remove('hidden');
+            
             const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
             const totalBill = subtotal + 20;
             const orderPin = Math.floor(1000 + Math.random() * 9000);
-            const orderData = { customerName: name, customerPhone: phone, customerLocation: location, items: cart, total: "₹" + totalBill, status: 'pending', orderPin: orderPin, createdAt: serverTimestamp(), showFeedback: false };
+
+            // 1. Direct Redirect for Online Payment (No alert)
+            if (method === 'online') {
+                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=Freshfry_Order_${orderPin}`;
+            }
+
+            const orderData = { 
+                customerName: name, 
+                customerPhone: phone, 
+                customerLocation: location, 
+                items: cart, 
+                total: "₹" + totalBill, 
+                status: 'pending', 
+                orderPin: orderPin, 
+                createdAt: serverTimestamp(), 
+                showFeedback: false 
+            };
+
             try {
                 const docRef = await addDoc(collection(db, "orders"), orderData);
-                if (method === 'online') {
-                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=Freshfry_Order_${orderPin}`;
-                } else if (method === 'whatsapp') {
+                
+                if (method === 'whatsapp') {
                     let itemDetails = cart.map(i => `✅ *${i.qty}x ${i.name}* (₹${i.price * i.qty})`).join('%0A');
                     const message = `*🔥 NEW ORDER - FRESHFRY MOMOS 🔥*%0A%0A*--- CUSTOMER DETAILS ---*%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A📍 Loc: ${location}%0A%0A*--- ORDER ITEMS ---*%0A${itemDetails}%0A%0A*--- BILL SUMMARY ---*%0A💰 Items Total: ₹${subtotal}%0A🚚 Delivery Fee: ₹20%0A⭐ *TOTAL BILL: ₹${totalBill}*%0A%0A🔑 *ORDER PIN: ${orderPin}*%0A🆔 Order ID: #${docRef.id.slice(-5)}%0A%0APlease confirm my order!`;
                     window.open(`https://wa.me/917008186187?text=${message}`);
                 }
-                cart = []; updateCartUI(); toggleCart(false);
-                alert(`Order Placed Successfully! PIN: ${orderPin}`);
-            } catch (e) { alert("Server error, please try again!"); }
+
+                // UI Cleanup
+                cart = []; 
+                updateCartUI(); 
+                toggleCart(false);
+
+                // WhatsApp ke liye hi alert dikhayein
+                if (method === 'whatsapp') {
+                    alert(`Order Placed Successfully! PIN: ${orderPin}`);
+                }
+            } catch (e) { 
+                console.error(e);
+                alert("Server error, please try again!"); 
+            }
         };
 
         window.loadMyOrders = () => {
@@ -419,26 +447,21 @@
             if (!localStorage.getItem('ff_phone')) { setTimeout(() => { document.getElementById('user-info-modal').classList.remove('hidden'); }, 1000); }
         };
 
-        // --- PWA INSTALLATION LOGIC ---
         let deferredPrompt;
         const installBox = document.getElementById("installBox");
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             installBox.style.display = "block";
         });
-
         installBox.addEventListener("click", async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') console.log('User installed');
                 deferredPrompt = null;
                 installBox.style.display = "none";
             }
         });
-
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(() => console.log("SW Registered"));
         }
