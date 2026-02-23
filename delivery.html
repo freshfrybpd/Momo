@@ -12,6 +12,7 @@
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .rider-card { background: white; border-radius: 2.5rem; box-shadow: 0 15px 35px -5px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
         .wallet-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .progress-container { height: 12px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, #ff8a00, #ff5e00); transition: width 0.8s ease; }
         #main-app { display: none; }
         .pulse-online { animation: pulse 2s infinite; }
@@ -50,6 +51,17 @@
         </nav>
 
         <section class="p-6 space-y-6">
+            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
+                <div class="flex justify-between items-end mb-2">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Daily Goal (₹500)</p>
+                    <p id="goalPercent" class="text-xs font-900 text-orange-500">0%</p>
+                </div>
+                <div class="progress-container">
+                    <div id="goalProgress" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <p class="text-[9px] font-bold text-slate-400 uppercase italic mt-2" id="goalMessage">Complete 25 orders to hit target!</p>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div class="wallet-gradient p-7 rounded-[3rem] text-white">
                     <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Today's Pay</p>
@@ -95,23 +107,30 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- LOGIN LOGIC ---
+        // --- DISTANCE HELPER (Haversine Formula) ---
+        function calculateDistance(lat2, lon2) {
+            const shopLat = 21.9348; // Change to your Baripada Shop Lat
+            const shopLon = 86.7513; // Change to your Baripada Shop Lon
+            const R = 6371; // Earth Radius in KM
+            const dLat = (lat2 - shopLat) * Math.PI / 180;
+            const dLon = (lon2 - shopLon) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(shopLat * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return (R * c).toFixed(1);
+        }
+
         window.checkRiderLogin = async () => {
             const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
             const phone = document.getElementById('riderPhoneInput').value.trim();
             const upi = document.getElementById('riderUpiInput').value.trim().toLowerCase();
             const pass = document.getElementById('riderPassInput').value;
             const phoneRegex = /^[6-9]\d{9}$/;
-
             if (name.length < 3) return alert("Enter full name!");
             if (!phoneRegex.test(phone)) return alert("Enter valid 10-digit Indian phone number!");
             if (!upi.includes('@')) return alert("Enter valid UPI ID!");
             if (pass !== "freshfry2026") return alert("Incorrect Pass Key!");
-
-            await setDoc(doc(db, "riders", name), { 
-                riderName: name, riderPhone: phone, riderUpi: upi, status: "Online", lastLogin: serverTimestamp() 
-            }, { merge: true });
-
+            await setDoc(doc(db, "riders", name), { riderName: name, riderPhone: phone, riderUpi: upi, status: "Online", lastLogin: serverTimestamp() }, { merge: true });
             sessionStorage.setItem('rider_auth', 'true');
             sessionStorage.setItem('rider_name', name);
             sessionStorage.setItem('rider_upi', upi);
@@ -123,7 +142,6 @@
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('displayRiderName').innerText = name;
             document.getElementById('displayRiderUpi').innerText = "UPI: " + sessionStorage.getItem('rider_upi');
-            
             const today = new Date().toLocaleDateString();
             if (localStorage.getItem(`ff_date_${name}`) !== today) {
                 localStorage.setItem(`ff_earn_${name}`, 0);
@@ -136,11 +154,26 @@
         }
 
         function loadEarningUI(name) {
-            document.getElementById('todayEarning').innerText = `₹${localStorage.getItem(`ff_earn_${name}`) || 0}`;
-            document.getElementById('orderCountDisplay').innerText = localStorage.getItem(`ff_orders_${name}`) || 0;
+            const earn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0);
+            const orders = localStorage.getItem(`ff_orders_${name}`) || 0;
+            document.getElementById('todayEarning').innerText = `₹${earn}`;
+            document.getElementById('orderCountDisplay').innerText = orders;
+            
+            // Graph Logic
+            const goal = 500;
+            const percent = Math.min((earn / goal) * 100, 100).toFixed(0);
+            document.getElementById('goalProgress').style.width = percent + '%';
+            document.getElementById('goalPercent').innerText = percent + '%';
+            
+            if(earn >= goal) {
+                document.getElementById('goalMessage').innerText = "Daily Goal Achieved! 🏆";
+                document.getElementById('goalMessage').className = "text-[9px] font-bold text-green-500 uppercase italic mt-2";
+            } else {
+                const remaining = Math.ceil((goal - earn) / 20);
+                document.getElementById('goalMessage').innerText = `${remaining} more orders to reach ₹500 goal!`;
+            }
         }
 
-        // --- ACTIVE ORDERS ---
         function loadMyOrders(riderName) {
             const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
             onSnapshot(q, (snap) => {
@@ -152,107 +185,73 @@
                 }
                 snap.forEach(d => {
                     const o = d.data();
-                    
-                    // SMART NAVIGATION LOGIC
                     let navBtnHtml = '';
-                    const mapLinkMatch = o.customerLocation.match(/https?:\/\/[\w\/\.]+/);
+                    let distHtml = '';
+                    const mapLinkMatch = o.customerLocation.match(/q=([\d.-]+),([\d.-]+)/); // Extract lat,lon from Google URL
                     
                     if(mapLinkMatch) {
-                        navBtnHtml = `
-                        <a href="${mapLinkMatch[0]}" target="_blank" class="flex items-center gap-4 bg-orange-50 p-4 rounded-2xl border border-orange-100 active:scale-95 transition mb-3">
-                            <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-orange-200"><i class="fa-solid fa-location-arrow"></i></div>
+                        const dist = calculateDistance(parseFloat(mapLinkMatch[1]), parseFloat(mapLinkMatch[2]));
+                        distHtml = `<div class="bg-orange-500 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-tighter italic">📍 ${dist} KM AWAY</div>`;
+                        navBtnHtml = `<a href="${o.customerLocation}" target="_blank" class="flex items-center gap-4 bg-orange-50 p-4 rounded-2xl border border-orange-100 active:scale-95 transition mb-3">
+                            <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-location-arrow"></i></div>
                             <span class="font-800 text-sm text-orange-700 italic uppercase">Navigate to Location</span>
                         </a>`;
                     } else {
-                        // If no link, create a search button using address text
                         const searchUrl = `https://www.google.com/maps/search/${encodeURIComponent(o.customerLocation)}`;
-                        navBtnHtml = `
-                        <a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 active:scale-95 transition mb-3">
-                            <div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div>
-                            <span class="font-800 text-sm text-slate-700 italic uppercase">Search Address on Maps</span>
-                        </a>`;
+                        navBtnHtml = `<a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 mb-3"><div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div><span class="font-800 text-sm text-slate-700 italic uppercase">Search Address</span></a>`;
                     }
 
-                    list.innerHTML += `
-                    <div class="rider-card p-8 border-t-[12px] border-orange-500">
+                    list.innerHTML += `<div class="rider-card p-8 border-t-[12px] border-orange-500">
                         <div class="flex justify-between items-start mb-6">
                             <div>
                                 <h3 class="text-2xl font-800 text-slate-900 tracking-tighter uppercase italic">${o.customerName}</h3>
                                 <p class="text-[10px] font-black text-orange-500 uppercase mt-1 tracking-widest">ORDER ID #${d.id.slice(-5)}</p>
                             </div>
-                            <div class="text-right italic">
-                                <h3 class="text-2xl font-900 text-slate-900">₹${o.total}</h3>
-                                <p class="text-[8px] font-black text-blue-500 uppercase">PREPAID</p>
+                            <div class="text-right">
+                                ${distHtml}
+                                <h3 class="text-2xl font-900 text-slate-900 mt-2">₹${o.total}</h3>
                             </div>
                         </div>
-
                         <div class="space-y-3 mb-8">
-                            <a href="tel:${o.customerPhone}" class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100 active:scale-95 transition">
-                                <div class="h-10 w-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div>
-                                <span class="font-800 text-sm text-blue-700 uppercase italic">CALL CUSTOMER</span>
-                            </a>
+                            <a href="tel:${o.customerPhone}" class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100"><div class="h-10 w-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div><span class="font-800 text-sm text-blue-700 uppercase italic">CALL CUSTOMER</span></a>
                             ${navBtnHtml}
-                            <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <div class="h-10 w-10 bg-slate-200 text-slate-600 rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot"></i></div>
-                                <span class="font-700 text-xs text-slate-500 leading-snug pt-1">${o.customerLocation}</span>
-                            </div>
+                            <div class="flex items-start gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100"><div class="h-10 w-10 bg-slate-200 text-slate-600 rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot"></i></div><span class="font-700 text-xs text-slate-500 leading-snug pt-1">${o.customerLocation}</span></div>
                         </div>
-
                         <div class="bg-slate-900 p-8 rounded-[2.5rem] shadow-xl">
-                            <p class="text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Enter Verification PIN</p>
-                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="••••" class="w-full bg-white/5 border border-white/10 text-center text-4xl font-900 tracking-[1.5rem] outline-none text-white py-4 rounded-2xl focus:bg-white/10 transition-all">
-                            <button onclick="verifyAndDeliver('${d.id}', '${o.orderPin}')" class="w-full bg-orange-500 text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-widest mt-6 active:scale-95 transition-all italic">Complete Delivery 🔥</button>
+                            <p class="text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Verification PIN</p>
+                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="••••" class="w-full bg-white/5 border border-white/10 text-center text-4xl font-900 tracking-[1.5rem] outline-none text-white py-4 rounded-2xl">
+                            <button onclick="verifyAndDeliver('${d.id}', '${o.orderPin}')" class="w-full bg-orange-500 text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-widest mt-6 active:scale-95 italic">Complete Delivery 🔥</button>
                         </div>
                     </div>`;
                 });
             });
         }
 
-        // --- ORDER HISTORY ---
         function loadHistory(riderName) {
             const q = query(collection(db, "orders"), where("status", "==", "delivered"), where("riderName", "==", riderName), orderBy("deliveredAt", "desc"), limit(10));
             onSnapshot(q, (snap) => {
                 const histList = document.getElementById('rider-history-list');
                 histList.innerHTML = '';
-                if(snap.empty) {
-                    histList.innerHTML = `<p class="text-center text-[10px] text-slate-400 font-bold uppercase py-4">No deliveries yet today</p>`;
-                    return;
-                }
+                if(snap.empty) { histList.innerHTML = `<p class="text-center text-[10px] text-slate-400 font-bold py-4">No deliveries yet</p>`; return; }
                 snap.forEach(d => {
                     const o = d.data();
-                    histList.innerHTML += `
-                    <div class="history-card p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div>
-                            <div>
-                                <p class="text-[11px] font-800 text-slate-800 uppercase italic">${o.customerName}</p>
-                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">ID: #${d.id.slice(-5)}</p>
-                            </div>
-                        </div>
-                        <p class="font-900 text-sm text-slate-900 italic">+₹20</p>
-                    </div>`;
+                    histList.innerHTML += `<div class="history-card p-4 flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div><div><p class="text-[11px] font-800 text-slate-800 uppercase italic">${o.customerName}</p><p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">ID: #${d.id.slice(-5)}</p></div></div><p class="font-900 text-sm text-slate-900 italic">+₹20</p></div>`;
                 });
             });
         }
 
-        // --- DELIVERY VERIFICATION ---
         window.verifyAndDeliver = async (orderId, correctPin) => {
             const inputPin = document.getElementById(`pin-${orderId}`).value;
             if(String(inputPin) === String(correctPin)) {
                 const name = sessionStorage.getItem('rider_name');
                 await updateDoc(doc(db, "orders", orderId), { status: 'delivered', deliveredAt: serverTimestamp() });
-                
                 let todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
                 let orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
-
                 localStorage.setItem(`ff_earn_${name}`, todayEarn);
                 localStorage.setItem(`ff_orders_${name}`, orders);
-                
                 loadEarningUI(name);
-                alert("Order Delivered Successfully! ₹20 added to wallet.");
-            } else {
-                alert("Incorrect PIN! Ask customer for their 4-digit code.");
-            }
+                alert("Order Delivered Successfully! ₹20 added.");
+            } else { alert("Incorrect PIN!"); }
         };
 
         window.toggleDuty = async () => {
@@ -266,7 +265,7 @@
         };
 
         window.logoutRider = async () => {
-            if (confirm("Go Offline and Logout?")) {
+            if (confirm("Logout?")) {
                 const name = sessionStorage.getItem('rider_name');
                 await updateDoc(doc(db, "riders", name), { status: "Offline" });
                 sessionStorage.clear();
