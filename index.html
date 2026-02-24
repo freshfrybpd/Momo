@@ -143,11 +143,10 @@
                 <span>Total Bill</span>
                 <span id="cart-total" class="text-orange-600">₹0</span>
             </div>
-            <div class="grid grid-cols-2 gap-3 pt-4">
-                <button onclick="processOrder('whatsapp')" class="bg-[#25D366] text-white py-4 rounded-2xl font-black text-[11px] uppercase flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            <div class="pt-4">
+                <button onclick="processOrder('online')" class="w-full btn-gradient text-white py-5 rounded-2xl font-black text-sm uppercase shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-credit-card"></i> Pay Online & Order
                 </button>
-                <button onclick="processOrder('online')" class="btn-gradient text-white py-4 rounded-2xl font-black text-[11px] uppercase">Pay Online</button>
             </div>
         </div>
     </div>
@@ -346,7 +345,6 @@
             document.getElementById('cart-total').innerText = "₹" + (subtotal > 0 ? subtotal + 20 : 0);
         };
 
-        // --- UPDATED PROCESS ORDER FOR DIRECT WHATSAPP APP ---
         window.processOrder = async (method) => {
             if (cart.length === 0) return alert("Bhai, box khali hai! Kuch toh add karo 🥟");
             const name = localStorage.getItem('ff_user');
@@ -372,24 +370,8 @@
 
             try {
                 const docRef = await addDoc(collection(db, "orders"), orderData);
-                
-                if (method === 'whatsapp') {
-                    let itemDetails = cart.map(i => `✅ *${i.qty}x ${i.name}*`).join('\n');
-                    const rawMsg = `*🔥 NEW ORDER - FRESHFRY*\n\n👤 *Customer:* ${name}\n📞 *Phone:* ${phone}\n📍 *Loc:* ${location}\n\n*ORDER:* \n${itemDetails}\n\n💰 *Total:* ₹${totalBill}\n🔑 *PIN:* ${orderPin}\n🆔 ID: #${docRef.id.slice(-5)}`;
-                    
-                    const encodedMsg = encodeURIComponent(rawMsg);
-                    const whatsappAppUrl = `whatsapp://send?phone=917008186187&text=${encodedMsg}`;
-                    const whatsappWebUrl = `https://api.whatsapp.com/send?phone=917008186187&text=${encodedMsg}`;
-
-                    // Force open App, fallback to Web
-                    window.location.assign(whatsappAppUrl);
-                    setTimeout(() => {
-                        if(document.hasFocus()) window.location.href = whatsappWebUrl;
-                    }, 1000);
-
-                } else if (method === 'online') {
-                    window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=FF_${orderPin}`;
-                }
+                // Directly initiating UPI payment
+                window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=FF_${orderPin}`;
 
                 cart = []; 
                 updateCartUI(); 
