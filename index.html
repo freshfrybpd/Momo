@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <title>Freshfry | Baripada Premium Momos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+    
     <meta name="title" content="Freshfry | Baripada Premium Momos">
     <meta name="description" content="Craving for the best momos in Baripada? Order from Freshfry now! 🥟🔥">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -181,7 +185,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where, orderBy, doc, setDoc, addDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        // MODIFIED: Added enableIndexedDbPersistence for Offline Mode
+        import { getFirestore, collection, onSnapshot, query, where, orderBy, doc, setDoc, addDoc, updateDoc, serverTimestamp, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -194,6 +199,16 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // --- NEW: OFFLINE PERSISTENCE ---
+        enableIndexedDbPersistence(db).catch((err) => {
+            if (err.code == 'failed-precondition') {
+                console.log("Persistence failed: Multiple tabs open");
+            } else if (err.code == 'unimplemented') {
+                console.log("Persistence is not supported in this browser");
+            }
+        });
+
         let cart = [];
         let currentFilter = 'All';
 
@@ -254,7 +269,7 @@
                     list.innerHTML += `
                         <div class="momo-card p-4">
                             <div class="food-badge ${badgeColor}">${item.type || 'Veg'}</div>
-                            <img src="${item.image}" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
+                            <img src="${item.image}" loading="lazy" class="w-full h-56 object-cover rounded-[2rem] mb-4 ${isAvailable ? '' : 'grayscale opacity-60'}">
                             <div class="px-2">
                                 <div class="flex justify-between font-900 text-lg uppercase italic">
                                     <span class="momo-name-text ${isAvailable ? '' : 'text-gray-400'}">${item.name}</span>
@@ -370,13 +385,10 @@
 
             try {
                 const docRef = await addDoc(collection(db, "orders"), orderData);
-                // Directly initiating UPI payment
                 window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry%20Momos&am=${totalBill}&cu=INR&tn=FF_${orderPin}`;
-
                 cart = []; 
                 updateCartUI(); 
                 toggleCart(false);
-
             } catch (e) { 
                 console.error(e);
                 alert("Server error, please try again!"); 
