@@ -1,114 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Freshfry | Baripada Premium Momos</title>
+    <title>Freshfry | Fast & Premium</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ff5e00">
+    
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://api.dicebear.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        :root { --brand: #ff5e00; --bg: #fcfcfd; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: #0f172a; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
         
-        /* Modern UI Accents */
-        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .momo-card { border-radius: 2.2rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1); background: white; border: 1px solid #f1f5f9; }
-        .momo-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(255, 94, 0, 0.1); }
-        
-        /* Sidebar System */
-        .sidebar { position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 420px; z-index: 1000; background: white; transition: transform 0.4s ease-in-out; }
-        .sidebar-closed { transform: translateX(100%); }
-        .sidebar-open { transform: translateX(0); box-shadow: -15px 0 50px rgba(0,0,0,0.1); }
+        :root { --primary: #ff5e00; --surface: #ffffff; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: #f8fafc; 
+            overscroll-behavior-y: contain; /* Prevents pull-to-refresh bounce */
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* Loyalty Points Animation */
-        .points-badge { background: linear-gradient(135deg, #fbbf24, #d97706); color: white; animation: shine 2s infinite; }
-        @keyframes shine { 0% { opacity: 0.9; } 50% { opacity: 1; scale: 1.05; } 100% { opacity: 0.9; } }
-        
-        .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        /* Prevent Layout Shift */
+        .img-container {
+            aspect-ratio: 16 / 9;
+            background: #e2e8f0;
+            overflow: hidden;
+            border-radius: 1.5rem;
+        }
+
+        /* Fast Sidebars - GPU Accelerated */
+        .sidebar {
+            position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 400px;
+            background: var(--surface); z-index: 1000;
+            will-change: transform;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-closed { transform: translateX(105%); }
+        .sidebar-open { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.05); }
+
+        /* Hardware Accelerated Animations */
+        @keyframes skeleton-move {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: skeleton-move 1.5s infinite linear;
+        }
+
+        /* Glassmorphism Optimization */
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(10px);
+            -webkit-backdrop-filter: saturate(180%) blur(10px);
+        }
     </style>
 </head>
-<body class="pb-28">
+<body class="pb-24">
 
-    <div class="bg-black text-white text-[10px] font-black uppercase py-2 px-4 tracking-tighter flex justify-between items-center overflow-hidden">
-        <div class="animate-pulse flex items-center gap-2"><i class="fa-solid fa-bolt text-yellow-400"></i> Fast Delivery in Baripada</div>
-        <div id="user-points" class="bg-orange-600 px-2 py-0.5 rounded-full hidden">0 Points</div>
-    </div>
-
-    <nav class="sticky top-0 z-50 glass-nav px-6 py-4 flex justify-between items-center">
-        <div class="flex flex-col">
-            <h1 class="text-2xl font-900 italic uppercase tracking-tighter leading-none">Fresh<span class="text-orange-600">fry.</span></h1>
-            <span class="text-[8px] font-bold text-gray-400 tracking-widest uppercase">Premium Momos</span>
-        </div>
-        <div class="flex items-center gap-3">
-            <button onclick="toggleOrders(true)" class="w-11 h-11 rounded-2xl bg-gray-50 flex items-center justify-center text-slate-600 active:scale-90 transition"><i class="fa-solid fa-clock-rotate-left"></i></button>
-            <div onclick="toggleCart(true)" class="w-11 h-11 rounded-2xl bg-slate-900 text-white flex items-center justify-center relative cursor-pointer active:scale-90 transition">
-                <i class="fa-solid fa-bag-shopping text-sm"></i>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-orange-500 text-[9px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-black">0</span>
+    <nav class="sticky top-0 z-50 nav-glass border-b border-gray-100 px-6 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-900 italic tracking-tighter">Fresh<span class="text-orange-600">fry.</span></h1>
+        <div class="flex gap-4">
+            <div onclick="toggleCart(true)" class="relative cursor-pointer">
+                <i class="fa-solid fa-bag-shopping text-xl"></i>
+                <span id="cart-dot" class="absolute -top-1 -right-1 bg-orange-600 w-4 h-4 rounded-full text-[8px] flex items-center justify-center text-white font-black hidden">0</span>
             </div>
-            <img id="avatar" onclick="openProfile()" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Fresh" class="w-11 h-11 rounded-2xl border-2 border-orange-500 p-0.5 cursor-pointer">
+            <img id="user-icon" onclick="openLogin()" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Fresh" class="w-8 h-8 rounded-lg bg-orange-50">
         </div>
     </nav>
 
     <main class="max-w-6xl mx-auto px-6 mt-8">
-        <div class="mb-8">
-            <h2 class="text-3xl font-900 italic uppercase leading-none">Craving <br><span class="text-orange-600">Something?</span></h2>
-            <div class="flex gap-2 mt-6 overflow-x-auto no-scrollbar pb-2">
-                <button onclick="setFilter('All')" id="f-all" class="px-6 py-3 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest transition">All 🥟</button>
-                <button onclick="setFilter('Veg')" id="f-veg" class="px-6 py-3 rounded-2xl bg-white text-slate-400 border border-slate-100 text-[10px] font-black uppercase tracking-widest transition">Veg 🥗</button>
-                <button onclick="setFilter('Non-Veg')" id="f-nonveg" class="px-6 py-3 rounded-2xl bg-white text-slate-400 border border-slate-100 text-[10px] font-black uppercase tracking-widest transition">Non-Veg 🍗</button>
-            </div>
+        <div class="flex justify-between items-end mb-6">
+            <h2 class="text-3xl font-900 italic uppercase">Fast <br><span class="text-orange-600">Flavor.</span></h2>
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest pb-1">Baripada Service</p>
         </div>
 
-        <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="skeleton h-80 rounded-[2.2rem]"></div>
-            <div class="skeleton h-80 rounded-[2.2rem]"></div>
+        <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="skeleton h-64 rounded-3xl"></div>
+            <div class="skeleton h-64 rounded-3xl"></div>
         </div>
     </main>
 
-    <div id="live-ticker" class="fixed bottom-8 left-6 right-6 z-50 transform translate-y-32 transition-transform duration-500">
-        <div onclick="toggleOrders(true)" class="bg-slate-900 text-white p-4 rounded-[2rem] shadow-2xl flex items-center justify-between border-b-4 border-orange-500">
-            <div class="flex items-center gap-4">
-                <div class="relative"><div class="w-3 h-3 bg-orange-500 rounded-full animate-ping"></div><div class="absolute inset-0 w-3 h-3 bg-orange-600 rounded-full"></div></div>
-                <div><p class="text-[10px] text-orange-400 font-black uppercase tracking-widest leading-none">Live Order Status</p><p id="ticker-msg" class="text-sm font-black italic uppercase mt-1">Preparing your feast...</p></div>
+    <div id="order-status" class="fixed bottom-6 left-6 right-6 z-40 hidden translate-y-20 transition-transform duration-300">
+        <div class="bg-slate-900 text-white p-4 rounded-2xl flex justify-between items-center shadow-2xl border-b-4 border-orange-500">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-fire-burner text-orange-500 animate-pulse"></i>
+                <span class="text-xs font-black uppercase italic" id="status-text">Preparing...</span>
             </div>
-            <i class="fa-solid fa-arrow-right text-xs opacity-30"></i>
+            <button onclick="toggleOrders(true)" class="text-[9px] font-black uppercase bg-white/10 px-3 py-1 rounded-lg">View Details</button>
         </div>
     </div>
-
-    <div id="overlay" onclick="closeAll()" class="fixed inset-0 bg-black/40 backdrop-blur-md z-40 hidden opacity-0 transition-opacity duration-300"></div>
 
     <div id="cart-side" class="sidebar sidebar-closed flex flex-col">
-        <div class="p-8 flex justify-between items-center">
-            <h2 class="text-2xl font-900 italic uppercase tracking-tighter">Your <span class="text-orange-600">Box</span></h2>
-            <button onclick="toggleCart(false)" class="w-10 h-10 bg-gray-50 rounded-2xl"><i class="fa-solid fa-xmark"></i></button>
+        <div class="p-6 border-b flex justify-between items-center">
+            <h2 class="text-xl font-900 italic uppercase">Your Box</h2>
+            <i onclick="toggleCart(false)" class="fa-solid fa-xmark cursor-pointer"></i>
         </div>
-        <div id="cart-list" class="flex-1 overflow-y-auto px-8 space-y-4"></div>
-        <div id="ai-suggest" class="px-8 mb-4 hidden">
-            <p class="text-[10px] font-black text-gray-400 uppercase mb-2">People also love:</p>
-            <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100 flex justify-between items-center">
-                <p class="text-xs font-900 italic uppercase">Chilled Coke (250ml) • ₹40</p>
-                <button onclick="addToCart('Coke', 40, 'https://cdn-icons-png.flaticon.com/512/3075/3075908.png')" class="w-8 h-8 bg-orange-500 text-white rounded-xl"><i class="fa-solid fa-plus text-[10px]"></i></button>
+        <div id="cart-body" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-6 bg-gray-50 border-t">
+            <div class="flex justify-between font-900 text-xl italic mb-4">
+                <span>Total</span><span id="cart-total" class="text-orange-600">₹0</span>
             </div>
+            <button onclick="checkout()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase shadow-lg active:scale-95 transition">Order Now</button>
         </div>
-        <div class="p-8 border-t bg-gray-50/50 space-y-4">
-            <div class="flex justify-between font-bold text-xs uppercase text-gray-400"><span>Subtotal</span><span id="sub-price">₹0</span></div>
-            <div class="flex justify-between font-900 text-2xl italic uppercase"><span>Total Bill</span><span id="total-price" class="text-orange-600">₹0</span></div>
-            <button onclick="processOrder()" class="w-full bg-slate-900 text-white py-5 rounded-[1.8rem] font-black uppercase italic tracking-wide shadow-xl active:scale-95 transition">Pay & Order Now</button>
-        </div>
-    </div>
-
-    <div id="order-side" class="sidebar sidebar-closed flex flex-col">
-        <div class="p-8 flex justify-between items-center"><h2 class="text-2xl font-900 italic uppercase">Recent <span class="text-orange-600">Orders</span></h2><button onclick="toggleOrders(false)" class="w-10 h-10 bg-gray-50 rounded-2xl"><i class="fa-solid fa-xmark"></i></button></div>
-        <div id="orders-cont" class="flex-1 overflow-y-auto px-8 pb-8 space-y-6"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where, doc, setDoc, addDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, where, doc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const config = {
             apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -122,131 +125,103 @@
         const app = initializeApp(config);
         const db = getFirestore(app);
 
-        let cart = [], currentFilter = 'All';
+        let cart = [];
 
-        window.onload = () => { syncUser(); loadMenu(); listenToOrders(); };
+        // UI State Controllers
+        window.toggleCart = (show) => {
+            document.getElementById('cart-side').className = `sidebar ${show ? 'sidebar-open' : 'sidebar-closed'}`;
+        };
 
-        // Core Functions
-        window.loadMenu = () => {
-            onSnapshot(collection(db, "menu"), snap => {
-                const grid = document.getElementById('menu-grid');
-                grid.innerHTML = '';
+        // High Performance Menu Loader
+        function loadMenu() {
+            const grid = document.getElementById('menu-grid');
+            onSnapshot(collection(db, "menu"), (snap) => {
+                let html = '';
                 snap.forEach(d => {
                     const item = d.data();
-                    if(currentFilter !== 'All' && item.type !== currentFilter) return;
-                    grid.innerHTML += `
-                        <div class="momo-card p-4">
-                            <img src="${item.image}" class="w-full h-52 object-cover rounded-[1.8rem] mb-4">
-                            <div class="px-2">
-                                <div class="flex justify-between items-start mb-4">
-                                    <h3 class="font-900 text-xl italic uppercase">${item.name}</h3>
-                                    <span class="text-[8px] font-black uppercase px-2 py-1 rounded-lg ${item.type==='Veg'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${item.type}</span>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick="addToCart('${item.name} (H)', ${item.halfPrice}, '${item.image}')" class="flex-1 py-3 rounded-2xl bg-orange-50 text-orange-600 font-900 text-xs border border-orange-100">Half ₹${item.halfPrice}</button>
-                                    <button onclick="addToCart('${item.name} (F)', ${item.fullPrice}, '${item.image}')" class="flex-1 py-3 rounded-2xl bg-slate-900 text-white font-900 text-xs shadow-lg">Full ₹${item.fullPrice}</button>
-                                </div>
+                    html += `
+                        <div class="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">
+                            <div class="img-container mb-4">
+                                <img src="${item.image}" loading="lazy" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-900 uppercase italic text-sm">${item.name}</h3>
+                                <span class="text-[8px] font-black px-2 py-1 bg-gray-100 rounded">${item.type}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="addToCart('${item.name} (H)', ${item.halfPrice})" class="text-[10px] font-black py-2 rounded-lg bg-orange-50 text-orange-600">Half ₹${item.halfPrice}</button>
+                                <button onclick="addToCart('${item.name} (F)', ${item.fullPrice})" class="text-[10px] font-black py-2 rounded-lg bg-slate-900 text-white">Full ₹${item.fullPrice}</button>
                             </div>
                         </div>`;
                 });
+                grid.innerHTML = html;
             });
-        };
+        }
 
-        window.addToCart = (n, p, i) => {
-            const ex = cart.find(x => x.name === n);
-            if(ex) ex.qty++; else cart.push({name:n, price:p, image:i, qty:1});
-            updateUI();
+        window.addToCart = (name, price) => {
+            const entry = cart.find(i => i.name === name);
+            if(entry) entry.qty++; else cart.push({name, price, qty: 1});
+            renderCart();
             toggleCart(true);
         };
 
-        window.updateUI = () => {
-            const list = document.getElementById('cart-list');
-            let sub = 0, count = 0;
-            list.innerHTML = cart.map((i, idx) => {
-                sub += (i.price * i.qty); count += i.qty;
-                return `<div class="flex items-center gap-4 p-4 bg-gray-50 rounded-3xl">
-                    <img src="${i.image}" class="w-14 h-14 object-cover rounded-2xl">
-                    <div class="flex-1"><p class="font-900 text-xs uppercase">${i.name}</p><p class="text-orange-600 font-900 text-[11px]">₹${i.price}</p></div>
-                    <div class="flex items-center gap-2"><button onclick="chQty(${idx},-1)" class="w-8 h-8 bg-white rounded-xl shadow-sm">-</button><span class="font-900 text-xs w-4 text-center">${i.qty}</span><button onclick="chQty(${idx},1)" class="w-8 h-8 bg-white rounded-xl shadow-sm">+</button></div>
+        function renderCart() {
+            const body = document.getElementById('cart-body');
+            const dot = document.getElementById('cart-dot');
+            let total = 0;
+            
+            body.innerHTML = cart.map(item => {
+                total += (item.price * item.qty);
+                return `<div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                    <div class="flex-1"><p class="text-xs font-black uppercase">${item.name}</p><p class="text-[10px] text-orange-600 font-black">₹${item.price}</p></div>
+                    <div class="flex items-center gap-3"><span class="text-xs font-black">x${item.qty}</span></div>
                 </div>`;
             }).join('');
-            document.getElementById('cart-count').innerText = count;
-            document.getElementById('sub-price').innerText = `₹${sub}`;
-            document.getElementById('total-price').innerText = `₹${sub > 0 ? sub + 20 : 0}`;
-            document.getElementById('ai-suggest').classList.toggle('hidden', sub === 0);
-        };
 
-        window.chQty = (idx, d) => { cart[idx].qty += d; if(cart[idx].qty < 1) cart.splice(idx,1); updateUI(); };
+            dot.innerText = cart.length;
+            dot.classList.toggle('hidden', cart.length === 0);
+            document.getElementById('cart-total').innerText = `₹${total + (total > 0 ? 20 : 0)}`;
+        }
 
-        window.processOrder = async () => {
-            const p = localStorage.getItem('ff_phone');
-            if(!p) return openProfile();
-            const total = parseInt(document.getElementById('total-price').innerText.replace('₹',''));
-            const pin = Math.floor(1000 + Math.random() * 9000);
-            
-            const order = {
-                customerPhone: p,
-                customerName: localStorage.getItem('ff_user'),
-                customerLocation: localStorage.getItem('ff_location'),
-                items: cart,
-                total: `₹${total}`,
-                status: 'pending',
-                orderPin: pin,
-                createdAt: serverTimestamp()
-            };
-
-            await addDoc(collection(db, "orders"), order);
-            // Loyalty points logic
-            const userRef = doc(db, "users", p);
-            const userSnap = await getDoc(userRef);
-            const currentPoints = userSnap.data().points || 0;
-            await setDoc(userRef, { points: currentPoints + 10 }, { merge: true });
-            
-            window.location.href = `upi://pay?pa=7008186187@ybl&pn=Freshfry&am=${total}&cu=INR&tn=FF_${pin}`;
-            cart = []; updateUI(); toggleCart(false);
-        };
-
-        // Live Ticker Logic
-        function listenToOrders() {
+        // Live Performance: Order Tracking
+        function watchOrders() {
             const p = localStorage.getItem('ff_phone');
             if(!p) return;
-            const q = query(collection(db, "orders"), where("customerPhone", "==", p), where("status", "in", ["pending", "accepted", "preparing", "out"]));
+            const q = query(collection(db, "orders"), where("customerPhone", "==", p), where("status", "in", ["pending", "accepted", "preparing"]));
             onSnapshot(q, snap => {
-                const ticker = document.getElementById('live-ticker');
+                const ticker = document.getElementById('order-status');
                 if(!snap.empty) {
-                    ticker.style.transform = "translateY(0)";
-                    document.getElementById('ticker-msg').innerText = snap.docs[0].data().status === 'out' ? "Out for Delivery! 🛵" : "Cooking your Momos... 🥟";
+                    ticker.classList.remove('hidden');
+                    setTimeout(() => ticker.style.transform = "translateY(0)", 100);
+                    document.getElementById('status-text').innerText = snap.docs[0].data().status;
                 } else {
-                    ticker.style.transform = "translateY(150%)";
+                    ticker.style.transform = "translateY(100px)";
+                    setTimeout(() => ticker.classList.add('hidden'), 300);
                 }
             });
         }
 
-        // Standard UI Utils
-        window.setFilter = (f) => {
-            currentFilter = f;
-            document.querySelectorAll('[id^="f-"]').forEach(btn => {
-                btn.className = "px-6 py-3 rounded-2xl bg-white text-slate-400 border border-slate-100 text-[10px] font-black uppercase tracking-widest transition";
+        window.checkout = async () => {
+            const p = localStorage.getItem('ff_phone');
+            if(!p) return alert("Please Login First");
+            const total = document.getElementById('cart-total').innerText;
+            
+            await addDoc(collection(db, "orders"), {
+                customerPhone: p,
+                items: cart,
+                total: total,
+                status: 'pending',
+                createdAt: serverTimestamp()
             });
-            document.getElementById(`f-${f.toLowerCase().replace('-','')}`).className = "px-6 py-3 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest transition shadow-lg";
-            loadMenu();
+            
+            alert("Order Placed! Redirecting to UPI...");
+            cart = []; renderCart(); toggleCart(false);
         };
 
-        window.toggleCart = (s) => { document.getElementById('cart-side').className = `sidebar ${s?'sidebar-open':'sidebar-closed'}`; document.getElementById('overlay').classList.toggle('hidden', !s); document.getElementById('overlay').style.opacity = s ? '1' : '0'; };
-        window.toggleOrders = (s) => { document.getElementById('order-side').className = `sidebar ${s?'sidebar-open':'sidebar-closed'}`; document.getElementById('overlay').classList.toggle('hidden', !s); if(s) loadOrderList(); };
-        window.closeAll = () => { toggleCart(false); toggleOrders(false); };
-
-        async function syncUser() {
-            const p = localStorage.getItem('ff_phone');
-            if(p) {
-                const u = await getDoc(doc(db, "users", p));
-                if(u.exists()) {
-                    document.getElementById('user-points').innerText = `${u.data().points || 0} Points`;
-                    document.getElementById('user-points').classList.remove('hidden');
-                }
-            }
-        }
+        window.onload = () => {
+            loadMenu();
+            watchOrders();
+        };
     </script>
 </body>
 </html>
-
