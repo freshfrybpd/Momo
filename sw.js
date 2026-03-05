@@ -1,4 +1,4 @@
-const CACHE_NAME = "freshfry-v1";
+const CACHE_NAME = "freshfry-v2";
 const urlsToCache = [
   "/",
   "/index.html",
