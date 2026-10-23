@@ -1,186 +1,593 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry | Admin Panel Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #f8fafc; }
-        .admin-card { border-radius: 2rem; background: white; border: 1px solid #e2e8f0; overflow: hidden; transition: 0.3s; }
-        .input-style { width: 100%; background: #f1f5f9; border: 2px solid transparent; padding: 12px 18px; border-radius: 1.2rem; font-weight: 600; font-size: 14px; outline: none; transition: 0.3s; }
-        .input-style:focus { border-color: #ff5e00; background: white; }
-        .btn-add { background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%); color: white; font-weight: 900; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<title>Freshfry | Admin Panel Pro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --orange:#ff5e00;
+  --dark:#111318;
+  --muted:#778095;
+  --line:#e8ebf1;
+  --bg:#f5f6fa;
+}
+*{box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--dark)}
+button,input,select,textarea{font:inherit}
+button:disabled{opacity:.55;cursor:not-allowed}
+.admin-card{border-radius:24px;background:#fff;border:1px solid var(--line);overflow:hidden}
+.input-style{
+  width:100%;background:#f6f7fa;border:2px solid transparent;
+  padding:13px 15px;border-radius:15px;font-size:13px;font-weight:600;
+  outline:none;transition:.2s;color:#111318
+}
+.input-style:focus{border-color:var(--orange);background:white}
+.btn-add{background:linear-gradient(135deg,#ff8a00,#ff5e00);color:white;font-weight:900}
+.btn-add:active{transform:scale(.98)}
+.stat-card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px}
+.stat-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center}
+.menu-image{width:68px;height:68px;object-fit:cover;border-radius:17px;background:#f1f2f5;flex-shrink:0}
+.action-btn{height:38px;width:38px;border-radius:12px;display:grid;place-items:center}
+.action-btn:active{transform:scale(.94)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:99px;font-size:9px;font-weight:900;text-transform:uppercase}
+.badge-available{background:#e9f9ef;color:#168044}
+.badge-unavailable{background:#fff0ef;color:#c53232}
+.chip{border:1px solid #e3e6ed;background:white;border-radius:99px;padding:9px 14px;font-size:11px;font-weight:800;white-space:nowrap}
+.chip.active{background:#111318;color:white;border-color:#111318}
+.overlay{position:fixed;inset:0;background:#10111488;z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.show{display:flex}
+.modal{width:100%;max-width:480px;max-height:90dvh;overflow:auto;background:white;border-radius:25px;padding:22px}
+.toast{position:fixed;z-index:100;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;visibility:hidden;transition:.2s;background:#111318;color:white;padding:13px 17px;border-radius:13px;font-size:12px;font-weight:700;max-width:calc(100% - 30px);text-align:center}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.toast.error{background:#a32323}
+#image-preview{width:100%;height:155px;object-fit:cover;border-radius:16px;background:#f2f3f6}
+.empty-state{padding:40px 15px;text-align:center;color:#8991a2;background:white;border:1px dashed #dce0e8;border-radius:20px}
+@media(max-width:420px){
+  .menu-image{width:55px;height:55px;border-radius:13px}
+  .menu-row{gap:10px}
+  .action-btn{width:34px;height:34px}
+}
+</style>
 </head>
-<body class="p-4 pb-20">
 
-    <div class="max-w-xl mx-auto">
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-900 italic uppercase">Menu <span class="text-orange-500">Control</span></h1>
-            <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
-                <i class="fa-solid fa-plus"></i>
-            </div>
-        </header>
+<body class="min-h-screen p-4 pb-12">
+<main class="max-w-2xl mx-auto">
 
-        <div class="admin-card p-6 mb-10 shadow-xl border-t-4 border-orange-500">
-            <h2 id="form-title" class="font-900 uppercase italic text-xs mb-6 text-gray-400">Add New Momo</h2>
-            <input type="hidden" id="edit-id"> 
-            
-            <div class="space-y-4">
-                <input type="text" id="m-name" placeholder="Item Name (e.g. Chicken Steam)" class="input-style">
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <p class="text-[10px] font-black uppercase ml-2 mb-1 text-gray-400">Half Price (₹)</p>
-                        <input type="number" id="m-half-price" placeholder="40" class="input-style">
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-black uppercase ml-2 mb-1 text-gray-400">Full Price (₹)</p>
-                        <input type="number" id="m-full-price" placeholder="80" class="input-style">
-                    </div>
-                </div>
+  <header class="flex justify-between items-center gap-4 mb-7 mt-2">
+    <div>
+      <div class="text-[10px] uppercase tracking-[3px] font-black text-orange-500 mb-1">Freshfry Restaurant</div>
+      <h1 class="text-2xl sm:text-3xl font-black italic uppercase tracking-tight">
+        Menu <span class="text-orange-500">Control</span>
+      </h1>
+      <p class="text-xs text-slate-500 mt-1">Manage your food menu and availability</p>
+    </div>
+    <div class="h-12 w-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/25 flex-shrink-0">
+      <i class="fa-solid fa-utensils text-lg"></i>
+    </div>
+  </header>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <select id="m-type" class="input-style">
-                        <option value="Non-Veg">Non-Veg 🍗</option>
-                        <option value="Veg">Veg 🥗</option>
-                    </select>
-                    <input type="text" id="m-image" placeholder="Image URL" class="input-style">
-                </div>
+  <!-- STATS -->
+  <section class="grid grid-cols-3 gap-3 mb-6">
+    <div class="stat-card">
+      <div class="stat-icon bg-orange-50 text-orange-500 mb-3"><i class="fa-solid fa-bowl-food"></i></div>
+      <div id="stat-total" class="text-2xl font-black">—</div>
+      <div class="text-[9px] uppercase tracking-wide font-extrabold text-slate-400 mt-1">Total items</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon bg-green-50 text-green-600 mb-3"><i class="fa-solid fa-circle-check"></i></div>
+      <div id="stat-available" class="text-2xl font-black">—</div>
+      <div class="text-[9px] uppercase tracking-wide font-extrabold text-slate-400 mt-1">Available</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon bg-red-50 text-red-500 mb-3"><i class="fa-solid fa-ban"></i></div>
+      <div id="stat-unavailable" class="text-2xl font-black">—</div>
+      <div class="text-[9px] uppercase tracking-wide font-extrabold text-slate-400 mt-1">Out of stock</div>
+    </div>
+  </section>
 
-                <div class="flex gap-2">
-                    <button id="submit-btn" onclick="saveItem()" class="flex-1 btn-add py-4 rounded-2xl shadow-lg active:scale-95 transition-all uppercase text-xs tracking-widest">Add Item</button>
-                    <button id="cancel-btn" onclick="resetForm()" class="hidden bg-gray-200 text-gray-600 px-6 rounded-2xl font-black text-xs uppercase">Cancel</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="admin-menu-list" class="space-y-4"></div>
+  <!-- FORM -->
+  <section class="admin-card p-5 sm:p-6 mb-7 shadow-sm">
+    <div class="flex justify-between items-start gap-3 mb-5">
+      <div>
+        <div id="form-eyebrow" class="text-[10px] text-orange-500 font-black uppercase tracking-widest mb-1">Menu management</div>
+        <h2 id="form-title" class="text-lg font-black">Add New Item</h2>
+        <p class="text-xs text-slate-400 mt-1">Enter the food details below.</p>
+      </div>
+      <div class="h-10 w-10 rounded-xl bg-orange-50 text-orange-500 grid place-items-center flex-shrink-0">
+        <i class="fa-solid fa-plus" id="form-icon"></i>
+      </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <form id="menu-form" class="space-y-4">
+      <input type="hidden" id="edit-id">
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
-            authDomain: "freshfry-39a10.firebaseapp.com",
-            projectId: "freshfry-39a10",
-            storageBucket: "freshfry-39a10.firebasestorage.app",
-            messagingSenderId: "928483976893",
-            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
-        };
+      <div>
+        <label for="m-name" class="block text-[10px] font-black uppercase text-slate-500 mb-2">Item name *</label>
+        <input type="text" id="m-name" maxlength="100" required placeholder="e.g. Chicken Steam Momo" class="input-style">
+      </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="m-half-price" class="block text-[10px] font-black uppercase text-slate-500 mb-2">Half price (₹) *</label>
+          <input type="number" id="m-half-price" min="0" max="100000" step="0.01" required placeholder="40" class="input-style">
+        </div>
+        <div>
+          <label for="m-full-price" class="block text-[10px] font-black uppercase text-slate-500 mb-2">Full price (₹) *</label>
+          <input type="number" id="m-full-price" min="0" max="100000" step="0.01" required placeholder="80" class="input-style">
+        </div>
+      </div>
 
-        // Save or Update Function
-        window.saveItem = async () => {
-            const id = document.getElementById('edit-id').value;
-            const data = {
-                name: document.getElementById('m-name').value,
-                halfPrice: Number(document.getElementById('m-half-price').value) || 0,
-                fullPrice: Number(document.getElementById('m-full-price').value) || 0,
-                type: document.getElementById('m-type').value,
-                image: document.getElementById('m-image').value || 'https://via.placeholder.com/150',
-                inStock: true
-            };
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="m-type" class="block text-[10px] font-black uppercase text-slate-500 mb-2">Category *</label>
+          <select id="m-type" class="input-style" required>
+            <option value="Non-Veg">Non-Veg 🍗</option>
+            <option value="Veg">Veg 🥗</option>
+          </select>
+        </div>
+        <div>
+          <label for="m-image" class="block text-[10px] font-black uppercase text-slate-500 mb-2">Image URL</label>
+          <input type="url" id="m-image" maxlength="2000" placeholder="https://..." class="input-style">
+        </div>
+      </div>
 
-            if(!data.name) return alert("Bhai, naam likhna zaroori hai!");
+      <div>
+        <label for="m-description" class="block text-[10px] font-black uppercase text-slate-500 mb-2">Description (optional)</label>
+        <textarea id="m-description" maxlength="300" rows="2" placeholder="Describe your food item..." class="input-style resize-y"></textarea>
+      </div>
 
-            try {
-                if(id) {
-                    await updateDoc(doc(db, "menu", id), data);
-                    alert("Updated Successfully! ✅");
-                } else {
-                    await addDoc(collection(db, "menu"), data);
-                    alert("Added Successfully! 🔥");
-                }
-                resetForm();
-            } catch (e) { 
-                console.error(e);
-                alert("Error saving data!"); 
-            }
-        };
+      <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3">
+        <div class="text-[10px] font-black uppercase text-slate-500 mb-3">Image preview</div>
+        <img id="image-preview" alt="Food image preview" src="https://placehold.co/600x300/f1f2f5/8991a2?text=Food+Preview">
+        <p id="image-preview-note" class="text-[10px] text-slate-400 mt-2">Enter a valid image URL to preview it.</p>
+      </div>
 
-        // Load Items
-        onSnapshot(collection(db, "menu"), (snap) => {
-            const list = document.getElementById('admin-menu-list');
-            list.innerHTML = '';
-            snap.forEach(d => {
-                const item = d.data();
-                const itemId = d.id;
-                list.innerHTML += `
-                    <div class="admin-card p-4 flex items-center gap-4 shadow-sm">
-                        <img src="${item.image}" class="w-16 h-16 object-cover rounded-2xl">
-                        <div class="flex-1">
-                            <h3 class="font-900 uppercase text-xs tracking-tight">${item.name}</h3>
-                            <p class="text-[10px] font-bold text-gray-400">H: ₹${item.halfPrice} | F: ₹${item.fullPrice}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="editItem('${itemId}')" class="h-9 w-9 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-pen-to-square text-xs"></i>
-                            </button>
-                            <button onclick="deleteItem('${itemId}')" class="h-9 w-9 bg-red-50 text-red-500 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-trash-can text-xs"></i>
-                            </button>
-                        </div>
-                    </div>`;
-            });
-        });
+      <label class="flex items-center justify-between gap-3 p-4 bg-slate-50 rounded-2xl cursor-pointer">
+        <span>
+          <span class="block text-xs font-black">Available for ordering</span>
+          <span class="block text-[10px] text-slate-400 mt-1">Turn off when this item is sold out.</span>
+        </span>
+        <input type="checkbox" id="m-available" checked class="w-5 h-5 accent-orange-500">
+      </label>
 
-        // Edit Function (Fixed)
-        window.editItem = async (id) => {
-            try {
-                const docRef = doc(db, "menu", id);
-                const docSnap = await getDoc(docRef);
+      <div class="flex gap-2">
+        <button id="submit-btn" type="submit" class="flex-1 btn-add py-4 rounded-2xl shadow-lg shadow-orange-500/15 uppercase text-xs tracking-widest">
+          <i class="fa-solid fa-plus mr-2"></i>Add Item
+        </button>
+        <button id="cancel-btn" type="button" class="hidden bg-slate-100 text-slate-600 px-5 rounded-2xl font-black text-xs uppercase">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </section>
 
-                if (docSnap.exists()) {
-                    const item = docSnap.data();
-                    
-                    document.getElementById('edit-id').value = id;
-                    document.getElementById('m-name').value = item.name;
-                    document.getElementById('m-half-price').value = item.halfPrice;
-                    document.getElementById('m-full-price').value = item.fullPrice;
-                    document.getElementById('m-type').value = item.type;
-                    document.getElementById('m-image').value = item.image;
-                    
-                    document.getElementById('form-title').innerText = "Edit Momo Details";
-                    document.getElementById('submit-btn').innerText = "Update Item";
-                    document.getElementById('cancel-btn').classList.remove('hidden');
-                    
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        };
+  <!-- MENU LIST -->
+  <section>
+    <div class="flex justify-between items-end gap-3 mb-4">
+      <div>
+        <div class="text-[10px] text-orange-500 font-black uppercase tracking-widest mb-1">Your catalogue</div>
+        <h2 class="text-xl font-black">Menu Items</h2>
+      </div>
+      <button id="refresh-btn" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold">
+        <i class="fa-solid fa-rotate mr-1"></i> Refresh
+      </button>
+    </div>
 
-        // Reset Form
-        window.resetForm = () => {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('m-name').value = '';
-            document.getElementById('m-half-price').value = '';
-            document.getElementById('m-full-price').value = '';
-            document.getElementById('m-image').value = '';
-            document.getElementById('form-title').innerText = "Add New Momo";
-            document.getElementById('submit-btn').innerText = "Add Item";
-            document.getElementById('cancel-btn').classList.add('hidden');
-        };
+    <div class="relative mb-4">
+      <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+      <input type="search" id="search-input" class="input-style pl-11 bg-white" placeholder="Search food items...">
+    </div>
 
-        // Delete Function
-        window.deleteItem = async (id) => {
-            if(confirm("Bhai, pakka uda dein?")) {
-                try {
-                    await deleteDoc(doc(db, "menu", id));
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        };
-    </script>
+    <div class="flex gap-2 overflow-x-auto pb-3 mb-3" id="filter-row">
+      <button class="chip active" data-filter="all">All items</button>
+      <button class="chip" data-filter="available">Available</button>
+      <button class="chip" data-filter="unavailable">Out of stock</button>
+      <button class="chip" data-filter="Veg">Veg</button>
+      <button class="chip" data-filter="Non-Veg">Non-Veg</button>
+    </div>
+
+    <div id="list-status" class="text-xs text-slate-400 mb-3">Connecting to menu...</div>
+    <div id="admin-menu-list" class="space-y-3">
+      <div class="admin-card p-5 animate-pulse h-24"></div>
+      <div class="admin-card p-5 animate-pulse h-24"></div>
+    </div>
+  </section>
+
+  <footer class="text-center text-[10px] text-slate-400 mt-10">
+    FRESHFRY MENU CONTROL · FIRESTORE
+  </footer>
+</main>
+
+<!-- DELETE CONFIRMATION -->
+<div class="overlay" id="delete-modal">
+  <div class="modal">
+    <div class="h-12 w-12 rounded-2xl bg-red-50 text-red-500 grid place-items-center text-xl mb-4">
+      <i class="fa-solid fa-trash-can"></i>
+    </div>
+    <h2 class="text-xl font-black">Delete this item?</h2>
+    <p id="delete-message" class="text-sm text-slate-500 mt-2">This item will be removed from the menu.</p>
+    <div class="flex gap-3 mt-6">
+      <button id="delete-cancel" class="flex-1 py-3 rounded-xl bg-slate-100 font-black text-xs">CANCEL</button>
+      <button id="delete-confirm" class="flex-1 py-3 rounded-xl bg-red-500 text-white font-black text-xs">DELETE ITEM</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { initializeApp, getApp, getApps }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, onSnapshot, addDoc, deleteDoc,
+  doc, updateDoc, getDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Existing Freshfry Firebase project */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+
+let items = [];
+let currentFilter = "all";
+let searchTerm = "";
+let unsubscribeMenu = null;
+let pendingDeleteId = null;
+let saving = false;
+let toastTimer = null;
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[ch]);
+}
+function safeImageURL(value) {
+  try {
+    const url = new URL(String(value || ""));
+    return ["https:","http:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+function showToast(message,error=false) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.toggle("error",error);
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove("show"),2800);
+}
+function setSaving(value) {
+  saving = value;
+  $("submit-btn").disabled = value;
+  $("submit-btn").innerHTML = value
+    ? '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Saving...'
+    : ($("edit-id").value
+      ? '<i class="fa-solid fa-floppy-disk mr-2"></i>Update Item'
+      : '<i class="fa-solid fa-plus mr-2"></i>Add Item');
+}
+function updateStats() {
+  const available = items.filter(item => item.available).length;
+  $("stat-total").textContent = items.length;
+  $("stat-available").textContent = available;
+  $("stat-unavailable").textContent = items.length - available;
+}
+function normalizeItem(d) {
+  const x = d.data();
+  return {
+    id:d.id,
+    name:String(x.name || "Food item"),
+    halfPrice:Number(x.halfPrice ?? 0),
+    fullPrice:Number(x.fullPrice ?? 0),
+    type:String(x.type || "Veg"),
+    image:String(x.image || ""),
+    description:String(x.description || x.details || ""),
+    available:x.available !== false && x.isAvailable !== false && x.inStock !== false
+  };
+}
+
+/* LIVE MENU */
+function startListener() {
+  if (unsubscribeMenu) unsubscribeMenu();
+  $("list-status").textContent = "Loading menu...";
+  unsubscribeMenu = onSnapshot(collection(db,"menu"), snapshot => {
+    items = snapshot.docs.map(normalizeItem);
+    updateStats();
+    renderList();
+    $("list-status").textContent = `${items.length} item(s) loaded`;
+  }, error => {
+    console.error("Menu listener failed:",error);
+    $("list-status").textContent = "Could not load menu. Check Firestore permissions.";
+    $("admin-menu-list").innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-triangle-exclamation text-2xl mb-3"></i>
+        <p class="font-bold">Unable to load menu</p>
+        <p class="text-xs mt-2">Check internet connection and Firestore rules.</p>
+        <button id="retry-load" class="mt-4 px-4 py-3 bg-slate-900 text-white rounded-xl text-xs font-black">TRY AGAIN</button>
+      </div>`;
+  });
+}
+function renderList() {
+  const filtered = items.filter(item => {
+    const matchesSearch = (item.name+" "+item.type+" "+item.description).toLowerCase().includes(searchTerm);
+    const matchesFilter =
+      currentFilter === "all" ||
+      (currentFilter === "available" && item.available) ||
+      (currentFilter === "unavailable" && !item.available) ||
+      item.type === currentFilter;
+    return matchesSearch && matchesFilter;
+  });
+
+  if (!filtered.length) {
+    $("admin-menu-list").innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-bowl-food text-2xl mb-3"></i>
+        <p class="font-bold">No menu items found</p>
+        <p class="text-xs mt-2">Try another search or add a new item.</p>
+      </div>`;
+    return;
+  }
+
+  $("admin-menu-list").innerHTML = filtered.map(item => {
+    const image = safeImageURL(item.image);
+    return `
+      <article class="admin-card p-3 sm:p-4 shadow-sm">
+        <div class="menu-row flex items-center gap-3">
+          <img class="menu-image" src="${escapeHTML(image || "https://placehold.co/120x120/f1f2f5/8991a2?text=Food")}"
+               alt="${escapeHTML(item.name)}" loading="lazy"
+               onerror="this.onerror=null;this.src='https://placehold.co/120x120/f1f2f5/8991a2?text=Food'">
+          <div class="flex-1 min-w-0">
+            <h3 class="font-black text-sm leading-tight break-words">${escapeHTML(item.name)}</h3>
+            <div class="text-[10px] font-bold text-slate-400 mt-1.5">
+              H: ${money(item.halfPrice)} <span class="mx-1">|</span> F: ${money(item.fullPrice)}
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-2">
+              <span class="badge ${item.available ? "badge-available" : "badge-unavailable"}">
+                <i class="fa-solid ${item.available ? "fa-check" : "fa-ban"}"></i>
+                ${item.available ? "Available" : "Out of stock"}
+              </span>
+              <span class="badge bg-slate-100 text-slate-600">${escapeHTML(item.type)}</span>
+            </div>
+          </div>
+        </div>
+        ${item.description ? `<p class="text-[11px] text-slate-500 mt-3 break-words">${escapeHTML(item.description)}</p>` : ""}
+        <div class="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+          <button data-edit="${escapeHTML(item.id)}" class="action-btn bg-slate-100 text-slate-700" title="Edit item" aria-label="Edit ${escapeHTML(item.name)}">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <button data-toggle="${escapeHTML(item.id)}" class="flex-1 py-2.5 rounded-xl text-[10px] font-black ${item.available ? "bg-amber-50 text-amber-700" : "bg-green-50 text-green-700"}">
+            <i class="fa-solid ${item.available ? "fa-eye-slash" : "fa-eye"} mr-1"></i>
+            ${item.available ? "MARK OUT OF STOCK" : "MAKE AVAILABLE"}
+          </button>
+          <button data-delete="${escapeHTML(item.id)}" class="action-btn bg-red-50 text-red-500" title="Delete item" aria-label="Delete ${escapeHTML(item.name)}">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+/* IMAGE PREVIEW */
+function updateImagePreview() {
+  const url = safeImageURL($("m-image").value.trim());
+  $("image-preview").src = url || "https://placehold.co/600x300/f1f2f5/8991a2?text=Food+Preview";
+  $("image-preview-note").textContent = url ? "Image URL loaded. Preview may take a moment." : "Enter a valid image URL to preview it.";
+}
+$("m-image").addEventListener("input",updateImagePreview);
+$("image-preview").addEventListener("error",() => {
+  $("image-preview").src = "https://placehold.co/600x300/f1f2f5/8991a2?text=Image+Unavailable";
+  $("image-preview-note").textContent = "Image could not be loaded. Check the URL.";
+});
+
+/* ADD / UPDATE */
+$("menu-form").addEventListener("submit",async event => {
+  event.preventDefault();
+  if (saving) return;
+
+  const id = $("edit-id").value;
+  const name = $("m-name").value.trim();
+  const halfRaw = $("m-half-price").value;
+  const fullRaw = $("m-full-price").value;
+  const halfPrice = Number(halfRaw);
+  const fullPrice = Number(fullRaw);
+  const type = $("m-type").value;
+  const imageInput = $("m-image").value.trim();
+  const description = $("m-description").value.trim();
+
+  if (name.length < 2) return showToast("Please enter a valid item name.",true);
+  if (halfRaw === "" || fullRaw === "" || !Number.isFinite(halfPrice) || !Number.isFinite(fullPrice) ||
+      halfPrice < 0 || fullPrice < 0 || halfPrice > 100000 || fullPrice > 100000) {
+    return showToast("Enter valid half and full prices.",true);
+  }
+  if (imageInput && !safeImageURL(imageInput)) return showToast("Image URL must start with http:// or https://.",true);
+
+  const available = $("m-available").checked;
+  const data = {
+    name,
+    halfPrice,
+    fullPrice,
+    type,
+    image: imageInput || "",
+    description,
+    available,
+    isAvailable:available,
+    inStock:available,
+    updatedAt:serverTimestamp()
+  };
+
+  setSaving(true);
+  try {
+    if (id) {
+      await updateDoc(doc(db,"menu",id),data);
+      showToast("Menu item updated successfully.");
+    } else {
+      await addDoc(collection(db,"menu"),{
+        ...data,
+        createdAt:serverTimestamp()
+      });
+      showToast("New menu item added.");
+    }
+    resetForm();
+  } catch (error) {
+    console.error("Save menu item failed:",error);
+    showToast("Save failed. Check Firestore permissions.",true);
+  } finally {
+    setSaving(false);
+  }
+});
+
+/* EDIT */
+async function editItem(id) {
+  try {
+    const snap = await getDoc(doc(db,"menu",id));
+    if (!snap.exists()) return showToast("This item no longer exists.",true);
+    const item = snap.data();
+
+    $("edit-id").value = id;
+    $("m-name").value = item.name || "";
+    $("m-half-price").value = item.halfPrice ?? "";
+    $("m-full-price").value = item.fullPrice ?? "";
+    $("m-type").value = item.type === "Veg" ? "Veg" : "Non-Veg";
+    $("m-image").value = item.image || "";
+    $("m-description").value = item.description || item.details || "";
+    $("m-available").checked = item.available !== false && item.isAvailable !== false && item.inStock !== false;
+
+    $("form-title").textContent = "Edit Menu Item";
+    $("form-eyebrow").textContent = "Update catalogue";
+    $("form-icon").className = "fa-solid fa-pen-to-square";
+    $("cancel-btn").classList.remove("hidden");
+    setSaving(false);
+    updateImagePreview();
+    $("submit-btn").innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i>Update Item';
+    window.scrollTo({top:0,behavior:"smooth"});
+    $("m-name").focus({preventScroll:true});
+  } catch (error) {
+    console.error("Could not edit item:",error);
+    showToast("Could not load item details.",true);
+  }
+}
+
+/* RESET */
+function resetForm() {
+  $("menu-form").reset();
+  $("edit-id").value = "";
+  $("m-available").checked = true;
+  $("form-title").textContent = "Add New Item";
+  $("form-eyebrow").textContent = "Menu management";
+  $("form-icon").className = "fa-solid fa-plus";
+  $("cancel-btn").classList.add("hidden");
+  $("image-preview").src = "https://placehold.co/600x300/f1f2f5/8991a2?text=Food+Preview";
+  $("image-preview-note").textContent = "Enter a valid image URL to preview it.";
+  setSaving(false);
+}
+
+/* AVAILABILITY TOGGLE */
+async function toggleAvailability(id) {
+  const item = items.find(x => x.id === id);
+  if (!item) return showToast("Item not found.",true);
+
+  const next = !item.available;
+  try {
+    await updateDoc(doc(db,"menu",id),{
+      available:next,
+      isAvailable:next,
+      inStock:next,
+      updatedAt:serverTimestamp()
+    });
+    showToast(next ? "Item is now available." : "Item marked out of stock.");
+  } catch (error) {
+    console.error("Availability update failed:",error);
+    showToast("Could not update stock status.",true);
+  }
+}
+
+/* DELETE */
+function askDelete(id) {
+  const item = items.find(x => x.id === id);
+  if (!item) return;
+  pendingDeleteId = id;
+  $("delete-message").textContent = `“${item.name}” will be removed from the menu. This cannot be undone.`;
+  $("delete-modal").classList.add("show");
+}
+$("delete-cancel").addEventListener("click",() => {
+  pendingDeleteId = null;
+  $("delete-modal").classList.remove("show");
+});
+$("delete-modal").addEventListener("click",event => {
+  if (event.target === $("delete-modal")) {
+    pendingDeleteId = null;
+    $("delete-modal").classList.remove("show");
+  }
+});
+$("delete-confirm").addEventListener("click",async () => {
+  if (!pendingDeleteId) return;
+  const id = pendingDeleteId;
+  $("delete-confirm").disabled = true;
+  $("delete-confirm").textContent = "DELETING...";
+  try {
+    await deleteDoc(doc(db,"menu",id));
+    if ($("edit-id").value === id) resetForm();
+    showToast("Menu item deleted.");
+  } catch (error) {
+    console.error("Delete failed:",error);
+    showToast("Delete failed. Check Firestore permissions.",true);
+  } finally {
+    pendingDeleteId = null;
+    $("delete-modal").classList.remove("show");
+    $("delete-confirm").disabled = false;
+    $("delete-confirm").textContent = "DELETE ITEM";
+  }
+});
+
+/* SEARCH + FILTERS */
+$("search-input").addEventListener("input",event => {
+  searchTerm = event.target.value.trim().toLowerCase();
+  renderList();
+});
+$("filter-row").addEventListener("click",event => {
+  const button = event.target.closest("[data-filter]");
+  if (!button) return;
+  currentFilter = button.dataset.filter;
+  document.querySelectorAll("[data-filter]").forEach(el => el.classList.toggle("active",el === button));
+  renderList();
+});
+$("admin-menu-list").addEventListener("click",event => {
+  const edit = event.target.closest("[data-edit]");
+  const toggle = event.target.closest("[data-toggle]");
+  const del = event.target.closest("[data-delete]");
+  if (edit) editItem(edit.dataset.edit);
+  if (toggle) toggleAvailability(toggle.dataset.toggle);
+  if (del) askDelete(del.dataset.delete);
+  if (event.target.closest("#retry-load")) startListener();
+});
+$("cancel-btn").addEventListener("click",resetForm);
+$("refresh-btn").addEventListener("click",() => {
+  startListener();
+  showToast("Refreshing menu...");
+});
+
+/* START */
+startListener();
+</script>
 </body>
 </html>
