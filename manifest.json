@@ -1,20 +1,30 @@
 {
+  "id": "/",
   "name": "FreshFry Momo Baripada",
   "short_name": "FreshFry",
+  "description": "Order delicious momos and food from FreshFry in Baripada.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "background_color": "#0d0d0d",
   "theme_color": "#ff5e00",
+  "categories": [
+    "food",
+    "shopping"
+  ],
   "icons": [
     {
-      "src": "logo.png",
+      "src": "/logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "/logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
