@@ -1,278 +1,724 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freshfry Partner | Rider App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F4F7FE; color: #1e293b; }
-        .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .premium-card { background: white; border-radius: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.04); }
-        .wallet-gradient { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
-        .progress-container { height: 8px; background: #f1f5f9; border-radius: 20px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff8a00, #ff5e00); transition: width 1s ease; }
-        #main-app { display: none; }
-        .pulse-online { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
-        .bottom-nav { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101114">
+<title>Freshfry Partner | Rider V2</title>
+
+<link rel="preconnect" href="https://www.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --orange-light:#fff0e6;
+  --dark:#101114;
+  --muted:#9296a0;
+  --bg:#f5f6f8;
+  --line:#eceef2;
+  --green:#16a34a;
+  --red:#dc2626;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--dark);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  padding-bottom:100px;-webkit-font-smoothing:antialiased
+}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}
+.topbar{
+  background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
+  padding:18px 20px;display:flex;justify-content:space-between;
+  align-items:center;border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:20
+}
+.logo{font-size:19px;font-weight:800;letter-spacing:-.7px}
+.logo span{color:var(--orange)}
+.sub{font-size:10px;color:var(--muted);margin-top:4px}
+.status-btn{
+  border:0;padding:11px 15px;border-radius:13px;
+  font-size:10px;font-weight:800;color:white;background:var(--green)
+}
+.online-dot{
+  display:inline-block;width:7px;height:7px;background:#fff;
+  border-radius:50%;margin-right:6px
+}
+.container{max-width:850px;margin:auto;padding:20px 15px}
+.welcome{margin:8px 0 22px}
+.welcome h1{font-size:28px;font-weight:800;letter-spacing:-1.3px;margin:0}
+.welcome p{font-size:12px;color:var(--muted);margin:7px 0 0}
+.wallet{
+  background:linear-gradient(135deg,#111827,#263449);
+  color:white;border-radius:27px;padding:23px;
+  position:relative;overflow:hidden
+}
+.wallet:after{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+  border:30px solid #ffffff0b;right:-60px;top:-65px
+}
+.wallet-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.wallet-label{font-size:10px;color:#b8c0ce;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.wallet-icon{
+  width:42px;height:42px;border-radius:15px;background:#ffffff13;
+  display:grid;place-items:center;color:#ff9a63
+}
+.earning{font-size:38px;font-weight:800;letter-spacing:-2px;margin:15px 0 6px}
+.goal-row{display:flex;justify-content:space-between;font-size:10px;color:#c1c8d3;margin:20px 0 9px}
+.progress{height:7px;background:#ffffff1b;border-radius:20px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#ff9a50,var(--orange));transition:width .3s}
+.goal-note{font-size:10px;color:#ffbd95;margin-top:9px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0 25px}
+.stat{
+  padding:18px;background:white;border:1px solid var(--line);
+  border-radius:21px
+}
+.stat-icon{
+  width:36px;height:36px;border-radius:12px;background:var(--orange-light);
+  color:var(--orange);display:grid;place-items:center;margin-bottom:13px
+}
+.stat-label{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.stat-value{font-size:25px;font-weight:800;letter-spacing:-1px;margin-top:5px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:28px 2px 14px}
+.section-head h2{font-size:15px;font-weight:800;margin:0}
+.section-head span{font-size:10px;color:var(--muted)}
+.order-card{
+  background:white;border:1px solid var(--line);border-radius:23px;
+  padding:17px;margin-bottom:14px
+}
+.order-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.customer-name{font-size:17px;font-weight:800;overflow-wrap:anywhere}
+.order-id{font-size:10px;color:var(--muted);margin-top:5px}
+.order-amount{font-size:20px;font-weight:800;text-align:right}
+.tag{
+  display:inline-block;margin-top:7px;padding:6px 9px;border-radius:9px;
+  background:var(--orange-light);color:var(--orange);
+  font-size:9px;font-weight:800;text-transform:uppercase
+}
+.info-line{
+  display:flex;gap:11px;align-items:flex-start;margin:17px 0;
+  padding:13px;background:#f8f9fb;border-radius:14px
+}
+.info-icon{
+  flex-shrink:0;width:34px;height:34px;border-radius:11px;
+  display:grid;place-items:center;background:white;color:var(--orange)
+}
+.info-text{font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+.info-text strong{display:block;font-size:10px;color:var(--muted);margin-bottom:2px}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.action-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 8px;border-radius:13px;text-decoration:none;
+  border:1px solid var(--line);font-size:10px;font-weight:800;
+  background:white;color:var(--dark)
+}
+.action-btn.orange{background:var(--orange);color:white;border-color:var(--orange)}
+.pin-box{margin-top:17px;padding:17px;background:var(--dark);border-radius:19px;color:white}
+.pin-title{text-align:center;font-size:10px;color:#a7afbd;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.pin-input{
+  display:block;width:100%;margin-top:13px;background:#ffffff0b;
+  color:white;border:1px solid #ffffff20;border-radius:13px;
+  text-align:center;padding:15px;font-size:25px;font-weight:800;
+  letter-spacing:10px;outline:none
+}
+.pin-input:focus{border-color:var(--orange)}
+.deliver-btn{
+  width:100%;margin-top:12px;padding:15px;border:0;border-radius:13px;
+  background:var(--orange);color:white;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.6px
+}
+.empty{
+  background:white;border:1px dashed #dfe2e7;border-radius:22px;
+  padding:35px 20px;text-align:center;color:var(--muted);
+  font-size:11px;line-height:1.8
+}
+.empty i{font-size:27px;color:#c9cdd5;margin-bottom:10px}
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:15px;background:white;border:1px solid var(--line);
+  border-radius:17px;margin-bottom:10px
+}
+.history-left{display:flex;align-items:center;gap:11px;min-width:0}
+.check-icon{
+  width:37px;height:37px;border-radius:13px;background:#dcfce7;
+  color:var(--green);display:grid;place-items:center;flex-shrink:0
+}
+.history-name{font-size:11px;font-weight:800;overflow-wrap:anywhere}
+.history-id{font-size:9px;color:var(--muted);margin-top:4px}
+.history-pay{font-size:12px;font-weight:800;color:var(--green);white-space:nowrap}
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:30;
+  padding:12px 20px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(16,17,20,.97);backdrop-filter:blur(14px);
+  display:flex;justify-content:center
+}
+.nav-inner{width:100%;max-width:500px;display:flex;justify-content:space-around}
+.nav-btn{
+  border:0;background:none;color:#9296a0;min-width:55px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-size:9px;font-weight:800
+}
+.nav-btn i{font-size:19px}
+.nav-btn.active{color:#ff7a32}
+.login-screen{
+  position:fixed;inset:0;z-index:100;background:var(--orange);
+  display:flex;align-items:center;justify-content:center;padding:20px
+}
+.login-card{width:100%;max-width:390px;background:white;padding:27px;border-radius:28px}
+.login-logo{
+  width:59px;height:59px;background:var(--dark);color:white;
+  border-radius:18px;display:grid;place-items:center;font-size:23px;margin:0 auto 15px
+}
+.login-title{text-align:center;font-size:22px;font-weight:800;letter-spacing:-1px;margin:0}
+.login-sub{text-align:center;font-size:10px;color:var(--muted);margin:8px 0 24px;line-height:1.7}
+.field{margin-bottom:12px}
+.field input{
+  width:100%;padding:14px;background:#f8f9fb;border:1px solid #eceef2;
+  border-radius:13px;outline:none;font-size:11px
+}
+.field input:focus{border-color:var(--orange)}
+.login-submit{
+  width:100%;border:0;border-radius:13px;background:var(--dark);
+  color:white;padding:16px;font-size:10px;font-weight:800;margin-top:5px
+}
+.login-warning{font-size:10px;line-height:1.7;color:#9a3412;background:#fff4e9;padding:11px;border-radius:12px;margin-top:14px}
+.toast{
+  position:fixed;z-index:200;left:50%;bottom:100px;transform:translateX(-50%);
+  background:#161616;color:white;padding:13px 18px;border-radius:13px;
+  font-size:11px;max-width:calc(100% - 30px);display:none
+}
+.toast.show{display:block}
+@media(min-width:650px){
+  .container{padding:25px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .wallet{padding:28px}
+}
+</style>
 </head>
-<body class="pb-36">
 
-    <audio id="orderAudio" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+<body>
 
-    <div id="rider-login-screen" class="fixed inset-0 z-[100] bg-orange-500 flex items-center justify-center p-6 text-white">
-        <div class="w-full max-w-sm bg-white rounded-[3rem] p-8 shadow-2xl text-slate-800">
-            <div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
-                <i class="fa-solid fa-motorcycle"></i>
-            </div>
-            <h2 class="text-2xl font-800 mb-6 text-center tracking-tighter italic">FRESH<span class="text-orange-500">FRY</span> PARTNER</h2>
-            <div class="space-y-3">
-                <input type="text" id="riderNameInput" placeholder="FULL NAME" class="w-full px-5 py-4 bg-slate-50 rounded-xl outline-none font-bold border focus:border-orange-500 uppercase text-xs">
-                <input type="tel" id="riderPhoneInput" maxlength="10" placeholder="PHONE NUMBER" class="w-full px-5 py-4 bg-slate-50 rounded-xl outline-none font-bold border focus:border-orange-500 text-xs">
-                <input type="text" id="riderUpiInput" placeholder="UPI ID" class="w-full px-5 py-4 bg-slate-50 rounded-xl outline-none font-bold border focus:border-orange-500 text-xs">
-                <input type="password" id="riderPassInput" placeholder="PASS KEY" class="w-full px-5 py-4 bg-slate-50 rounded-xl outline-none font-bold border focus:border-orange-500 text-xs">
-                <button onclick="checkRiderLogin()" class="w-full bg-slate-900 text-white py-5 rounded-xl font-black uppercase text-[10px] tracking-widest mt-2 active:scale-95 transition-all">Start Duty 🚀</button>
-            </div>
-        </div>
+<audio id="orderAudio" preload="none"
+src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+<section id="rider-login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><i class="fa-solid fa-motorcycle"></i></div>
+    <h1 class="login-title">FRESH<span style="color:var(--orange)">FRY</span> PARTNER</h1>
+    <p class="login-sub">RIDER OPERATIONS DASHBOARD<br>Sign in to manage your deliveries.</p>
+    <form id="login-form">
+      <div class="field"><input id="riderNameInput" maxlength="80" required placeholder="FULL NAME" autocomplete="name"></div>
+      <div class="field"><input id="riderPhoneInput" type="tel" inputmode="numeric" maxlength="10" required placeholder="10-DIGIT PHONE"></div>
+      <div class="field"><input id="riderUpiInput" type="text" maxlength="100" required placeholder="UPI ID"></div>
+      <div class="field"><input id="riderPassInput" type="password" required placeholder="PASS KEY" autocomplete="current-password"></div>
+      <button class="login-submit" id="login-button" type="submit">START DUTY <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="login-warning">
+      <strong>Setup notice:</strong> This page must use a trusted authentication backend before real riders use it. A password checked inside HTML/JavaScript is not secure.
+    </div>
+  </div>
+</section>
+
+<div id="main-app" class="hidden">
+  <header class="topbar">
+    <div>
+      <div class="logo">FRESH<span>FRY.</span> <span style="color:#9296a0;font-size:10px">PARTNER</span></div>
+      <div class="sub">Welcome, <strong id="displayRiderName">Rider</strong></div>
+    </div>
+    <button id="statusToggle" class="status-btn"><span class="online-dot"></span>ONLINE</button>
+  </header>
+
+  <main class="container" id="dashboard">
+    <section class="welcome">
+      <h1>Your deliveries.<br>Made simple.</h1>
+      <p>Stay on top of your tasks and daily earnings.</p>
+    </section>
+
+    <section class="wallet">
+      <div class="wallet-top">
+        <div class="wallet-label"><i class="fa-solid fa-wallet"></i> Today's confirmed pay</div>
+        <div class="wallet-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+      </div>
+      <div id="todayEarning" class="earning">₹0</div>
+      <div class="goal-row">
+        <span>DAILY GOAL · ₹500</span>
+        <strong id="goalPercent">0%</strong>
+      </div>
+      <div class="progress"><div id="goalProgress" class="progress-fill"></div></div>
+      <div id="goalMessage" class="goal-note">Loading earnings...</div>
+    </section>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+        <div class="stat-label">Today's deliveries</div>
+        <div class="stat-value" id="orderCountDisplay">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i class="fa-solid fa-motorcycle"></i></div>
+        <div class="stat-label">Active tasks</div>
+        <div class="stat-value" id="activeCount">0</div>
+      </div>
     </div>
 
-    <div id="main-app">
-        <nav class="glass-nav px-6 py-5 sticky top-0 z-50 flex justify-between items-center">
-            <div>
-                <h1 id="displayRiderName" class="text-sm font-800 text-slate-900 uppercase italic leading-none">Rider</h1>
-                <p id="displayRiderUpi" class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest"></p>
-            </div>
-            <button id="statusToggle" onclick="toggleDuty()" class="px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all bg-green-500 text-white pulse-online">Online</button>
-        </nav>
-
-        <section class="p-6 space-y-6">
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                <div class="flex justify-between items-end mb-2">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Daily Goal (₹500)</p>
-                    <p id="goalPercent" class="text-xs font-900 text-orange-500 italic">0%</p>
-                </div>
-                <div class="progress-container">
-                    <div id="goalProgress" class="progress-fill" style="width: 0%"></div>
-                </div>
-                <p id="goalMessage" class="text-[9px] font-bold text-slate-500 uppercase italic mt-2">Loading progress...</p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div class="wallet-gradient p-6 rounded-[2.5rem] text-white">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Today's Pay</p>
-                    <h3 id="todayEarning" class="text-2xl font-800 italic tracking-tighter">₹0</h3>
-                </div>
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Orders</p>
-                    <h3 id="orderCountDisplay" class="text-2xl font-800 italic text-slate-900 tracking-tighter">0</h3>
-                </div>
-            </div>
-
-            <h2 class="text-[10px] font-900 uppercase text-slate-400 px-2 tracking-[0.2em]">Active Tasks</h2>
-            <div id="rider-orders-list" class="space-y-6"></div>
-
-            <h2 class="text-[10px] font-900 uppercase text-slate-400 px-2 tracking-[0.2em] mt-8">Recent History</h2>
-            <div id="rider-history-list" class="space-y-3 pb-10"></div>
-        </section>
-
-        <div class="fixed bottom-6 left-6 right-6 bottom-nav rounded-[2rem] p-4 flex justify-around items-center shadow-2xl z-50">
-            <button class="text-orange-500 text-xl w-12 h-12 flex items-center justify-center bg-white/10 rounded-2xl"><i class="fa-solid fa-house"></i></button>
-            <button onclick="location.reload()" class="text-slate-400 text-xl"><i class="fa-solid fa-rotate"></i></button>
-            <button onclick="logoutRider()" class="text-red-400 text-xl"><i class="fa-solid fa-power-off"></i></button>
-        </div>
+    <div class="section-head">
+      <h2><i class="fa-solid fa-bolt" style="color:var(--orange)"></i> Active Tasks</h2>
+      <span id="active-label">0 assigned</span>
+    </div>
+    <div id="rider-orders-list">
+      <div class="empty">Loading assigned deliveries...</div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where, doc, updateDoc, setDoc, serverTimestamp, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <div class="section-head">
+      <h2><i class="fa-solid fa-clock-rotate-left" style="color:var(--orange)"></i> Recent History</h2>
+      <span>Latest 5</span>
+    </div>
+    <div id="rider-history-list">
+      <div class="empty">Loading delivery history...</div>
+    </div>
+  </main>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
-            authDomain: "freshfry-39a10.firebaseapp.com",
-            projectId: "freshfry-39a10",
-            storageBucket: "freshfry-39a10.firebasestorage.app",
-            messagingSenderId: "928483976893",
-            appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
-        };
+  <nav class="bottom-nav">
+    <div class="nav-inner">
+      <button class="nav-btn active" data-scroll="dashboard">
+        <i class="fa-solid fa-house"></i>Home
+      </button>
+      <button class="nav-btn" data-scroll="rider-orders-list">
+        <i class="fa-solid fa-box"></i>Tasks
+      </button>
+      <button class="nav-btn" data-scroll="rider-history-list">
+        <i class="fa-solid fa-clock-rotate-left"></i>History
+      </button>
+      <button class="nav-btn" id="logout-button">
+        <i class="fa-solid fa-power-off"></i>Logout
+      </button>
+    </div>
+  </nav>
+</div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        let lastOrderCount = -1;
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-        function calculateDistance(lat2, lon2) {
-            const shopLat = 21.9348; 
-            const shopLon = 86.7513; 
-            const R = 6371; 
-            const dLat = (lat2 - shopLat) * Math.PI / 180;
-            const dLon = (lon2 - shopLon) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(shopLat * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return (R * c).toFixed(1);
-        }
+<script type="module">
+import { initializeApp, getApps, getApp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, onSnapshot, query, where,
+  doc, updateDoc, setDoc, serverTimestamp, orderBy, limit
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        window.checkRiderLogin = async () => {
-            const name = document.getElementById('riderNameInput').value.trim().toUpperCase();
-            const phone = document.getElementById('riderPhoneInput').value.trim();
-            const upi = document.getElementById('riderUpiInput').value.trim().toLowerCase();
-            const pass = document.getElementById('riderPassInput').value;
-            if (name.length < 3 || !/^[6-9]\d{9}$/.test(phone) || !upi.includes('@') || pass !== "freshfry2026") return alert("Invalid Details!");
-            
-            await setDoc(doc(db, "riders", name), { riderName: name, riderPhone: phone, riderUpi: upi, status: "Online", lastLogin: serverTimestamp() }, { merge: true });
-            sessionStorage.setItem('rider_auth', 'true');
-            sessionStorage.setItem('rider_name', name);
-            sessionStorage.setItem('rider_upi', upi);
-            unlockUI(name);
-        };
+const firebaseConfig = {
+  apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
 
-        function unlockUI(name) {
-            document.getElementById('rider-login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('displayRiderName').innerText = name;
-            document.getElementById('displayRiderUpi').innerText = sessionStorage.getItem('rider_upi');
-            const today = new Date().toLocaleDateString();
-            if (localStorage.getItem(`ff_date_${name}`) !== today) {
-                localStorage.setItem(`ff_earn_${name}`, 0);
-                localStorage.setItem(`ff_orders_${name}`, 0);
-                localStorage.setItem(`ff_date_${name}`, today);
-            }
-            loadEarningUI(name);
-            loadMyOrders(name);
-            loadHistory(name);
-        }
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        function loadEarningUI(name) {
-            const earn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0);
-            const orders = localStorage.getItem(`ff_orders_${name}`) || 0;
-            document.getElementById('todayEarning').innerText = `₹${earn}`;
-            document.getElementById('orderCountDisplay').innerText = orders;
-            const goal = 500;
-            const percent = Math.min((earn / goal) * 100, 100).toFixed(0);
-            document.getElementById('goalProgress').style.width = percent + '%';
-            document.getElementById('goalPercent').innerText = percent + '%';
-            document.getElementById('goalMessage').innerText = earn >= goal ? "Goal Achieved! 🏆" : `${Math.ceil((goal-earn)/20)} more orders to reach ₹500`;
-        }
+const $ = id => document.getElementById(id);
+const DAILY_GOAL = 500;
+const DELIVERY_PAY = 20;
 
-        function loadMyOrders(riderName) {
-            const q = query(collection(db, "orders"), where("status", "==", "out_for_delivery"), where("riderName", "==", riderName));
-            onSnapshot(q, (snap) => {
-                const list = document.getElementById('rider-orders-list');
-                
-                // Sound logic for new orders
-                if (lastOrderCount !== -1 && snap.size > lastOrderCount) {
-                    document.getElementById('orderAudio').play().catch(e => console.log("Sound error:", e));
-                }
-                lastOrderCount = snap.size;
+let rider = null;
+let activeOrders = [];
+let historyOrders = [];
+let unsubs = [];
+let lastActiveIds = null;
+let busy = new Set();
+let toastTimer;
 
-                list.innerHTML = '';
-                if(snap.empty) {
-                    list.innerHTML = `<div class="bg-white p-12 rounded-[2rem] text-center text-slate-300 font-bold uppercase text-[10px] tracking-widest border border-dashed border-slate-200 italic">No orders assigned</div>`;
-                    return;
-                }
-                snap.forEach(d => {
-                    const o = d.data();
-                    let navBtnHtml = '';
-                    let distHtml = '';
-                    
-                    // --- WORKING NAVIGATION LOGIC ---
-                    if (o.customerLocation && o.customerLocation.includes('q=')) {
-                        try {
-                            const coords = o.customerLocation.split('q=')[1].split(',');
-                            const dist = calculateDistance(parseFloat(coords[0]), parseFloat(coords[1]));
-                            distHtml = `<div class="bg-orange-500 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-tighter italic">📍 ${dist} KM AWAY</div>`;
-                        } catch(e) {}
-                        
-                        // Direct Maps Link
-                        navBtnHtml = `<a href="${o.customerLocation}" target="_blank" class="flex items-center gap-4 bg-orange-50 p-4 rounded-2xl border border-orange-100 active:scale-95 transition">
-                            <div class="h-10 w-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-location-arrow"></i></div>
-                            <span class="font-800 text-sm text-orange-700 italic uppercase">Navigate to Location</span>
-                        </a>`;
-                    } else {
-                        // Text search link
-                        const encodedAddr = encodeURIComponent(o.customerLocation || 'Baripada');
-                        const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddr}`;
-                        navBtnHtml = `<a href="${searchUrl}" target="_blank" class="flex items-center gap-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 active:scale-95 transition">
-                            <div class="h-10 w-10 bg-slate-800 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-location"></i></div>
-                            <span class="font-800 text-sm text-slate-700 italic uppercase">Search Address</span>
-                        </a>`;
-                    }
+function escapeHTML(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+function money(v) {
+  return "₹" + (Number(v) || 0).toLocaleString("en-IN");
+}
+function showToast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3000);
+}
+function phoneValid(p) { return /^[6-9]\d{9}$/.test(p); }
+function getTodayStart() {
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  return d;
+}
+function isToday(timestamp) {
+  if (!timestamp?.toDate) return false;
+  return timestamp.toDate() >= getTodayStart();
+}
+function distanceFromShop(locationUrl) {
+  try {
+    const u = new URL(locationUrl);
+    const q = u.searchParams.get("q") || u.searchParams.get("query");
+    if (!q) return null;
+    const parts = q.split(",").map(Number);
+    if (parts.length < 2 || !parts.every(Number.isFinite)) return null;
+    const [lat, lon] = parts;
+    const shopLat = 21.9348, shopLon = 86.7513;
+    const rad = n => n * Math.PI / 180;
+    const dLat = rad(lat-shopLat), dLon = rad(lon-shopLon);
+    const a = Math.sin(dLat/2)**2 +
+      Math.cos(rad(shopLat))*Math.cos(rad(lat))*Math.sin(dLon/2)**2;
+    return (6371 * 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
+  } catch { return null; }
+}
+function mapURL(locationValue) {
+  const value = String(locationValue || "").trim();
+  if (/^https:\/\/(www\.)?google\.[^/]+\/maps\//i.test(value)) return value;
+  return "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(value || "Baripada, Odisha");
+}
+function stopListeners() {
+  unsubs.forEach(fn => { try { fn(); } catch {} });
+  unsubs = [];
+}
+function setBusy(id, state) {
+  if (state) busy.add(id); else busy.delete(id);
+}
+function isBusy(id) { return busy.has(id); }
 
-                    list.innerHTML += `<div class="premium-card p-6 border-l-8 border-orange-500">
-                        <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <h3 class="text-xl font-800 text-slate-900 tracking-tighter uppercase italic">${o.customerName}</h3>
-                                <p class="text-[9px] font-black text-orange-500 uppercase tracking-widest mt-1">ORDER ID #${d.id.slice(-5)}</p>
-                            </div>
-                            <div class="text-right">
-                                ${distHtml}
-                                <h3 class="text-xl font-900 text-slate-900 mt-1">₹${o.total}</h3>
-                            </div>
-                        </div>
-                        <div class="space-y-3 mb-6">
-                            <a href="tel:${o.customerPhone}" class="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl border border-blue-100 active:scale-95 transition"><div class="h-10 w-10 bg-blue-500 text-white rounded-xl flex items-center justify-center"><i class="fa-solid fa-phone"></i></div><span class="font-800 text-sm text-blue-700 uppercase italic">CALL CUSTOMER</span></a>
-                            ${navBtnHtml}
-                        </div>
-                        <div class="bg-slate-900 p-6 rounded-[1.5rem] shadow-xl">
-                            <p class="text-center text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Verification PIN</p>
-                            <input type="tel" id="pin-${d.id}" maxlength="4" placeholder="••••" class="w-full bg-white/5 border border-white/10 text-center text-3xl font-900 tracking-[1.2rem] outline-none text-white py-3 rounded-xl">
-                            <button onclick="verifyAndDeliver('${d.id}', '${o.orderPin}')" class="w-full bg-orange-500 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest mt-5 active:scale-95 italic">Complete Delivery 🔥</button>
-                        </div>
-                    </div>`;
-                });
-            });
-        }
+/*
+ * IMPORTANT:
+ * Client-side pass key validation is NOT authentication.
+ * This compatibility version accepts the legacy demo key.
+ * Replace with Firebase Authentication + trusted backend before production.
+ */
+$("login-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const name = $("riderNameInput").value.trim().toUpperCase();
+  const phone = $("riderPhoneInput").value.trim();
+  const upi = $("riderUpiInput").value.trim().toLowerCase();
+  const pass = $("riderPassInput").value;
+  const button = $("login-button");
 
-        function loadHistory(riderName) {
-            const q = query(collection(db, "orders"), where("status", "==", "delivered"), where("riderName", "==", riderName), orderBy("deliveredAt", "desc"), limit(5));
-            onSnapshot(q, (snap) => {
-                const histList = document.getElementById('rider-history-list');
-                histList.innerHTML = '';
-                if(snap.empty) { histList.innerHTML = `<p class="text-center text-[10px] text-slate-400 font-bold py-4 italic uppercase">No tasks completed yet</p>`; return; }
-                snap.forEach(d => {
-                    const o = d.data();
-                    histList.innerHTML += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center border border-slate-50 shadow-sm"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></div><div><p class="text-[11px] font-800 text-slate-800 uppercase italic">${o.customerName}</p><p class="text-[8px] font-bold text-slate-400 uppercase">Order #${d.id.slice(-5)}</p></div></div><p class="font-900 text-sm text-green-600">+₹20</p></div>`;
-                });
-            });
-        }
+  if (name.length < 3 || !phoneValid(phone) ||
+      !/^[^@\s]+@[^@\s]+$/.test(upi)) {
+    return showToast("Please check your name, phone and UPI ID.");
+  }
+  if (pass !== "freshfry2026") {
+    return showToast("Invalid pass key.");
+  }
 
-        window.verifyAndDeliver = async (orderId, correctPin) => {
-            const inputPin = document.getElementById(`pin-${orderId}`).value;
-            if(String(inputPin) === String(correctPin)) {
-                const name = sessionStorage.getItem('rider_name');
-                await updateDoc(doc(db, "orders", orderId), { status: 'delivered', deliveredAt: serverTimestamp() });
-                let todayEarn = parseInt(localStorage.getItem(`ff_earn_${name}`) || 0) + 20;
-                let orders = parseInt(localStorage.getItem(`ff_orders_${name}`) || 0) + 1;
-                localStorage.setItem(`ff_earn_${name}`, todayEarn);
-                localStorage.setItem(`ff_orders_${name}`, orders);
-                loadEarningUI(name);
-                alert("Order Delivered! ₹20 added.");
-            } else { alert("Incorrect PIN!"); }
-        };
+  button.disabled = true;
+  button.textContent = "PLEASE WAIT...";
+  try {
+    /*
+     * This write is not a secure login operation.
+     * Firestore Rules must restrict who can register or edit rider records.
+     */
+    await setDoc(doc(db, "riders", name), {
+      riderName:name,
+      riderPhone:phone,
+      riderUpi:upi,
+      status:"Online",
+      lastLogin:serverTimestamp()
+    }, {merge:true});
 
-        window.toggleDuty = async () => {
-            const name = sessionStorage.getItem('rider_name');
-            const btn = document.getElementById('statusToggle');
-            const isOnline = btn.innerText === "Online";
-            const newStatus = isOnline ? "Offline" : "Online";
-            await updateDoc(doc(db, "riders", name), { status: newStatus });
-            btn.innerText = newStatus;
-            btn.className = `px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${newStatus === 'Online' ? 'bg-green-500 pulse-online' : 'bg-slate-400'} text-white`;
-        };
+    rider = {name, phone, upi};
+    sessionStorage.setItem("rider_auth", "true");
+    sessionStorage.setItem("rider_name", name);
+    sessionStorage.setItem("rider_upi", upi);
+    await unlockUI();
+  } catch (error) {
+    console.error(error);
+    showToast("Login failed. Check Firebase permissions.");
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'START DUTY <i class="fa-solid fa-arrow-right"></i>';
+  }
+});
 
-        window.logoutRider = async () => {
-            if (confirm("Logout?")) {
-                const name = sessionStorage.getItem('rider_name');
-                await updateDoc(doc(db, "riders", name), { status: "Offline" });
-                sessionStorage.clear();
-                location.reload();
-            }
-        };
+async function unlockUI() {
+  $("rider-login-screen").classList.add("hidden");
+  $("main-app").classList.remove("hidden");
+  $("displayRiderName").textContent = rider.name;
+  await listenToRider();
+}
+function listenToRider() {
+  stopListeners();
+  activeOrders = [];
+  historyOrders = [];
+  lastActiveIds = null;
+  renderOrders();
+  renderHistory();
+  updateEarnings();
 
-        if(sessionStorage.getItem('rider_auth') === 'true') unlockUI(sessionStorage.getItem('rider_name'));
-    </script>
+  const activeQ = query(
+    collection(db, "orders"),
+    where("status", "==", "out_for_delivery"),
+    where("riderName", "==", rider.name)
+  );
+  const historyQ = query(
+    collection(db, "orders"),
+    where("status", "==", "delivered"),
+    where("riderName", "==", rider.name),
+    orderBy("deliveredAt", "desc"),
+    limit(30)
+  );
+
+  unsubs.push(onSnapshot(activeQ, snap => {
+    const newIds = new Set(snap.docs.map(d => d.id));
+    if (lastActiveIds !== null &&
+        [...newIds].some(id => !lastActiveIds.has(id))) {
+      $("orderAudio").play().catch(() => {});
+    }
+    lastActiveIds = newIds;
+    activeOrders = snap.docs.map(d => ({id:d.id,...d.data()}));
+    renderOrders();
+  }, error => {
+    console.error(error);
+    $("rider-orders-list").innerHTML =
+      '<div class="empty">Could not load tasks. Check your Firebase rules and connection.</div>';
+  }));
+
+  unsubs.push(onSnapshot(historyQ, snap => {
+    historyOrders = snap.docs.map(d => ({id:d.id,...d.data()}));
+    renderHistory();
+    updateEarnings();
+  }, error => {
+    console.error(error);
+    $("rider-history-list").innerHTML =
+      '<div class="empty">Could not load history. Check your Firestore index and permissions.</div>';
+  }));
+
+  unsubs.push(onSnapshot(doc(db, "riders", rider.name), snap => {
+    if (!snap.exists()) return;
+    const status = snap.data().status || "Offline";
+    updateDutyButton(status);
+  }, error => console.error(error)));
+}
+
+function renderOrders() {
+  $("activeCount").textContent = activeOrders.length;
+  $("active-label").textContent = activeOrders.length + " assigned";
+
+  if (!activeOrders.length) {
+    $("rider-orders-list").innerHTML =
+      '<div class="empty"><i class="fa-solid fa-mug-hot"></i><br>No active deliveries right now.<br>New assigned tasks will appear here.</div>';
+    return;
+  }
+
+  $("rider-orders-list").innerHTML = activeOrders.map(o => {
+    const customer = escapeHTML(o.customerName || "Customer");
+    const phone = String(o.customerPhone || "").replace(/\D/g,"");
+    const address = String(o.customerLocation || o.deliveryAddress || "Address not provided");
+    const nav = mapURL(address);
+    const dist = distanceFromShop(address);
+    const items = Array.isArray(o.items) ? o.items : [];
+    const itemText = items.length
+      ? items.map(i => `${escapeHTML(i.name || "Item")} × ${Number(i.qty)||1}`).join("<br>")
+      : "Order items not available";
+    const id = escapeHTML(o.id);
+    const pinId = "pin-" + o.id.replace(/[^a-zA-Z0-9_-]/g,"");
+    return `
+      <article class="order-card">
+        <div class="order-top">
+          <div>
+            <div class="customer-name">${customer}</div>
+            <div class="order-id">ORDER #${id.slice(-6).toUpperCase()}</div>
+            <span class="tag">${dist ? dist + " km from shop (approx.)" : "Out for delivery"}</span>
+          </div>
+          <div class="order-amount">${money(parseFloat(o.total))}</div>
+        </div>
+        <div class="info-line">
+          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="info-text"><strong>DELIVERY ADDRESS</strong>${escapeHTML(address)}</div>
+        </div>
+        <div class="info-line">
+          <div class="info-icon"><i class="fa-solid fa-bowl-food"></i></div>
+          <div class="info-text"><strong>ORDER ITEMS</strong>${itemText}</div>
+        </div>
+        <div class="action-grid">
+          ${phone ? `<a class="action-btn" href="tel:${phone}"><i class="fa-solid fa-phone"></i> CALL CUSTOMER</a>` :
+          '<button class="action-btn" disabled>Phone unavailable</button>'}
+          <a class="action-btn orange" href="${escapeHTML(nav)}" target="_blank" rel="noopener noreferrer">
+            <i class="fa-solid fa-location-arrow"></i> NAVIGATE
+          </a>
+        </div>
+        <div class="pin-box">
+          <div class="pin-title"><i class="fa-solid fa-shield-halved"></i> Customer delivery PIN</div>
+          <input class="pin-input" id="${pinId}" type="password" inputmode="numeric"
+            maxlength="4" pattern="[0-9]{4}" autocomplete="off" placeholder="••••"
+            aria-label="Customer delivery PIN">
+          <button class="deliver-btn" data-deliver="${id}" ${isBusy(o.id) ? "disabled" : ""}>
+            ${isBusy(o.id) ? "PROCESSING..." : "Confirm Delivery"}
+            <i class="fa-solid fa-check"></i>
+          </button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function renderHistory() {
+  const latest = historyOrders.slice(0,5);
+  if (!latest.length) {
+    $("rider-history-list").innerHTML =
+      '<div class="empty"><i class="fa-solid fa-clock-rotate-left"></i><br>No completed deliveries found yet.</div>';
+    return;
+  }
+  $("rider-history-list").innerHTML = latest.map(o => `
+    <div class="history-item">
+      <div class="history-left">
+        <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+        <div>
+          <div class="history-name">${escapeHTML(o.customerName || "Customer")}</div>
+          <div class="history-id">ORDER #${escapeHTML(o.id.slice(-6).toUpperCase())}</div>
+          <div class="history-id">${o.deliveredAt?.toDate ? escapeHTML(o.deliveredAt.toDate().toLocaleString()) : "Delivered"}</div>
+        </div>
+      </div>
+      <div class="history-pay">+${money(DELIVERY_PAY)}</div>
+    </div>`).join("");
+}
+
+function updateEarnings() {
+  /*
+   * Earnings are estimated using delivered orders from Firestore.
+   * Replace DELIVERY_PAY with your actual payout policy.
+   * A server-side ledger is required for authoritative payments.
+   */
+  const todays = historyOrders.filter(o => isToday(o.deliveredAt));
+  const earnings = todays.length * DELIVERY_PAY;
+  const percent = Math.min(100, Math.round(earnings / DAILY_GOAL * 100));
+  $("todayEarning").textContent = money(earnings);
+  $("orderCountDisplay").textContent = todays.length;
+  $("goalPercent").textContent = percent + "%";
+  $("goalProgress").style.width = percent + "%";
+  $("goalMessage").textContent = earnings >= DAILY_GOAL
+    ? "Daily goal achieved. Great work!"
+    : money(DAILY_GOAL - earnings) + " more to reach your daily goal.";
+}
+
+$("rider-orders-list").addEventListener("click", async event => {
+  const button = event.target.closest("[data-deliver]");
+  if (!button) return;
+  const orderId = button.dataset.deliver;
+  const order = activeOrders.find(o => o.id === orderId);
+  if (!order) return showToast("This task is no longer active.");
+
+  const input = $("pin-" + orderId.replace(/[^a-zA-Z0-9_-]/g,""));
+  const enteredPin = input?.value.trim() || "";
+  const correctPin = String(order.orderPin ?? "");
+
+  if (!/^\d{4}$/.test(enteredPin)) {
+    return showToast("Enter the 4-digit customer PIN.");
+  }
+  if (!correctPin || enteredPin !== correctPin) {
+    return showToast("Incorrect PIN. Please check with the customer.");
+  }
+  if (isBusy(orderId)) return;
+  if (!confirm("Confirm that this order has been delivered?")) return;
+
+  setBusy(orderId, true);
+  renderOrders();
+  try {
+    /*
+     * WARNING: this client-side update is NOT secure delivery verification.
+     * Production must call a trusted backend that verifies rider identity,
+     * assigned rider, PIN, and current order status transactionally.
+     */
+    await updateDoc(doc(db, "orders", orderId), {
+      status:"delivered",
+      deliveredAt:serverTimestamp()
+    });
+    showToast("Delivery marked complete.");
+  } catch (error) {
+    console.error(error);
+    showToast("Could not update order. Check permissions and connection.");
+  } finally {
+    setBusy(orderId, false);
+    renderOrders();
+  }
+});
+
+function updateDutyButton(status) {
+  const online = status === "Online";
+  const btn = $("statusToggle");
+  btn.innerHTML = `<span class="online-dot"></span>${online ? "ONLINE" : "OFFLINE"}`;
+  btn.style.background = online ? "var(--green)" : "#64748b";
+}
+$("statusToggle").addEventListener("click", async () => {
+  if (!rider) return;
+  const btn = $("statusToggle");
+  btn.disabled = true;
+  try {
+    const snap = await new Promise((resolve, reject) => {
+      const unsub = onSnapshot(doc(db,"riders",rider.name), s => {
+        unsub(); resolve(s);
+      }, reject);
+    });
+    const oldStatus = snap.exists() ? snap.data().status : "Offline";
+    const newStatus = oldStatus === "Online" ? "Offline" : "Online";
+    await updateDoc(doc(db,"riders",rider.name), {
+      status:newStatus,
+      lastStatusUpdate:serverTimestamp()
+    });
+    updateDutyButton(newStatus);
+    showToast("Duty status: " + newStatus);
+  } catch (error) {
+    console.error(error);
+    showToast("Could not update duty status.");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+$("rider-orders-list").addEventListener("click", event => {
+  // Delivery handler is installed separately above.
+});
+document.querySelectorAll("[data-scroll]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById(btn.dataset.scroll)?.scrollIntoView({
+      behavior:"smooth",block:"start"
+    });
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+
+$("logout-button").addEventListener("click", async () => {
+  if (!confirm("Log out of the rider dashboard?")) return;
+  stopListeners();
+  try {
+    await updateDoc(doc(db,"riders",rider.name), {
+      status:"Offline",lastLogout:serverTimestamp()
+    });
+  } catch (error) {
+    console.error(error);
+  }
+  sessionStorage.removeItem("rider_auth");
+  sessionStorage.removeItem("rider_name");
+  sessionStorage.removeItem("rider_upi");
+  location.reload();
+});
+
+/*
+ * Existing sessionStorage is retained for compatibility, but it is not
+ * proof of identity. Do not use it as authorization in Firestore Rules.
+ */
+if (sessionStorage.getItem("rider_auth") === "true" &&
+    sessionStorage.getItem("rider_name")) {
+  rider = {
+    name:sessionStorage.getItem("rider_name"),
+    upi:sessionStorage.getItem("rider_upi") || ""
+  };
+  unlockUI().catch(error => {
+    console.error(error);
+    showToast("Could not start the dashboard.");
+  });
+}
+</script>
 </body>
 </html>
