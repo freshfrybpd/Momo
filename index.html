@@ -16,22 +16,15 @@
 
 <style>
 :root{
-  --orange:#ff5e00;
-  --orange-dark:#e94e00;
-  --black:#101114;
-  --muted:#777b85;
-  --bg:#f7f7f8;
-  --white:#fff;
-  --line:#ececef;
-  --green:#15803d;
-  --radius:22px;
+  --orange:#ff5e00;--orange-dark:#e94e00;--black:#101114;
+  --muted:#777b85;--bg:#f7f7f8;--white:#fff;--line:#ececef;
+  --green:#15803d;--radius:22px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;background:var(--bg);color:var(--black);
-  font-family:'Outfit',sans-serif;
-  -webkit-font-smoothing:antialiased;
+  font-family:'Outfit',sans-serif;-webkit-font-smoothing:antialiased;
   padding-bottom:100px;
 }
 button,input,textarea,select{font:inherit}
@@ -42,37 +35,31 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{
   outline:3px solid #ffb38a;outline-offset:2px
 }
 .topbar{
-  position:sticky;top:0;z-index:50;
-  background:rgba(255,255,255,.94);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);
-  padding:13px 5%;
-  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  padding:13px 5%;display:flex;align-items:center;justify-content:space-between;
 }
 .brand{font-size:27px;font-weight:900;font-style:italic;letter-spacing:-1.5px}
 .brand span{color:var(--orange)}
 .header-actions{display:flex;gap:10px;align-items:center}
 .icon-btn{
-  width:43px;height:43px;border:1px solid var(--line);
-  background:white;border-radius:15px;position:relative;
-  display:grid;place-items:center;font-size:17px;color:var(--black)
+  width:43px;height:43px;border:1px solid var(--line);background:white;
+  border-radius:15px;position:relative;display:grid;place-items:center;
+  font-size:17px;color:var(--black)
 }
 .cart-count{
-  position:absolute;right:-4px;top:-5px;background:var(--orange);
-  color:white;min-width:19px;height:19px;border-radius:99px;
-  font-size:10px;font-weight:900;display:grid;place-items:center;
-  padding:0 4px
+  position:absolute;right:-4px;top:-5px;background:var(--orange);color:white;
+  min-width:19px;height:19px;border-radius:99px;font-size:10px;font-weight:900;
+  display:grid;place-items:center;padding:0 4px
 }
 .user-btn{
-  display:flex;align-items:center;gap:8px;padding:10px 13px;
-  border:0;background:var(--black);color:white;border-radius:14px;
-  font-size:12px;font-weight:800
+  display:flex;align-items:center;gap:8px;padding:10px 13px;border:0;
+  background:var(--black);color:white;border-radius:14px;font-size:12px;font-weight:800
 }
 .wrap{max-width:1120px;margin:auto;padding:0 20px}
 .hero{
-  margin-top:25px;border-radius:30px;overflow:hidden;
-  background:var(--black);color:white;position:relative;
-  padding:36px 27px;min-height:230px;
+  margin-top:25px;border-radius:30px;overflow:hidden;background:var(--black);
+  color:white;position:relative;padding:36px 27px;min-height:230px;
   display:flex;align-items:center
 }
 .hero:after{
@@ -85,24 +72,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 .hero-content{position:relative;z-index:2;max-width:530px}
 .eyebrow{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:10px;font-weight:900;letter-spacing:1.5px;
-  color:#ffc09d;text-transform:uppercase
+  display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:900;
+  letter-spacing:1.5px;color:#ffc09d;text-transform:uppercase
 }
-.hero h1{
-  font-size:clamp(35px,6vw,58px);line-height:.98;
-  letter-spacing:-2px;margin:14px 0
-}
+.hero h1{font-size:clamp(35px,6vw,58px);line-height:.98;letter-spacing:-2px;margin:14px 0}
 .hero h1 span{color:var(--orange)}
 .hero p{font-size:13px;color:#d0d0d3;line-height:1.7;max-width:330px}
 .hero-tag{
-  display:inline-flex;gap:8px;align-items:center;
-  background:white;color:var(--black);padding:11px 15px;
-  border-radius:12px;font-size:11px;font-weight:900;margin-top:7px
+  display:inline-flex;gap:8px;align-items:center;background:white;color:var(--black);
+  padding:11px 15px;border-radius:12px;font-size:11px;font-weight:900;margin-top:7px;border:0
 }
 .section-head{
-  display:flex;justify-content:space-between;align-items:end;
-  gap:12px;margin:32px 0 17px
+  display:flex;justify-content:space-between;align-items:end;gap:12px;margin:32px 0 17px
 }
 .section-head h2{font-size:23px;margin:0;font-weight:900;letter-spacing:-.7px}
 .section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
@@ -110,54 +91,35 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{
 .search-wrap{position:relative;margin-top:24px}
 .search-wrap i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#999}
 .search{
-  width:100%;padding:16px 15px 16px 45px;background:white;
-  border:1px solid var(--line);border-radius:16px;outline:none;font-size:13px
+  width:100%;padding:16px 15px 16px 45px;background:white;border:1px solid var(--line);
+  border-radius:16px;outline:none;font-size:13px
 }
 .search:focus{border-color:var(--orange)}
-.category-row{
-  display:flex;gap:9px;overflow-x:auto;padding:3px 0 8px;
-  scrollbar-width:none
-}
+.category-row{display:flex;gap:9px;overflow-x:auto;padding:3px 0 8px;scrollbar-width:none}
 .category-row::-webkit-scrollbar{display:none}
 .chip{
-  flex-shrink:0;border:1px solid var(--line);background:white;
-  border-radius:999px;padding:10px 16px;font-size:11px;
-  font-weight:800;color:#555
+  flex-shrink:0;border:1px solid var(--line);background:white;border-radius:999px;
+  padding:10px 16px;font-size:11px;font-weight:800;color:#555
 }
 .chip.active{background:var(--black);border-color:var(--black);color:white}
-.menu-grid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px
-}
+.menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px}
 .food-card{
-  background:white;border:1px solid var(--line);
-  border-radius:23px;padding:11px;overflow:hidden;min-width:0;
-  transition:transform .2s,box-shadow .2s
+  background:white;border:1px solid var(--line);border-radius:23px;padding:11px;
+  overflow:hidden;min-width:0;transition:transform .2s,box-shadow .2s
 }
 .food-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #00000008}
-.food-image{
-  aspect-ratio:1.35;position:relative;overflow:hidden;
-  border-radius:16px;background:#f0f0f0
-}
+.food-image{aspect-ratio:1.35;position:relative;overflow:hidden;border-radius:16px;background:#f0f0f0}
 .food-image img{width:100%;height:100%;object-fit:cover}
-.food-image .no-image{
-  width:100%;height:100%;display:grid;place-items:center;
-  color:#b7b7b7;font-size:36px
-}
+.food-image .no-image{width:100%;height:100%;display:grid;place-items:center;color:#b7b7b7;font-size:36px}
 .food-type{
-  position:absolute;left:9px;top:9px;background:white;
-  border-radius:8px;padding:6px 8px;font-size:9px;font-weight:900;
-  text-transform:uppercase
+  position:absolute;left:9px;top:9px;background:white;border-radius:8px;
+  padding:6px 8px;font-size:9px;font-weight:900;text-transform:uppercase
 }
 .food-type.veg{color:var(--green)}
 .food-type.nonveg{color:#c52222}
 .food-info{padding:13px 3px 3px}
-.food-name{
-  font-size:15px;font-weight:900;text-transform:capitalize;
-  margin:0;line-height:1.3;overflow-wrap:anywhere
-}
-.food-description{
-  font-size:10px;color:var(--muted);margin:7px 0 13px;line-height:1.5
-}
+.food-name{font-size:15px;font-weight:900;text-transform:capitalize;margin:0;line-height:1.3;overflow-wrap:anywhere}
+.food-description{font-size:10px;color:var(--muted);margin:7px 0 13px;line-height:1.5}
 .price-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .price-btn{
   padding:10px 5px;border-radius:11px;border:1px solid #ffe1d1;
@@ -165,176 +127,126 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 .price-btn.full{background:var(--black);border-color:var(--black);color:white}
 .price-btn:active{transform:scale(.97)}
-.loading-card{height:250px;border-radius:22px;background:
-linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%);
-background-size:200% 100%;animation:shimmer 1.5s infinite}
+.loading-card{
+  height:250px;border-radius:22px;background:linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%);
+  background-size:200% 100%;animation:shimmer 1.5s infinite
+}
 @keyframes shimmer{to{background-position:-200% 0}}
 .empty-state{
   grid-column:1/-1;background:white;padding:45px 20px;text-align:center;
   border-radius:20px;border:1px dashed #ddd;color:var(--muted)
 }
 .empty-state i{font-size:30px;color:#ccc;margin-bottom:12px}
-.notice{
-  margin-top:22px;background:#fff3eb;color:#8a3a10;
-  padding:13px 15px;border-radius:14px;font-size:11px;line-height:1.6
-}
+.notice{margin-top:22px;background:#fff3eb;color:#8a3a10;padding:13px 15px;border-radius:14px;font-size:11px;line-height:1.6}
 .bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:40;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(15px);
-  border-top:1px solid var(--line);display:flex;justify-content:center;
+  position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(255,255,255,.96);
+  backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:center;
   padding:10px 12px calc(10px + env(safe-area-inset-bottom))
 }
 .bottom-inner{width:100%;max-width:600px;display:flex;justify-content:space-around}
 .nav-item{
-  background:none;border:0;color:#888;display:flex;flex-direction:column;
-  gap:5px;align-items:center;font-size:10px;font-weight:800;padding:5px 13px
+  background:none;border:0;color:#888;display:flex;flex-direction:column;gap:5px;
+  align-items:center;font-size:10px;font-weight:800;padding:5px 13px
 }
 .nav-item i{font-size:18px}
 .nav-item.active{color:var(--orange)}
-.overlay{
-  position:fixed;inset:0;background:#0008;z-index:100;
-  opacity:0;visibility:hidden;transition:.25s
-}
+.overlay{position:fixed;inset:0;background:#0008;z-index:100;opacity:0;visibility:hidden;transition:.25s}
 .overlay.show{opacity:1;visibility:visible}
 .drawer{
-  position:fixed;z-index:101;right:0;top:0;bottom:0;
-  width:min(460px,100%);background:white;
-  transform:translateX(105%);transition:transform .28s ease;
-  display:flex;flex-direction:column;
+  position:fixed;z-index:101;right:0;top:0;bottom:0;width:min(460px,100%);background:white;
+  transform:translateX(105%);transition:transform .28s ease;display:flex;flex-direction:column;
   padding-bottom:env(safe-area-inset-bottom)
 }
 .drawer.show{transform:translateX(0)}
-.drawer-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:21px;border-bottom:1px solid var(--line)
-}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:21px;border-bottom:1px solid var(--line)}
 .drawer-head h2{font-size:20px;font-weight:900;margin:0}
-.close-btn{
-  width:37px;height:37px;border:0;border-radius:12px;background:#f2f2f3;
-  display:grid;place-items:center
-}
+.close-btn{width:37px;height:37px;border:0;border-radius:12px;background:#f2f2f3;display:grid;place-items:center}
 .drawer-content{flex:1;overflow-y:auto;padding:18px}
-.cart-line{
-  display:flex;gap:12px;align-items:center;padding:14px 0;
-  border-bottom:1px solid var(--line)
-}
-.cart-item-icon{
-  width:48px;height:48px;flex-shrink:0;background:#fff1e8;
-  color:var(--orange);border-radius:14px;display:grid;place-items:center
-}
+.cart-line{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.cart-item-icon{width:48px;height:48px;flex-shrink:0;background:#fff1e8;color:var(--orange);border-radius:14px;display:grid;place-items:center}
 .cart-item-info{flex:1;min-width:0}
 .cart-item-info h4{font-size:12px;margin:0 0 5px;overflow-wrap:anywhere}
 .cart-item-info p{font-size:11px;color:var(--orange);font-weight:900;margin:0}
 .qty-control{display:flex;align-items:center;gap:10px}
-.qty-control button{
-  width:29px;height:29px;border:1px solid var(--line);
-  background:white;border-radius:9px;font-weight:900
-}
+.qty-control button{width:29px;height:29px;border:1px solid var(--line);background:white;border-radius:9px;font-weight:900}
 .remove-btn{border:0;background:none;color:#aaa;padding:5px}
 .cart-footer{padding:20px;border-top:1px solid var(--line);background:#fafafa}
-.total-row{display:flex;justify-content:space-between;margin:9px 0;font-size:12px;color:#555}
+.total-row{display:flex;justify-content:space-between;gap:12px;margin:9px 0;font-size:12px;color:#555}
 .total-row.final{font-size:19px;font-weight:900;color:var(--black);margin:16px 0}
 .total-row.final span:last-child{color:var(--orange)}
 .primary-btn{
-  border:0;background:var(--orange);color:white;width:100%;
-  border-radius:14px;padding:16px;font-size:12px;font-weight:900;
-  text-transform:uppercase;letter-spacing:.4px
+  border:0;background:var(--orange);color:white;width:100%;border-radius:14px;
+  padding:16px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.4px
 }
 .primary-btn.dark{background:var(--black)}
-.secondary-btn{
-  border:1px solid var(--line);background:white;color:var(--black);
-  border-radius:12px;padding:12px;font-size:11px;font-weight:900
-}
+.secondary-btn{border:1px solid var(--line);background:white;color:var(--black);border-radius:12px;padding:12px;font-size:11px;font-weight:900}
 .form-group{margin-bottom:15px}
-.form-group label{
-  display:block;font-size:11px;font-weight:900;margin-bottom:7px
-}
-.form-control{
-  width:100%;border:1px solid #e5e5e8;border-radius:12px;
-  background:white;padding:13px;font-size:12px;outline:none
-}
+.form-group label{display:block;font-size:11px;font-weight:900;margin-bottom:7px}
+.form-control{width:100%;border:1px solid #e5e5e8;border-radius:12px;background:white;padding:13px;font-size:12px;outline:none}
 .form-control:focus{border-color:var(--orange)}
 textarea.form-control{resize:vertical;min-height:82px}
 .form-hint{font-size:10px;color:var(--muted);line-height:1.5;margin-top:6px}
-.payment-option{
-  border:1px solid var(--line);border-radius:13px;padding:12px;
-  display:flex;align-items:center;gap:10px;margin:8px 0;font-size:12px
-}
+.payment-option{border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;align-items:center;gap:10px;margin:8px 0;font-size:12px}
 .payment-option input{accent-color:var(--orange)}
-.order-card{
-  background:white;border:1px solid var(--line);border-radius:18px;
-  padding:16px;margin-bottom:13px
-}
+.order-card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:13px}
 .order-card-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
 .order-id{font-size:10px;color:var(--muted);margin-bottom:5px}
-.order-status{
-  display:inline-block;border-radius:8px;padding:6px 9px;
-  background:#fff0e7;color:#bd4600;font-size:9px;font-weight:900;
-  text-transform:uppercase
-}
+.order-status{display:inline-block;border-radius:8px;padding:6px 9px;background:#fff0e7;color:#bd4600;font-size:9px;font-weight:900;text-transform:uppercase}
 .order-items{font-size:11px;color:#666;line-height:1.8;margin:12px 0}
-.order-card-bottom{
-  display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid var(--line);padding-top:12px;font-size:12px;font-weight:900
-}
-.progress{
-  display:grid;grid-template-columns:repeat(4,1fr);margin:20px 0 24px;
-  position:relative;gap:4px
-}
+.order-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:12px;font-size:12px;font-weight:900}
+.progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:20px 0 24px;position:relative;gap:4px}
 .progress-step{text-align:center;color:#aaa;font-size:9px;font-weight:800;position:relative}
-.progress-step .circle{
-  width:28px;height:28px;margin:0 auto 7px;border-radius:50%;
-  background:#eee;display:grid;place-items:center
-}
+.progress-step .circle{width:28px;height:28px;margin:0 auto 7px;border-radius:50%;background:#eee;display:grid;place-items:center}
 .progress-step.done{color:var(--orange)}
 .progress-step.done .circle{background:var(--orange);color:white}
-.status-banner{
-  background:#111;color:white;padding:16px;border-radius:16px;
-  font-size:12px;line-height:1.6
-}
+.status-banner{background:#111;color:white;padding:16px;border-radius:16px;font-size:12px;line-height:1.6}
 .status-banner strong{color:#ff9a63}
+.delivery-pin-card{
+  margin-top:16px;padding:18px;border:1px solid #b7e4c7;border-radius:16px;
+  background:#effcf4;text-align:center
+}
+.delivery-pin-heading{color:#15803d;font-size:12px;font-weight:900}
+.delivery-pin-number{
+  margin:10px 0;color:#166534;font-size:36px;font-weight:900;
+  letter-spacing:10px;font-variant-numeric:tabular-nums
+}
+.delivery-pin-note{margin:0;color:#166534;font-size:11px;line-height:1.6}
 .toast{
   position:fixed;z-index:200;left:50%;bottom:95px;transform:translate(-50%,20px);
-  opacity:0;visibility:hidden;background:#161616;color:white;
-  border-radius:13px;padding:13px 17px;font-size:12px;
-  width:max-content;max-width:calc(100% - 35px);transition:.25s;
-  box-shadow:0 10px 30px #0002
+  opacity:0;visibility:hidden;background:#161616;color:white;border-radius:13px;padding:13px 17px;
+  font-size:12px;width:max-content;max-width:calc(100% - 35px);transition:.25s;box-shadow:0 10px 30px #0002
 }
 .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .toast.error{background:#a32323}
-.modal{
-  position:fixed;inset:0;z-index:120;background:#0008;
-  display:none;align-items:center;justify-content:center;padding:20px
-}
+.modal{position:fixed;inset:0;z-index:120;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}
 .modal.show{display:flex}
-.modal-box{
-  width:100%;max-width:440px;max-height:90dvh;overflow-y:auto;
-  background:white;border-radius:24px;padding:23px
-}
+.modal-box{width:100%;max-width:440px;max-height:90dvh;overflow-y:auto;background:white;border-radius:24px;padding:23px}
 .modal-title{font-size:22px;font-weight:900;margin:0 0 6px}
 .muted{color:var(--muted);font-size:11px;line-height:1.6}
+.confirm-pin-card{
+  margin:16px 0;padding:20px 16px;background:#effcf4;border:1px solid #b7e4c7;
+  border-radius:18px;text-align:center
+}
+.confirm-pin-label{color:#15803d;font-size:11px;font-weight:900;letter-spacing:.7px}
+.confirm-pin-number{font-size:38px;letter-spacing:10px;font-weight:900;color:#166534;margin:9px 0;font-variant-numeric:tabular-nums}
 @media(max-width:760px){
   .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .wrap{padding:0 14px}
-  .topbar{padding:12px 15px}
+  .wrap{padding:0 14px}.topbar{padding:12px 15px}
   .hero{margin-top:17px;padding:27px 20px;min-height:220px}
   .hero:after{width:155px;height:155px;right:-65px;top:55px}
-  .hero:before{right:4px}
-  .hero h1{font-size:40px}
+  .hero:before{right:4px}.hero h1{font-size:40px}
   .food-card{padding:8px;border-radius:19px}
   .food-image{border-radius:13px;aspect-ratio:1.15}
-  .food-info{padding:11px 2px 2px}
-  .food-name{font-size:13px}
+  .food-info{padding:11px 2px 2px}.food-name{font-size:13px}
   .food-description{font-size:10px;margin:6px 0 11px}
   .price-btn{font-size:9px;padding:10px 2px}
   .section-head h2{font-size:21px}
 }
 @media(max-width:360px){
-  .brand{font-size:23px}
-  .user-btn{padding:10px}
-  .user-btn span{display:none}
-  .hero h1{font-size:35px}
-  .menu-grid{gap:9px}
+  .brand{font-size:23px}.user-btn{padding:10px}.user-btn span{display:none}
+  .hero h1{font-size:35px}.menu-grid{gap:9px}
+  .progress-step{font-size:8px}.progress-step .circle{width:24px;height:24px}
+  .confirm-pin-number,.delivery-pin-number{font-size:31px;letter-spacing:7px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -346,16 +258,11 @@ textarea.form-control{resize:vertical;min-height:82px}
 <header class="topbar">
   <div class="brand">Fresh<span>fry.</span></div>
   <div class="header-actions">
-    <button class="icon-btn" id="header-orders" aria-label="My orders">
-      <i class="fa-solid fa-receipt"></i>
-    </button>
+    <button class="icon-btn" id="header-orders" aria-label="My orders"><i class="fa-solid fa-receipt"></i></button>
     <button class="icon-btn" id="header-cart" aria-label="Shopping cart">
-      <i class="fa-solid fa-bag-shopping"></i>
-      <span class="cart-count" id="cart-count" hidden>0</span>
+      <i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cart-count" hidden>0</span>
     </button>
-    <button class="user-btn" id="login-open">
-      <i class="fa-regular fa-user"></i><span id="user-label">Login</span>
-    </button>
+    <button class="user-btn" id="login-open"><i class="fa-regular fa-user"></i><span id="user-label">Login</span></button>
   </div>
 </header>
 
@@ -365,47 +272,30 @@ textarea.form-control{resize:vertical;min-height:82px}
       <span class="eyebrow"><i class="fa-solid fa-bolt"></i> Freshly made. Fastly served.</span>
       <h1>FAST<br><span>FLAVOR.</span></h1>
       <p>Your cravings, our kitchen. Discover delicious food and order your favourites in Baripada.</p>
-      <button class="hero-tag" id="explore-menu">
-        EXPLORE MENU <i class="fa-solid fa-arrow-right"></i>
-      </button>
+      <button class="hero-tag" id="explore-menu">EXPLORE MENU <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </section>
 
   <div class="search-wrap">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <input id="search-input" class="search" type="search"
-      placeholder="Search your favourite food..." autocomplete="off">
+    <input id="search-input" class="search" type="search" placeholder="Search your favourite food..." autocomplete="off">
   </div>
 
   <section id="menu-section">
     <div class="section-head">
-      <div>
-        <span class="small-label">Made for your cravings</span>
-        <h2>Explore Menu</h2>
-        <p>Choose your favourite. Pick your portion.</p>
-      </div>
+      <div><span class="small-label">Made for your cravings</span><h2>Explore Menu</h2><p>Choose your favourite. Pick your portion.</p></div>
       <span class="small-label" id="menu-count">Loading...</span>
     </div>
-    <div class="category-row" id="category-row">
-      <button class="chip active" data-category="all">All Items</button>
-    </div>
+    <div class="category-row" id="category-row"><button class="chip active" data-category="all">All Items</button></div>
     <div class="menu-grid" id="menu-grid">
-      <div class="loading-card"></div><div class="loading-card"></div>
-      <div class="loading-card"></div>
+      <div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div>
     </div>
-    <div class="notice">
-      <i class="fa-solid fa-circle-info"></i>
-      Menu prices and availability are provided by the restaurant. Confirm the final amount before payment.
-    </div>
+    <div class="notice"><i class="fa-solid fa-circle-info"></i> Menu prices and availability are provided by the restaurant. Confirm the final amount before payment.</div>
   </section>
 
   <section id="orders-section" hidden>
     <div class="section-head">
-      <div>
-        <span class="small-label">Your food journey</span>
-        <h2>My Orders</h2>
-        <p>View order details and the latest available status.</p>
-      </div>
+      <div><span class="small-label">Your food journey</span><h2>My Orders</h2><p>View order details and the latest available status.</p></div>
     </div>
     <div id="orders-list"></div>
   </section>
@@ -413,30 +303,18 @@ textarea.form-control{resize:vertical;min-height:82px}
 
 <div class="bottom-nav">
   <div class="bottom-inner">
-    <button class="nav-item active" data-page="home">
-      <i class="fa-solid fa-house"></i>Home
-    </button>
-    <button class="nav-item" data-page="menu-section">
-      <i class="fa-solid fa-utensils"></i>Menu
-    </button>
-    <button class="nav-item" data-page="orders-section">
-      <i class="fa-solid fa-receipt"></i>Orders
-    </button>
-    <button class="nav-item" id="bottom-cart">
-      <i class="fa-solid fa-bag-shopping"></i>My Box
-    </button>
+    <button class="nav-item active" data-page="home"><i class="fa-solid fa-house"></i>Home</button>
+    <button class="nav-item" data-page="menu-section"><i class="fa-solid fa-utensils"></i>Menu</button>
+    <button class="nav-item" data-page="orders-section"><i class="fa-solid fa-receipt"></i>Orders</button>
+    <button class="nav-item" id="bottom-cart"><i class="fa-solid fa-bag-shopping"></i>My Box</button>
   </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<!-- CART DRAWER -->
 <aside class="drawer" id="cart-drawer" aria-label="Shopping cart">
   <div class="drawer-head">
-    <div>
-      <span class="small-label">Almost there</span>
-      <h2>Your Box <span id="cart-title-count">(0)</span></h2>
-    </div>
+    <div><span class="small-label">Almost there</span><h2>Your Box <span id="cart-title-count">(0)</span></h2></div>
     <button class="close-btn" data-close aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <div class="drawer-content" id="cart-content"></div>
@@ -448,50 +326,21 @@ textarea.form-control{resize:vertical;min-height:82px}
   </div>
 </aside>
 
-<!-- CHECKOUT MODAL -->
 <div class="modal" id="checkout-modal">
   <div class="modal-box">
     <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:20px">
-      <div>
-        <span class="small-label">Almost ready</span>
-        <h2 class="modal-title">Checkout</h2>
-        <p class="muted">Confirm your contact and delivery details.</p>
-      </div>
+      <div><span class="small-label">Almost ready</span><h2 class="modal-title">Checkout</h2><p class="muted">Confirm your contact and delivery details.</p></div>
       <button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
-
     <form id="checkout-form">
-      <div class="form-group">
-        <label for="customer-name">Full name *</label>
-        <input class="form-control" id="customer-name" maxlength="80" required autocomplete="name" placeholder="Enter your name">
-      </div>
-      <div class="form-group">
-        <label for="customer-phone">Mobile number *</label>
-        <input class="form-control" id="customer-phone" type="tel" inputmode="numeric"
-          pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number">
-      </div>
-      <div class="form-group">
-        <label for="customer-address">Delivery address *</label>
-        <textarea class="form-control" id="customer-address" maxlength="500"
-          required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="customer-note">Order note (optional)</label>
-        <textarea class="form-control" id="customer-note" maxlength="250"
-          placeholder="Any special instructions?"></textarea>
-      </div>
+      <div class="form-group"><label for="customer-name">Full name *</label><input class="form-control" id="customer-name" maxlength="80" required autocomplete="name" placeholder="Enter your name"></div>
+      <div class="form-group"><label for="customer-phone">Mobile number *</label><input class="form-control" id="customer-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number"></div>
+      <div class="form-group"><label for="customer-address">Delivery address *</label><textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea></div>
+      <div class="form-group"><label for="customer-note">Order note (optional)</label><textarea class="form-control" id="customer-note" maxlength="250" placeholder="Any special instructions?"></textarea></div>
       <div class="form-group">
         <label>Payment preference</label>
-        <label class="payment-option">
-          <input type="radio" name="payment-method" value="COD" checked>
-          <i class="fa-solid fa-money-bill-wave"></i>
-          <span>Cash on delivery</span>
-        </label>
-        <label class="payment-option">
-          <input type="radio" name="payment-method" value="UPI">
-          <i class="fa-brands fa-google-pay"></i>
-          <span>UPI payment — arrange with restaurant</span>
-        </label>
+        <label class="payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
+        <label class="payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-google-pay"></i><span>UPI payment — arrange with restaurant</span></label>
         <p class="form-hint">Selecting UPI does not make or verify a payment. The restaurant must confirm payment separately.</p>
       </div>
       <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
@@ -501,22 +350,16 @@ textarea.form-control{resize:vertical;min-height:82px}
   </div>
 </div>
 
-<!-- LOGIN MODAL: compatible with the existing ff_phone key -->
 <div class="modal" id="login-modal">
   <div class="modal-box">
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px">
-      <div>
-        <span class="small-label">Welcome to Freshfry</span>
-        <h2 class="modal-title">Your account</h2>
-        <p class="muted">Enter your phone number to continue.</p>
-      </div>
+      <div><span class="small-label">Welcome to Freshfry</span><h2 class="modal-title">Your account</h2><p class="muted">Enter your phone number to continue.</p></div>
       <button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="login-form">
       <div class="form-group">
         <label for="login-phone">Mobile number</label>
-        <input class="form-control" id="login-phone" type="tel" inputmode="numeric"
-          pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit mobile number">
+        <input class="form-control" id="login-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit mobile number">
         <p class="form-hint">This basic form saves the phone number on this device only. It does not verify identity by OTP.</p>
       </div>
       <button class="primary-btn" type="submit">Continue</button>
@@ -525,19 +368,34 @@ textarea.form-control{resize:vertical;min-height:82px}
   </div>
 </div>
 
-<!-- ORDER DETAILS MODAL -->
 <div class="modal" id="order-modal">
   <div class="modal-box">
     <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
-      <div>
-        <span class="small-label">Live updates</span>
-        <h2 class="modal-title">Track Order</h2>
-        <p class="muted" id="tracking-id"></p>
-      </div>
+      <div><span class="small-label">Live updates</span><h2 class="modal-title">Track Order</h2><p class="muted" id="tracking-id"></p></div>
       <button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div id="tracking-content"></div>
     <button class="secondary-btn" id="tracking-refresh" style="width:100%;margin-top:15px">Refresh details</button>
+  </div>
+</div>
+
+<!-- Order confirmation including delivery PIN -->
+<div class="modal" id="confirmation-modal">
+  <div class="modal-box" style="text-align:center">
+    <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px">
+      <i class="fa-solid fa-check"></i>
+    </div>
+    <span class="small-label">Freshfry order confirmed</span>
+    <h2 class="modal-title" style="margin-top:8px">Order placed!</h2>
+    <p class="muted" id="confirmation-order-id"></p>
+    <div class="confirm-pin-card">
+      <div class="confirm-pin-label"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div>
+      <div class="confirm-pin-number" id="confirmation-pin">----</div>
+      <p class="delivery-pin-note">Keep this PIN private. Share it with the rider only when your order arrives.</p>
+    </div>
+    <p class="muted">You can find this PIN again in My Orders → Track details when your order is out for delivery.</p>
+    <button class="primary-btn" id="confirmation-track" style="margin-top:14px">Track my order</button>
+    <button class="secondary-btn" id="confirmation-close" style="width:100%;margin-top:10px">Continue browsing</button>
   </div>
 </div>
 
@@ -553,7 +411,7 @@ import {
 
 /* Keep your existing Firebase project configuration. */
 const firebaseConfig = {
-  apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+  apiKey: "AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
   authDomain: "freshfry-39a10.firebaseapp.com",
   projectId: "freshfry-39a10",
   storageBucket: "freshfry-39a10.firebasestorage.app",
@@ -586,6 +444,7 @@ let menuUnsubscribe = null;
 let ordersUnsubscribe = null;
 let toastTimer = null;
 let submitting = false;
+let lastPlacedOrderId = null;
 
 function readCart() {
   try {
@@ -609,9 +468,7 @@ function escapeHTML(value) {
   })[ch]);
 }
 function money(value) {
-  return "₹" + Number(value || 0).toLocaleString("en-IN", {
-    maximumFractionDigits: 2
-  });
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {maximumFractionDigits:2});
 }
 function getPhone() {
   return (localStorage.getItem("ff_phone") || "").replace(/\D/g, "").slice(-10);
@@ -654,7 +511,7 @@ function closeAllModals() {
 }
 function updateUserUI() {
   const phone = getPhone();
-  $("user-label").textContent = phone ? phone.slice(0, 2) + "••••" + phone.slice(-2) : "Login";
+  $("user-label").textContent = phone ? phone.slice(0,2) + "••••" + phone.slice(-2) : "Login";
   $("login-phone").value = phone;
   $("logout-btn").style.display = phone ? "block" : "none";
 }
@@ -667,14 +524,14 @@ function startMenuListener() {
     menuItems = snapshot.docs.map(d => {
       const x = d.data();
       return {
-        id: d.id,
-        name: String(x.name || "Food item"),
-        image: typeof x.image === "string" ? x.image : "",
-        type: String(x.type || "Food"),
-        description: String(x.description || x.details || ""),
-        halfPrice: Number(x.halfPrice),
-        fullPrice: Number(x.fullPrice),
-        available: x.available !== false && x.isAvailable !== false
+        id:d.id,
+        name:String(x.name || "Food item"),
+        image:typeof x.image === "string" ? x.image : "",
+        type:String(x.type || "Food"),
+        description:String(x.description || x.details || ""),
+        halfPrice:Number(x.halfPrice),
+        fullPrice:Number(x.fullPrice),
+        available:x.available !== false && x.isAvailable !== false
       };
     }).filter(x =>
       Number.isFinite(x.halfPrice) && x.halfPrice >= 0 &&
@@ -684,8 +541,7 @@ function startMenuListener() {
     renderMenu();
   }, error => {
     console.error("Menu listener:", error);
-    $("menu-grid").innerHTML =
-      '<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>';
+    $("menu-grid").innerHTML = '<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>';
   });
 }
 function renderCategories() {
@@ -698,8 +554,7 @@ function renderCategories() {
 function renderMenu() {
   const visible = menuItems.filter(item => {
     const matchesCategory = selectedCategory === "all" || item.type === selectedCategory;
-    const matchesSearch = (item.name + " " + item.type + " " + item.description)
-      .toLowerCase().includes(searchTerm);
+    const matchesSearch = (item.name + " " + item.type + " " + item.description).toLowerCase().includes(searchTerm);
     return matchesCategory && matchesSearch && item.available;
   });
   $("menu-count").textContent = `${visible.length} ITEMS`;
@@ -767,8 +622,7 @@ function renderCart() {
     <div class="cart-line">
       <div class="cart-item-icon"><i class="fa-solid fa-utensils"></i></div>
       <div class="cart-item-info">
-        <h4>${escapeHTML(item.name)}</h4>
-        <p>${money(item.price)} each</p>
+        <h4>${escapeHTML(item.name)}</h4><p>${money(item.price)} each</p>
         <div class="qty-control" style="margin-top:9px">
           <button data-qty="${escapeHTML(item.id)}" data-delta="-1" aria-label="Decrease quantity">−</button>
           <strong style="font-size:12px">${item.qty}</strong>
@@ -796,13 +650,19 @@ function removeItem(id) {
   renderCart();
 }
 
-/* CHECKOUT */
+/* CHECKOUT + DELIVERY PIN */
 function openCheckout() {
   if (!cart.length) return showToast("Your box is empty.", true);
   closeDrawers();
-  const phone = getPhone();
-  $("customer-phone").value = phone;
+  $("customer-phone").value = getPhone();
+  $("customer-name").value = localStorage.getItem("ff_customer_name") || "";
+  $("customer-address").value = localStorage.getItem("ff_customer_address") || "";
   openModal("checkout-modal");
+}
+function generateDeliveryPin() {
+  // Four-digit PIN; frontend-generated for compatibility with the current setup.
+  // For production, generate and verify the PIN in a trusted backend.
+  return String(crypto.getRandomValues(new Uint32Array(1))[0] % 9000 + 1000);
 }
 async function placeOrder(event) {
   event.preventDefault();
@@ -822,14 +682,15 @@ async function placeOrder(event) {
     return showToast("Please check your cart.", true);
   }
 
-  /* Prices and totals from a browser are NOT trusted.
-     Production checkout must verify them on a trusted server. */
+  // Prices and totals from a browser are not trusted; validate on a trusted server in production.
   const orderItems = cart.map(i => ({
-    name: i.name,
-    price: i.price,
-    qty: i.qty
+    name:i.name,
+    price:i.price,
+    qty:i.qty,
+    menuItemId:i.menuId || ""
   }));
   const orderTotal = total();
+  const deliveryPin = generateDeliveryPin();
 
   submitting = true;
   const button = $("place-order-btn");
@@ -838,32 +699,42 @@ async function placeOrder(event) {
 
   try {
     const ref = await addDoc(collection(db, "orders"), {
-      customerPhone: phone,
-      customerName: name,
-      deliveryAddress: address,
-      note: note,
-      paymentMethod: paymentMethod,
-      paymentStatus: "unverified",
-      items: orderItems,
-      total: String(orderTotal),
-      status: "pending",
-      createdAt: serverTimestamp()
+      customerPhone:phone,
+      customerName:name,
+      deliveryAddress:address,
+      customerLocation:address,
+      note:note,
+      paymentMethod:paymentMethod,
+      paymentStatus:"unverified",
+      items:orderItems,
+      subtotal:subtotal(),
+      deliveryFee:cart.length ? DELIVERY_FEE : 0,
+      total:String(orderTotal),
+      deliveryPin:deliveryPin,
+      status:"pending",
+      createdAt:serverTimestamp()
     });
 
+    lastPlacedOrderId = ref.id;
+    localStorage.setItem("ff_last_order_id", ref.id);
+    localStorage.setItem("ff_last_delivery_pin", deliveryPin);
     localStorage.setItem("ff_phone", phone);
     localStorage.setItem("ff_customer_name", name);
     localStorage.setItem("ff_customer_address", address);
+
     cart = [];
     saveCart();
     renderCart();
     updateUserUI();
     closeModal("checkout-modal");
-    showToast("Order placed! Reference: " + ref.id.slice(0, 8));
+
+    $("confirmation-order-id").textContent = "Order #" + ref.id;
+    $("confirmation-pin").textContent = deliveryPin;
+    openModal("confirmation-modal");
+
     startOrdersListener();
     selectedOrderId = ref.id;
     showOrdersPage();
-    openModal("order-modal");
-    renderTracking();
   } catch (error) {
     console.error("Order creation failed:", error);
     showToast("Order could not be placed. Check your connection or Firebase permissions.", true);
@@ -878,14 +749,14 @@ async function placeOrder(event) {
 function normalizeStatus(value) {
   const s = String(value || "pending").toLowerCase().trim().replace(/[\s-]+/g, "_");
   const aliases = {
-    "confirmed":"accepted",
-    "cooking":"preparing",
-    "on_the_way":"out_for_delivery",
-    "outfordelivery":"out_for_delivery",
-    "complete":"delivered",
-    "completed":"delivered",
-    "cancelled":"cancelled",
-    "canceled":"cancelled"
+    confirmed:"accepted",
+    cooking:"preparing",
+    on_the_way:"out_for_delivery",
+    outfordelivery:"out_for_delivery",
+    complete:"delivered",
+    completed:"delivered",
+    cancelled:"cancelled",
+    canceled:"cancelled"
   };
   return aliases[s] || s;
 }
@@ -912,16 +783,11 @@ function startOrdersListener() {
     return;
   }
 
-  // Uses the existing customerPhone field and orders collection.
   ordersUnsubscribe = onSnapshot(
     query(collection(db, "orders"), where("customerPhone", "==", phone)),
     snapshot => {
       orders = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
-      orders.sort((a,b) => {
-        const at = a.createdAt?.toMillis?.() || 0;
-        const bt = b.createdAt?.toMillis?.() || 0;
-        return bt - at;
-      });
+      orders.sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
       renderOrders();
       if (selectedOrderId) renderTracking();
       updateOrderTicker();
@@ -965,17 +831,22 @@ function renderTracking() {
     $("tracking-content").innerHTML = '<p class="muted">Waiting for order details. Please refresh shortly.</p>';
     return;
   }
+
   const status = normalizeStatus(order.status);
-  const cancelled = ["cancelled", "rejected"].includes(status);
+  const cancelled = ["cancelled","rejected"].includes(status);
   const current = STATUS_STEPS.findIndex(x => x.key === status);
-  const steps = STATUS_STEPS.map((step, index) => {
+  const steps = STATUS_STEPS.map((step,index) => {
     const done = !cancelled && current >= index;
     return `<div class="progress-step ${done ? "done" : ""}">
       <div class="circle"><i class="fa-solid ${done ? "fa-check" : "fa-circle"}"></i></div>
       ${escapeHTML(step.label)}
     </div>`;
   }).join("");
+
   const items = Array.isArray(order.items) ? order.items : [];
+  const pin = /^\d{4}$/.test(String(order.deliveryPin || "")) ? String(order.deliveryPin) : "";
+  const showPin = status === "out_for_delivery" && pin;
+
   $("tracking-id").textContent = "Order #" + order.id;
   $("tracking-content").innerHTML = `
     <div class="status-banner">
@@ -983,9 +854,25 @@ function renderTracking() {
       Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
       <div style="color:#bbb;font-size:10px;margin-top:5px">This status updates when the restaurant updates your order.</div>
     </div>
-    ${cancelled ? `<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}. Please contact the restaurant if you need assistance.</p>` : `<div class="progress">${steps}</div>`}
+
+    ${showPin ? `
+      <div class="delivery-pin-card">
+        <div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div>
+        <div class="delivery-pin-number">${escapeHTML(pin)}</div>
+        <p class="delivery-pin-note">Share this PIN with your rider when your food arrives. Keep it private until delivery.</p>
+      </div>
+    ` : ""}
+
+    ${!pin && status !== "delivered" && !cancelled ? `
+      <p class="muted" style="margin-top:12px">If this is an older order, a delivery PIN may not be available. New orders will have a PIN.</p>
+    ` : ""}
+
+    ${cancelled
+      ? `<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}. Please contact the restaurant if you need assistance.</p>`
+      : `<div class="progress">${steps}</div>`}
+
     <h3 style="font-size:14px;margin:22px 0 10px">Order summary</h3>
-    ${items.map(i => `<div class="total-row"><span>${escapeHTML(i.name)} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
+    ${items.map(i => `<div class="total-row"><span>${escapeHTML(i.name || "Item")} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
     <div class="total-row final"><span>Total</span><span>${money(parseFloat(order.total)||0)}</span></div>
     ${order.deliveryAddress ? `<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>` : ""}
     <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod || "Not specified")}. Payment status: ${escapeHTML(order.paymentStatus || "Not recorded")}.</p>`;
@@ -1004,7 +891,9 @@ function updateOrderTicker() {
     ticker.style.cssText = "position:fixed;bottom:83px;left:15px;right:15px;width:calc(100% - 30px);max-width:500px;margin:auto;z-index:39;box-shadow:0 8px 25px #0002";
     document.body.appendChild(ticker);
     ticker.addEventListener("click", () => {
-      selectedOrderId = active.id;
+      const latestActive = orders.find(o => ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
+      if (!latestActive) return;
+      selectedOrderId = latestActive.id;
       renderTracking();
       openModal("order-modal");
     });
@@ -1017,7 +906,7 @@ function showOrdersPage() {
   $("menu-section").hidden = true;
   $("orders-section").hidden = false;
   document.querySelectorAll(".nav-item[data-page]").forEach(b => b.classList.toggle("active", b.dataset.page === "orders-section"));
-  $("orders-section").scrollIntoView({behavior:"smooth", block:"start"});
+  $("orders-section").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function showHome() {
   $("menu-section").hidden = false;
@@ -1032,23 +921,19 @@ function showMenu() {
   $("menu-section").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-/* EVENT HANDLERS */
-$("header-cart").addEventListener("click", () => {
-  renderCart();
-  openDrawer("cart-drawer");
-});
-$("bottom-cart").addEventListener("click", () => {
-  renderCart();
-  openDrawer("cart-drawer");
-});
+/* EVENTS */
+$("header-cart").addEventListener("click", () => { renderCart(); openDrawer("cart-drawer"); });
+$("bottom-cart").addEventListener("click", () => { renderCart(); openDrawer("cart-drawer"); });
 $("header-orders").addEventListener("click", () => {
   if (!getPhone()) return openModal("login-modal");
+  startOrdersListener();
   showOrdersPage();
 });
 $("login-open").addEventListener("click", () => openModal("login-modal"));
 $("explore-menu").addEventListener("click", showMenu);
 $("checkout-open").addEventListener("click", openCheckout);
 $("checkout-form").addEventListener("submit", placeOrder);
+
 $("search-input").addEventListener("input", event => {
   searchTerm = event.target.value.trim().toLowerCase();
   renderMenu();
@@ -1088,9 +973,7 @@ $("tracking-refresh").addEventListener("click", () => {
 });
 document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeDrawers));
 $("overlay").addEventListener("click", closeDrawers);
-document.querySelectorAll("[data-modal-close]").forEach(b => b.addEventListener("click", () => {
-  closeAllModals();
-}));
+document.querySelectorAll("[data-modal-close]").forEach(b => b.addEventListener("click", closeAllModals));
 document.querySelectorAll(".modal").forEach(modal => modal.addEventListener("click", event => {
   if (event.target === modal) closeModal(modal.id);
 }));
@@ -1100,10 +983,12 @@ document.querySelectorAll(".nav-item[data-page]").forEach(button => {
     if (button.dataset.page === "menu-section") showMenu();
     if (button.dataset.page === "orders-section") {
       if (!getPhone()) return openModal("login-modal");
+      startOrdersListener();
       showOrdersPage();
     }
   });
 });
+
 $("login-form").addEventListener("submit", event => {
   event.preventDefault();
   const phone = $("login-phone").value.replace(/\D/g, "");
@@ -1121,6 +1006,15 @@ $("logout-btn").addEventListener("click", () => {
   closeModal("login-modal");
   showToast("Logged out on this device.");
 });
+
+/* Confirmation modal actions */
+$("confirmation-track").addEventListener("click", () => {
+  closeModal("confirmation-modal");
+  renderTracking();
+  openModal("order-modal");
+});
+$("confirmation-close").addEventListener("click", () => closeModal("confirmation-modal"));
+
 window.addEventListener("online", () => showToast("You're back online."));
 window.addEventListener("offline", () => showToast("Internet connection lost.", true));
 
