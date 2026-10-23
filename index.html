@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,7 @@
 
 <link rel="preconnect" href="https://www.gstatic.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -25,7 +24,7 @@ html{scroll-behavior:smooth}
 body{
   margin:0;background:var(--bg);color:var(--black);
   font-family:'Outfit',sans-serif;-webkit-font-smoothing:antialiased;
-  padding-bottom:100px;
+  padding-bottom:100px
 }
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
@@ -34,10 +33,11 @@ img{display:block;max-width:100%}
 button:focus-visible,input:focus-visible,textarea:focus-visible{
   outline:3px solid #ffb38a;outline-offset:2px
 }
+[hidden]{display:none!important}
 .topbar{
   position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);
   backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
-  padding:13px 5%;display:flex;align-items:center;justify-content:space-between;
+  padding:13px 5%;display:flex;align-items:center;justify-content:space-between
 }
 .brand{font-size:27px;font-weight:900;font-style:italic;letter-spacing:-1.5px}
 .brand span{color:var(--orange)}
@@ -229,6 +229,29 @@ textarea.form-control{resize:vertical;min-height:82px}
 }
 .confirm-pin-label{color:#15803d;font-size:11px;font-weight:900;letter-spacing:.7px}
 .confirm-pin-number{font-size:38px;letter-spacing:10px;font-weight:900;color:#166534;margin:9px 0;font-variant-numeric:tabular-nums}
+
+/* NEW: tracking bar with delivery PIN beside it */
+.order-ticker-wrap{
+  position:fixed;bottom:83px;left:15px;right:15px;
+  width:calc(100% - 30px);max-width:500px;margin:auto;z-index:39;
+  display:flex;gap:8px;align-items:stretch
+}
+.order-ticker-track{
+  flex:1;min-width:0;border:0;border-radius:15px;
+  background:var(--orange);color:white;padding:15px 8px;
+  font-size:clamp(10px,2.8vw,13px);font-weight:900;
+  box-shadow:0 8px 25px #0002
+}
+.order-ticker-pin{
+  min-width:100px;border:1px solid #b7e4c7;border-radius:15px;
+  background:#effcf4;color:#166534;padding:9px 12px;text-align:center;
+  display:flex;flex-direction:column;justify-content:center;align-items:center
+}
+.order-ticker-pin-label{font-size:9px;font-weight:900;letter-spacing:.4px}
+.order-ticker-pin-number{
+  font-size:23px;line-height:1.3;font-weight:900;letter-spacing:3px;
+  font-variant-numeric:tabular-nums
+}
 @media(max-width:760px){
   .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .wrap{padding:0 14px}.topbar{padding:12px 15px}
@@ -247,6 +270,10 @@ textarea.form-control{resize:vertical;min-height:82px}
   .hero h1{font-size:35px}.menu-grid{gap:9px}
   .progress-step{font-size:8px}.progress-step .circle{width:24px;height:24px}
   .confirm-pin-number,.delivery-pin-number{font-size:31px;letter-spacing:7px}
+  .order-ticker-wrap{left:8px;right:8px;width:calc(100% - 16px);gap:5px}
+  .order-ticker-pin{min-width:82px;padding:7px 6px}
+  .order-ticker-pin-number{font-size:19px;letter-spacing:2px}
+  .order-ticker-track{padding:12px 5px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -379,7 +406,6 @@ textarea.form-control{resize:vertical;min-height:82px}
   </div>
 </div>
 
-<!-- Order confirmation including delivery PIN -->
 <div class="modal" id="confirmation-modal">
   <div class="modal-box" style="text-align:center">
     <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px">
@@ -409,7 +435,6 @@ import {
   addDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* Keep your existing Firebase project configuration. */
 const firebaseConfig = {
   apiKey: "AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
   authDomain: "freshfry-39a10.firebaseapp.com",
@@ -425,13 +450,13 @@ const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 const DELIVERY_FEE = 20;
 const CART_KEY = "ff_cart_v2";
-const ACTIVE_STATUSES = ["pending", "accepted", "preparing", "out_for_delivery"];
+const ACTIVE_STATUSES = ["pending","accepted","preparing","out_for_delivery"];
 const STATUS_STEPS = [
-  {key:"pending", label:"Placed"},
-  {key:"accepted", label:"Accepted"},
-  {key:"preparing", label:"Preparing"},
-  {key:"out_for_delivery", label:"On the way"},
-  {key:"delivered", label:"Delivered"}
+  {key:"pending",label:"Placed"},
+  {key:"accepted",label:"Accepted"},
+  {key:"preparing",label:"Preparing"},
+  {key:"out_for_delivery",label:"On the way"},
+  {key:"delivered",label:"Delivered"}
 ];
 
 let menuItems = [];
@@ -446,179 +471,168 @@ let toastTimer = null;
 let submitting = false;
 let lastPlacedOrderId = null;
 
-function readCart() {
-  try {
-    const data = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-    if (!Array.isArray(data)) return [];
+function readCart(){
+  try{
+    const data = JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+    if(!Array.isArray(data)) return [];
     return data.filter(x =>
-      x && typeof x.id === "string" &&
-      typeof x.name === "string" &&
-      Number.isFinite(x.price) && x.price >= 0 &&
-      Number.isInteger(x.qty) && x.qty > 0
-    ).slice(0, 100);
-  } catch { return []; }
+      x && typeof x.id==="string" &&
+      typeof x.name==="string" &&
+      Number.isFinite(x.price) && x.price>=0 &&
+      Number.isInteger(x.qty) && x.qty>0
+    ).slice(0,100);
+  }catch{return []}
 }
-function saveCart() {
-  try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
-  catch { showToast("Could not save cart on this device.", true); }
+function saveCart(){
+  try{localStorage.setItem(CART_KEY,JSON.stringify(cart))}
+  catch{showToast("Could not save cart on this device.",true)}
 }
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
-  })[ch]);
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,ch=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[ch])
 }
-function money(value) {
-  return "₹" + Number(value || 0).toLocaleString("en-IN", {maximumFractionDigits:2});
+function money(value){
+  return "₹"+Number(value||0).toLocaleString("en-IN",{maximumFractionDigits:2})
 }
-function getPhone() {
-  return (localStorage.getItem("ff_phone") || "").replace(/\D/g, "").slice(-10);
+function getPhone(){
+  return (localStorage.getItem("ff_phone")||"").replace(/\D/g,"").slice(-10)
 }
-function validPhone(phone) {
-  return /^[6-9]\d{9}$/.test(phone);
-}
-function subtotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-}
-function total() {
-  return subtotal() + (cart.length ? DELIVERY_FEE : 0);
-}
-function showToast(message, error = false) {
-  const toast = $("toast");
-  toast.textContent = message;
-  toast.classList.toggle("error", error);
+function validPhone(phone){return /^[6-9]\d{9}$/.test(phone)}
+function subtotal(){return cart.reduce((sum,item)=>sum+item.price*item.qty,0)}
+function total(){return subtotal()+(cart.length?DELIVERY_FEE:0)}
+function showToast(message,error=false){
+  const toast=$("toast");
+  toast.textContent=message;
+  toast.classList.toggle("error",error);
   toast.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+  toastTimer=setTimeout(()=>toast.classList.remove("show"),2800)
 }
-function openModal(id) {
-  $(id).classList.add("show");
-}
-function closeModal(id) {
-  $(id).classList.remove("show");
-}
-function openDrawer(id) {
+function openModal(id){$(id).classList.add("show")}
+function closeModal(id){$(id).classList.remove("show")}
+function openDrawer(id){
   $("overlay").classList.add("show");
   $(id).classList.add("show");
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow="hidden"
 }
-function closeDrawers() {
+function closeDrawers(){
   $("overlay").classList.remove("show");
-  document.querySelectorAll(".drawer").forEach(el => el.classList.remove("show"));
-  document.body.style.overflow = "";
+  document.querySelectorAll(".drawer").forEach(el=>el.classList.remove("show"));
+  document.body.style.overflow=""
 }
-function closeAllModals() {
-  document.querySelectorAll(".modal").forEach(el => el.classList.remove("show"));
+function closeAllModals(){
+  document.querySelectorAll(".modal").forEach(el=>el.classList.remove("show"))
 }
-function updateUserUI() {
-  const phone = getPhone();
-  $("user-label").textContent = phone ? phone.slice(0,2) + "••••" + phone.slice(-2) : "Login";
-  $("login-phone").value = phone;
-  $("logout-btn").style.display = phone ? "block" : "none";
+function updateUserUI(){
+  const phone=getPhone();
+  $("user-label").textContent=phone?phone.slice(0,2)+"••••"+phone.slice(-2):"Login";
+  $("login-phone").value=phone;
+  $("logout-btn").style.display=phone?"block":"none"
 }
 
 /* MENU */
-function startMenuListener() {
-  if (menuUnsubscribe) menuUnsubscribe();
-  $("menu-grid").innerHTML = '<div class="loading-card"></div><div class="loading-card"></div>';
-  menuUnsubscribe = onSnapshot(collection(db, "menu"), snapshot => {
-    menuItems = snapshot.docs.map(d => {
-      const x = d.data();
+function startMenuListener(){
+  if(menuUnsubscribe) menuUnsubscribe();
+  $("menu-grid").innerHTML='<div class="loading-card"></div><div class="loading-card"></div>';
+  menuUnsubscribe=onSnapshot(collection(db,"menu"),snapshot=>{
+    menuItems=snapshot.docs.map(d=>{
+      const x=d.data();
       return {
         id:d.id,
-        name:String(x.name || "Food item"),
-        image:typeof x.image === "string" ? x.image : "",
-        type:String(x.type || "Food"),
-        description:String(x.description || x.details || ""),
+        name:String(x.name||"Food item"),
+        image:typeof x.image==="string"?x.image:"",
+        type:String(x.type||"Food"),
+        description:String(x.description||x.details||""),
         halfPrice:Number(x.halfPrice),
         fullPrice:Number(x.fullPrice),
-        available:x.available !== false && x.isAvailable !== false
-      };
-    }).filter(x =>
-      Number.isFinite(x.halfPrice) && x.halfPrice >= 0 &&
-      Number.isFinite(x.fullPrice) && x.fullPrice >= 0
+        available:x.available!==false&&x.isAvailable!==false
+      }
+    }).filter(x=>
+      Number.isFinite(x.halfPrice)&&x.halfPrice>=0&&
+      Number.isFinite(x.fullPrice)&&x.fullPrice>=0
     );
     renderCategories();
-    renderMenu();
-  }, error => {
-    console.error("Menu listener:", error);
-    $("menu-grid").innerHTML = '<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>';
-  });
+    renderMenu()
+  },error=>{
+    console.error("Menu listener:",error);
+    $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>'
+  })
 }
-function renderCategories() {
-  const categories = [...new Set(menuItems.map(x => x.type).filter(Boolean))];
-  if (selectedCategory !== "all" && !categories.includes(selectedCategory)) selectedCategory = "all";
-  $("category-row").innerHTML =
-    `<button class="chip ${selectedCategory === "all" ? "active" : ""}" data-category="all">All Items</button>` +
-    categories.map(c => `<button class="chip ${selectedCategory === c ? "active" : ""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("");
+function renderCategories(){
+  const categories=[...new Set(menuItems.map(x=>x.type).filter(Boolean))];
+  if(selectedCategory!=="all"&&!categories.includes(selectedCategory)) selectedCategory="all";
+  $("category-row").innerHTML=
+    `<button class="chip ${selectedCategory==="all"?"active":""}" data-category="all">All Items</button>`+
+    categories.map(c=>`<button class="chip ${selectedCategory===c?"active":""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("")
 }
-function renderMenu() {
-  const visible = menuItems.filter(item => {
-    const matchesCategory = selectedCategory === "all" || item.type === selectedCategory;
-    const matchesSearch = (item.name + " " + item.type + " " + item.description).toLowerCase().includes(searchTerm);
-    return matchesCategory && matchesSearch && item.available;
+function renderMenu(){
+  const visible=menuItems.filter(item=>{
+    const matchesCategory=selectedCategory==="all"||item.type===selectedCategory;
+    const matchesSearch=(item.name+" "+item.type+" "+item.description).toLowerCase().includes(searchTerm);
+    return matchesCategory&&matchesSearch&&item.available
   });
-  $("menu-count").textContent = `${visible.length} ITEMS`;
-  if (!visible.length) {
-    $("menu-grid").innerHTML = '<div class="empty-state"><i class="fa-solid fa-bowl-food"></i><p>No matching food items.</p><p>Try another search or category.</p></div>';
-    return;
+  $("menu-count").textContent=`${visible.length} ITEMS`;
+  if(!visible.length){
+    $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-bowl-food"></i><p>No matching food items.</p><p>Try another search or category.</p></div>';
+    return
   }
-  $("menu-grid").innerHTML = visible.map(item => {
-    const type = item.type.toLowerCase().includes("non") ? "nonveg" : "veg";
-    const image = safeImageURL(item.image);
+  $("menu-grid").innerHTML=visible.map(item=>{
+    const type=item.type.toLowerCase().includes("non")?"nonveg":"veg";
+    const image=safeImageURL(item.image);
     return `
       <article class="food-card">
         <div class="food-image">
-          ${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" loading="lazy" decoding="async">` : '<div class="no-image"><i class="fa-solid fa-utensils"></i></div>'}
+          ${image?`<img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" loading="lazy" decoding="async">`:'<div class="no-image"><i class="fa-solid fa-utensils"></i></div>'}
           <span class="food-type ${type}">${escapeHTML(item.type)}</span>
         </div>
         <div class="food-info">
           <h3 class="food-name">${escapeHTML(item.name)}</h3>
-          ${item.description ? `<p class="food-description">${escapeHTML(item.description)}</p>` : '<p class="food-description">Freshly prepared for you.</p>'}
+          ${item.description?`<p class="food-description">${escapeHTML(item.description)}</p>`:'<p class="food-description">Freshly prepared for you.</p>'}
           <div class="price-row">
             <button class="price-btn" data-add="${escapeHTML(item.id)}" data-size="half">Half ${money(item.halfPrice)}</button>
             <button class="price-btn full" data-add="${escapeHTML(item.id)}" data-size="full">Full ${money(item.fullPrice)}</button>
           </div>
         </div>
-      </article>`;
-  }).join("");
+      </article>`
+  }).join("")
 }
-function safeImageURL(value) {
-  try {
-    const url = new URL(value);
-    return ["https:", "http:"].includes(url.protocol) ? url.href : "";
-  } catch { return ""; }
+function safeImageURL(value){
+  try{
+    const url=new URL(value);
+    return ["https:","http:"].includes(url.protocol)?url.href:""
+  }catch{return ""}
 }
-function addToCart(itemId, size) {
-  const item = menuItems.find(x => x.id === itemId && x.available);
-  if (!item) return showToast("This item is currently unavailable.", true);
-  const price = size === "half" ? item.halfPrice : item.fullPrice;
-  const name = `${item.name} (${size === "half" ? "Half" : "Full"})`;
-  const key = item.id + "_" + size;
-  const existing = cart.find(x => x.id === key);
-  if (existing) existing.qty = Math.min(existing.qty + 1, 99);
-  else cart.push({id:key, menuId:item.id, name, price, qty:1, size});
+function addToCart(itemId,size){
+  const item=menuItems.find(x=>x.id===itemId&&x.available);
+  if(!item) return showToast("This item is currently unavailable.",true);
+  const price=size==="half"?item.halfPrice:item.fullPrice;
+  const name=`${item.name} (${size==="half"?"Half":"Full"})`;
+  const key=item.id+"_"+size;
+  const existing=cart.find(x=>x.id===key);
+  if(existing) existing.qty=Math.min(existing.qty+1,99);
+  else cart.push({id:key,menuId:item.id,name,price,qty:1,size});
   saveCart();
   renderCart();
-  showToast(name + " added to your box");
+  showToast(name+" added to your box")
 }
 
 /* CART */
-function renderCart() {
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
-  $("cart-count").textContent = count > 99 ? "99+" : count;
-  $("cart-count").hidden = count === 0;
-  $("cart-title-count").textContent = `(${count})`;
-  $("subtotal").textContent = money(subtotal());
-  $("delivery-fee").textContent = money(cart.length ? DELIVERY_FEE : 0);
-  $("grand-total").textContent = money(total());
-  $("checkout-total").textContent = money(total());
-  $("checkout-open").disabled = !cart.length;
-
-  if (!cart.length) {
-    $("cart-content").innerHTML = '<div class="empty-state"><i class="fa-solid fa-bag-shopping"></i><p>Your box is empty.</p><p>Add something delicious from the menu.</p></div>';
-    return;
+function renderCart(){
+  const count=cart.reduce((sum,item)=>sum+item.qty,0);
+  $("cart-count").textContent=count>99?"99+":count;
+  $("cart-count").hidden=count===0;
+  $("cart-title-count").textContent=`(${count})`;
+  $("subtotal").textContent=money(subtotal());
+  $("delivery-fee").textContent=money(cart.length?DELIVERY_FEE:0);
+  $("grand-total").textContent=money(total());
+  $("checkout-total").textContent=money(total());
+  $("checkout-open").disabled=!cart.length;
+  if(!cart.length){
+    $("cart-content").innerHTML='<div class="empty-state"><i class="fa-solid fa-bag-shopping"></i><p>Your box is empty.</p><p>Add something delicious from the menu.</p></div>';
+    return
   }
-  $("cart-content").innerHTML = cart.map(item => `
+  $("cart-content").innerHTML=cart.map(item=>`
     <div class="cart-line">
       <div class="cart-item-icon"><i class="fa-solid fa-utensils"></i></div>
       <div class="cart-item-info">
@@ -630,75 +644,70 @@ function renderCart() {
         </div>
       </div>
       <div style="text-align:right">
-        <strong style="font-size:12px">${money(item.price * item.qty)}</strong><br>
+        <strong style="font-size:12px">${money(item.price*item.qty)}</strong><br>
         <button class="remove-btn" data-remove="${escapeHTML(item.id)}" aria-label="Remove item"><i class="fa-regular fa-trash-can"></i></button>
       </div>
-    </div>`).join("");
+    </div>`).join("")
 }
-function changeQuantity(id, delta) {
-  const item = cart.find(x => x.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
-  if (item.qty > 99) item.qty = 99;
+function changeQuantity(id,delta){
+  const item=cart.find(x=>x.id===id);
+  if(!item)return;
+  item.qty+=delta;
+  if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+  if(item.qty>99)item.qty=99;
   saveCart();
-  renderCart();
+  renderCart()
 }
-function removeItem(id) {
-  cart = cart.filter(x => x.id !== id);
+function removeItem(id){
+  cart=cart.filter(x=>x.id!==id);
   saveCart();
-  renderCart();
+  renderCart()
 }
 
 /* CHECKOUT + DELIVERY PIN */
-function openCheckout() {
-  if (!cart.length) return showToast("Your box is empty.", true);
+function openCheckout(){
+  if(!cart.length)return showToast("Your box is empty.",true);
   closeDrawers();
-  $("customer-phone").value = getPhone();
-  $("customer-name").value = localStorage.getItem("ff_customer_name") || "";
-  $("customer-address").value = localStorage.getItem("ff_customer_address") || "";
-  openModal("checkout-modal");
+  $("customer-phone").value=getPhone();
+  $("customer-name").value=localStorage.getItem("ff_customer_name")||"";
+  $("customer-address").value=localStorage.getItem("ff_customer_address")||"";
+  openModal("checkout-modal")
 }
-function generateDeliveryPin() {
-  // Four-digit PIN; frontend-generated for compatibility with the current setup.
-  // For production, generate and verify the PIN in a trusted backend.
-  return String(crypto.getRandomValues(new Uint32Array(1))[0] % 9000 + 1000);
+function generateDeliveryPin(){
+  // Existing frontend PIN generation. Production should use a trusted backend.
+  return String(crypto.getRandomValues(new Uint32Array(1))[0]%9000+1000)
 }
-async function placeOrder(event) {
+async function placeOrder(event){
   event.preventDefault();
-  if (submitting) return;
-  if (!cart.length) return showToast("Your box is empty.", true);
+  if(submitting)return;
+  if(!cart.length)return showToast("Your box is empty.",true);
 
-  const name = $("customer-name").value.trim();
-  const phone = $("customer-phone").value.replace(/\D/g, "");
-  const address = $("customer-address").value.trim();
-  const note = $("customer-note").value.trim();
-  const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || "COD";
+  const name=$("customer-name").value.trim();
+  const phone=$("customer-phone").value.replace(/\D/g,"");
+  const address=$("customer-address").value.trim();
+  const note=$("customer-note").value.trim();
+  const paymentMethod=document.querySelector('input[name="payment-method"]:checked')?.value||"COD";
 
-  if (name.length < 2) return showToast("Please enter your full name.", true);
-  if (!validPhone(phone)) return showToast("Enter a valid 10-digit Indian mobile number.", true);
-  if (address.length < 8) return showToast("Please enter your complete address.", true);
-  if (!cart.length || cart.some(i => !Number.isFinite(i.price) || i.price < 0 || i.qty < 1)) {
-    return showToast("Please check your cart.", true);
+  if(name.length<2)return showToast("Please enter your full name.",true);
+  if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
+  if(address.length<8)return showToast("Please enter your complete address.",true);
+  if(!cart.length||cart.some(i=>!Number.isFinite(i.price)||i.price<0||i.qty<1)){
+    return showToast("Please check your cart.",true)
   }
 
-  // Prices and totals from a browser are not trusted; validate on a trusted server in production.
-  const orderItems = cart.map(i => ({
-    name:i.name,
-    price:i.price,
-    qty:i.qty,
-    menuItemId:i.menuId || ""
+  const orderItems=cart.map(i=>({
+    name:i.name,price:i.price,qty:i.qty,menuItemId:i.menuId||""
   }));
-  const orderTotal = total();
-  const deliveryPin = generateDeliveryPin();
+  const orderTotal=total();
+  const deliveryPin=generateDeliveryPin();
 
-  submitting = true;
-  const button = $("place-order-btn");
-  button.disabled = true;
-  button.textContent = "Placing order...";
+  submitting=true;
+  const button=$("place-order-btn");
+  button.disabled=true;
+  button.textContent="Placing order...";
 
-  try {
-    const ref = await addDoc(collection(db, "orders"), {
+  try{
+    const ref=await addDoc(collection(db,"orders"),{
       customerPhone:phone,
       customerName:name,
       deliveryAddress:address,
@@ -708,315 +717,315 @@ async function placeOrder(event) {
       paymentStatus:"unverified",
       items:orderItems,
       subtotal:subtotal(),
-      deliveryFee:cart.length ? DELIVERY_FEE : 0,
+      deliveryFee:cart.length?DELIVERY_FEE:0,
       total:String(orderTotal),
       deliveryPin:deliveryPin,
       status:"pending",
       createdAt:serverTimestamp()
     });
 
-    lastPlacedOrderId = ref.id;
-    localStorage.setItem("ff_last_order_id", ref.id);
-    localStorage.setItem("ff_last_delivery_pin", deliveryPin);
-    localStorage.setItem("ff_phone", phone);
-    localStorage.setItem("ff_customer_name", name);
-    localStorage.setItem("ff_customer_address", address);
+    lastPlacedOrderId=ref.id;
+    localStorage.setItem("ff_last_order_id",ref.id);
+    localStorage.setItem("ff_last_delivery_pin",deliveryPin);
+    localStorage.setItem("ff_phone",phone);
+    localStorage.setItem("ff_customer_name",name);
+    localStorage.setItem("ff_customer_address",address);
 
-    cart = [];
+    cart=[];
     saveCart();
     renderCart();
     updateUserUI();
     closeModal("checkout-modal");
 
-    $("confirmation-order-id").textContent = "Order #" + ref.id;
-    $("confirmation-pin").textContent = deliveryPin;
+    $("confirmation-order-id").textContent="Order #"+ref.id;
+    $("confirmation-pin").textContent=deliveryPin;
     openModal("confirmation-modal");
 
     startOrdersListener();
-    selectedOrderId = ref.id;
-    showOrdersPage();
-  } catch (error) {
-    console.error("Order creation failed:", error);
-    showToast("Order could not be placed. Check your connection or Firebase permissions.", true);
-  } finally {
-    submitting = false;
-    button.disabled = false;
-    button.innerHTML = 'Place Order';
+    selectedOrderId=ref.id;
+    showOrdersPage()
+  }catch(error){
+    console.error("Order creation failed:",error);
+    showToast("Order could not be placed. Check your connection or Firebase permissions.",true)
+  }finally{
+    submitting=false;
+    button.disabled=false;
+    button.textContent="Place Order"
   }
 }
 
 /* ORDERS & LIVE TRACKING */
-function normalizeStatus(value) {
-  const s = String(value || "pending").toLowerCase().trim().replace(/[\s-]+/g, "_");
-  const aliases = {
-    confirmed:"accepted",
-    cooking:"preparing",
-    on_the_way:"out_for_delivery",
-    outfordelivery:"out_for_delivery",
-    complete:"delivered",
-    completed:"delivered",
-    cancelled:"cancelled",
-    canceled:"cancelled"
+function normalizeStatus(value){
+  const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
+  const aliases={
+    confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",
+    outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",
+    cancelled:"cancelled",canceled:"cancelled"
   };
-  return aliases[s] || s;
+  return aliases[s]||s
 }
-function statusLabel(status) {
+function statusLabel(status){
   return ({
-    pending:"Pending",
-    accepted:"Accepted",
-    preparing:"Preparing",
-    out_for_delivery:"Out for delivery",
-    delivered:"Delivered",
-    cancelled:"Cancelled",
-    rejected:"Rejected"
-  })[normalizeStatus(status)] || String(status || "Pending");
+    pending:"Pending",accepted:"Accepted",preparing:"Preparing",
+    out_for_delivery:"Out for delivery",delivered:"Delivered",
+    cancelled:"Cancelled",rejected:"Rejected"
+  })[normalizeStatus(status)]||String(status||"Pending")
 }
-function startOrdersListener() {
-  const phone = getPhone();
-  if (ordersUnsubscribe) {
-    ordersUnsubscribe();
-    ordersUnsubscribe = null;
-  }
-  orders = [];
-  if (!validPhone(phone)) {
+function startOrdersListener(){
+  const phone=getPhone();
+  if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null}
+  orders=[];
+  if(!validPhone(phone)){
     renderOrders();
-    return;
+    updateOrderTicker();
+    return
   }
-
-  ordersUnsubscribe = onSnapshot(
-    query(collection(db, "orders"), where("customerPhone", "==", phone)),
-    snapshot => {
-      orders = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
-      orders.sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+  ordersUnsubscribe=onSnapshot(
+    query(collection(db,"orders"),where("customerPhone","==",phone)),
+    snapshot=>{
+      orders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+      orders.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
       renderOrders();
-      if (selectedOrderId) renderTracking();
-      updateOrderTicker();
+      if(selectedOrderId)renderTracking();
+      updateOrderTicker()
     },
-    error => {
-      console.error("Order listener:", error);
-      $("orders-list").innerHTML = '<div class="empty-state"><p>Could not load your orders. Please try again later.</p></div>';
+    error=>{
+      console.error("Order listener:",error);
+      $("orders-list").innerHTML='<div class="empty-state"><p>Could not load your orders. Please try again later.</p></div>'
     }
-  );
+  )
 }
-function renderOrders() {
-  if (!getPhone()) {
-    $("orders-list").innerHTML = '<div class="empty-state"><i class="fa-regular fa-user"></i><p>Login with your phone number to view orders.</p><button class="primary-btn" id="orders-login">Login</button></div>';
-    return;
+function renderOrders(){
+  if(!getPhone()){
+    $("orders-list").innerHTML='<div class="empty-state"><i class="fa-regular fa-user"></i><p>Login with your phone number to view orders.</p><button class="primary-btn" id="orders-login">Login</button></div>';
+    return
   }
-  if (!orders.length) {
-    $("orders-list").innerHTML = '<div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders found yet.</p><p>Your orders will appear here after checkout.</p><button class="secondary-btn" id="orders-menu">Explore menu</button></div>';
-    return;
+  if(!orders.length){
+    $("orders-list").innerHTML='<div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders found yet.</p><p>Your orders will appear here after checkout.</p><button class="secondary-btn" id="orders-menu">Explore menu</button></div>';
+    return
   }
-  $("orders-list").innerHTML = orders.map(order => {
-    const status = normalizeStatus(order.status);
-    const items = Array.isArray(order.items) ? order.items : [];
+  $("orders-list").innerHTML=orders.map(order=>{
+    const status=normalizeStatus(order.status);
+    const items=Array.isArray(order.items)?order.items:[];
     return `
       <article class="order-card">
         <div class="order-card-top">
           <div><div class="order-id">ORDER #${escapeHTML(order.id.slice(0,8).toUpperCase())}</div>
-          <strong style="font-size:16px">${money(parseFloat(order.total) || 0)}</strong></div>
+          <strong style="font-size:16px">${money(parseFloat(order.total)||0)}</strong></div>
           <span class="order-status">${escapeHTML(statusLabel(status))}</span>
         </div>
-        <div class="order-items">${items.map(i => `${escapeHTML(i.name || "Item")} × ${Number(i.qty) || 1}`).join("<br>") || "Order details unavailable"}</div>
+        <div class="order-items">${items.map(i=>`${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}`).join("<br>")||"Order details unavailable"}</div>
         <div class="order-card-bottom">
-          <span>${escapeHTML(order.paymentMethod || "Payment details unavailable")}</span>
+          <span>${escapeHTML(order.paymentMethod||"Payment details unavailable")}</span>
           <button class="secondary-btn" data-track="${escapeHTML(order.id)}">Track details</button>
         </div>
-      </article>`;
-  }).join("");
+      </article>`
+  }).join("")
 }
-function renderTracking() {
-  const order = orders.find(x => x.id === selectedOrderId);
-  if (!order) {
-    $("tracking-content").innerHTML = '<p class="muted">Waiting for order details. Please refresh shortly.</p>';
-    return;
+function renderTracking(){
+  const order=orders.find(x=>x.id===selectedOrderId);
+  if(!order){
+    $("tracking-content").innerHTML='<p class="muted">Waiting for order details. Please refresh shortly.</p>';
+    return
   }
-
-  const status = normalizeStatus(order.status);
-  const cancelled = ["cancelled","rejected"].includes(status);
-  const current = STATUS_STEPS.findIndex(x => x.key === status);
-  const steps = STATUS_STEPS.map((step,index) => {
-    const done = !cancelled && current >= index;
-    return `<div class="progress-step ${done ? "done" : ""}">
-      <div class="circle"><i class="fa-solid ${done ? "fa-check" : "fa-circle"}"></i></div>
+  const status=normalizeStatus(order.status);
+  const cancelled=["cancelled","rejected"].includes(status);
+  const current=STATUS_STEPS.findIndex(x=>x.key===status);
+  const steps=STATUS_STEPS.map((step,index)=>{
+    const done=!cancelled&&current>=index;
+    return `<div class="progress-step ${done?"done":""}">
+      <div class="circle"><i class="fa-solid ${done?"fa-check":"fa-circle"}"></i></div>
       ${escapeHTML(step.label)}
-    </div>`;
+    </div>`
   }).join("");
 
-  const items = Array.isArray(order.items) ? order.items : [];
-  const pin = /^\d{4}$/.test(String(order.deliveryPin || "")) ? String(order.deliveryPin) : "";
-  const showPin = status === "out_for_delivery" && pin;
+  const items=Array.isArray(order.items)?order.items:[];
+  const pin=/^\d{4}$/.test(String(order.deliveryPin||""))?String(order.deliveryPin):"";
+  const showPin=status==="out_for_delivery"&&pin;
 
-  $("tracking-id").textContent = "Order #" + order.id;
-  $("tracking-content").innerHTML = `
+  $("tracking-id").textContent="Order #"+order.id;
+  $("tracking-content").innerHTML=`
     <div class="status-banner">
       <i class="fa-solid fa-fire-burner"></i>
       Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
       <div style="color:#bbb;font-size:10px;margin-top:5px">This status updates when the restaurant updates your order.</div>
     </div>
-
-    ${showPin ? `
+    ${showPin?`
       <div class="delivery-pin-card">
         <div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div>
         <div class="delivery-pin-number">${escapeHTML(pin)}</div>
         <p class="delivery-pin-note">Share this PIN with your rider when your food arrives. Keep it private until delivery.</p>
-      </div>
-    ` : ""}
-
-    ${!pin && status !== "delivered" && !cancelled ? `
-      <p class="muted" style="margin-top:12px">If this is an older order, a delivery PIN may not be available. New orders will have a PIN.</p>
-    ` : ""}
-
+      </div>`:""}
+    ${!pin&&status!=="delivered"&&!cancelled?`
+      <p class="muted" style="margin-top:12px">If this is an older order, a delivery PIN may not be available. New orders will have a PIN.</p>`:""}
     ${cancelled
-      ? `<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}. Please contact the restaurant if you need assistance.</p>`
-      : `<div class="progress">${steps}</div>`}
-
+      ?`<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}. Please contact the restaurant if you need assistance.</p>`
+      :`<div class="progress">${steps}</div>`}
     <h3 style="font-size:14px;margin:22px 0 10px">Order summary</h3>
-    ${items.map(i => `<div class="total-row"><span>${escapeHTML(i.name || "Item")} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
+    ${items.map(i=>`<div class="total-row"><span>${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
     <div class="total-row final"><span>Total</span><span>${money(parseFloat(order.total)||0)}</span></div>
-    ${order.deliveryAddress ? `<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>` : ""}
-    <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod || "Not specified")}. Payment status: ${escapeHTML(order.paymentStatus || "Not recorded")}.</p>`;
+    ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
+    <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"Not recorded")}.</p>`
 }
-function updateOrderTicker() {
-  const active = orders.find(o => ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
-  let ticker = $("order-ticker");
-  if (!active) {
-    if (ticker) ticker.remove();
-    return;
+
+/* NEW: live tracking button with PIN beside it */
+function updateOrderTicker(){
+  let wrap=$("order-ticker-wrap");
+  const active=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
+
+  if(!active){
+    if(wrap)wrap.remove();
+    return
   }
-  if (!ticker) {
-    ticker = document.createElement("button");
-    ticker.id = "order-ticker";
-    ticker.className = "primary-btn";
-    ticker.style.cssText = "position:fixed;bottom:83px;left:15px;right:15px;width:calc(100% - 30px);max-width:500px;margin:auto;z-index:39;box-shadow:0 8px 25px #0002";
-    document.body.appendChild(ticker);
-    ticker.addEventListener("click", () => {
-      const latestActive = orders.find(o => ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
-      if (!latestActive) return;
-      selectedOrderId = latestActive.id;
+
+  if(!wrap){
+    wrap=document.createElement("div");
+    wrap.id="order-ticker-wrap";
+    wrap.className="order-ticker-wrap";
+    wrap.innerHTML=`
+      <button type="button" id="order-ticker-track" class="order-ticker-track">
+        <i class="fa-solid fa-fire-burner"></i>
+        <span id="order-ticker-status">ORDER PENDING · TRACK</span>
+      </button>
+      <div id="order-ticker-pin" class="order-ticker-pin" hidden>
+        <span class="order-ticker-pin-label">DELIVERY PIN</span>
+        <span id="order-ticker-pin-number" class="order-ticker-pin-number">----</span>
+      </div>`;
+    document.body.appendChild(wrap);
+
+    $("order-ticker-track").addEventListener("click",()=>{
+      const latestActive=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
+      if(!latestActive)return;
+      selectedOrderId=latestActive.id;
       renderTracking();
-      openModal("order-modal");
-    });
+      openModal("order-modal")
+    })
   }
-  ticker.innerHTML = `<i class="fa-solid fa-fire-burner"></i> Order ${escapeHTML(statusLabel(active.status))} · Track`;
+
+  const status=normalizeStatus(active.status);
+  const pin=String(active.deliveryPin||"");
+  const showPin=status==="out_for_delivery"&&/^\d{4}$/.test(pin);
+
+  $("order-ticker-status").textContent=`${statusLabel(status).toUpperCase()} · TRACK`;
+  $("order-ticker-pin").hidden=!showPin;
+  $("order-ticker-pin-number").textContent=showPin?pin:"----"
 }
 
 /* NAVIGATION */
-function showOrdersPage() {
-  $("menu-section").hidden = true;
-  $("orders-section").hidden = false;
-  document.querySelectorAll(".nav-item[data-page]").forEach(b => b.classList.toggle("active", b.dataset.page === "orders-section"));
-  $("orders-section").scrollIntoView({behavior:"smooth",block:"start"});
+function showOrdersPage(){
+  $("menu-section").hidden=true;
+  $("orders-section").hidden=false;
+  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="orders-section"));
+  $("orders-section").scrollIntoView({behavior:"smooth",block:"start"})
 }
-function showHome() {
-  $("menu-section").hidden = false;
-  $("orders-section").hidden = true;
-  document.querySelectorAll(".nav-item[data-page]").forEach(b => b.classList.toggle("active", b.dataset.page === "home"));
-  window.scrollTo({top:0,behavior:"smooth"});
+function showHome(){
+  $("menu-section").hidden=false;
+  $("orders-section").hidden=true;
+  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="home"));
+  window.scrollTo({top:0,behavior:"smooth"})
 }
-function showMenu() {
-  $("menu-section").hidden = false;
-  $("orders-section").hidden = true;
-  document.querySelectorAll(".nav-item[data-page]").forEach(b => b.classList.toggle("active", b.dataset.page === "menu-section"));
-  $("menu-section").scrollIntoView({behavior:"smooth",block:"start"});
+function showMenu(){
+  $("menu-section").hidden=false;
+  $("orders-section").hidden=true;
+  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="menu-section"));
+  $("menu-section").scrollIntoView({behavior:"smooth",block:"start"})
 }
 
 /* EVENTS */
-$("header-cart").addEventListener("click", () => { renderCart(); openDrawer("cart-drawer"); });
-$("bottom-cart").addEventListener("click", () => { renderCart(); openDrawer("cart-drawer"); });
-$("header-orders").addEventListener("click", () => {
-  if (!getPhone()) return openModal("login-modal");
+$("header-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer")});
+$("bottom-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer")});
+$("header-orders").addEventListener("click",()=>{
+  if(!getPhone())return openModal("login-modal");
   startOrdersListener();
-  showOrdersPage();
+  showOrdersPage()
 });
-$("login-open").addEventListener("click", () => openModal("login-modal"));
-$("explore-menu").addEventListener("click", showMenu);
-$("checkout-open").addEventListener("click", openCheckout);
-$("checkout-form").addEventListener("submit", placeOrder);
+$("login-open").addEventListener("click",()=>openModal("login-modal"));
+$("explore-menu").addEventListener("click",showMenu);
+$("checkout-open").addEventListener("click",openCheckout);
+$("checkout-form").addEventListener("submit",placeOrder);
 
-$("search-input").addEventListener("input", event => {
-  searchTerm = event.target.value.trim().toLowerCase();
-  renderMenu();
+$("search-input").addEventListener("input",event=>{
+  searchTerm=event.target.value.trim().toLowerCase();
+  renderMenu()
 });
-$("category-row").addEventListener("click", event => {
-  const button = event.target.closest("[data-category]");
-  if (!button) return;
-  selectedCategory = button.dataset.category;
+$("category-row").addEventListener("click",event=>{
+  const button=event.target.closest("[data-category]");
+  if(!button)return;
+  selectedCategory=button.dataset.category;
   renderCategories();
-  renderMenu();
+  renderMenu()
 });
-$("menu-grid").addEventListener("click", event => {
-  const button = event.target.closest("[data-add]");
-  if (button) addToCart(button.dataset.add, button.dataset.size);
-  if (event.target.closest("#retry-menu")) startMenuListener();
+$("menu-grid").addEventListener("click",event=>{
+  const button=event.target.closest("[data-add]");
+  if(button)addToCart(button.dataset.add,button.dataset.size);
+  if(event.target.closest("#retry-menu"))startMenuListener()
 });
-$("cart-content").addEventListener("click", event => {
-  const qty = event.target.closest("[data-qty]");
-  const remove = event.target.closest("[data-remove]");
-  if (qty) changeQuantity(qty.dataset.qty, Number(qty.dataset.delta));
-  if (remove) removeItem(remove.dataset.remove);
+$("cart-content").addEventListener("click",event=>{
+  const qty=event.target.closest("[data-qty]");
+  const remove=event.target.closest("[data-remove]");
+  if(qty)changeQuantity(qty.dataset.qty,Number(qty.dataset.delta));
+  if(remove)removeItem(remove.dataset.remove)
 });
-$("orders-list").addEventListener("click", event => {
-  if (event.target.closest("#orders-login")) return openModal("login-modal");
-  if (event.target.closest("#orders-menu")) return showMenu();
-  const button = event.target.closest("[data-track]");
-  if (button) {
-    selectedOrderId = button.dataset.track;
+$("orders-list").addEventListener("click",event=>{
+  if(event.target.closest("#orders-login"))return openModal("login-modal");
+  if(event.target.closest("#orders-menu"))return showMenu();
+  const button=event.target.closest("[data-track]");
+  if(button){
+    selectedOrderId=button.dataset.track;
     renderTracking();
-    openModal("order-modal");
+    openModal("order-modal")
   }
 });
-$("tracking-refresh").addEventListener("click", () => {
+$("tracking-refresh").addEventListener("click",()=>{
   startOrdersListener();
   renderTracking();
-  showToast("Refreshing order details...");
+  showToast("Refreshing order details...")
 });
-document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeDrawers));
-$("overlay").addEventListener("click", closeDrawers);
-document.querySelectorAll("[data-modal-close]").forEach(b => b.addEventListener("click", closeAllModals));
-document.querySelectorAll(".modal").forEach(modal => modal.addEventListener("click", event => {
-  if (event.target === modal) closeModal(modal.id);
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeDrawers));
+$("overlay").addEventListener("click",closeDrawers);
+document.querySelectorAll("[data-modal-close]").forEach(b=>b.addEventListener("click",closeAllModals));
+document.querySelectorAll(".modal").forEach(modal=>modal.addEventListener("click",event=>{
+  if(event.target===modal)closeModal(modal.id)
 }));
-document.querySelectorAll(".nav-item[data-page]").forEach(button => {
-  button.addEventListener("click", () => {
-    if (button.dataset.page === "home") showHome();
-    if (button.dataset.page === "menu-section") showMenu();
-    if (button.dataset.page === "orders-section") {
-      if (!getPhone()) return openModal("login-modal");
+document.querySelectorAll(".nav-item[data-page]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    if(button.dataset.page==="home")showHome();
+    if(button.dataset.page==="menu-section")showMenu();
+    if(button.dataset.page==="orders-section"){
+      if(!getPhone())return openModal("login-modal");
       startOrdersListener();
-      showOrdersPage();
+      showOrdersPage()
     }
-  });
+  })
 });
 
-$("login-form").addEventListener("submit", event => {
+$("login-form").addEventListener("submit",event=>{
   event.preventDefault();
-  const phone = $("login-phone").value.replace(/\D/g, "");
-  if (!validPhone(phone)) return showToast("Enter a valid 10-digit Indian mobile number.", true);
-  localStorage.setItem("ff_phone", phone);
+  const phone=$("login-phone").value.replace(/\D/g,"");
+  if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
+  localStorage.setItem("ff_phone",phone);
   updateUserUI();
   closeModal("login-modal");
   startOrdersListener();
-  showToast("Phone number saved on this device.");
+  showToast("Phone number saved on this device.")
 });
-$("logout-btn").addEventListener("click", () => {
+$("logout-btn").addEventListener("click",()=>{
   localStorage.removeItem("ff_phone");
   updateUserUI();
   startOrdersListener();
   closeModal("login-modal");
-  showToast("Logged out on this device.");
+  showToast("Logged out on this device.")
 });
 
-/* Confirmation modal actions */
-$("confirmation-track").addEventListener("click", () => {
+$("confirmation-track").addEventListener("click",()=>{
   closeModal("confirmation-modal");
   renderTracking();
-  openModal("order-modal");
+  openModal("order-modal")
 });
-$("confirmation-close").addEventListener("click", () => closeModal("confirmation-modal"));
+$("confirmation-close").addEventListener("click",()=>closeModal("confirmation-modal"));
 
-window.addEventListener("online", () => showToast("You're back online."));
-window.addEventListener("offline", () => showToast("Internet connection lost.", true));
+window.addEventListener("online",()=>showToast("You're back online."));
+window.addEventListener("offline",()=>showToast("Internet connection lost.",true));
 
 /* START */
 updateUserUI();
