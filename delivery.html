@@ -3,316 +3,271 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101114">
-<title>Freshfry Partner | Rider V2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>Freshfry Partner | Delivery App</title>
 
-<link rel="preconnect" href="https://www.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 :root {
-  --orange:#ff5e00;
-  --orange-light:#fff0e6;
-  --dark:#101114;
-  --muted:#9296a0;
-  --bg:#f5f6f8;
-  --line:#eceef2;
-  --green:#16a34a;
-  --red:#dc2626;
+  --bg:#f3f5f9;
+  --card:#ffffff;
+  --ink:#101827;
+  --muted:#758096;
+  --orange:#ff6b27;
+  --green:#159b64;
+  --line:#e8ebf1;
+  --shadow:0 8px 28px rgba(18,28,45,.07);
 }
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--dark);
-  font-family:'Plus Jakarta Sans',sans-serif;
-  padding-bottom:100px;-webkit-font-smoothing:antialiased
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent;
 }
-button,input{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-.hidden{display:none!important}
-.topbar{
-  background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
-  padding:18px 20px;display:flex;justify-content:space-between;
-  align-items:center;border-bottom:1px solid var(--line);
-  position:sticky;top:0;z-index:20
+button,input { font:inherit; }
+button { cursor:pointer; }
+.topbar {
+  background:#101827;
+  color:white;
+  padding:20px 18px 24px;
+  border-radius:0 0 26px 26px;
 }
-.logo{font-size:19px;font-weight:800;letter-spacing:-.7px}
-.logo span{color:var(--orange)}
-.sub{font-size:10px;color:var(--muted);margin-top:4px}
-.status-btn{
-  border:0;padding:11px 15px;border-radius:13px;
-  font-size:10px;font-weight:800;color:white;background:var(--green)
+.topline { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:900; font-size:19px; }
+.brand-icon {
+  width:40px;height:40px;border-radius:13px;
+  display:grid;place-items:center;background:var(--orange);color:white;
 }
-.online-dot{
-  display:inline-block;width:7px;height:7px;background:#fff;
-  border-radius:50%;margin-right:6px
+.brand small { display:block;font-size:10px;letter-spacing:2px;color:#abb4c4;margin-top:3px; }
+.online-pill {
+  background:#183e34;color:#71edb8;border:1px solid #28664e;
+  border-radius:30px;padding:8px 11px;font-size:11px;font-weight:800;
 }
-.container{max-width:850px;margin:auto;padding:20px 15px}
-.welcome{margin:8px 0 22px}
-.welcome h1{font-size:28px;font-weight:800;letter-spacing:-1.3px;margin:0}
-.welcome p{font-size:12px;color:var(--muted);margin:7px 0 0}
-.wallet{
-  background:linear-gradient(135deg,#111827,#263449);
-  color:white;border-radius:27px;padding:23px;
-  position:relative;overflow:hidden
+.welcome { margin-top:24px; }
+.welcome .eyebrow { color:#a9b4c7;font-size:11px;font-weight:700;letter-spacing:1.5px; }
+.welcome h1 { margin:7px 0 5px;font-size:26px;line-height:1.2; }
+.welcome p { margin:0;color:#abb4c4;font-size:13px; }
+.container { max-width:680px;margin:auto;padding:18px 15px 40px; }
+.card {
+  background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:18px;margin-bottom:15px;
+  box-shadow:var(--shadow);
 }
-.wallet:after{
-  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
-  border:30px solid #ffffff0b;right:-60px;top:-65px
+.login-card { margin-top:20px; }
+.section-title { font-size:16px;font-weight:900;margin:0 0 5px; }
+.section-sub { color:var(--muted);font-size:12px;line-height:1.6;margin:0 0 18px; }
+.field { margin:14px 0; }
+.field label { display:block;font-size:12px;font-weight:800;margin-bottom:8px; }
+.field input {
+  width:100%;padding:15px;border:1px solid #dfe4ed;border-radius:13px;
+  outline:none;background:#fafbfe;color:var(--ink);font-size:15px;
 }
-.wallet-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
-.wallet-label{font-size:10px;color:#b8c0ce;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.wallet-icon{
-  width:42px;height:42px;border-radius:15px;background:#ffffff13;
-  display:grid;place-items:center;color:#ff9a63
+.field input:focus { border-color:var(--orange);box-shadow:0 0 0 3px #ff6b271c; }
+.primary {
+  width:100%;border:0;background:var(--orange);color:white;
+  padding:15px;border-radius:13px;font-size:13px;font-weight:900;
+  box-shadow:0 7px 16px #ff6b2728;
 }
-.earning{font-size:38px;font-weight:800;letter-spacing:-2px;margin:15px 0 6px}
-.goal-row{display:flex;justify-content:space-between;font-size:10px;color:#c1c8d3;margin:20px 0 9px}
-.progress{height:7px;background:#ffffff1b;border-radius:20px;overflow:hidden}
-.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#ff9a50,var(--orange));transition:width .3s}
-.goal-note{font-size:10px;color:#ffbd95;margin-top:9px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0 25px}
-.stat{
-  padding:18px;background:white;border:1px solid var(--line);
-  border-radius:21px
+.primary:disabled { opacity:.6;cursor:wait; }
+.secondary {
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  border-radius:11px;padding:11px 13px;font-size:12px;font-weight:800;
 }
-.stat-icon{
-  width:36px;height:36px;border-radius:12px;background:var(--orange-light);
-  color:var(--orange);display:grid;place-items:center;margin-bottom:13px
+.stats { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px; }
+.stat { background:white;border:1px solid var(--line);border-radius:17px;padding:15px 11px;box-shadow:var(--shadow); }
+.stat .icon { color:var(--orange);font-size:17px; }
+.stat strong { display:block;font-size:23px;margin:9px 0 4px;overflow-wrap:anywhere; }
+.stat span { color:var(--muted);font-size:10px;font-weight:800; }
+.section-head { display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 2px 12px; }
+.section-head h2 { font-size:17px;margin:0;font-weight:900; }
+.count { background:#fff0e8;color:#d94c0c;padding:6px 10px;border-radius:30px;font-size:11px;font-weight:900; }
+.order-card { background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:13px;box-shadow:var(--shadow); }
+.order-top { display:flex;justify-content:space-between;align-items:flex-start;gap:10px; }
+.order-number { font-size:13px;font-weight:900;overflow-wrap:anywhere; }
+.order-date { color:var(--muted);font-size:11px;margin-top:5px; }
+.status {
+  border-radius:30px;background:#fff0e8;color:#d94c0c;
+  padding:7px 9px;font-size:9px;font-weight:900;white-space:nowrap;
 }
-.stat-label{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
-.stat-value{font-size:25px;font-weight:800;letter-spacing:-1px;margin-top:5px}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin:28px 2px 14px}
-.section-head h2{font-size:15px;font-weight:800;margin:0}
-.section-head span{font-size:10px;color:var(--muted)}
-.order-card{
-  background:white;border:1px solid var(--line);border-radius:23px;
-  padding:17px;margin-bottom:14px
+.status.done { background:#e7f8ef;color:#138351; }
+.order-divider { border-top:1px dashed #e4e8ef;margin:14px 0; }
+.info-row { display:flex;gap:11px;align-items:flex-start;margin:13px 0; }
+.info-icon {
+  flex:0 0 34px;height:34px;border-radius:11px;
+  display:grid;place-items:center;background:#fff2eb;color:var(--orange);
 }
-.order-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.customer-name{font-size:17px;font-weight:800;overflow-wrap:anywhere}
-.order-id{font-size:10px;color:var(--muted);margin-top:5px}
-.order-amount{font-size:20px;font-weight:800;text-align:right}
-.tag{
-  display:inline-block;margin-top:7px;padding:6px 9px;border-radius:9px;
-  background:var(--orange-light);color:var(--orange);
-  font-size:9px;font-weight:800;text-transform:uppercase
+.info-text { min-width:0;flex:1; }
+.info-text label { display:block;color:var(--muted);font-size:10px;font-weight:800;margin-bottom:5px; }
+.info-text div { font-size:13px;font-weight:700;line-height:1.55;overflow-wrap:anywhere; }
+.info-text a { color:var(--ink);text-decoration:none; }
+.items-text { color:#5c6678;font-size:12px;line-height:1.8;white-space:pre-line; }
+.amount-row { display:flex;justify-content:space-between;align-items:center;gap:10px; }
+.amount-row span { color:var(--muted);font-size:12px;font-weight:700; }
+.amount-row strong { font-size:22px; }
+.actions { display:flex;gap:9px;margin-top:14px; }
+.actions button,.actions a {
+  flex:1;display:flex;justify-content:center;align-items:center;gap:7px;
+  text-decoration:none;border:0;border-radius:11px;padding:12px 8px;
+  font-size:11px;font-weight:900;
 }
-.info-line{
-  display:flex;gap:11px;align-items:flex-start;margin:17px 0;
-  padding:13px;background:#f8f9fb;border-radius:14px
+.call-btn { background:#edf8f2;color:#138351; }
+.map-btn { background:#edf3ff;color:#315fd2; }
+.deliver-btn { background:var(--orange);color:white;width:100%;margin-top:10px; }
+.pin-area { margin-top:13px;padding:13px;background:#f7f8fb;border-radius:13px; }
+.pin-area label { display:block;font-size:11px;font-weight:900;margin-bottom:8px; }
+.pin-row { display:flex;gap:8px; }
+.pin-row input { min-width:0;width:100%;border:1px solid #dfe4ed;border-radius:10px;padding:12px;outline:none; }
+.pin-row button { border:0;border-radius:10px;background:var(--green);color:white;padding:0 14px;font-size:11px;font-weight:900; }
+.empty { text-align:center;padding:30px 15px;color:var(--muted); }
+.empty i { font-size:28px;color:#c2cad7;margin-bottom:12px; }
+.empty strong { display:block;color:var(--ink);font-size:14px;margin-bottom:6px; }
+.empty p { font-size:12px;line-height:1.6;margin:0; }
+.profile { display:flex;align-items:center;gap:12px;min-width:0; }
+.avatar {
+  width:44px;height:44px;border-radius:15px;background:#fff0e8;color:var(--orange);
+  display:grid;place-items:center;font-weight:900;font-size:18px;flex-shrink:0;
 }
-.info-icon{
-  flex-shrink:0;width:34px;height:34px;border-radius:11px;
-  display:grid;place-items:center;background:white;color:var(--orange)
+.profile strong { display:block;font-size:14px;overflow-wrap:anywhere; }
+.profile small { display:block;color:var(--muted);font-size:11px;margin-top:5px; }
+.profile-row { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+.note { color:var(--muted);font-size:11px;line-height:1.7;margin-top:12px; }
+.hidden { display:none !important; }
+.toast {
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  background:#101827;color:white;padding:13px 17px;border-radius:12px;
+  font-size:12px;font-weight:700;box-shadow:var(--shadow);
+  z-index:99;width:max-content;max-width:90%;display:none;
 }
-.info-text{font-size:11px;line-height:1.7;overflow-wrap:anywhere}
-.info-text strong{display:block;font-size:10px;color:var(--muted);margin-bottom:2px}
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.action-btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:13px 8px;border-radius:13px;text-decoration:none;
-  border:1px solid var(--line);font-size:10px;font-weight:800;
-  background:white;color:var(--dark)
-}
-.action-btn.orange{background:var(--orange);color:white;border-color:var(--orange)}
-.pin-box{margin-top:17px;padding:17px;background:var(--dark);border-radius:19px;color:white}
-.pin-title{text-align:center;font-size:10px;color:#a7afbd;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.pin-input{
-  display:block;width:100%;margin-top:13px;background:#ffffff0b;
-  color:white;border:1px solid #ffffff20;border-radius:13px;
-  text-align:center;padding:15px;font-size:25px;font-weight:800;
-  letter-spacing:10px;outline:none
-}
-.pin-input:focus{border-color:var(--orange)}
-.deliver-btn{
-  width:100%;margin-top:12px;padding:15px;border:0;border-radius:13px;
-  background:var(--orange);color:white;font-size:10px;font-weight:800;
-  text-transform:uppercase;letter-spacing:.6px
-}
-.empty{
-  background:white;border:1px dashed #dfe2e7;border-radius:22px;
-  padding:35px 20px;text-align:center;color:var(--muted);
-  font-size:11px;line-height:1.8
-}
-.empty i{font-size:27px;color:#c9cdd5;margin-bottom:10px}
-.history-item{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:15px;background:white;border:1px solid var(--line);
-  border-radius:17px;margin-bottom:10px
-}
-.history-left{display:flex;align-items:center;gap:11px;min-width:0}
-.check-icon{
-  width:37px;height:37px;border-radius:13px;background:#dcfce7;
-  color:var(--green);display:grid;place-items:center;flex-shrink:0
-}
-.history-name{font-size:11px;font-weight:800;overflow-wrap:anywhere}
-.history-id{font-size:9px;color:var(--muted);margin-top:4px}
-.history-pay{font-size:12px;font-weight:800;color:var(--green);white-space:nowrap}
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:30;
-  padding:12px 20px calc(12px + env(safe-area-inset-bottom));
-  background:rgba(16,17,20,.97);backdrop-filter:blur(14px);
-  display:flex;justify-content:center
-}
-.nav-inner{width:100%;max-width:500px;display:flex;justify-content:space-around}
-.nav-btn{
-  border:0;background:none;color:#9296a0;min-width:55px;
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  font-size:9px;font-weight:800
-}
-.nav-btn i{font-size:19px}
-.nav-btn.active{color:#ff7a32}
-.login-screen{
-  position:fixed;inset:0;z-index:100;background:var(--orange);
-  display:flex;align-items:center;justify-content:center;padding:20px
-}
-.login-card{width:100%;max-width:390px;background:white;padding:27px;border-radius:28px}
-.login-logo{
-  width:59px;height:59px;background:var(--dark);color:white;
-  border-radius:18px;display:grid;place-items:center;font-size:23px;margin:0 auto 15px
-}
-.login-title{text-align:center;font-size:22px;font-weight:800;letter-spacing:-1px;margin:0}
-.login-sub{text-align:center;font-size:10px;color:var(--muted);margin:8px 0 24px;line-height:1.7}
-.field{margin-bottom:12px}
-.field input{
-  width:100%;padding:14px;background:#f8f9fb;border:1px solid #eceef2;
-  border-radius:13px;outline:none;font-size:11px
-}
-.field input:focus{border-color:var(--orange)}
-.login-submit{
-  width:100%;border:0;border-radius:13px;background:var(--dark);
-  color:white;padding:16px;font-size:10px;font-weight:800;margin-top:5px
-}
-.login-warning{font-size:10px;line-height:1.7;color:#9a3412;background:#fff4e9;padding:11px;border-radius:12px;margin-top:14px}
-.toast{
-  position:fixed;z-index:200;left:50%;bottom:100px;transform:translateX(-50%);
-  background:#161616;color:white;padding:13px 18px;border-radius:13px;
-  font-size:11px;max-width:calc(100% - 30px);display:none
-}
-.toast.show{display:block}
-@media(min-width:650px){
-  .container{padding:25px}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .wallet{padding:28px}
+.footer { text-align:center;color:#99a2b2;font-size:10px;padding:15px 0 5px; }
+@media(max-width:370px) {
+  .stats { gap:6px; }
+  .stat { padding:12px 8px; }
+  .stat strong { font-size:19px; }
+  .actions { flex-wrap:wrap; }
 }
 </style>
 </head>
 
 <body>
 
-<audio id="orderAudio" preload="none"
-src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
-
-<section id="rider-login-screen" class="login-screen">
-  <div class="login-card">
-    <div class="login-logo"><i class="fa-solid fa-motorcycle"></i></div>
-    <h1 class="login-title">FRESH<span style="color:var(--orange)">FRY</span> PARTNER</h1>
-    <p class="login-sub">RIDER OPERATIONS DASHBOARD<br>Sign in to manage your deliveries.</p>
-    <form id="login-form">
-      <div class="field"><input id="riderNameInput" maxlength="80" required placeholder="FULL NAME" autocomplete="name"></div>
-      <div class="field"><input id="riderPhoneInput" type="tel" inputmode="numeric" maxlength="10" required placeholder="10-DIGIT PHONE"></div>
-      <div class="field"><input id="riderUpiInput" type="text" maxlength="100" required placeholder="UPI ID"></div>
-      <div class="field"><input id="riderPassInput" type="password" required placeholder="PASS KEY" autocomplete="current-password"></div>
-      <button class="login-submit" id="login-button" type="submit">START DUTY <i class="fa-solid fa-arrow-right"></i></button>
-    </form>
-    <div class="login-warning">
-      <strong>Setup notice:</strong> This page must use a trusted authentication backend before real riders use it. A password checked inside HTML/JavaScript is not secure.
+<header class="topbar">
+  <div class="topline">
+    <div class="brand">
+      <div class="brand-icon"><i class="fa-solid fa-motorcycle"></i></div>
+      <div>freshfry<small>DELIVERY PARTNER</small></div>
     </div>
+    <div class="online-pill"><i class="fa-solid fa-circle"></i> PARTNER APP</div>
   </div>
-</section>
+  <div class="welcome">
+    <div class="eyebrow">DELIVERY DASHBOARD</div>
+    <h1 id="welcome-title">Welcome, Partner 👋</h1>
+    <p>Manage your deliveries in one place.</p>
+  </div>
+</header>
 
-<div id="main-app" class="hidden">
-  <header class="topbar">
-    <div>
-      <div class="logo">FRESH<span>FRY.</span> <span style="color:#9296a0;font-size:10px">PARTNER</span></div>
-      <div class="sub">Welcome, <strong id="displayRiderName">Rider</strong></div>
+<main class="container">
+
+  <!-- LOGIN -->
+  <section id="login-section" class="card login-card">
+    <h2 class="section-title">Start your duty</h2>
+    <p class="section-sub">Enter your full name and registered 10-digit mobile number.</p>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="riderNameInput">FULL NAME</label>
+        <input id="riderNameInput" type="text" placeholder="Enter your full name"
+               autocomplete="name" minlength="3" maxlength="80" required>
+      </div>
+      <div class="field">
+        <label for="riderPhoneInput">10-DIGIT MOBILE NUMBER</label>
+        <input id="riderPhoneInput" type="tel" inputmode="numeric"
+               placeholder="Enter mobile number" maxlength="10"
+               autocomplete="tel-national" required>
+      </div>
+      <button id="login-button" class="primary" type="submit">
+        START DUTY <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+    <p class="note">
+      Same-device auto-login is enabled. Only log in on a device you trust.
+      Your name and number alone do not securely verify your identity.
+    </p>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard-section" class="hidden">
+    <div class="card">
+      <div class="profile-row">
+        <div class="profile">
+          <div class="avatar" id="profile-avatar">R</div>
+          <div>
+            <strong id="profile-name">Delivery Partner</strong>
+            <small id="profile-phone"></small>
+          </div>
+        </div>
+        <button id="logout-button" class="secondary" type="button">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
     </div>
-    <button id="statusToggle" class="status-btn"><span class="online-dot"></span>ONLINE</button>
-  </header>
-
-  <main class="container" id="dashboard">
-    <section class="welcome">
-      <h1>Your deliveries.<br>Made simple.</h1>
-      <p>Stay on top of your tasks and daily earnings.</p>
-    </section>
-
-    <section class="wallet">
-      <div class="wallet-top">
-        <div class="wallet-label"><i class="fa-solid fa-wallet"></i> Today's confirmed pay</div>
-        <div class="wallet-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
-      </div>
-      <div id="todayEarning" class="earning">₹0</div>
-      <div class="goal-row">
-        <span>DAILY GOAL · ₹500</span>
-        <strong id="goalPercent">0%</strong>
-      </div>
-      <div class="progress"><div id="goalProgress" class="progress-fill"></div></div>
-      <div id="goalMessage" class="goal-note">Loading earnings...</div>
-    </section>
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
-        <div class="stat-label">Today's deliveries</div>
-        <div class="stat-value" id="orderCountDisplay">0</div>
+        <i class="fa-solid fa-box-open icon"></i>
+        <strong id="active-count">0</strong>
+        <span>ACTIVE ORDERS</span>
       </div>
       <div class="stat">
-        <div class="stat-icon"><i class="fa-solid fa-motorcycle"></i></div>
-        <div class="stat-label">Active tasks</div>
-        <div class="stat-value" id="activeCount">0</div>
+        <i class="fa-solid fa-circle-check icon"></i>
+        <strong id="delivered-count">0</strong>
+        <span>DELIVERED</span>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-indian-rupee-sign icon"></i>
+        <strong id="earnings">₹0</strong>
+        <span>ORDER TOTAL*</span>
       </div>
     </div>
 
     <div class="section-head">
-      <h2><i class="fa-solid fa-bolt" style="color:var(--orange)"></i> Active Tasks</h2>
-      <span id="active-label">0 assigned</span>
+      <h2><i class="fa-solid fa-motorcycle"></i> Active deliveries</h2>
+      <span class="count" id="active-badge">0 ORDERS</span>
     </div>
-    <div id="rider-orders-list">
-      <div class="empty">Loading assigned deliveries...</div>
+    <div id="active-orders">
+      <div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading orders...</strong></div>
     </div>
 
     <div class="section-head">
-      <h2><i class="fa-solid fa-clock-rotate-left" style="color:var(--orange)"></i> Recent History</h2>
-      <span>Latest 5</span>
+      <h2><i class="fa-solid fa-clock-rotate-left"></i> Delivery history</h2>
     </div>
-    <div id="rider-history-list">
-      <div class="empty">Loading delivery history...</div>
+    <div id="history-orders">
+      <div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading history...</strong></div>
     </div>
-  </main>
 
-  <nav class="bottom-nav">
-    <div class="nav-inner">
-      <button class="nav-btn active" data-scroll="dashboard">
-        <i class="fa-solid fa-house"></i>Home
-      </button>
-      <button class="nav-btn" data-scroll="rider-orders-list">
-        <i class="fa-solid fa-box"></i>Tasks
-      </button>
-      <button class="nav-btn" data-scroll="rider-history-list">
-        <i class="fa-solid fa-clock-rotate-left"></i>History
-      </button>
-      <button class="nav-btn" id="logout-button">
-        <i class="fa-solid fa-power-off"></i>Logout
-      </button>
-    </div>
-  </nav>
-</div>
+    <p class="note">*Order total is not your rider commission or confirmed earnings. Commission calculation needs a separate business rule.</p>
+  </section>
 
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div class="footer">FRESHFRY PARTNER APP</div>
+</main>
+
+<div id="toast" class="toast"></div>
 
 <script type="module">
-import { initializeApp, getApps, getApp }
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getFirestore, collection, onSnapshot, query, where,
-  doc, updateDoc, setDoc, serverTimestamp, orderBy, limit
+  getFirestore, doc, setDoc, updateDoc, collection, query, where,
+  onSnapshot, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* YOUR FIREBASE CONFIG */
 const firebaseConfig = {
-  apiKey: "AIzaSyDCb8ZRaDfMc--BzT2S_LllBA4G2d0dfUM",
+  apiKey: "AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
   authDomain: "freshfry-39a10.firebaseapp.com",
   projectId: "freshfry-39a10",
   storageBucket: "freshfry-39a10.firebasestorage.app",
@@ -320,405 +275,454 @@ const firebaseConfig = {
   appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
 };
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const $ = id => document.getElementById(id);
-const DAILY_GOAL = 500;
-const DELIVERY_PAY = 20;
 
 let rider = null;
+let stopActive = null;
+let stopHistory = null;
 let activeOrders = [];
 let historyOrders = [];
-let unsubs = [];
-let lastActiveIds = null;
-let busy = new Set();
-let toastTimer;
+let toastTimer = null;
 
-function escapeHTML(v) {
-  return String(v ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[c]);
-}
-function money(v) {
-  return "₹" + (Number(v) || 0).toLocaleString("en-IN");
-}
 function showToast(message) {
-  $("toast").textContent = message;
-  $("toast").classList.add("show");
+  const el = $("toast");
+  el.textContent = message;
+  el.style.display = "block";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3000);
+  toastTimer = setTimeout(() => el.style.display = "none", 3200);
 }
-function phoneValid(p) { return /^[6-9]\d{9}$/.test(p); }
-function getTodayStart() {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  return d;
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[char]));
 }
-function isToday(timestamp) {
-  if (!timestamp?.toDate) return false;
-  return timestamp.toDate() >= getTodayStart();
+
+function formatMoney(value) {
+  const amount = Number(value);
+  return "₹" + (Number.isFinite(amount) ? amount.toLocaleString("en-IN") : "0");
 }
-function distanceFromShop(locationUrl) {
-  try {
-    const u = new URL(locationUrl);
-    const q = u.searchParams.get("q") || u.searchParams.get("query");
-    if (!q) return null;
-    const parts = q.split(",").map(Number);
-    if (parts.length < 2 || !parts.every(Number.isFinite)) return null;
-    const [lat, lon] = parts;
-    const shopLat = 21.9348, shopLon = 86.7513;
-    const rad = n => n * Math.PI / 180;
-    const dLat = rad(lat-shopLat), dLon = rad(lon-shopLon);
-    const a = Math.sin(dLat/2)**2 +
-      Math.cos(rad(shopLat))*Math.cos(rad(lat))*Math.sin(dLon/2)**2;
-    return (6371 * 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
-  } catch { return null; }
+
+function formatDate(value) {
+  if (!value) return "Date not available";
+  let date;
+  if (typeof value.toDate === "function") date = value.toDate();
+  else if (value instanceof Date) date = value;
+  else date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Date not available";
+  return date.toLocaleString("en-IN", {
+    day:"2-digit", month:"short", year:"numeric",
+    hour:"2-digit", minute:"2-digit"
+  });
 }
-function mapURL(locationValue) {
-  const value = String(locationValue || "").trim();
-  if (/^https:\/\/(www\.)?google\.[^/]+\/maps\//i.test(value)) return value;
-  return "https://www.google.com/maps/search/?api=1&query=" +
-    encodeURIComponent(value || "Baripada, Odisha");
+
+function getAddress(order) {
+  return order.customerLocation || order.deliveryAddress || order.address || "Address not provided";
 }
+
+function getPhone(order) {
+  return String(order.customerPhone || order.phone || "").replace(/[^\d+]/g, "");
+}
+
+function getCustomer(order) {
+  return order.customerName || order.name || "Customer";
+}
+
+function getOrderId(order) {
+  return order.id || "Order";
+}
+
+function getItemsText(order) {
+  const items = order.items;
+  if (!Array.isArray(items)) return "Items not listed";
+  return items.map(item => {
+    if (typeof item === "string") return item;
+    const name = item.name || item.title || item.foodName || "Item";
+    const quantity = item.quantity || item.qty || 1;
+    return `${name} × ${quantity}`;
+  }).join("\n") || "Items not listed";
+}
+
+function getTotal(order) {
+  return order.total ?? order.grandTotal ?? order.amount ?? 0;
+}
+
+function setDashboardVisible(isVisible) {
+  $("login-section").classList.toggle("hidden", isVisible);
+  $("dashboard-section").classList.toggle("hidden", !isVisible);
+}
+
 function stopListeners() {
-  unsubs.forEach(fn => { try { fn(); } catch {} });
-  unsubs = [];
+  if (stopActive) stopActive();
+  if (stopHistory) stopHistory();
+  stopActive = null;
+  stopHistory = null;
 }
-function setBusy(id, state) {
-  if (state) busy.add(id); else busy.delete(id);
+
+function renderActiveOrders() {
+  $("active-count").textContent = activeOrders.length;
+  $("active-badge").textContent = `${activeOrders.length} ORDER${activeOrders.length === 1 ? "" : "S"}`;
+
+  if (!activeOrders.length) {
+    $("active-orders").innerHTML = `
+      <div class="card empty">
+        <i class="fa-solid fa-box-open"></i>
+        <strong>No active deliveries</strong>
+        <p>New orders assigned to you will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  $("active-orders").innerHTML = activeOrders.map(order => {
+    const id = escapeHTML(order.id);
+    const customer = escapeHTML(getCustomer(order));
+    const phone = getPhone(order);
+    const address = getAddress(order);
+    const phoneHref = phone ? `tel:${encodeURIComponent(phone)}` : "";
+    const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+
+    return `
+      <article class="order-card">
+        <div class="order-top">
+          <div>
+            <div class="order-number">ORDER #${id}</div>
+            <div class="order-date">${escapeHTML(formatDate(order.createdAt || order.orderDate))}</div>
+          </div>
+          <span class="status">OUT FOR DELIVERY</span>
+        </div>
+        <div class="order-divider"></div>
+
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-user"></i></div>
+          <div class="info-text">
+            <label>CUSTOMER</label>
+            <div>${customer}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="info-text">
+            <label>DELIVERY ADDRESS</label>
+            <div>${escapeHTML(address)}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+          <div class="info-text">
+            <label>ORDER ITEMS</label>
+            <div class="items-text">${escapeHTML(getItemsText(order))}</div>
+          </div>
+        </div>
+
+        <div class="amount-row">
+          <span>Order total</span>
+          <strong>${formatMoney(getTotal(order))}</strong>
+        </div>
+
+        <div class="actions">
+          ${phone ? `<a class="call-btn" href="${escapeHTML(phoneHref)}"><i class="fa-solid fa-phone"></i> CALL CUSTOMER</a>` : `<button class="secondary" disabled>NO PHONE</button>`}
+          <a class="map-btn" href="${escapeHTML(mapHref)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> OPEN MAP</a>
+        </div>
+
+        <div class="pin-area">
+          <label for="pin-${id}"><i class="fa-solid fa-shield-halved"></i> CUSTOMER DELIVERY PIN</label>
+          <div class="pin-row">
+            <input id="pin-${id}" type="password" inputmode="numeric" maxlength="8"
+              placeholder="Enter PIN" autocomplete="off" aria-label="Delivery PIN for order ${id}">
+            <button type="button" data-deliver="${id}">VERIFY & DELIVER</button>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+
+  document.querySelectorAll("[data-deliver]").forEach(button => {
+    button.addEventListener("click", () => markDelivered(button.dataset.deliver, button));
+  });
 }
-function isBusy(id) { return busy.has(id); }
+
+function renderHistory() {
+  $("delivered-count").textContent = historyOrders.length;
+
+  const total = historyOrders.reduce((sum, order) => {
+    const n = Number(getTotal(order));
+    return sum + (Number.isFinite(n) ? n : 0);
+  }, 0);
+  $("earnings").textContent = formatMoney(total);
+
+  if (!historyOrders.length) {
+    $("history-orders").innerHTML = `
+      <div class="card empty">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <strong>No completed deliveries yet</strong>
+        <p>Your delivered orders will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  $("history-orders").innerHTML = historyOrders.map(order => `
+    <article class="order-card">
+      <div class="order-top">
+        <div>
+          <div class="order-number">ORDER #${escapeHTML(order.id)}</div>
+          <div class="order-date">${escapeHTML(formatDate(order.deliveredAt || order.createdAt))}</div>
+        </div>
+        <span class="status done"><i class="fa-solid fa-check"></i> DELIVERED</span>
+      </div>
+      <div class="order-divider"></div>
+      <div class="info-row">
+        <div class="info-icon"><i class="fa-solid fa-user-check"></i></div>
+        <div class="info-text">
+          <label>CUSTOMER</label>
+          <div>${escapeHTML(getCustomer(order))}</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div class="info-text">
+          <label>DELIVERY ADDRESS</label>
+          <div>${escapeHTML(getAddress(order))}</div>
+        </div>
+      </div>
+      <div class="amount-row">
+        <span>Order total</span>
+        <strong>${formatMoney(getTotal(order))}</strong>
+      </div>
+    </article>
+  `).join("");
+}
+
+async function unlockUI() {
+  if (!rider) return;
+  stopListeners();
+  setDashboardVisible(true);
+
+  $("welcome-title").textContent = `Welcome, ${rider.name.split(" ")[0]} 👋`;
+  $("profile-name").textContent = rider.name;
+  $("profile-phone").textContent = rider.phone;
+  $("profile-avatar").textContent = rider.name.charAt(0).toUpperCase();
+
+  $("active-orders").innerHTML = `<div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading active deliveries...</strong></div>`;
+  $("history-orders").innerHTML = `<div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading history...</strong></div>`;
+
+  const activeQuery = query(
+    collection(db, "orders"),
+    where("status", "==", "out_for_delivery"),
+    where("riderName", "==", rider.name)
+  );
+
+  const historyQuery = query(
+    collection(db, "orders"),
+    where("status", "==", "delivered"),
+    where("riderName", "==", rider.name)
+  );
+
+  stopActive = onSnapshot(activeQuery, snapshot => {
+    activeOrders = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+    activeOrders.sort((a,b) => {
+      const ta = a.createdAt?.toMillis?.() || 0;
+      const tb = b.createdAt?.toMillis?.() || 0;
+      return tb - ta;
+    });
+    renderActiveOrders();
+  }, error => {
+    console.error("Active order listener:", error);
+    $("active-orders").innerHTML = `<div class="card empty"><strong>Could not load active orders</strong><p>Check your internet connection and Firestore permissions.</p></div>`;
+  });
+
+  stopHistory = onSnapshot(historyQuery, snapshot => {
+    historyOrders = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+    historyOrders.sort((a,b) => {
+      const ta = a.deliveredAt?.toMillis?.() || 0;
+      const tb = b.deliveredAt?.toMillis?.() || 0;
+      return tb - ta;
+    });
+    renderHistory();
+  }, error => {
+    console.error("History listener:", error);
+    $("history-orders").innerHTML = `<div class="card empty"><strong>Could not load history</strong><p>Check your internet connection and Firestore permissions.</p></div>`;
+  });
+}
 
 /*
- * IMPORTANT:
- * Client-side pass key validation is NOT authentication.
- * This compatibility version accepts the legacy demo key.
- * Replace with Firebase Authentication + trusted backend before production.
+ * NOTE:
+ * This client-side PIN check is for a demo only.
+ * Production delivery verification should be performed by a trusted
+ * backend/Cloud Function with authenticated rider authorization.
  */
+async function markDelivered(orderId, button) {
+  if (!rider) return showToast("Please log in again.");
+
+  const pinInput = document.getElementById(`pin-${orderId}`);
+  const enteredPin = (pinInput?.value || "").trim();
+
+  if (!enteredPin) return showToast("Enter the customer delivery PIN.");
+
+  const order = activeOrders.find(item => item.id === orderId);
+  if (!order) return showToast("Order is no longer active. Refresh and try again.");
+
+  const actualPin = String(order.orderPin ?? order.deliveryPin ?? "").trim();
+  if (!actualPin) {
+    return showToast("This order has no delivery PIN. Ask admin to check the order.");
+  }
+
+  if (enteredPin !== actualPin) {
+    pinInput.value = "";
+    pinInput.focus();
+    return showToast("Incorrect delivery PIN. Please try again.");
+  }
+
+  if (!confirm(`Confirm order #${orderId} has been delivered to the customer?`)) return;
+
+  button.disabled = true;
+  button.textContent = "UPDATING...";
+
+  try {
+    // Re-read the order before attempting the status update.
+    const orderRef = doc(db, "orders", orderId);
+    const latest = await getDoc(orderRef);
+
+    if (!latest.exists()) throw new Error("Order not found.");
+
+    const latestData = latest.data();
+
+    if (latestData.status !== "out_for_delivery") {
+      throw new Error("This order is no longer active.");
+    }
+
+    if (String(latestData.riderName || "") !== rider.name) {
+      throw new Error("This order is not assigned to your account.");
+    }
+
+    const latestPin = String(latestData.orderPin ?? latestData.deliveryPin ?? "").trim();
+    if (enteredPin !== latestPin) throw new Error("Delivery PIN did not match.");
+
+    await updateDoc(orderRef, {
+      status: "delivered",
+      deliveredAt: serverTimestamp()
+    });
+
+    showToast("Order marked as delivered.");
+  } catch (error) {
+    console.error("Delivery update failed:", error);
+    showToast(error.message || "Could not update order. Check Firebase permissions.");
+    button.disabled = false;
+    button.textContent = "VERIFY & DELIVER";
+  }
+}
+
+$("riderPhoneInput").addEventListener("input", event => {
+  event.target.value = event.target.value.replace(/\D/g, "").slice(0, 10);
+});
+
 $("login-form").addEventListener("submit", async event => {
   event.preventDefault();
-  const name = $("riderNameInput").value.trim().toUpperCase();
-  const phone = $("riderPhoneInput").value.trim();
-  const upi = $("riderUpiInput").value.trim().toLowerCase();
-  const pass = $("riderPassInput").value;
+
+  const name = $("riderNameInput").value.trim().replace(/\s+/g, " ").toUpperCase();
+  const phone = $("riderPhoneInput").value.replace(/\D/g, "");
   const button = $("login-button");
 
-  if (name.length < 3 || !phoneValid(phone) ||
-      !/^[^@\s]+@[^@\s]+$/.test(upi)) {
-    return showToast("Please check your name, phone and UPI ID.");
-  }
-  if (pass !== "freshfry2026") {
-    return showToast("Invalid pass key.");
+  if (name.length < 3) return showToast("Enter your full name.");
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    return showToast("Enter a valid 10-digit Indian mobile number.");
   }
 
   button.disabled = true;
-  button.textContent = "PLEASE WAIT...";
-  try {
-    /*
-     * This write is not a secure login operation.
-     * Firestore Rules must restrict who can register or edit rider records.
-     */
-    await setDoc(doc(db, "riders", name), {
-      riderName:name,
-      riderPhone:phone,
-      riderUpi:upi,
-      status:"Online",
-      lastLogin:serverTimestamp()
-    }, {merge:true});
+  button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PLEASE WAIT...';
 
-    rider = {name, phone, upi};
-    sessionStorage.setItem("rider_auth", "true");
-    sessionStorage.setItem("rider_name", name);
-    sessionStorage.setItem("rider_upi", upi);
+  try {
+    // Existing rider document ID format is preserved.
+    // Firestore Rules must restrict who can create or update rider records.
+    await setDoc(doc(db, "riders", name), {
+      riderName: name,
+      riderPhone: phone,
+      status: "Online",
+      lastLogin: serverTimestamp()
+    }, { merge:true });
+
+    rider = { name, phone };
+
+    // Same-device auto-login.
+    localStorage.setItem("ff_rider_name", name);
+    localStorage.setItem("ff_rider_phone", phone);
+
     await unlockUI();
   } catch (error) {
-    console.error(error);
-    showToast("Login failed. Check Firebase permissions.");
+    console.error("Login failed:", error);
+    showToast("Login failed. Check internet and Firebase permissions.");
   } finally {
     button.disabled = false;
     button.innerHTML = 'START DUTY <i class="fa-solid fa-arrow-right"></i>';
   }
 });
 
-async function unlockUI() {
-  $("rider-login-screen").classList.add("hidden");
-  $("main-app").classList.remove("hidden");
-  $("displayRiderName").textContent = rider.name;
-  await listenToRider();
-}
-function listenToRider() {
+$("logout-button").addEventListener("click", async () => {
+  if (!confirm("Log out of this device? You will need to enter your details again.")) return;
+
   stopListeners();
+
+  try {
+    if (rider) {
+      await updateDoc(doc(db, "riders", rider.name), {
+        status:"Offline",
+        lastLogout:serverTimestamp()
+      });
+    }
+  } catch (error) {
+    console.warn("Could not update rider status:", error);
+  }
+
+  localStorage.removeItem("ff_rider_name");
+  localStorage.removeItem("ff_rider_phone");
+
+  rider = null;
   activeOrders = [];
   historyOrders = [];
-  lastActiveIds = null;
-  renderOrders();
-  renderHistory();
-  updateEarnings();
+  setDashboardVisible(false);
+  $("riderNameInput").value = "";
+  $("riderPhoneInput").value = "";
+  showToast("Logged out from this device.");
+});
 
-  const activeQ = query(
-    collection(db, "orders"),
-    where("status", "==", "out_for_delivery"),
-    where("riderName", "==", rider.name)
-  );
-  const historyQ = query(
-    collection(db, "orders"),
-    where("status", "==", "delivered"),
-    where("riderName", "==", rider.name),
-    orderBy("deliveredAt", "desc"),
-    limit(30)
-  );
+// Restore the rider automatically on the same browser/device.
+async function restoreSession() {
+  const savedName = localStorage.getItem("ff_rider_name");
+  const savedPhone = localStorage.getItem("ff_rider_phone");
 
-  unsubs.push(onSnapshot(activeQ, snap => {
-    const newIds = new Set(snap.docs.map(d => d.id));
-    if (lastActiveIds !== null &&
-        [...newIds].some(id => !lastActiveIds.has(id))) {
-      $("orderAudio").play().catch(() => {});
+  if (
+    savedName && savedName.length >= 3 &&
+    savedPhone && /^[6-9]\d{9}$/.test(savedPhone)
+  ) {
+    rider = { name:savedName, phone:savedPhone };
+    $("riderNameInput").value = savedName;
+    $("riderPhoneInput").value = savedPhone;
+
+    try {
+      // Check that this rider record still exists.
+      const riderSnapshot = await getDoc(doc(db, "riders", savedName));
+      if (!riderSnapshot.exists()) {
+        localStorage.removeItem("ff_rider_name");
+        localStorage.removeItem("ff_rider_phone");
+        rider = null;
+        setDashboardVisible(false);
+        return;
+      }
+      await unlockUI();
+    } catch (error) {
+      console.error("Auto-login failed:", error);
+      setDashboardVisible(false);
+      showToast("Could not reconnect. Check your internet and try again.");
     }
-    lastActiveIds = newIds;
-    activeOrders = snap.docs.map(d => ({id:d.id,...d.data()}));
-    renderOrders();
-  }, error => {
-    console.error(error);
-    $("rider-orders-list").innerHTML =
-      '<div class="empty">Could not load tasks. Check your Firebase rules and connection.</div>';
-  }));
-
-  unsubs.push(onSnapshot(historyQ, snap => {
-    historyOrders = snap.docs.map(d => ({id:d.id,...d.data()}));
-    renderHistory();
-    updateEarnings();
-  }, error => {
-    console.error(error);
-    $("rider-history-list").innerHTML =
-      '<div class="empty">Could not load history. Check your Firestore index and permissions.</div>';
-  }));
-
-  unsubs.push(onSnapshot(doc(db, "riders", rider.name), snap => {
-    if (!snap.exists()) return;
-    const status = snap.data().status || "Offline";
-    updateDutyButton(status);
-  }, error => console.error(error)));
+  } else {
+    setDashboardVisible(false);
+  }
 }
 
-function renderOrders() {
-  $("activeCount").textContent = activeOrders.length;
-  $("active-label").textContent = activeOrders.length + " assigned";
-
-  if (!activeOrders.length) {
-    $("rider-orders-list").innerHTML =
-      '<div class="empty"><i class="fa-solid fa-mug-hot"></i><br>No active deliveries right now.<br>New assigned tasks will appear here.</div>';
-    return;
-  }
-
-  $("rider-orders-list").innerHTML = activeOrders.map(o => {
-    const customer = escapeHTML(o.customerName || "Customer");
-    const phone = String(o.customerPhone || "").replace(/\D/g,"");
-    const address = String(o.customerLocation || o.deliveryAddress || "Address not provided");
-    const nav = mapURL(address);
-    const dist = distanceFromShop(address);
-    const items = Array.isArray(o.items) ? o.items : [];
-    const itemText = items.length
-      ? items.map(i => `${escapeHTML(i.name || "Item")} × ${Number(i.qty)||1}`).join("<br>")
-      : "Order items not available";
-    const id = escapeHTML(o.id);
-    const pinId = "pin-" + o.id.replace(/[^a-zA-Z0-9_-]/g,"");
-    return `
-      <article class="order-card">
-        <div class="order-top">
-          <div>
-            <div class="customer-name">${customer}</div>
-            <div class="order-id">ORDER #${id.slice(-6).toUpperCase()}</div>
-            <span class="tag">${dist ? dist + " km from shop (approx.)" : "Out for delivery"}</span>
-          </div>
-          <div class="order-amount">${money(parseFloat(o.total))}</div>
-        </div>
-        <div class="info-line">
-          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
-          <div class="info-text"><strong>DELIVERY ADDRESS</strong>${escapeHTML(address)}</div>
-        </div>
-        <div class="info-line">
-          <div class="info-icon"><i class="fa-solid fa-bowl-food"></i></div>
-          <div class="info-text"><strong>ORDER ITEMS</strong>${itemText}</div>
-        </div>
-        <div class="action-grid">
-          ${phone ? `<a class="action-btn" href="tel:${phone}"><i class="fa-solid fa-phone"></i> CALL CUSTOMER</a>` :
-          '<button class="action-btn" disabled>Phone unavailable</button>'}
-          <a class="action-btn orange" href="${escapeHTML(nav)}" target="_blank" rel="noopener noreferrer">
-            <i class="fa-solid fa-location-arrow"></i> NAVIGATE
-          </a>
-        </div>
-        <div class="pin-box">
-          <div class="pin-title"><i class="fa-solid fa-shield-halved"></i> Customer delivery PIN</div>
-          <input class="pin-input" id="${pinId}" type="password" inputmode="numeric"
-            maxlength="4" pattern="[0-9]{4}" autocomplete="off" placeholder="••••"
-            aria-label="Customer delivery PIN">
-          <button class="deliver-btn" data-deliver="${id}" ${isBusy(o.id) ? "disabled" : ""}>
-            ${isBusy(o.id) ? "PROCESSING..." : "Confirm Delivery"}
-            <i class="fa-solid fa-check"></i>
-          </button>
-        </div>
-      </article>`;
-  }).join("");
-}
-
-function renderHistory() {
-  const latest = historyOrders.slice(0,5);
-  if (!latest.length) {
-    $("rider-history-list").innerHTML =
-      '<div class="empty"><i class="fa-solid fa-clock-rotate-left"></i><br>No completed deliveries found yet.</div>';
-    return;
-  }
-  $("rider-history-list").innerHTML = latest.map(o => `
-    <div class="history-item">
-      <div class="history-left">
-        <div class="check-icon"><i class="fa-solid fa-check"></i></div>
-        <div>
-          <div class="history-name">${escapeHTML(o.customerName || "Customer")}</div>
-          <div class="history-id">ORDER #${escapeHTML(o.id.slice(-6).toUpperCase())}</div>
-          <div class="history-id">${o.deliveredAt?.toDate ? escapeHTML(o.deliveredAt.toDate().toLocaleString()) : "Delivered"}</div>
-        </div>
-      </div>
-      <div class="history-pay">+${money(DELIVERY_PAY)}</div>
-    </div>`).join("");
-}
-
-function updateEarnings() {
-  /*
-   * Earnings are estimated using delivered orders from Firestore.
-   * Replace DELIVERY_PAY with your actual payout policy.
-   * A server-side ledger is required for authoritative payments.
-   */
-  const todays = historyOrders.filter(o => isToday(o.deliveredAt));
-  const earnings = todays.length * DELIVERY_PAY;
-  const percent = Math.min(100, Math.round(earnings / DAILY_GOAL * 100));
-  $("todayEarning").textContent = money(earnings);
-  $("orderCountDisplay").textContent = todays.length;
-  $("goalPercent").textContent = percent + "%";
-  $("goalProgress").style.width = percent + "%";
-  $("goalMessage").textContent = earnings >= DAILY_GOAL
-    ? "Daily goal achieved. Great work!"
-    : money(DAILY_GOAL - earnings) + " more to reach your daily goal.";
-}
-
-$("rider-orders-list").addEventListener("click", async event => {
-  const button = event.target.closest("[data-deliver]");
-  if (!button) return;
-  const orderId = button.dataset.deliver;
-  const order = activeOrders.find(o => o.id === orderId);
-  if (!order) return showToast("This task is no longer active.");
-
-  const input = $("pin-" + orderId.replace(/[^a-zA-Z0-9_-]/g,""));
-  const enteredPin = input?.value.trim() || "";
-  const correctPin = String(order.orderPin ?? "");
-
-  if (!/^\d{4}$/.test(enteredPin)) {
-    return showToast("Enter the 4-digit customer PIN.");
-  }
-  if (!correctPin || enteredPin !== correctPin) {
-    return showToast("Incorrect PIN. Please check with the customer.");
-  }
-  if (isBusy(orderId)) return;
-  if (!confirm("Confirm that this order has been delivered?")) return;
-
-  setBusy(orderId, true);
-  renderOrders();
-  try {
-    /*
-     * WARNING: this client-side update is NOT secure delivery verification.
-     * Production must call a trusted backend that verifies rider identity,
-     * assigned rider, PIN, and current order status transactionally.
-     */
-    await updateDoc(doc(db, "orders", orderId), {
-      status:"delivered",
-      deliveredAt:serverTimestamp()
-    });
-    showToast("Delivery marked complete.");
-  } catch (error) {
-    console.error(error);
-    showToast("Could not update order. Check permissions and connection.");
-  } finally {
-    setBusy(orderId, false);
-    renderOrders();
-  }
-});
-
-function updateDutyButton(status) {
-  const online = status === "Online";
-  const btn = $("statusToggle");
-  btn.innerHTML = `<span class="online-dot"></span>${online ? "ONLINE" : "OFFLINE"}`;
-  btn.style.background = online ? "var(--green)" : "#64748b";
-}
-$("statusToggle").addEventListener("click", async () => {
-  if (!rider) return;
-  const btn = $("statusToggle");
-  btn.disabled = true;
-  try {
-    const snap = await new Promise((resolve, reject) => {
-      const unsub = onSnapshot(doc(db,"riders",rider.name), s => {
-        unsub(); resolve(s);
-      }, reject);
-    });
-    const oldStatus = snap.exists() ? snap.data().status : "Offline";
-    const newStatus = oldStatus === "Online" ? "Offline" : "Online";
-    await updateDoc(doc(db,"riders",rider.name), {
-      status:newStatus,
-      lastStatusUpdate:serverTimestamp()
-    });
-    updateDutyButton(newStatus);
-    showToast("Duty status: " + newStatus);
-  } catch (error) {
-    console.error(error);
-    showToast("Could not update duty status.");
-  } finally {
-    btn.disabled = false;
-  }
-});
-
-$("rider-orders-list").addEventListener("click", event => {
-  // Delivery handler is installed separately above.
-});
-document.querySelectorAll("[data-scroll]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.getElementById(btn.dataset.scroll)?.scrollIntoView({
-      behavior:"smooth",block:"start"
-    });
-    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-  });
-});
-
-$("logout-button").addEventListener("click", async () => {
-  if (!confirm("Log out of the rider dashboard?")) return;
-  stopListeners();
-  try {
-    await updateDoc(doc(db,"riders",rider.name), {
-      status:"Offline",lastLogout:serverTimestamp()
-    });
-  } catch (error) {
-    console.error(error);
-  }
-  sessionStorage.removeItem("rider_auth");
-  sessionStorage.removeItem("rider_name");
-  sessionStorage.removeItem("rider_upi");
-  location.reload();
-});
-
-/*
- * Existing sessionStorage is retained for compatibility, but it is not
- * proof of identity. Do not use it as authorization in Firestore Rules.
- */
-if (sessionStorage.getItem("rider_auth") === "true" &&
-    sessionStorage.getItem("rider_name")) {
-  rider = {
-    name:sessionStorage.getItem("rider_name"),
-    upi:sessionStorage.getItem("rider_upi") || ""
-  };
-  unlockUI().catch(error => {
-    console.error(error);
-    showToast("Could not start the dashboard.");
-  });
-}
+restoreSession();
 </script>
+
 </body>
 </html>
