@@ -3,16 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ff5e00">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="FreshFry Momo Baripada opens at 5 PM. Get ready to order your favourite momos and delicious food.">
   <title>FreshFry | We Open at 5 PM</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    :root {
+      --orange: #ff5e00;
+      --background: #101114;
+      --card: #171719;
+      --white: #ffffff;
+      --muted: #b8b8bd;
+      --border: #343438;
+    }
+
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
     }
 
     body {
@@ -21,143 +35,210 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      background: #101114;
-      color: #fff;
+      padding: 24px 16px;
+      background: var(--background);
+      color: var(--white);
       font-family: 'Outfit', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       width: 100%;
-      max-width: 440px;
+      max-width: 760px;
+      padding: 48px 40px;
       text-align: center;
-      padding: 35px 22px;
-      border: 1px solid #343434;
-      border-radius: 28px;
       background: linear-gradient(145deg, #1b1b1e, #111113);
-      box-shadow: 0 25px 70px #0007;
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      box-shadow: 0 25px 70px #0005;
     }
 
-    .logo {
-      font-size: 34px;
+    .logo-text {
+      margin: 0;
+      font-size: clamp(35px, 7vw, 52px);
       font-weight: 900;
       font-style: italic;
-      letter-spacing: -2px;
+      letter-spacing: -2.5px;
+      line-height: 1.1;
     }
 
-    .logo span {
-      color: #ff5e00;
+    .logo-text span {
+      color: var(--orange);
     }
 
+    /* Your existing GitHub logo.png */
     .food-icon {
-      width: 100px;
-      height: 100px;
-      margin: 28px auto 20px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      color: #ff5e00;
-      background: #ff5e001b;
-      border: 1px solid #ff5e0045;
-      font-size: 42px;
+      width: 150px;
+      height: 105px;
+      margin: 34px auto 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+    }
+
+    .food-icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .label {
       display: inline-block;
-      padding: 8px 13px;
-      border-radius: 99px;
-      background: #ff5e001b;
+      max-width: 100%;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: #ff5e001e;
       color: #ff9b66;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
     }
 
     h1 {
-      margin: 20px 0 10px;
-      font-size: clamp(32px, 8vw, 43px);
-      line-height: 1.1;
-      letter-spacing: -1.5px;
+      margin: 32px 0 18px;
+      font-size: clamp(38px, 8vw, 66px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -2.5px;
     }
 
     h1 span {
-      color: #ff5e00;
+      color: var(--orange);
     }
 
     .description {
+      max-width: 560px;
       margin: 0 auto;
-      max-width: 310px;
-      color: #b8b8bd;
-      font-size: 14px;
-      line-height: 1.7;
+      color: var(--muted);
+      font-size: clamp(14px, 2.5vw, 19px);
+      line-height: 1.8;
     }
 
     .timer {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin: 28px 0 18px;
+      gap: 14px;
+      margin: 42px auto 30px;
     }
 
     .time-box {
       flex: 1;
-      max-width: 95px;
-      padding: 15px 5px;
-      border: 1px solid #363639;
-      border-radius: 15px;
+      max-width: 180px;
+      padding: 22px 8px;
       background: #202023;
+      border: 1px solid #39393d;
+      border-radius: 23px;
     }
 
     .time-box strong {
       display: block;
-      font-size: 29px;
+      color: var(--white);
+      font-size: clamp(29px, 6vw, 52px);
       font-weight: 900;
-      color: #fff;
+      line-height: 1.15;
       font-variant-numeric: tabular-nums;
     }
 
     .time-box small {
       display: block;
-      margin-top: 5px;
+      margin-top: 10px;
       color: #9999a0;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
     }
 
     .open-time {
-      margin: 18px 0;
-      padding: 15px;
-      border-radius: 14px;
-      background: #ff5e00;
+      width: 100%;
+      margin: 0 auto 30px;
+      padding: 21px 14px;
+      border-radius: 18px;
+      background: var(--orange);
       color: white;
-      font-size: 16px;
+      font-size: clamp(14px, 3vw, 23px);
       font-weight: 900;
-    }
-
-    .footer {
-      margin-top: 22px;
-      color: #77777e;
-      font-size: 11px;
     }
 
     .open-now {
       display: none;
-      margin-top: 20px;
-      padding: 14px;
-      border-radius: 13px;
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid #24864a;
+      border-radius: 16px;
       background: #14532d;
       color: #dcfce7;
       font-weight: 800;
+      line-height: 1.6;
     }
 
-    @media (max-width: 360px) {
-      .container {
-        padding: 28px 15px;
+    .footer {
+      margin-top: 42px;
+      color: #77777e;
+      font-size: 13px;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 22px 12px;
       }
 
-      .time-box strong {
-        font-size: 24px;
+      .container {
+        padding: 38px 20px;
+        border-radius: 28px;
+      }
+
+      .food-icon {
+        width: 135px;
+        height: 95px;
+        margin: 30px auto 25px;
+      }
+
+      .label {
+        padding: 11px 15px;
+        font-size: 10px;
+        letter-spacing: 1.4px;
+      }
+
+      h1 {
+        margin-top: 28px;
+        letter-spacing: -1.5px;
+      }
+
+      .timer {
+        gap: 9px;
+        margin: 32px auto 24px;
+      }
+
+      .time-box {
+        padding: 18px 4px;
+        border-radius: 17px;
+      }
+
+      .time-box small {
+        font-size: 9px;
+        letter-spacing: 1px;
+      }
+
+      .open-time {
+        padding: 18px 9px;
+        border-radius: 15px;
+      }
+
+      .footer {
+        margin-top: 32px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
       }
     }
   </style>
@@ -165,10 +246,14 @@
 
 <body>
   <main class="container">
-    <div class="logo">Fresh<span>fry.</span></div>
+    <div class="logo-text">Fresh<span>fry.</span></div>
 
     <div class="food-icon">
-      <i class="fa-solid fa-bowl-food"></i>
+      <img
+        src="./logo.png"
+        alt="FreshFry Logo"
+        onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;color:#ff5e00;font-size:36px;font-weight:900&quot;>FreshFry</span>';"
+      >
     </div>
 
     <div class="label">FRESHLY MADE FOR YOU</div>
@@ -180,7 +265,7 @@
       and your favourite food in Baripada.
     </p>
 
-    <div class="timer" id="timer">
+    <div class="timer" id="timer" aria-label="Time remaining until opening">
       <div class="time-box">
         <strong id="hours">00</strong>
         <small>HOURS</small>
@@ -204,7 +289,7 @@
 
     <div class="open-now" id="open-now">
       <i class="fa-solid fa-circle-check"></i>
-      We're open! Redirecting to our menu...
+      It's opening time! Taking you to our menu...
     </div>
 
     <p class="description" id="message">
@@ -217,13 +302,15 @@
   </main>
 
   <script>
-    // Replace this with your existing FreshFry menu URL.
+    // Existing FreshFry menu website
     const MENU_URL = "https://freshfrymomo.food/";
+
+    let redirected = false;
 
     function updateTimer() {
       const now = new Date();
 
-      // Today's opening time: 5:00 PM, local device time.
+      // Today's opening time according to the device's local clock.
       const opening = new Date(now);
       opening.setHours(17, 0, 0, 0);
 
@@ -233,11 +320,15 @@
         document.getElementById("timer").style.display = "none";
         document.getElementById("open-time").style.display = "none";
         document.getElementById("open-now").style.display = "block";
+
         document.getElementById("message").textContent =
           "Our kitchen is open. Let's find your favourites!";
 
-        // Redirect once the opening time arrives.
-        window.location.replace(MENU_URL);
+        if (!redirected) {
+          redirected = true;
+          window.location.replace(MENU_URL);
+        }
+
         return;
       }
 
