@@ -3,7 +3,7 @@ const CACHE_NAME = "freshfry-partner-v1";
 
 const APP_FILES = [
   "/delivery.html",
-  "/partner-manifest.json",
+  "/delivermanifest.json",
   "/logo.png"
 ];
 
