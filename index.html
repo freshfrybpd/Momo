@@ -258,7 +258,7 @@ textarea.form-control{resize:vertical;min-height:82px}
         <label>Payment preference</label>
         <label class="payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
         <label class="payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-google-pay"></i><span>UPI payment — open UPI app</span></label>
-        <p class="form-hint">UPI app opening does not confirm payment. Payment is marked unverified until independently checked.</p>
+        <p class="form-hint">UPI orders remain payment pending until the payment is independently verified. Opening a UPI app does not confirm payment.</p>
       </div>
       <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
       <p id="checkout-minimum-notice" class="minimum-notice" aria-live="polite"></p>
@@ -293,7 +293,7 @@ textarea.form-control{resize:vertical;min-height:82px}
 <div class="modal" id="confirmation-modal">
   <div class="modal-box" style="text-align:center">
     <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px"><i class="fa-solid fa-check"></i></div>
-    <span class="small-label">Freshfry order confirmed</span><h2 class="modal-title" style="margin-top:8px">Order placed!</h2>
+    <span class="small-label">Freshfry order received</span><h2 class="modal-title" style="margin-top:8px">Order received!</h2>
     <p class="muted" id="confirmation-order-id"></p>
     <div class="confirm-pin-card"><div class="confirm-pin-label"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="confirm-pin-number" id="confirmation-pin">----</div><p class="delivery-pin-note">Keep this PIN private. Share it with the rider only when your order arrives.</p></div>
     <p class="muted">You can find this PIN again in My Orders → Track details when your order is out for delivery.</p>
@@ -326,7 +326,9 @@ const MINIMUM_ORDER=100;
 const UPI_ID="8984225311@ybl";
 const UPI_NAME="ABINASH BARIK";
 const CART_KEY="ff_cart_v2";
-const ACTIVE_STATUSES=["pending","accepted","preparing","out_for_delivery"];
+
+/* Payment-pending orders are visible, but are NOT treated as accepted orders. */
+const ACTIVE_STATUSES=["payment_pending","pending","accepted","preparing","out_for_delivery"];
 const STATUS_STEPS=[
   {key:"pending",label:"Placed"},
   {key:"accepted",label:"Accepted"},
@@ -381,7 +383,7 @@ function showToast(message,error=false){
   toast.classList.toggle("error",error);
   toast.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>toast.classList.remove("show"),3000);
+  toastTimer=setTimeout(()=>toast.classList.remove("show"),3500);
 }
 
 function openModal(id){$(id).classList.add("show")}
@@ -508,7 +510,7 @@ function addToCart(itemId,size){
   showToast(name+" added to your box");
 }
 
-/* CART + MINIMUM ORDER */
+/* CART */
 
 function renderCart(){
   const count=cart.reduce((sum,item)=>sum+item.qty,0);
@@ -598,17 +600,18 @@ function openCheckout(){
 /* DELIVERY PIN */
 
 function generateDeliveryPin(){
-  return String(crypto.getRandomValues(new Uint32Array(1))[0]%9000+1000);
+  const values=new Uint32Array(1);
+  crypto.getRandomValues(values);
+  return String(values[0]%9000+1000);
 }
 
-/* UPI INTENT */
+/* UPI PAYMENT INTENT */
 
-function openUPIPayment(amount,orderId){
+function createUPILink(amount,orderId){
   const payableAmount=Number(amount);
 
   if(!Number.isFinite(payableAmount)||payableAmount<=0){
-    showToast("Invalid payment amount.",true);
-    return;
+    throw new Error("Invalid payment amount.");
   }
 
   const params=new URLSearchParams({
@@ -616,13 +619,24 @@ function openUPIPayment(amount,orderId){
     pn:UPI_NAME,
     am:payableAmount.toFixed(2),
     cu:"INR",
-    tn:"FreshFry Order "+orderId.slice(0,20)
+    tn:`FreshFry Order ${orderId}`,
+    tr:orderId
   });
 
-  window.location.href="upi://pay?"+params.toString();
+  return "upi://pay?"+params.toString();
 }
 
-/* CHECKOUT + FIRESTORE ORDER */
+function openUPIPayment(amount,orderId){
+  const link=createUPILink(amount,orderId);
+
+  /*
+    Do not mark payment as successful here.
+    A UPI intent only opens a payment app.
+  */
+  window.location.assign(link);
+}
+
+/* CHECKOUT */
 
 async function placeOrder(event){
   event.preventDefault();
@@ -640,7 +654,6 @@ async function placeOrder(event){
   if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
   if(address.length<8)return showToast("Please enter your complete address.",true);
 
-  // Recheck minimum at submission time.
   const orderSubtotal=subtotal();
 
   if(orderSubtotal<MINIMUM_ORDER){
@@ -663,10 +676,18 @@ async function placeOrder(event){
   const orderTotal=orderSubtotal+deliveryFee;
   const deliveryPin=generateDeliveryPin();
 
+  /*
+    UPI: payment_pending + unverified.
+    COD: pending + not applicable.
+    The browser cannot independently verify a UPI transfer.
+  */
+  const initialStatus=paymentMethod==="UPI"?"payment_pending":"pending";
+  const initialPaymentStatus=paymentMethod==="UPI"?"unverified":"cash_on_delivery";
+
   submitting=true;
   const button=$("place-order-btn");
   button.disabled=true;
-  button.textContent="Placing order...";
+  button.textContent="Creating order...";
 
   try{
     const ref=await addDoc(collection(db,"orders"),{
@@ -676,13 +697,13 @@ async function placeOrder(event){
       customerLocation:address,
       note,
       paymentMethod,
-      paymentStatus:"unverified",
+      paymentStatus:initialPaymentStatus,
       items:orderItems,
       subtotal:orderSubtotal,
       deliveryFee,
       total:orderTotal,
       deliveryPin,
-      status:"pending",
+      status:initialStatus,
       createdAt:serverTimestamp()
     });
 
@@ -692,9 +713,6 @@ async function placeOrder(event){
     localStorage.setItem("ff_customer_name",name);
     localStorage.setItem("ff_customer_address",address);
 
-    cart=[];
-    saveCart();
-    renderCart();
     updateUserUI();
     closeModal("checkout-modal");
 
@@ -703,16 +721,28 @@ async function placeOrder(event){
     showOrdersPage();
 
     if(paymentMethod==="UPI"){
-      showToast("Order placed. Opening UPI app...");
+      /*
+        Keep cart until the order has been saved successfully.
+        Once saved, clear it before redirecting to the UPI app.
+      */
+      cart=[];
+      saveCart();
+      renderCart();
+
+      showToast("Order created as PAYMENT PENDING. Opening UPI app...");
       openUPIPayment(orderTotal,ref.id);
     }else{
+      cart=[];
+      saveCart();
+      renderCart();
+
       $("confirmation-order-id").textContent="Order #"+ref.id;
       $("confirmation-pin").textContent=deliveryPin;
       openModal("confirmation-modal");
     }
   }catch(error){
     console.error("Order creation failed:",error);
-    showToast("Order could not be placed. Check connection or Firebase permissions.",true);
+    showToast("Order could not be created. Check internet and Firestore permissions.",true);
   }finally{
     submitting=false;
     button.disabled=!cart.length||subtotal()<MINIMUM_ORDER;
@@ -724,12 +754,30 @@ async function placeOrder(event){
 
 function normalizeStatus(value){
   const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
-  const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",cancelled:"cancelled",canceled:"cancelled"};
+  const aliases={
+    confirmed:"accepted",
+    cooking:"preparing",
+    on_the_way:"out_for_delivery",
+    outfordelivery:"out_for_delivery",
+    complete:"delivered",
+    completed:"delivered",
+    cancelled:"cancelled",
+    canceled:"cancelled"
+  };
   return aliases[s]||s;
 }
 
 function statusLabel(status){
-  return ({pending:"Pending",accepted:"Accepted",preparing:"Preparing",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled",rejected:"Rejected"})[normalizeStatus(status)]||String(status||"Pending");
+  return ({
+    payment_pending:"Payment pending",
+    pending:"Pending",
+    accepted:"Accepted",
+    preparing:"Preparing",
+    out_for_delivery:"Out for delivery",
+    delivered:"Delivered",
+    cancelled:"Cancelled",
+    rejected:"Rejected"
+  })[normalizeStatus(status)]||String(status||"Pending");
 }
 
 function startOrdersListener(){
@@ -770,6 +818,9 @@ function renderOrders(){
   $("orders-list").innerHTML=orders.map(order=>{
     const status=normalizeStatus(order.status);
     const items=Array.isArray(order.items)?order.items:[];
+    const paymentText=order.paymentMethod==="UPI"&&order.paymentStatus!=="paid"
+      ?"Payment not verified"
+      :(order.paymentStatus||"unverified");
 
     return `
       <article class="order-card">
@@ -779,7 +830,7 @@ function renderOrders(){
         </div>
         <div class="order-items">${items.map(i=>`${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}`).join("<br>")||"Order details unavailable"}</div>
         <div class="order-card-bottom">
-          <span>${escapeHTML(order.paymentMethod||"Payment unavailable")}<br><small>${escapeHTML(order.paymentStatus||"unverified")}</small></span>
+          <span>${escapeHTML(order.paymentMethod||"Payment unavailable")}<br><small>${escapeHTML(paymentText)}</small></span>
           <button class="secondary-btn" data-track="${escapeHTML(order.id)}">Track details</button>
         </div>
       </article>`;
@@ -806,15 +857,25 @@ function renderTracking(){
   const items=Array.isArray(order.items)?order.items:[];
   const pin=/^\d{4}$/.test(String(order.deliveryPin||""))?String(order.deliveryPin):"";
   const showPin=status==="out_for_delivery"&&pin;
+  const paymentPending=order.paymentMethod==="UPI"&&order.paymentStatus!=="paid";
 
   $("tracking-id").textContent="Order #"+order.id;
 
   $("tracking-content").innerHTML=`
-    <div class="status-banner"><i class="fa-solid fa-fire-burner"></i> Current status: <strong>${escapeHTML(statusLabel(status))}</strong><div style="color:#bbb;font-size:10px;margin-top:5px">Payment status: ${escapeHTML(order.paymentStatus||"unverified")}. Status updates when the restaurant updates your order.</div></div>
+    <div class="status-banner">
+      <i class="fa-solid fa-fire-burner"></i>
+      Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
+      <div style="color:#bbb;font-size:10px;margin-top:5px">
+        Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.
+        ${paymentPending?"Please complete payment and wait for independent verification. Do not assume payment succeeded just because the UPI app opened.":"Status updates when the restaurant updates your order."}
+      </div>
+    </div>
     ${showPin?`<div class="delivery-pin-card"><div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="delivery-pin-number">${escapeHTML(pin)}</div><p class="delivery-pin-note">Share this PIN with your rider when your food arrives.</p></div>`:""}
     ${cancelled?`<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}.</p>`:`<div class="progress">${steps}</div>`}
     <h3 style="font-size:14px;margin:22px 0 10px">Order summary</h3>
     ${items.map(i=>`<div class="total-row"><span>${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
+    <div class="total-row"><span>Food subtotal</span><strong>${money(Number(order.subtotal)||0)}</strong></div>
+    <div class="total-row"><span>Delivery fee</span><strong>${money(Number(order.deliveryFee)||0)}</strong></div>
     <div class="total-row final"><span>Total</span><span>${money(Number(order.total)||0)}</span></div>
     ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
     <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.</p>`;
