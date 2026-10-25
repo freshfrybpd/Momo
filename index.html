@@ -26,6 +26,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 img{display:block;max-width:100%}
 [hidden]{display:none!important}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ffb38a;outline-offset:2px}
+
 .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:13px 5%;display:flex;align-items:center;justify-content:space-between}
 .brand{font-size:27px;font-weight:900;font-style:italic;letter-spacing:-1.5px}
 .brand span{color:var(--orange)}
@@ -43,6 +44,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .hero h1 span{color:var(--orange)}
 .hero p{font-size:13px;color:#d0d0d3;line-height:1.7;max-width:330px}
 .hero-tag{display:inline-flex;gap:8px;align-items:center;background:white;color:var(--black);padding:11px 15px;border-radius:12px;font-size:11px;font-weight:900;margin-top:7px;border:0}
+
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:32px 0 17px}
 .section-head h2{font-size:23px;margin:0;font-weight:900;letter-spacing:-.7px}
 .section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
@@ -55,6 +57,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .category-row::-webkit-scrollbar{display:none}
 .chip{flex-shrink:0;border:1px solid var(--line);background:white;border-radius:999px;padding:10px 16px;font-size:11px;font-weight:800;color:#555}
 .chip.active{background:var(--black);border-color:var(--black);color:white}
+
 .menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px}
 .food-card{background:white;border:1px solid var(--line);border-radius:23px;padding:11px;overflow:hidden;min-width:0;transition:transform .2s,box-shadow .2s}
 .food-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #00000008}
@@ -75,11 +78,13 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .empty-state{grid-column:1/-1;background:white;padding:35px 20px;text-align:center;border-radius:20px;border:1px dashed #ddd;color:var(--muted)}
 .empty-state i{font-size:30px;color:#ccc;margin-bottom:12px}
 .notice{margin-top:22px;background:#fff3eb;color:#8a3a10;padding:13px 15px;border-radius:14px;font-size:11px;line-height:1.6}
+
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
 .bottom-inner{width:100%;max-width:600px;display:flex;justify-content:space-around}
 .nav-item{background:none;border:0;color:#888;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:10px;font-weight:800;padding:5px 13px}
 .nav-item i{font-size:18px}
 .nav-item.active{color:var(--orange)}
+
 .overlay{position:fixed;inset:0;background:#0008;z-index:100;opacity:0;visibility:hidden;transition:.25s}
 .overlay.show{opacity:1;visibility:visible}
 .drawer{position:fixed;z-index:101;right:0;top:0;bottom:0;width:min(460px,100%);background:white;transform:translateX(105%);transition:transform .28s ease;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
@@ -103,6 +108,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .minimum-notice{font-size:11px;line-height:1.5;margin:10px 0;color:#c2410c}
 .primary-btn{border:0;background:var(--orange);color:white;width:100%;border-radius:14px;padding:16px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.4px}
 .secondary-btn{border:1px solid var(--line);background:white;color:var(--black);border-radius:12px;padding:12px;font-size:11px;font-weight:900}
+
 .form-group{margin-bottom:15px}
 .form-group label{display:block;font-size:11px;font-weight:900;margin-bottom:7px}
 .form-control{width:100%;border:1px solid #e5e5e8;border-radius:12px;background:white;padding:13px;font-size:12px;outline:none}
@@ -147,6 +153,13 @@ textarea.form-control{resize:vertical;min-height:82px}
 .order-ticker-pin{min-width:100px;border:1px solid #b7e4c7;border-radius:15px;background:#effcf4;color:#166534;padding:9px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
 .order-ticker-pin-label{font-size:9px;font-weight:900;letter-spacing:.4px}
 .order-ticker-pin-number{font-size:23px;line-height:1.3;font-weight:900;letter-spacing:3px}
+.location-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.location-actions .secondary-btn{flex:1}
+.map-link{display:block;margin-top:10px;padding:12px;background:#effcf4;border:1px solid #b7e4c7;border-radius:12px;color:#166534;text-decoration:none;font-size:11px;font-weight:900;text-align:center}
+.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:9px;background:#168b45;color:white;border:0;border-radius:13px;padding:14px;width:100%;font-size:12px;font-weight:900;text-decoration:none}
+.whatsapp-btn i{font-size:18px}
+.payment-pending-note{padding:12px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:12px;font-size:11px;line-height:1.6;text-align:left}
+
 @media(max-width:760px){
 .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .wrap{padding:0 14px}
@@ -213,9 +226,9 @@ textarea.form-control{resize:vertical;min-height:82px}
       <div><span class="small-label">Made for your cravings</span><h2>Explore Menu</h2><p>Choose your favourite. Pick your portion.</p></div>
       <span class="small-label" id="menu-count">Loading...</span>
     </div>
-    <div class="category-row" id="category-row"><button class="chip active" data-category="all">All Items</button></div>
+    <div class="category-row" id="category-row"><button class="chip active" data-category="all">All Types</button></div>
     <div class="menu-grid" id="menu-grid"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div>
-    <div class="notice"><i class="fa-solid fa-circle-info"></i> Minimum food order ₹100. Delivery fee ₹20 is additional. For food subtotal above ₹150, only online UPI payment is available.</div>
+    <div class="notice"><i class="fa-solid fa-circle-info"></i> Minimum food order ₹100. Delivery fee ₹20 is additional. For food subtotal above ₹150, only online UPI QR-request payment is available.</div>
   </section>
 
   <section id="orders-section" hidden>
@@ -257,49 +270,44 @@ textarea.form-control{resize:vertical;min-height:82px}
     <form id="checkout-form">
       <div class="form-group"><label for="customer-name">Full name *</label><input class="form-control" id="customer-name" maxlength="80" required autocomplete="name" placeholder="Enter your name"></div>
       <div class="form-group"><label for="customer-phone">Mobile number *</label><input class="form-control" id="customer-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number"></div>
-      <div class="form-group"><label for="customer-address">Delivery address *</label><textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea></div>
+
+      <div class="form-group">
+        <label for="customer-address">Delivery address *</label>
+        <textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea>
+        <div class="location-actions">
+          <button type="button" id="use-current-location" class="secondary-btn"><i class="fa-solid fa-location-crosshairs"></i> Use My Current Location</button>
+        </div>
+        <p class="form-hint" id="location-status" aria-live="polite">Allow location access to attach your GPS coordinates to this order.</p>
+        <a id="open-location-map" class="map-link" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="fa-solid fa-map-location-dot"></i> View selected location on Google Maps</a>
+        <label style="margin-top:14px">Choose your area</label>
+        <div class="location-actions">
+          <button type="button" class="secondary-btn area-suggestion" data-area="Bhanjpur, Baripada">Bhanjpur</button>
+          <button type="button" class="secondary-btn area-suggestion" data-area="Bada Bazar, Baripada">Bada Bazar</button>
+          <button type="button" class="secondary-btn area-suggestion" data-area="Station Bazar, Baripada">Station Bazar</button>
+          <button type="button" class="secondary-btn area-suggestion" data-area="Baghra Road, Baripada">Baghra Road</button>
+        </div>
+        <p class="form-hint">Area suggestions can be edited. Add your house number or a nearby landmark too.</p>
+      </div>
+
       <div class="form-group"><label for="customer-note">Order note (optional)</label><textarea class="form-control" id="customer-note" maxlength="250" placeholder="Any special instructions?"></textarea></div>
 
       <div class="form-group">
         <label>Payment preference</label>
-
         <label class="payment-option" id="cod-payment-option">
           <input type="radio" name="payment-method" value="COD" checked>
-          <i class="fa-solid fa-money-bill-wave"></i>
-          <span>Cash on delivery</span>
+          <i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span>
         </label>
-
         <label class="payment-option" id="upi-payment-option">
           <input type="radio" name="payment-method" value="UPI">
-          <i class="fa-brands fa-google-pay"></i>
-          <span>Online UPI payment</span>
+          <i class="fa-brands fa-whatsapp" style="color:#168b45"></i><span>UPI QR code via WhatsApp</span>
         </label>
-
-        <p class="form-hint" id="payment-rule-hint">
-          Food subtotal above ₹150 requires online UPI payment.
-        </p>
+        <p class="form-hint" id="payment-rule-hint">For food subtotal above ₹150, only online UPI QR-request payment is available.</p>
       </div>
 
       <div id="upi-qr-section" class="qr-section" hidden>
-        <h3 style="margin:0 0 8px;font-size:17px;"><i class="fa-solid fa-mobile-screen-button"></i> Pay with UPI</h3>
-        <p style="font-size:12px;color:#666;margin:0 0 12px;">No QR code required. Open your UPI app after placing the order.</p>
-
-        <div style="background:white;border:1px solid #ffd9c4;border-radius:14px;padding:15px;">
-          <p style="margin:0 0 5px;font-size:11px;color:#777;">PAYABLE AMOUNT</p>
-          <strong id="upi-qr-amount" style="font-size:30px;color:#ff5e00;">₹0</strong>
-
-          <div style="margin-top:15px;text-align:left;">
-            <p style="font-size:11px;color:#777;margin:0 0 5px;">UPI ID</p>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-              <strong id="upi-id-display" style="font-size:14px;overflow-wrap:anywhere;">Q147892962@ybl</strong>
-              <button type="button" id="upi-copy-btn" class="secondary-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-            </div>
-          </div>
-        </div>
-
-        <p style="font-size:10px;line-height:1.6;color:#777;margin:12px 0 0;">
-          Verify the recipient and amount in your UPI app. Opening the app does not confirm payment.
-        </p>
+        <h3 style="margin:0 0 8px;font-size:17px"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i> Request UPI QR Code</h3>
+        <p style="font-size:12px;color:#666;margin:0 0 12px">No QR code will be displayed here. Place the order, then send a QR request through WhatsApp. We will send you the QR code manually.</p>
+        <div class="payment-pending-note"><strong>Payment process</strong><br>1. Place the order.<br>2. Request the QR code on WhatsApp.<br>3. Pay after receiving the QR code.<br>4. Your payment will be marked Paid after verification.</div>
       </div>
 
       <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
@@ -337,8 +345,9 @@ textarea.form-control{resize:vertical;min-height:82px}
     <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px"><i class="fa-solid fa-check"></i></div>
     <span class="small-label">Freshfry order received</span><h2 class="modal-title" style="margin-top:8px">Order received!</h2>
     <p class="muted" id="confirmation-order-id"></p>
+    <div id="confirmation-payment-note" class="payment-pending-note" hidden style="margin-top:14px">Your order is saved, but your UPI payment is <strong>pending verification</strong>. Request the QR code through WhatsApp, pay after receiving it, and wait for payment confirmation.</div>
     <div class="confirm-pin-card"><div class="confirm-pin-label"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="confirm-pin-number" id="confirmation-pin">----</div><p class="delivery-pin-note">Keep this PIN private. Share it with the rider only when your order arrives.</p></div>
-    <p class="muted">You can find this PIN again in My Orders → Track details when your order is out for delivery.</p>
+    <button class="whatsapp-btn" id="request-qr-whatsapp" hidden><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>
     <button class="primary-btn" id="confirmation-track" style="margin-top:14px">Track my order</button>
     <button class="secondary-btn" id="confirmation-close" style="width:100%;margin-top:10px">Continue browsing</button>
   </div>
@@ -366,8 +375,7 @@ const $=id=>document.getElementById(id);
 const DELIVERY_FEE=20;
 const MINIMUM_ORDER=100;
 const COD_MAX_SUBTOTAL=150;
-const UPI_ID="Q147892962@ybl";
-const UPI_NAME="ABINASH BARIK";
+const WHATSAPP_NUMBER="8984225311";
 const CART_KEY="ff_cart_v2";
 const ACTIVE_STATUSES=["payment_pending","pending","accepted","preparing","out_for_delivery"];
 const STATUS_STEPS=[
@@ -388,7 +396,8 @@ let menuUnsubscribe=null;
 let ordersUnsubscribe=null;
 let toastTimer=null;
 let submitting=false;
-let currentUPILink="";
+let selectedDeliveryLocation=null;
+let lastWhatsAppURL="";
 
 function readCart(){
   try{
@@ -417,38 +426,6 @@ function getPhone(){
 
 function validPhone(phone){return /^[6-9]\d{9}$/.test(phone)}
 function subtotal(){return cart.reduce((sum,item)=>sum+item.price*item.qty,0)}
-function total(){return subtotal()+(cart.length?DELIVERY_FEE:0)}
-
-/* PAYMENT RULE
-   Food subtotal <= ₹150: COD and UPI available.
-   Food subtotal > ₹150: only UPI available.
-*/
-
-function updatePaymentOptions(){
-  const foodSubtotal=subtotal();
-  const codOption=$("cod-payment-option");
-  const upiOption=$("upi-payment-option");
-  const codRadio=document.querySelector('input[name="payment-method"][value="COD"]');
-  const upiRadio=document.querySelector('input[name="payment-method"][value="UPI"]');
-  const hint=$("payment-rule-hint");
-
-  const onlineOnly=foodSubtotal>COD_MAX_SUBTOTAL;
-
-  codOption.hidden=onlineOnly;
-  codRadio.disabled=onlineOnly;
-
-  if(onlineOnly){
-    upiRadio.checked=true;
-    upiOption.classList.add("recommended");
-    hint.textContent="Your food subtotal is above ₹150. Cash on delivery is unavailable. Please pay online using UPI.";
-  }else{
-    upiOption.classList.remove("recommended");
-    hint.textContent="For food subtotal above ₹150, only online UPI payment is available.";
-    if(!codRadio.checked&&!upiRadio.checked)codRadio.checked=true;
-  }
-
-  return onlineOnly;
-}
 
 function showToast(message,error=false){
   const toast=$("toast");
@@ -485,11 +462,10 @@ function updateUserUI(){
   $("logout-btn").style.display=phone?"block":"none";
 }
 
-/* MENU */
-
+/* MENU: Original Firebase menu and type filter */
 function startMenuListener(){
   if(menuUnsubscribe)menuUnsubscribe();
-  $("menu-grid").innerHTML='<div class="loading-card"></div><div class="loading-card"></div>';
+  $("menu-grid").innerHTML='<div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div>';
 
   menuUnsubscribe=onSnapshot(collection(db,"menu"),snapshot=>{
     menuItems=snapshot.docs.map(d=>{
@@ -519,7 +495,7 @@ function renderCategories(){
   if(selectedCategory!=="all"&&!categories.includes(selectedCategory))selectedCategory="all";
 
   $("category-row").innerHTML=
-    `<button class="chip ${selectedCategory==="all"?"active":""}" data-category="all">All Items</button>`+
+    `<button class="chip ${selectedCategory==="all"?"active":""}" data-category="all">All Types</button>`+
     categories.map(c=>`<button class="chip ${selectedCategory===c?"active":""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("");
 }
 
@@ -540,7 +516,7 @@ function renderMenu(){
   $("menu-count").textContent=`${visible.length} ITEMS`;
 
   if(!visible.length){
-    $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-bowl-food"></i><p>No matching food items.</p><p>Try another search or category.</p></div>';
+    $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-bowl-food"></i><p>No matching food items.</p><p>Try another search or category.</p><button class="secondary-btn" id="show-all-food">Show all food</button></div>';
     return;
   }
 
@@ -551,7 +527,7 @@ function renderMenu(){
     return `
       <article class="food-card">
         <div class="food-image">
-          ${image?`<img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" loading="lazy" decoding="async">`:'<div class="no-image"><i class="fa-solid fa-utensils"></i></div>'}
+          ${image?`<img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`:'<div class="no-image"><i class="fa-solid fa-utensils"></i></div>'}
           <span class="food-type ${type}">${escapeHTML(item.type)}</span>
         </div>
         <div class="food-info">
@@ -566,6 +542,53 @@ function renderMenu(){
   }).join("");
 }
 
+/* PAYMENT: no QR image and no automatic UPI app launch */
+function updatePaymentOptions(){
+  const foodSubtotal=subtotal();
+  const codOption=$("cod-payment-option");
+  const upiOption=$("upi-payment-option");
+  const codRadio=document.querySelector('input[name="payment-method"][value="COD"]');
+  const upiRadio=document.querySelector('input[name="payment-method"][value="UPI"]');
+  const hint=$("payment-rule-hint");
+  const onlineOnly=foodSubtotal>COD_MAX_SUBTOTAL;
+
+  codOption.hidden=onlineOnly;
+  codRadio.disabled=onlineOnly;
+
+  if(onlineOnly){
+    upiRadio.checked=true;
+    upiOption.classList.add("recommended");
+    hint.textContent="Food subtotal is above ₹150. Cash on delivery is unavailable. Place the order and request a UPI QR code on WhatsApp.";
+  }else{
+    upiOption.classList.remove("recommended");
+    hint.textContent="For food subtotal above ₹150, only online UPI QR-request payment is available.";
+    if(!codRadio.checked&&!upiRadio.checked)codRadio.checked=true;
+  }
+  return onlineOnly;
+}
+
+function updateUPIQR(){
+  updatePaymentOptions();
+  const method=document.querySelector('input[name="payment-method"]:checked')?.value;
+  const eligible=cart.length>0&&subtotal()>=MINIMUM_ORDER&&method==="UPI";
+  $("upi-qr-section").hidden=!eligible;
+  $("place-order-btn").textContent=method==="UPI"?"Place Order & Request QR":"Place Order";
+}
+
+function buildWhatsAppURL({name,phone,orderId,amount,address}){
+  const message=[
+    "Hello, my name is "+name+".",
+    "I want to pay through UPI QR code. Please give me the QR code to pay.",
+    "FreshFry order ID: "+orderId,
+    "Order amount: "+money(amount),
+    "My mobile number: "+phone,
+    "Delivery address: "+address,
+    "Thank you!"
+  ].join("\n");
+  return "https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
+}
+
+/* CART */
 function addToCart(itemId,size){
   const item=menuItems.find(x=>x.id===itemId&&x.available);
   if(!item)return showToast("This item is currently unavailable.",true);
@@ -583,56 +606,8 @@ function addToCart(itemId,size){
   showToast(name+" added to your box");
 }
 
-/* UPI — NO QR CODE */
-
-function makeUPILink(amount,reference="FreshFry"){
-  const params=new URLSearchParams({
-    pa:UPI_ID,
-    pn:UPI_NAME,
-    am:Number(amount).toFixed(2),
-    cu:"INR",
-    tn:String(reference).slice(0,80)
-  });
-  return "upi://pay?"+params.toString();
-}
-
-function updateUPIQR(){
-  const section=$("upi-qr-section");
-  const method=document.querySelector('input[name="payment-method"]:checked')?.value;
-  const foodSubtotal=subtotal();
-
-  updatePaymentOptions();
-
-  const currentMethod=document.querySelector('input[name="payment-method"]:checked')?.value;
-
-  if(currentMethod!=="UPI"){
-    section.hidden=true;
-    currentUPILink="";
-    $("place-order-btn").textContent="Place Order";
-    return;
-  }
-
-  if(!cart.length||foodSubtotal<MINIMUM_ORDER){
-    section.hidden=true;
-    currentUPILink="";
-    $("place-order-btn").textContent="Place Order";
-    return;
-  }
-
-  const payable=foodSubtotal+DELIVERY_FEE;
-  currentUPILink=makeUPILink(payable,"FreshFry Checkout");
-
-  $("upi-qr-amount").textContent=money(payable);
-  $("upi-id-display").textContent=UPI_ID;
-  section.hidden=false;
-  $("place-order-btn").textContent="Place Order & Pay Online";
-}
-
-/* CART */
-
 function renderCart(){
   const count=cart.reduce((sum,item)=>sum+item.qty,0);
-
   $("cart-count").textContent=count>99?"99+":count;
   $("cart-count").hidden=count===0;
   $("cart-title-count").textContent=`(${count})`;
@@ -688,11 +663,9 @@ function renderCart(){
 function changeQuantity(id,delta){
   const item=cart.find(x=>x.id===id);
   if(!item)return;
-
   item.qty+=delta;
   if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
   if(item.qty>99)item.qty=99;
-
   saveCart();
   renderCart();
 }
@@ -705,7 +678,6 @@ function removeItem(id){
 
 function openCheckout(){
   if(!cart.length)return showToast("Your box is empty.",true);
-
   if(subtotal()<MINIMUM_ORDER){
     return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-subtotal())} more.`,true);
   }
@@ -714,13 +686,79 @@ function openCheckout(){
   $("customer-phone").value=getPhone();
   $("customer-name").value=localStorage.getItem("ff_customer_name")||"";
   $("customer-address").value=localStorage.getItem("ff_customer_address")||"";
+  $("location-status").textContent=selectedDeliveryLocation
+    ?"GPS location selected for this checkout."
+    :"Allow location access to attach your GPS coordinates to this order.";
+
+  if(selectedDeliveryLocation){
+    $("open-location-map").href=selectedDeliveryLocation.mapUrl;
+    $("open-location-map").hidden=false;
+  }else{
+    $("open-location-map").hidden=true;
+  }
+
   renderCart();
   updateUPIQR();
   openModal("checkout-modal");
 }
 
-/* DELIVERY PIN */
+/* GPS LOCATION */
+function setDeliveryLocation(latitude,longitude){
+  selectedDeliveryLocation={
+    latitude:Number(latitude),
+    longitude:Number(longitude),
+    mapUrl:`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`
+  };
 
+  const address=$("customer-address");
+  const gpsLine=`GPS Location: ${Number(latitude).toFixed(6)}, ${Number(longitude).toFixed(6)}`;
+  const withoutOldGps=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:")).join("\n").trim();
+  address.value=withoutOldGps?`${withoutOldGps}\n${gpsLine}`:gpsLine;
+
+  $("location-status").textContent="GPS coordinates captured. The map link will guide the delivery rider to this pin.";
+  $("open-location-map").href=selectedDeliveryLocation.mapUrl;
+  $("open-location-map").hidden=false;
+}
+
+$("use-current-location").addEventListener("click",()=>{
+  if(!navigator.geolocation){
+    $("location-status").textContent="This browser does not support GPS location. Please enter your address manually.";
+    return;
+  }
+
+  const button=$("use-current-location");
+  button.disabled=true;
+  $("location-status").textContent="Getting your current location. Please allow location access...";
+
+  navigator.geolocation.getCurrentPosition(position=>{
+    setDeliveryLocation(position.coords.latitude,position.coords.longitude);
+    button.disabled=false;
+  },error=>{
+    const messages={
+      1:"Location permission denied. Allow location access in browser settings.",
+      2:"Location unavailable. Check GPS and try again outdoors.",
+      3:"Location request timed out. Please try again."
+    };
+    $("location-status").textContent=messages[error.code]||"Could not get GPS location. Enter your address manually.";
+    button.disabled=false;
+  },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+});
+
+document.querySelectorAll(".area-suggestion").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const area=button.dataset.area;
+    const address=$("customer-address");
+    const lines=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:"));
+    const remaining=lines.slice(1).filter(Boolean);
+    address.value=[area,...remaining].join("\n");
+
+    document.querySelectorAll(".area-suggestion").forEach(item=>{
+      item.classList.toggle("recommended",item===button);
+    });
+  });
+});
+
+/* DELIVERY PIN */
 function generateDeliveryPin(){
   const values=new Uint32Array(1);
   crypto.getRandomValues(values);
@@ -728,16 +766,13 @@ function generateDeliveryPin(){
 }
 
 /* CHECKOUT + FIRESTORE */
-
 async function placeOrder(event){
   event.preventDefault();
 
-  // Opening time: 5:00 PM local time.
+  // Existing opening-time restriction: 5 PM local time.
   const now=new Date();
   const currentMinutes=now.getHours()*60+now.getMinutes();
-  const openingMinutes=17*60;
-
-  if(currentMinutes<openingMinutes){
+  if(currentMinutes<17*60){
     window.location.replace("https://freshfrymomo.food/freshfry.html");
     return;
   }
@@ -751,9 +786,7 @@ async function placeOrder(event){
   const note=$("customer-note").value.trim();
   const orderSubtotal=subtotal();
 
-  // Enforce payment rule in JavaScript as well as the UI.
   let paymentMethod=document.querySelector('input[name="payment-method"]:checked')?.value||"COD";
-
   if(orderSubtotal>COD_MAX_SUBTOTAL){
     paymentMethod="UPI";
     document.querySelector('input[name="payment-method"][value="UPI"]').checked=true;
@@ -761,17 +794,14 @@ async function placeOrder(event){
 
   if(name.length<2)return showToast("Please enter your full name.",true);
   if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
-  if(address.length<8)return showToast("Please enter your complete address.",true);
-
+  if(address.length<8)return showToast("Please enter your complete delivery address.",true);
   if(orderSubtotal<MINIMUM_ORDER){
     renderCart();
     return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-orderSubtotal)} more.`,true);
   }
-
   if(orderSubtotal>COD_MAX_SUBTOTAL&&paymentMethod!=="UPI"){
     return showToast("Orders above ₹150 require online UPI payment.",true);
   }
-
   if(cart.some(i=>!Number.isFinite(i.price)||i.price<0||!Number.isInteger(i.qty)||i.qty<1)){
     return showToast("Please check your cart.",true);
   }
@@ -786,6 +816,7 @@ async function placeOrder(event){
   const deliveryFee=DELIVERY_FEE;
   const orderTotal=orderSubtotal+deliveryFee;
   const deliveryPin=generateDeliveryPin();
+  const gps=selectedDeliveryLocation;
 
   submitting=true;
   $("place-order-btn").disabled=true;
@@ -797,9 +828,12 @@ async function placeOrder(event){
       customerName:name,
       deliveryAddress:address,
       customerLocation:address,
+      deliveryLatitude:gps?gps.latitude:null,
+      deliveryLongitude:gps?gps.longitude:null,
+      deliveryMapUrl:gps?gps.mapUrl:"",
       note,
       paymentMethod,
-      paymentStatus:paymentMethod==="UPI"?"unverified":"cash_on_delivery",
+      paymentStatus:paymentMethod==="UPI"?"pending":"cash_on_delivery",
       items:orderItems,
       subtotal:orderSubtotal,
       deliveryFee,
@@ -815,25 +849,29 @@ async function placeOrder(event){
     localStorage.setItem("ff_customer_name",name);
     localStorage.setItem("ff_customer_address",address);
 
+    lastWhatsAppURL=buildWhatsAppURL({
+      name,phone,orderId:ref.id,amount:orderTotal,address
+    });
+
     updateUserUI();
     closeModal("checkout-modal");
-
     selectedOrderId=ref.id;
     startOrdersListener();
-    showOrdersPage();
 
-    // Preserve the submitted order before clearing the cart.
     cart=[];
     saveCart();
     renderCart();
 
+    $("confirmation-order-id").textContent="Order #"+ref.id;
+    $("confirmation-pin").textContent=deliveryPin;
+    $("confirmation-payment-note").hidden=paymentMethod!=="UPI";
+    $("request-qr-whatsapp").hidden=paymentMethod!=="UPI";
+    openModal("confirmation-modal");
+
     if(paymentMethod==="UPI"){
-      showToast("Order saved. Opening UPI app. Payment is pending verification.");
-      openUPIPayment(orderTotal,ref.id);
+      showToast("Order saved. Request the QR code on WhatsApp to pay.");
     }else{
-      $("confirmation-order-id").textContent="Order #"+ref.id;
-      $("confirmation-pin").textContent=deliveryPin;
-      openModal("confirmation-modal");
+      showToast("Your order has been placed successfully.");
     }
   }catch(error){
     console.error("Order creation failed:",error);
@@ -845,13 +883,7 @@ async function placeOrder(event){
   }
 }
 
-function openUPIPayment(amount,orderId){
-  const link=makeUPILink(amount,"FreshFry Order "+orderId);
-  window.location.href=link;
-}
-
-/* ORDERS + TRACKING */
-
+/* ORDER STATUS + TRACKING */
 function normalizeStatus(value){
   const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
   const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",cancelled:"cancelled",canceled:"cancelled"};
@@ -873,7 +905,6 @@ function statusLabel(status){
 
 function startOrdersListener(){
   const phone=getPhone();
-
   if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null;}
   orders=[];
 
@@ -909,8 +940,8 @@ function renderOrders(){
   $("orders-list").innerHTML=orders.map(order=>{
     const status=normalizeStatus(order.status);
     const items=Array.isArray(order.items)?order.items:[];
-    const paymentText=order.paymentMethod==="UPI"&&order.paymentStatus!=="paid"
-      ?"Payment not verified"
+    const paymentText=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"
+      ?"Payment Pending"
       :(order.paymentStatus||"unverified");
 
     return `
@@ -928,9 +959,14 @@ function renderOrders(){
   }).join("");
 }
 
+function validCoordinates(latitude,longitude){
+  return Number.isFinite(Number(latitude))&&Number.isFinite(Number(longitude))&&
+    Number(latitude)>=-90&&Number(latitude)<=90&&
+    Number(longitude)>=-180&&Number(longitude)<=180;
+}
+
 function renderTracking(){
   const order=orders.find(x=>x.id===selectedOrderId);
-
   if(!order){
     $("tracking-content").innerHTML='<p class="muted">Waiting for order details. Please refresh shortly.</p>';
     return;
@@ -939,7 +975,6 @@ function renderTracking(){
   const status=normalizeStatus(order.status);
   const cancelled=["cancelled","rejected"].includes(status);
   const current=STATUS_STEPS.findIndex(x=>x.key===status);
-
   const steps=STATUS_STEPS.map((step,index)=>{
     const done=!cancelled&&current>=index;
     return `<div class="progress-step ${done?"done":""}"><div class="circle"><i class="fa-solid ${done?"fa-check":"fa-circle"}"></i></div>${escapeHTML(step.label)}</div>`;
@@ -948,16 +983,18 @@ function renderTracking(){
   const items=Array.isArray(order.items)?order.items:[];
   const pin=/^\d{4}$/.test(String(order.deliveryPin||""))?String(order.deliveryPin):"";
   const showPin=status==="out_for_delivery"&&pin;
-  const paymentPending=order.paymentMethod==="UPI"&&order.paymentStatus!=="paid";
+  const paymentPending=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid";
+  const mapUrl=validCoordinates(order.deliveryLatitude,order.deliveryLongitude)
+    ?`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(order.deliveryLatitude+","+order.deliveryLongitude)}`
+    :"";
 
   $("tracking-id").textContent="Order #"+order.id;
-
   $("tracking-content").innerHTML=`
     <div class="status-banner">
       Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
       <div style="color:#bbb;font-size:10px;margin-top:5px">
         Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.
-        ${paymentPending?"Payment is not verified. Complete payment and wait for confirmation. Opening a UPI app does not confirm payment.":"Status updates when the restaurant updates your order."}
+        ${paymentPending?"Payment has not been verified. Request the QR code and complete payment before waiting for confirmation.":"Status updates when the restaurant updates your order."}
       </div>
     </div>
     ${showPin?`<div class="delivery-pin-card"><div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="delivery-pin-number">${escapeHTML(pin)}</div><p class="delivery-pin-note">Share this PIN with your rider when your food arrives.</p></div>`:""}
@@ -968,11 +1005,26 @@ function renderTracking(){
     <div class="total-row"><span>Delivery fee</span><strong>${money(Number(order.deliveryFee)||0)}</strong></div>
     <div class="total-row final"><span>Total</span><span>${money(Number(order.total)||0)}</span></div>
     ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
+    ${mapUrl?`<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> Navigate to delivery location in Google Maps</a>`:""}
+    ${order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"?`<button type="button" class="whatsapp-btn" id="tracking-request-qr" style="margin-top:12px"><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>`:""}
     <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.</p>`;
+
+  const requestButton=$("tracking-content").querySelector("#tracking-request-qr");
+  if(requestButton){
+    requestButton.addEventListener("click",()=>{
+      const url=buildWhatsAppURL({
+        name:String(order.customerName||"Customer"),
+        phone:String(order.customerPhone||""),
+        orderId:order.id,
+        amount:Number(order.total)||0,
+        address:String(order.deliveryAddress||"")
+      });
+      window.open(url,"_blank","noopener,noreferrer");
+    });
+  }
 }
 
 /* ACTIVE ORDER TICKER */
-
 function updateOrderTicker(){
   let wrap=$("order-ticker-wrap");
   const active=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
@@ -986,7 +1038,6 @@ function updateOrderTicker(){
     wrap.innerHTML=`
       <button type="button" id="order-ticker-track" class="order-ticker-track"><i class="fa-solid fa-fire-burner"></i> <span id="order-ticker-status">ORDER PENDING · TRACK</span></button>
       <div id="order-ticker-pin" class="order-ticker-pin" hidden><span class="order-ticker-pin-label">DELIVERY PIN</span><span id="order-ticker-pin-number" class="order-ticker-pin-number">----</span></div>`;
-
     document.body.appendChild(wrap);
 
     $("order-ticker-track").addEventListener("click",()=>{
@@ -1008,7 +1059,6 @@ function updateOrderTicker(){
 }
 
 /* NAVIGATION */
-
 function showOrdersPage(){
   $("menu-section").hidden=true;
   $("orders-section").hidden=false;
@@ -1031,7 +1081,6 @@ function showMenu(){
 }
 
 /* EVENTS */
-
 $("header-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer");});
 $("bottom-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer");});
 
@@ -1053,15 +1102,6 @@ document.querySelectorAll('input[name="payment-method"]').forEach(input=>{
   });
 });
 
-$("upi-copy-btn").addEventListener("click",async()=>{
-  try{
-    await navigator.clipboard.writeText(UPI_ID);
-    showToast("UPI ID copied successfully.");
-  }catch{
-    showToast("Please copy UPI ID manually: "+UPI_ID,true);
-  }
-});
-
 $("search-input").addEventListener("input",event=>{
   searchTerm=event.target.value.trim().toLowerCase();
   renderMenu();
@@ -1078,7 +1118,16 @@ $("category-row").addEventListener("click",event=>{
 $("menu-grid").addEventListener("click",event=>{
   const button=event.target.closest("[data-add]");
   if(button)addToCart(button.dataset.add,button.dataset.size);
+
   if(event.target.closest("#retry-menu"))startMenuListener();
+
+  if(event.target.closest("#show-all-food")){
+    selectedCategory="all";
+    searchTerm="";
+    $("search-input").value="";
+    renderCategories();
+    renderMenu();
+  }
 });
 
 $("cart-content").addEventListener("click",event=>{
@@ -1129,7 +1178,6 @@ document.querySelectorAll(".nav-item[data-page]").forEach(button=>{
 
 $("login-form").addEventListener("submit",event=>{
   event.preventDefault();
-
   const phone=$("login-phone").value.replace(/\D/g,"");
   if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
 
@@ -1148,6 +1196,11 @@ $("logout-btn").addEventListener("click",()=>{
   showToast("Logged out on this device.");
 });
 
+$("request-qr-whatsapp").addEventListener("click",()=>{
+  if(!lastWhatsAppURL)return showToast("WhatsApp request is unavailable. Open your order and try again.",true);
+  window.open(lastWhatsAppURL,"_blank","noopener,noreferrer");
+});
+
 $("confirmation-track").addEventListener("click",()=>{
   closeModal("confirmation-modal");
   renderTracking();
@@ -1160,7 +1213,6 @@ window.addEventListener("online",()=>showToast("You're back online."));
 window.addEventListener("offline",()=>showToast("Internet connection lost.",true));
 
 /* START */
-
 updateUserUI();
 renderCart();
 updatePaymentOptions();
