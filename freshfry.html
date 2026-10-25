@@ -15,7 +15,6 @@
     :root {
       --orange: #ff5e00;
       --background: #101114;
-      --card: #171719;
       --white: #ffffff;
       --muted: #b8b8bd;
       --border: #343438;
@@ -27,6 +26,7 @@
 
     html {
       min-height: 100%;
+      scroll-behavior: smooth;
     }
 
     body {
@@ -36,21 +36,73 @@
       align-items: center;
       justify-content: center;
       padding: 24px 16px;
-      background: var(--background);
+      background:
+        radial-gradient(ellipse at 50% 30%, #ff5e0014, transparent 55%),
+        var(--background);
       color: var(--white);
       font-family: 'Outfit', sans-serif;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
+    /* Floating momo background */
+    .momo-float-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.25;
+    }
+
+    .floating-momo {
+      position: absolute;
+      bottom: -100px;
+      left: var(--left);
+      font-size: var(--size);
+      opacity: 0;
+      filter: drop-shadow(0 0 15px #ff5e0066);
+      animation: momoFloat var(--duration) linear infinite;
+      animation-delay: var(--delay);
+      will-change: transform, opacity;
+      user-select: none;
+    }
+
+    @keyframes momoFloat {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      12% {
+        opacity: 1;
+      }
+      50% {
+        transform: translate3d(35px, -55vh, 0) rotate(150deg);
+        opacity: 0.85;
+      }
+      88% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate3d(-25px, -115vh, 0) rotate(300deg);
+        opacity: 0;
+      }
+    }
+
+    /* Main opening card */
     .container {
+      position: relative;
+      z-index: 1;
       width: 100%;
       max-width: 760px;
-      padding: 48px 40px;
+      padding: 46px 38px;
       text-align: center;
-      background: linear-gradient(145deg, #1b1b1e, #111113);
-      border: 1px solid var(--border);
-      border-radius: 34px;
-      box-shadow: 0 25px 70px #0005;
+      background: rgba(20, 20, 22, 0.80);
+      border: 1px solid #39393d;
+      border-radius: 32px;
+      box-shadow: 0 25px 70px #0006;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .logo-text {
@@ -66,16 +118,13 @@
       color: var(--orange);
     }
 
-    /* Your existing GitHub logo.png */
     .food-icon {
       width: 150px;
       height: 105px;
-      margin: 34px auto 26px;
+      margin: 30px auto 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent;
-      border: none;
     }
 
     .food-icon img {
@@ -83,60 +132,65 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      filter: drop-shadow(0 5px 20px #ff5e0025);
     }
 
     .label {
       display: inline-block;
       max-width: 100%;
-      padding: 12px 22px;
+      padding: 11px 20px;
+      border: 1px solid #ff5e003d;
       border-radius: 999px;
       background: #ff5e001e;
-      color: #ff9b66;
-      font-size: 12px;
+      color: #ffad80;
+      font-size: 11px;
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 1.8px;
     }
 
     h1 {
-      margin: 32px 0 18px;
+      margin: 30px 0 17px;
       font-size: clamp(38px, 8vw, 66px);
-      line-height: 1.08;
+      line-height: 1.06;
       font-weight: 900;
       letter-spacing: -2.5px;
     }
 
     h1 span {
       color: var(--orange);
+      text-shadow: 0 0 30px #ff5e0033;
     }
 
     .description {
-      max-width: 560px;
+      max-width: 540px;
       margin: 0 auto;
       color: var(--muted);
-      font-size: clamp(14px, 2.5vw, 19px);
+      font-size: clamp(14px, 2.5vw, 18px);
       line-height: 1.8;
     }
 
+    /* Countdown */
     .timer {
       display: flex;
       justify-content: center;
-      gap: 14px;
-      margin: 42px auto 30px;
+      gap: 13px;
+      margin: 38px auto 28px;
     }
 
     .time-box {
       flex: 1;
       max-width: 180px;
-      padding: 22px 8px;
-      background: #202023;
+      padding: 21px 8px;
+      background: rgba(32, 32, 35, 0.90);
       border: 1px solid #39393d;
-      border-radius: 23px;
+      border-radius: 20px;
+      box-shadow: inset 0 0 25px #ffffff03;
     }
 
     .time-box strong {
       display: block;
       color: var(--white);
-      font-size: clamp(29px, 6vw, 52px);
+      font-size: clamp(28px, 6vw, 50px);
       font-weight: 900;
       line-height: 1.15;
       font-variant-numeric: tabular-nums;
@@ -144,30 +198,31 @@
 
     .time-box small {
       display: block;
-      margin-top: 10px;
-      color: #9999a0;
-      font-size: 11px;
+      margin-top: 9px;
+      color: #a5a5ac;
+      font-size: 10px;
       font-weight: 900;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.4px;
     }
 
     .open-time {
       width: 100%;
-      margin: 0 auto 30px;
-      padding: 21px 14px;
-      border-radius: 18px;
-      background: var(--orange);
+      margin: 0 auto 27px;
+      padding: 20px 12px;
+      border-radius: 16px;
+      background: linear-gradient(100deg, #ff5e00, #ff7b26);
       color: white;
-      font-size: clamp(14px, 3vw, 23px);
+      font-size: clamp(14px, 3vw, 21px);
       font-weight: 900;
+      box-shadow: 0 8px 28px #ff5e0028;
     }
 
     .open-now {
       display: none;
-      margin: 24px 0;
-      padding: 18px;
+      margin: 22px 0;
+      padding: 17px;
       border: 1px solid #24864a;
-      border-radius: 16px;
+      border-radius: 15px;
       background: #14532d;
       color: #dcfce7;
       font-weight: 800;
@@ -175,85 +230,94 @@
     }
 
     .footer {
-      margin-top: 42px;
-      color: #77777e;
-      font-size: 13px;
+      margin-top: 36px;
+      color: #85858d;
+      font-size: 12px;
     }
 
     @media (max-width: 520px) {
       body {
-        padding: 22px 12px;
+        padding: 18px 11px;
       }
 
       .container {
-        padding: 38px 20px;
-        border-radius: 28px;
+        padding: 35px 18px;
+        border-radius: 26px;
       }
 
       .food-icon {
-        width: 135px;
-        height: 95px;
-        margin: 30px auto 25px;
+        width: 130px;
+        height: 92px;
+        margin: 26px auto 22px;
       }
 
       .label {
-        padding: 11px 15px;
-        font-size: 10px;
-        letter-spacing: 1.4px;
+        padding: 10px 13px;
+        font-size: 9px;
+        letter-spacing: 1.3px;
       }
 
       h1 {
-        margin-top: 28px;
-        letter-spacing: -1.5px;
+        margin-top: 25px;
+        letter-spacing: -1.4px;
       }
 
       .timer {
-        gap: 9px;
-        margin: 32px auto 24px;
+        gap: 8px;
+        margin: 29px auto 22px;
       }
 
       .time-box {
-        padding: 18px 4px;
-        border-radius: 17px;
+        padding: 17px 3px;
+        border-radius: 15px;
       }
 
       .time-box small {
-        font-size: 9px;
+        font-size: 8px;
         letter-spacing: 1px;
       }
 
       .open-time {
-        padding: 18px 9px;
-        border-radius: 15px;
+        padding: 17px 8px;
+        border-radius: 14px;
       }
 
       .footer {
-        margin-top: 32px;
+        margin-top: 28px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        animation: none !important;
-        transition: none !important;
+      .momo-float-layer {
+        display: none;
+      }
+
+      html {
+        scroll-behavior: auto;
       }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Decorative floating momo animation -->
+  <div class="momo-float-layer" aria-hidden="true">
+    <span class="floating-momo" style="--left:5%;--size:46px;--duration:19s;--delay:-2s;">🥟</span>
+    <span class="floating-momo" style="--left:19%;--size:30px;--duration:24s;--delay:-11s;">🥟</span>
+    <span class="floating-momo" style="--left:35%;--size:54px;--duration:21s;--delay:-7s;">🥟</span>
+    <span class="floating-momo" style="--left:53%;--size:35px;--duration:26s;--delay:-16s;">🥟</span>
+    <span class="floating-momo" style="--left:69%;--size:48px;--duration:22s;--delay:-5s;">🥟</span>
+    <span class="floating-momo" style="--left:84%;--size:34px;--duration:25s;--delay:-13s;">🥟</span>
+    <span class="floating-momo" style="--left:94%;--size:43px;--duration:20s;--delay:-9s;">🥟</span>
+  </div>
+
   <main class="container">
     <div class="logo-text">Fresh<span>fry.</span></div>
 
+    <!-- logo.png should be in the same repository folder -->
     <div class="food-icon">
-      <img
-        src="./logo.png"
-        alt="FreshFry Logo"
-        onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;color:#ff5e00;font-size:36px;font-weight:900&quot;>FreshFry</span>';"
-      >
+      <img src="./logo.png" alt="FreshFry Logo">
     </div>
 
     <div class="label">FRESHLY MADE FOR YOU</div>
@@ -302,16 +366,16 @@
   </main>
 
   <script>
-    // Existing FreshFry menu website
+    // Existing FreshFry menu website.
     const MENU_URL = "https://freshfrymomo.food/";
 
     let redirected = false;
 
     function updateTimer() {
       const now = new Date();
-
-      // Today's opening time according to the device's local clock.
       const opening = new Date(now);
+
+      // Opening time is 5:00 PM in the device's local time zone.
       opening.setHours(17, 0, 0, 0);
 
       const difference = opening.getTime() - now.getTime();
@@ -349,5 +413,6 @@
     updateTimer();
     setInterval(updateTimer, 1000);
   </script>
+
 </body>
 </html>
