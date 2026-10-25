@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root{--orange:#ff5e00;--orange-dark:#e94e00;--black:#101114;--muted:#777b85;--bg:#f7f7f8;--white:#fff;--line:#ececef;--green:#15803d}
@@ -110,6 +111,9 @@ textarea.form-control{resize:vertical;min-height:82px}
 .form-hint{font-size:10px;color:var(--muted);line-height:1.5;margin-top:6px}
 .payment-option{border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;align-items:center;gap:10px;margin:8px 0;font-size:12px}
 .payment-option input{accent-color:var(--orange)}
+.qr-section{margin:16px 0;padding:18px;background:#fff7f1;border:1px solid #ffd9c4;border-radius:18px;text-align:center}
+.qr-box{display:flex;justify-content:center;align-items:center;min-height:220px;background:white;padding:12px;border-radius:14px;max-width:240px;margin:12px auto}
+.qr-box canvas,.qr-box img{max-width:100%;height:auto}
 .order-card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:13px}
 .order-card-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
 .order-id{font-size:10px;color:var(--muted);margin-bottom:5px}
@@ -254,12 +258,27 @@ textarea.form-control{resize:vertical;min-height:82px}
       <div class="form-group"><label for="customer-phone">Mobile number *</label><input class="form-control" id="customer-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number"></div>
       <div class="form-group"><label for="customer-address">Delivery address *</label><textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea></div>
       <div class="form-group"><label for="customer-note">Order note (optional)</label><textarea class="form-control" id="customer-note" maxlength="250" placeholder="Any special instructions?"></textarea></div>
+
       <div class="form-group">
         <label>Payment preference</label>
         <label class="payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
-        <label class="payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-google-pay"></i><span>UPI payment — open UPI app</span></label>
-        <p class="form-hint">UPI orders remain payment pending until the payment is independently verified. Opening a UPI app does not confirm payment.</p>
+        <label class="payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-google-pay"></i><span>UPI payment — scan QR or open UPI app</span></label>
+        <p class="form-hint">The QR contains your checkout amount. Payment stays unverified until independently confirmed.</p>
       </div>
+
+      <div id="upi-qr-section" class="qr-section" hidden>
+        <h3 style="margin:0 0 8px;font-size:17px;">Scan & Pay with UPI</h3>
+        <p style="font-size:12px;color:#666;margin:0 0 12px;">Scan this QR using a UPI app.</p>
+        <div id="upi-qr" class="qr-box"></div>
+        <p style="margin:12px 0 4px;font-size:12px;color:#666;">Pay exactly</p>
+        <strong id="upi-qr-amount" style="font-size:28px;color:#ff5e00;">₹0</strong>
+        <p style="font-size:12px;margin:10px 0 0;">UPI ID: <strong>8984225311@ybl</strong></p>
+        <p style="font-size:10px;line-height:1.5;color:#777;">Verify the recipient and amount in your UPI app before paying.</p>
+        <button type="button" id="upi-open-app" class="secondary-btn" style="margin-top:12px;">
+          <i class="fa-solid fa-mobile-screen-button"></i> Open UPI App
+        </button>
+      </div>
+
       <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
       <p id="checkout-minimum-notice" class="minimum-notice" aria-live="polite"></p>
       <button class="primary-btn" id="place-order-btn" type="submit">Place Order</button>
@@ -326,8 +345,6 @@ const MINIMUM_ORDER=100;
 const UPI_ID="8984225311@ybl";
 const UPI_NAME="ABINASH BARIK";
 const CART_KEY="ff_cart_v2";
-
-/* Payment-pending orders are visible, but are NOT treated as accepted orders. */
 const ACTIVE_STATUSES=["payment_pending","pending","accepted","preparing","out_for_delivery"];
 const STATUS_STEPS=[
   {key:"pending",label:"Placed"},
@@ -347,6 +364,7 @@ let menuUnsubscribe=null;
 let ordersUnsubscribe=null;
 let toastTimer=null;
 let submitting=false;
+let currentUPILink="";
 
 function readCart(){
   try{
@@ -510,6 +528,66 @@ function addToCart(itemId,size){
   showToast(name+" added to your box");
 }
 
+/* DYNAMIC UPI QR */
+
+function makeUPILink(amount,reference="FreshFry"){
+  const params=new URLSearchParams({
+    pa:UPI_ID,
+    pn:UPI_NAME,
+    am:Number(amount).toFixed(2),
+    cu:"INR",
+    tn:String(reference).slice(0,80)
+  });
+  return "upi://pay?"+params.toString();
+}
+
+function updateUPIQR(){
+  const section=$("upi-qr-section");
+  const method=document.querySelector('input[name="payment-method"]:checked')?.value;
+
+  if(method!=="UPI"){
+    section.hidden=true;
+    currentUPILink="";
+    $("upi-qr").innerHTML="";
+    return;
+  }
+
+  const foodSubtotal=subtotal();
+
+  if(!cart.length||foodSubtotal<MINIMUM_ORDER){
+    section.hidden=true;
+    currentUPILink="";
+    $("upi-qr").innerHTML="";
+    return;
+  }
+
+  const payable=foodSubtotal+DELIVERY_FEE;
+  currentUPILink=makeUPILink(payable,"FreshFry Checkout");
+
+  $("upi-qr-amount").textContent=money(payable);
+  $("upi-qr").innerHTML="";
+  section.hidden=false;
+
+  if(typeof window.QRCode==="undefined"){
+    $("upi-qr").textContent="QR library could not load. Check your internet connection.";
+    return;
+  }
+
+  new window.QRCode($("upi-qr"),{
+    text:currentUPILink,
+    width:200,
+    height:200,
+    colorDark:"#101114",
+    colorLight:"#ffffff",
+    correctLevel:window.QRCode.CorrectLevel.M
+  });
+}
+
+function openUPIPayment(amount,orderId){
+  const link=makeUPILink(amount,"FreshFry Order "+orderId);
+  window.location.href=link;
+}
+
 /* CART */
 
 function renderCart(){
@@ -542,6 +620,7 @@ function renderCart(){
 
   if(!cart.length){
     $("cart-content").innerHTML='<div class="empty-state"><i class="fa-solid fa-bag-shopping"></i><p>Your box is empty.</p><p>Add something delicious from the menu.</p></div>';
+    updateUPIQR();
     return;
   }
 
@@ -562,6 +641,8 @@ function renderCart(){
         <button class="remove-btn" data-remove="${escapeHTML(item.id)}" aria-label="Remove item"><i class="fa-regular fa-trash-can"></i></button>
       </div>
     </div>`).join("");
+
+  updateUPIQR();
 }
 
 function changeQuantity(id,delta){
@@ -594,6 +675,7 @@ function openCheckout(){
   $("customer-name").value=localStorage.getItem("ff_customer_name")||"";
   $("customer-address").value=localStorage.getItem("ff_customer_address")||"";
   renderCart();
+  updateUPIQR();
   openModal("checkout-modal");
 }
 
@@ -605,38 +687,7 @@ function generateDeliveryPin(){
   return String(values[0]%9000+1000);
 }
 
-/* UPI PAYMENT INTENT */
-
-function createUPILink(amount,orderId){
-  const payableAmount=Number(amount);
-
-  if(!Number.isFinite(payableAmount)||payableAmount<=0){
-    throw new Error("Invalid payment amount.");
-  }
-
-  const params=new URLSearchParams({
-    pa:UPI_ID,
-    pn:UPI_NAME,
-    am:payableAmount.toFixed(2),
-    cu:"INR",
-    tn:`FreshFry Order ${orderId}`,
-    tr:orderId
-  });
-
-  return "upi://pay?"+params.toString();
-}
-
-function openUPIPayment(amount,orderId){
-  const link=createUPILink(amount,orderId);
-
-  /*
-    Do not mark payment as successful here.
-    A UPI intent only opens a payment app.
-  */
-  window.location.assign(link);
-}
-
-/* CHECKOUT */
+/* CHECKOUT + FIRESTORE */
 
 async function placeOrder(event){
   event.preventDefault();
@@ -676,18 +727,9 @@ async function placeOrder(event){
   const orderTotal=orderSubtotal+deliveryFee;
   const deliveryPin=generateDeliveryPin();
 
-  /*
-    UPI: payment_pending + unverified.
-    COD: pending + not applicable.
-    The browser cannot independently verify a UPI transfer.
-  */
-  const initialStatus=paymentMethod==="UPI"?"payment_pending":"pending";
-  const initialPaymentStatus=paymentMethod==="UPI"?"unverified":"cash_on_delivery";
-
   submitting=true;
-  const button=$("place-order-btn");
-  button.disabled=true;
-  button.textContent="Creating order...";
+  $("place-order-btn").disabled=true;
+  $("place-order-btn").textContent="Creating order...";
 
   try{
     const ref=await addDoc(collection(db,"orders"),{
@@ -697,13 +739,13 @@ async function placeOrder(event){
       customerLocation:address,
       note,
       paymentMethod,
-      paymentStatus:initialPaymentStatus,
+      paymentStatus:paymentMethod==="UPI"?"unverified":"cash_on_delivery",
       items:orderItems,
       subtotal:orderSubtotal,
       deliveryFee,
       total:orderTotal,
       deliveryPin,
-      status:initialStatus,
+      status:paymentMethod==="UPI"?"payment_pending":"pending",
       createdAt:serverTimestamp()
     });
 
@@ -720,33 +762,25 @@ async function placeOrder(event){
     startOrdersListener();
     showOrdersPage();
 
-    if(paymentMethod==="UPI"){
-      /*
-        Keep cart until the order has been saved successfully.
-        Once saved, clear it before redirecting to the UPI app.
-      */
-      cart=[];
-      saveCart();
-      renderCart();
+    cart=[];
+    saveCart();
+    renderCart();
 
-      showToast("Order created as PAYMENT PENDING. Opening UPI app...");
+    if(paymentMethod==="UPI"){
+      showToast("Order saved as payment pending. Opening UPI app...");
       openUPIPayment(orderTotal,ref.id);
     }else{
-      cart=[];
-      saveCart();
-      renderCart();
-
       $("confirmation-order-id").textContent="Order #"+ref.id;
       $("confirmation-pin").textContent=deliveryPin;
       openModal("confirmation-modal");
     }
   }catch(error){
     console.error("Order creation failed:",error);
-    showToast("Order could not be created. Check internet and Firestore permissions.",true);
+    showToast("Order could not be created. Check connection or Firebase permissions.",true);
   }finally{
     submitting=false;
-    button.disabled=!cart.length||subtotal()<MINIMUM_ORDER;
-    button.textContent="Place Order";
+    $("place-order-btn").disabled=!cart.length||subtotal()<MINIMUM_ORDER;
+    $("place-order-btn").textContent="Place Order";
   }
 }
 
@@ -754,22 +788,13 @@ async function placeOrder(event){
 
 function normalizeStatus(value){
   const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
-  const aliases={
-    confirmed:"accepted",
-    cooking:"preparing",
-    on_the_way:"out_for_delivery",
-    outfordelivery:"out_for_delivery",
-    complete:"delivered",
-    completed:"delivered",
-    cancelled:"cancelled",
-    canceled:"cancelled"
-  };
+  const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",cancelled:"cancelled",canceled:"cancelled"};
   return aliases[s]||s;
 }
 
 function statusLabel(status){
   return ({
-    payment_pending:"Payment pending",
+    payment_pending:"Payment Pending",
     pending:"Pending",
     accepted:"Accepted",
     preparing:"Preparing",
@@ -863,11 +888,10 @@ function renderTracking(){
 
   $("tracking-content").innerHTML=`
     <div class="status-banner">
-      <i class="fa-solid fa-fire-burner"></i>
       Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
       <div style="color:#bbb;font-size:10px;margin-top:5px">
         Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.
-        ${paymentPending?"Please complete payment and wait for independent verification. Do not assume payment succeeded just because the UPI app opened.":"Status updates when the restaurant updates your order."}
+        ${paymentPending?"Payment is not verified. Complete payment and wait for confirmation. Opening a UPI app does not confirm payment.":"Status updates when the restaurant updates your order."}
       </div>
     </div>
     ${showPin?`<div class="delivery-pin-card"><div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="delivery-pin-number">${escapeHTML(pin)}</div><p class="delivery-pin-note">Share this PIN with your rider when your food arrives.</p></div>`:""}
@@ -955,6 +979,15 @@ $("login-open").addEventListener("click",()=>openModal("login-modal"));
 $("explore-menu").addEventListener("click",showMenu);
 $("checkout-open").addEventListener("click",openCheckout);
 $("checkout-form").addEventListener("submit",placeOrder);
+
+document.querySelectorAll('input[name="payment-method"]').forEach(input=>{
+  input.addEventListener("change",updateUPIQR);
+});
+
+$("upi-open-app").addEventListener("click",()=>{
+  if(!currentUPILink)return showToast("Select UPI and check your cart total first.",true);
+  window.location.href=currentUPILink;
+});
 
 $("search-input").addEventListener("input",event=>{
   searchTerm=event.target.value.trim().toLowerCase();
