@@ -1,1 +1,27 @@
-fff
+
+{
+  "id": "/admin.html",
+  "name": "Freshfry Admin",
+  "short_name": "Freshfry Admin",
+  "description": "Freshfry food delivery administration dashboard",
+  "start_url": "/admin.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f6fa",
+  "theme_color": "#101827",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
