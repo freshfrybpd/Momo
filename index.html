@@ -1005,7 +1005,7 @@ function renderTracking(){
     <div class="total-row"><span>Delivery fee</span><strong>${money(Number(order.deliveryFee)||0)}</strong></div>
     <div class="total-row final"><span>Total</span><span>${money(Number(order.total)||0)}</span></div>
     ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
-    ${mapUrl?`<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> Navigate to delivery location in Google Maps</a>`:""}
+ 
     ${order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"?`<button type="button" class="whatsapp-btn" id="tracking-request-qr" style="margin-top:12px"><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>`:""}
     <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.</p>`;
 
