@@ -3,191 +3,332 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#ff5e00">
+<meta name="theme-color" content="#101827">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Freshfry Partner">
 <link rel="manifest" href="/partner-manifest.json">
 <link rel="apple-touch-icon" href="/logo.png">
-<title>Freshfry Partner Delivery</title>
+<title>Freshfry Partner | Delivery App</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 :root {
-  --orange: #ff5e00;
-  --dark: #171717;
-  --bg: #fff7f0;
-  --green: #16803c;
-  --red: #c62828;
-  --muted: #777;
-  --line: #eee;
+  --bg:#f3f5f9;
+  --card:#ffffff;
+  --ink:#101827;
+  --muted:#758096;
+  --orange:#ff6b27;
+  --green:#159b64;
+  --line:#e8ebf1;
+  --shadow:0 8px 28px rgba(18,28,45,.07);
 }
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
 body {
-  margin: 0;
-  background: var(--bg);
-  color: #222;
-  font-family: Arial, sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent;
 }
-header {
-  background: var(--orange);
-  color: #fff;
-  padding: 17px;
-  font-size: 23px;
-  font-weight: 800;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+button,input { font:inherit; }
+button { cursor:pointer; }
+button:disabled { opacity:.6;cursor:wait; }
+.topbar {
+  background:#101827;
+  color:white;
+  padding:20px 18px 24px;
+  border-radius:0 0 26px 26px;
 }
-header img { width: 38px; height: 38px; object-fit: contain; }
-main { max-width: 700px; margin: auto; padding: 15px; }
+.topline { display:flex;align-items:center;justify-content:space-between;gap:12px; }
+.brand { display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px; }
+.brand-icon {
+  width:40px;height:40px;border-radius:13px;
+  display:grid;place-items:center;background:var(--orange);color:white;
+}
+.brand small { display:block;font-size:10px;letter-spacing:2px;color:#abb4c4;margin-top:3px; }
+.online-pill {
+  background:#183e34;color:#71edb8;border:1px solid #28664e;
+  border-radius:30px;padding:8px 11px;font-size:11px;font-weight:800;
+}
+.welcome { margin-top:24px; }
+.welcome .eyebrow { color:#a9b4c7;font-size:11px;font-weight:700;letter-spacing:1.5px; }
+.welcome h1 { margin:7px 0 5px;font-size:26px;line-height:1.2; }
+.welcome p { margin:0;color:#abb4c4;font-size:13px; }
+.container { max-width:680px;margin:auto;padding:18px 15px 40px; }
 .card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  margin: 13px 0;
-  box-shadow: 0 4px 18px #0000000c;
-  border: 1px solid #f0e8e2;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:18px;margin-bottom:15px;
+  box-shadow:var(--shadow);
 }
-h2 { font-size: 20px; margin: 8px 0 13px; }
-h3 { margin: 5px 0 12px; font-size: 18px; }
-p { line-height: 1.5; overflow-wrap: anywhere; }
-input, button {
-  width: 100%;
-  border-radius: 11px;
-  padding: 13px;
-  font-size: 16px;
-  margin: 6px 0;
+.login-card { margin-top:20px; }
+.section-title { font-size:16px;font-weight:900;margin:0 0 5px; }
+.section-sub { color:var(--muted);font-size:12px;line-height:1.6;margin:0 0 18px; }
+.field { margin:14px 0; }
+.field label { display:block;font-size:12px;font-weight:800;margin-bottom:8px; }
+.field input {
+  width:100%;padding:15px;border:1px solid #dfe4ed;border-radius:13px;
+  outline:none;background:#fafbfe;color:var(--ink);font-size:15px;
 }
-input { border: 1px solid #ddd; background: white; }
-button {
-  border: 0;
-  background: var(--orange);
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
+.field input:focus { border-color:var(--orange);box-shadow:0 0 0 3px #ff6b271c; }
+.primary {
+  width:100%;border:0;background:var(--orange);color:white;
+  padding:15px;border-radius:13px;font-size:13px;font-weight:900;
+  box-shadow:0 7px 16px #ff6b2728;
 }
-button.secondary { background: var(--dark); }
-button.green { background: var(--green); }
-button:disabled { opacity: .55; cursor: not-allowed; }
-.hidden { display: none !important; }
-.muted { color: var(--muted); font-size: 13px; }
+.secondary {
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  border-radius:11px;padding:11px 13px;font-size:12px;font-weight:800;
+}
+.full-btn { width:100%;margin-top:9px; }
+.stats { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px; }
+.stat { background:white;border:1px solid var(--line);border-radius:17px;padding:15px 11px;box-shadow:var(--shadow); }
+.stat .icon { color:var(--orange);font-size:17px; }
+.stat strong { display:block;font-size:23px;margin:9px 0 4px;overflow-wrap:anywhere; }
+.stat span { color:var(--muted);font-size:10px;font-weight:800; }
+.section-head { display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 2px 12px; }
+.section-head h2 { font-size:17px;margin:0;font-weight:900; }
+.count { background:#fff0e8;color:#d94c0c;padding:6px 10px;border-radius:30px;font-size:11px;font-weight:900; }
+.order-card { background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:13px;box-shadow:var(--shadow); }
+.order-top { display:flex;justify-content:space-between;align-items:flex-start;gap:10px; }
+.order-number { font-size:13px;font-weight:900;overflow-wrap:anywhere; }
+.order-date { color:var(--muted);font-size:11px;margin-top:5px; }
 .status {
-  display: inline-block;
-  background: #fff0e5;
-  color: #d84c00;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 12px;
+  border-radius:30px;background:#fff0e8;color:#d94c0c;
+  padding:7px 9px;font-size:9px;font-weight:900;white-space:nowrap;
 }
-.order-details {
-  border-top: 1px solid var(--line);
-  padding-top: 8px;
-  margin-top: 10px;
+.status.done { background:#e7f8ef;color:#138351; }
+.order-divider { border-top:1px dashed #e4e8ef;margin:14px 0; }
+.info-row { display:flex;gap:11px;align-items:flex-start;margin:13px 0; }
+.info-icon {
+  flex:0 0 34px;height:34px;border-radius:11px;
+  display:grid;place-items:center;background:#fff2eb;color:var(--orange);
 }
-.order-details p { margin: 7px 0; font-size: 14px; }
-a.action {
-  display: block;
-  padding: 13px;
-  background: #16803c;
-  color: white;
-  border-radius: 10px;
-  text-decoration: none;
-  text-align: center;
-  font-weight: bold;
-  margin: 9px 0;
+.info-text { min-width:0;flex:1; }
+.info-text label { display:block;color:var(--muted);font-size:10px;font-weight:800;margin-bottom:5px; }
+.info-text div { font-size:13px;font-weight:700;line-height:1.55;overflow-wrap:anywhere; }
+.items-text { color:#5c6678;font-size:12px;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere; }
+.amount-row { display:flex;justify-content:space-between;align-items:center;gap:10px; }
+.amount-row span { color:var(--muted);font-size:12px;font-weight:700; }
+.amount-row strong { font-size:22px; }
+.actions { display:flex;gap:9px;margin-top:14px; }
+.actions button,.actions a {
+  flex:1;display:flex;justify-content:center;align-items:center;gap:7px;
+  text-decoration:none;border:0;border-radius:11px;padding:12px 8px;
+  font-size:11px;font-weight:900;min-width:0;
 }
-a.call { background: #222; }
-.pin-input { letter-spacing: 5px; text-align: center; font-weight: bold; }
-.notice {
-  padding: 12px;
-  border-radius: 10px;
-  background: #fff1e7;
-  color: #9b3b00;
-  font-size: 13px;
-  line-height: 1.5;
+.call-btn { background:#edf8f2;color:#138351; }
+.map-btn { background:#edf3ff;color:#315fd2; }
+.pin-area { margin-top:13px;padding:13px;background:#f7f8fb;border-radius:13px; }
+.pin-area label { display:block;font-size:11px;font-weight:900;margin-bottom:8px; }
+.pin-row { display:flex;gap:8px; }
+.pin-row input { min-width:0;width:100%;border:1px solid #dfe4ed;border-radius:10px;padding:12px;outline:none; }
+.pin-row button { border:0;border-radius:10px;background:var(--green);color:white;padding:0 14px;font-size:11px;font-weight:900; }
+.empty { text-align:center;padding:30px 15px;color:var(--muted); }
+.empty i { font-size:28px;color:#c2cad7;margin-bottom:12px; }
+.empty strong { display:block;color:var(--ink);font-size:14px;margin-bottom:6px; }
+.empty p { font-size:12px;line-height:1.6;margin:0; }
+.profile { display:flex;align-items:center;gap:12px;min-width:0; }
+.avatar {
+  width:44px;height:44px;border-radius:15px;background:#fff0e8;color:var(--orange);
+  display:grid;place-items:center;font-weight:900;font-size:18px;flex-shrink:0;
 }
-#message { overflow-wrap: anywhere; }
+.profile strong { display:block;font-size:14px;overflow-wrap:anywhere; }
+.profile small { display:block;color:var(--muted);font-size:11px;margin-top:5px; }
+.profile-row { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+.note { color:var(--muted);font-size:11px;line-height:1.7;margin-top:12px; }
+.hidden { display:none !important; }
+.footer { text-align:center;color:#99a2b2;font-size:10px;padding:15px 0 5px; }
+
+.sound-status {
+  background:#f6f8fc;border:1px solid var(--line);border-radius:13px;
+  padding:13px;margin-top:10px;
+}
+.sound-status strong { display:block;font-size:12px;margin-bottom:5px; }
+.sound-status p { font-size:11px;color:var(--muted);line-height:1.6;margin:0; }
+.sound-enabled { color:var(--green)!important; }
+.notification-banner {
+  position:fixed;top:12px;left:12px;right:12px;z-index:9999;
+  max-width:620px;margin:0 auto;
+  background:#101827;color:#fff;border:1px solid #344156;
+  border-radius:18px;padding:15px;box-shadow:0 12px 35px #0003;
+  display:none;animation:slideDown .25s ease-out;
+}
+.notification-banner.show { display:block; }
+.notification-row { display:flex;align-items:flex-start;gap:12px; }
+.notification-icon {
+  flex:0 0 40px;width:40px;height:40px;border-radius:13px;
+  display:grid;place-items:center;background:var(--orange);font-size:17px;
+}
+.notification-content { flex:1;min-width:0; }
+.notification-content strong { display:block;font-size:13px;margin:2px 0 5px; }
+.notification-content p { font-size:12px;color:#cbd2df;line-height:1.5;margin:0;overflow-wrap:anywhere; }
+.notification-actions { display:flex;gap:8px;margin-top:12px; }
+.notification-actions button { border:0;border-radius:10px;padding:10px;font-size:11px;font-weight:900;flex:1; }
+.notification-open { background:var(--orange);color:white; }
+.notification-close { background:#263348;color:white; }
+@keyframes slideDown {
+  from { transform:translateY(-15px);opacity:0; }
+  to { transform:translateY(0);opacity:1; }
+}
+.toast {
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  background:#101827;color:white;padding:13px 17px;border-radius:12px;
+  font-size:12px;font-weight:700;box-shadow:var(--shadow);
+  z-index:10000;width:max-content;max-width:90%;display:none;
+}
+@media(max-width:370px) {
+  .stats { gap:6px; }
+  .stat { padding:12px 8px; }
+  .stat strong { font-size:19px; }
+  .actions { flex-wrap:wrap; }
+  .notification-banner { left:7px;right:7px;top:7px; }
+}
 </style>
 </head>
 
 <body>
-<header>
-  <span>🍜 Freshfry Partner</span>
-  <img src="/logo.png" alt="Freshfry logo" onerror="this.style.display='none'">
+
+<header class="topbar">
+  <div class="topline">
+    <div class="brand">
+      <div class="brand-icon"><i class="fa-solid fa-motorcycle"></i></div>
+      <div>freshfry<small>DELIVERY PARTNER</small></div>
+    </div>
+    <div class="online-pill"><i class="fa-solid fa-circle"></i> PARTNER APP</div>
+  </div>
+  <div class="welcome">
+    <div class="eyebrow">DELIVERY DASHBOARD</div>
+    <h1 id="welcome-title">Welcome, Partner 👋</h1>
+    <p>Manage your deliveries in one place.</p>
+  </div>
 </header>
 
-<main>
-  <section class="card" id="loginCard">
-    <h2>Delivery Partner Login</h2>
-    <p class="muted">Use the rider name and mobile number registered with Freshfry.</p>
+<!-- New order in-app notification -->
+<div id="notification-banner" class="notification-banner" role="alert" aria-live="assertive">
+  <div class="notification-row">
+    <div class="notification-icon"><i class="fa-solid fa-bell"></i></div>
+    <div class="notification-content">
+      <strong id="notification-title">New Freshfry order!</strong>
+      <p id="notification-message">A new delivery has been assigned to you.</p>
+    </div>
+  </div>
+  <div class="notification-actions">
+    <button id="notification-open" class="notification-open">VIEW ORDER</button>
+    <button id="notification-close" class="notification-close">DISMISS</button>
+  </div>
+</div>
 
-    <form id="loginForm">
-      <input id="riderName" type="text" placeholder="Registered rider name"
-             autocomplete="name" required maxlength="80">
-      <input id="riderPhone" type="tel" inputmode="numeric"
-             placeholder="10-digit mobile number" autocomplete="tel"
-             maxlength="15" required>
-      <button id="loginBtn" type="submit">Continue</button>
+<main class="container">
+
+  <section id="login-section" class="card login-card">
+    <h2 class="section-title">Start your duty</h2>
+    <p class="section-sub">Enter your full name and registered 10-digit mobile number.</p>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="riderNameInput">FULL NAME</label>
+        <input id="riderNameInput" type="text" placeholder="Enter your full name"
+               autocomplete="name" minlength="3" maxlength="80" required>
+      </div>
+      <div class="field">
+        <label for="riderPhoneInput">10-DIGIT MOBILE NUMBER</label>
+        <input id="riderPhoneInput" type="tel" inputmode="numeric"
+               placeholder="Enter mobile number" maxlength="10"
+               autocomplete="tel-national" required>
+      </div>
+      <button id="login-button" class="primary" type="submit">
+        START DUTY <i class="fa-solid fa-arrow-right"></i>
+      </button>
     </form>
-
-    <p class="muted">
-      Login checks the existing rider record. It does not provide OTP-based identity verification.
+    <p class="note">
+      Use the name and number already registered for your rider account.
+      This simple login is not OTP-based identity verification.
     </p>
   </section>
 
-  <section id="dashboard" class="hidden">
+  <section id="dashboard-section" class="hidden">
     <div class="card">
-      <h2 id="welcome">Welcome, Rider</h2>
-      <p id="riderInfo" class="muted"></p>
+      <div class="profile-row">
+        <div class="profile">
+          <div class="avatar" id="profile-avatar">R</div>
+          <div>
+            <strong id="profile-name">Delivery Partner</strong>
+            <small id="profile-phone"></small>
+          </div>
+        </div>
+        <button id="logout-button" class="secondary" type="button">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
 
-      <button id="soundBtn">🔔 Enable New Order Sound</button>
-      <p id="soundStatus" class="muted">
-        Tap the button once to enable sound alerts.
-      </p>
-
-      <button id="notificationBtn" class="secondary">
-        Enable Notifications
-      </button>
-
-      <button id="refreshBtn" class="secondary">Refresh Orders</button>
-      <button id="logoutBtn" class="secondary">Log Out</button>
+      <div class="sound-status">
+        <strong><i class="fa-solid fa-volume-high"></i> New Order Sound</strong>
+        <p id="sound-description">Enable sound once. The browser requires a user tap before it can play audio.</p>
+        <button id="sound-button" class="primary full-btn" type="button">
+          <i class="fa-solid fa-bell"></i> ENABLE ORDER SOUND
+        </button>
+        <button id="browser-notification-button" class="secondary full-btn" type="button">
+          <i class="fa-solid fa-mobile-screen"></i> ENABLE DEVICE NOTIFICATIONS
+        </button>
+      </div>
     </div>
 
-    <h2>🛵 Active Deliveries</h2>
-    <div id="orders">
-      <div class="card">Loading deliveries…</div>
+    <div class="stats">
+      <div class="stat">
+        <i class="fa-solid fa-box-open icon"></i>
+        <strong id="active-count">0</strong>
+        <span>ACTIVE ORDERS</span>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-circle-check icon"></i>
+        <strong id="delivered-count">0</strong>
+        <span>DELIVERED</span>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-indian-rupee-sign icon"></i>
+        <strong id="earnings">₹0</strong>
+        <span>DELIVERED TOTAL*</span>
+      </div>
     </div>
 
-    <h2>✅ Delivered History</h2>
-    <div id="history">
-      <div class="card">Loading history…</div>
+    <button id="refresh-button" class="secondary full-btn" type="button">
+      <i class="fa-solid fa-rotate"></i> REFRESH ORDERS
+    </button>
+
+    <div class="section-head">
+      <h2><i class="fa-solid fa-motorcycle"></i> Active deliveries</h2>
+      <span class="count" id="active-badge">0 ORDERS</span>
     </div>
+    <div id="active-orders">
+      <div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading orders...</strong></div>
+    </div>
+
+    <div class="section-head">
+      <h2><i class="fa-solid fa-clock-rotate-left"></i> Delivery history</h2>
+    </div>
+    <div id="history-orders">
+      <div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading history...</strong></div>
+    </div>
+
+    <p class="note">*Delivered order total is not rider commission or confirmed earnings.</p>
   </section>
 
-  <p id="message" class="muted" role="status" aria-live="polite"></p>
-
-  <div class="notice">
-    Sound alerts require the page to be open and sound enabled. Background or closed-app alerts require push notification setup. Google Maps navigation requires a saved customer address, map link, or coordinates.
-  </div>
+  <div class="footer">FRESHFRY PARTNER APP</div>
 </main>
 
-<script type="module">
-import { initializeApp, getApps, getApp } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-  query,
-  where,
-  onSnapshot,
-  updateDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  getFirestore, doc, setDoc, updateDoc, collection, query, where,
+  onSnapshot, getDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* Existing Freshfry Firebase project */
 const firebaseConfig = {
@@ -206,265 +347,233 @@ const $ = id => document.getElementById(id);
 let rider = null;
 let stopActive = null;
 let stopHistory = null;
+let activeOrders = [];
+let historyOrders = [];
+let knownActiveIds = new Set();
+let initialActiveSnapshotReceived = false;
 let soundEnabled = false;
 let audioContext = null;
-let initialSnapshotReceived = false;
-let activeOrderIds = new Set();
-let activeOrders = [];
-let deliveredOrders = [];
+let notificationOrderId = null;
+let toastTimer = null;
+let bannerTimer = null;
+let lastAlertTime = 0;
 
-const normalizePhone = value =>
-  String(value ?? "").replace(/\D/g, "").slice(-10);
-
-const normalizeName = value =>
-  String(value ?? "").trim().replace(/\s+/g, " ").toLowerCase();
-
-function message(text) {
-  $("message").textContent = text;
+function showToast(text) {
+  const el = $("toast");
+  el.textContent = text;
+  el.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.style.display = "none", 3500);
 }
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[char]));
 }
 
 function formatMoney(value) {
   const amount = Number(value);
-  return Number.isFinite(amount) ? "₹" + amount.toLocaleString("en-IN") : "—";
+  return "₹" + (Number.isFinite(amount) ? amount.toLocaleString("en-IN") : "0");
 }
 
-function getOrderPhone(order) {
-  return order.customerPhone || order.phone || order.mobile || "";
-}
-
-/*
-  Accepts common rider phone field names.
-  Phone comparison ignores spaces, +91 and other formatting.
-*/
-function getRiderPhone(data) {
-  const candidates = [
-    data.phone,
-    data.riderPhone,
-    data.mobile,
-    data.mobileNumber,
-    data.phoneNumber,
-    data.contactNumber,
-    data.whatsapp,
-    data.number
-  ];
-
-  for (const value of candidates) {
-    const normalized = normalizePhone(value);
-    if (normalized.length === 10) return normalized;
-  }
-  return "";
-}
-
-function getRiderName(data, fallback) {
-  return String(
-    data.name ||
-    data.riderName ||
-    data.fullName ||
-    data.username ||
-    fallback ||
-    ""
-  ).trim();
-}
-
-/*
-  Login: first tries the original name-based document ID.
-  Then checks rider records for a matching name and phone.
-*/
-async function findRider(name, phone) {
-  const directRef = doc(db, "riders", name.toUpperCase());
-  const directSnap = await getDoc(directRef);
-
-  if (directSnap.exists()) {
-    const data = directSnap.data();
-    const storedPhone = getRiderPhone(data);
-
-    if (storedPhone && storedPhone === phone) {
-      return {
-        id: directSnap.id,
-        ...data,
-        name: getRiderName(data, name),
-        phone: storedPhone
-      };
-    }
-  }
-
-  const ridersSnapshot = await new Promise((resolve, reject) => {
-    const unsubscribe = onSnapshot(
-      collection(db, "riders"),
-      snapshot => {
-        unsubscribe();
-        resolve(snapshot);
-      },
-      error => {
-        unsubscribe();
-        reject(error);
-      }
-    );
+function formatDate(value) {
+  if (!value) return "Date not available";
+  let date;
+  if (typeof value.toDate === "function") date = value.toDate();
+  else if (value instanceof Date) date = value;
+  else date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Date not available";
+  return date.toLocaleString("en-IN", {
+    day:"2-digit", month:"short", year:"numeric",
+    hour:"2-digit", minute:"2-digit"
   });
-
-  for (const riderDoc of ridersSnapshot.docs) {
-    const data = riderDoc.data();
-    const storedPhone = getRiderPhone(data);
-    const storedName = getRiderName(data, riderDoc.id);
-
-    if (
-      storedPhone === phone &&
-      normalizeName(storedName) === normalizeName(name)
-    ) {
-      return {
-        id: riderDoc.id,
-        ...data,
-        name: storedName,
-        phone: storedPhone
-      };
-    }
-  }
-
-  return null;
 }
 
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
+function normalizePhone(value) {
+  return String(value ?? "").replace(/\D/g, "").slice(-10);
+}
 
-  const name = $("riderName").value.trim();
-  const phone = normalizePhone($("riderPhone").value);
+function normalizeName(value) {
+  return String(value ?? "").trim().replace(/\s+/g, " ").toUpperCase();
+}
 
-  if (name.length < 2) {
-    message("Please enter the registered rider name.");
-    return;
-  }
+function getAddress(order) {
+  if (typeof order.deliveryAddress === "string" && order.deliveryAddress.trim()) return order.deliveryAddress;
+  if (typeof order.customerAddress === "string" && order.customerAddress.trim()) return order.customerAddress;
+  if (typeof order.address === "string" && order.address.trim()) return order.address;
+  if (typeof order.customerLocation === "string" && order.customerLocation.trim()) return order.customerLocation;
+  return "Address not provided";
+}
 
-  if (!/^[6-9]\d{9}$/.test(phone)) {
-    message("Please enter a valid 10-digit Indian mobile number.");
-    return;
-  }
+function getPhone(order) {
+  return String(order.customerPhone || order.phone || order.mobile || "").replace(/[^\d+]/g, "");
+}
 
-  $("loginBtn").disabled = true;
-  $("loginBtn").textContent = "Checking…";
-  message("Checking rider record…");
+function getCustomer(order) {
+  return order.customerName || order.name || "Customer";
+}
+
+function getItemsText(order) {
+  if (!Array.isArray(order.items)) return "Items not listed";
+  return order.items.map(item => {
+    if (typeof item === "string") return item;
+    return (item.name || item.title || item.foodName || "Item") +
+      " × " + (item.quantity || item.qty || 1);
+  }).join("\n") || "Items not listed";
+}
+
+function getTotal(order) {
+  return order.total ?? order.grandTotal ?? order.amount ?? order.totalAmount ?? 0;
+}
+
+/* -------- Sound -------- */
+
+async function prepareSound() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) throw new Error("Audio is not supported by this browser.");
+
+  if (!audioContext) audioContext = new AudioContextClass();
+  if (audioContext.state === "suspended") await audioContext.resume();
+  soundEnabled = true;
+
+  $("sound-description").textContent =
+    "Sound is enabled. New assigned orders will play an alert while this page is active.";
+  $("sound-description").classList.add("sound-enabled");
+  $("sound-button").innerHTML = '<i class="fa-solid fa-volume-high"></i> SOUND ENABLED';
+
+  playOrderSound();
+}
+
+function playOrderSound() {
+  if (!soundEnabled || !audioContext) return;
 
   try {
-    const foundRider = await findRider(name, phone);
-
-    if (!foundRider) {
-      message(
-        "Rider details did not match. Check the registered name and phone number in the riders collection."
-      );
-      return;
-    }
-
-    rider = foundRider;
-
-    $("loginCard").classList.add("hidden");
-    $("dashboard").classList.remove("hidden");
-    $("welcome").textContent = "Welcome, " + rider.name;
-    $("riderInfo").textContent = "Registered mobile: " + rider.phone;
-
-    listenForOrders();
-    message("");
-  } catch (error) {
-    console.error("Rider login error:", error);
-    message(
-      "Could not read rider records. Check internet connection and Firestore read permissions."
-    );
-  } finally {
-    $("loginBtn").disabled = false;
-    $("loginBtn").textContent = "Continue";
-  }
-});
-
-/* ---------------- SOUND ALERT ---------------- */
-
-function playOrderAlert() {
-  if (!soundEnabled) return;
-
-  try {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
     if (audioContext.state === "suspended") {
-      audioContext.resume();
+      audioContext.resume().catch(() => {});
     }
 
-    // Three loud browser-generated alert tones
-    [0, 0.38, 0.76, 1.14].forEach((delay, index) => {
+    const now = audioContext.currentTime;
+
+    // Repeated alert pattern; uses browser audio, not the phone's native ringtone.
+    [0, 0.45, 0.9, 1.35].forEach((delay, index) => {
       const oscillator = audioContext.createOscillator();
       const gain = audioContext.createGain();
 
-      oscillator.type = "square";
+      oscillator.type = "sine";
       oscillator.frequency.value = index % 2 === 0 ? 880 : 660;
-      gain.gain.value = 0.25;
+      gain.gain.setValueAtTime(0.0001, now + delay);
+      gain.gain.exponentialRampToValueAtTime(0.3, now + delay + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.32);
 
       oscillator.connect(gain);
       gain.connect(audioContext.destination);
-
-      const start = audioContext.currentTime + delay;
-      oscillator.start(start);
-      oscillator.stop(start + 0.25);
+      oscillator.start(now + delay);
+      oscillator.stop(now + delay + 0.34);
     });
   } catch (error) {
-    console.warn("Unable to play order sound:", error);
+    console.warn("Sound alert could not play:", error);
   }
 }
 
-$("soundBtn").addEventListener("click", async () => {
+$("sound-button").addEventListener("click", async () => {
   try {
-    audioContext = audioContext ||
-      new (window.AudioContext || window.webkitAudioContext)();
-
-    await audioContext.resume();
-    soundEnabled = true;
-
-    $("soundStatus").textContent =
-      "Sound enabled. Keep the delivery app open for new order alerts.";
-
-    $("soundBtn").textContent = "🔔 Sound Enabled";
-    playOrderAlert();
+    await prepareSound();
+    showToast("New order sound enabled.");
   } catch (error) {
     console.error(error);
-    $("soundStatus").textContent =
-      "Sound could not start. Check your phone's silent mode and volume.";
+    showToast("Could not enable sound. Check browser and device settings.");
   }
 });
 
-$("notificationBtn").addEventListener("click", async () => {
+/* -------- Notification banner and optional system notification -------- */
+
+function showNewOrderNotification(order) {
+  const id = order.id;
+  notificationOrderId = id;
+
+  const customer = getCustomer(order);
+  $("notification-title").textContent = "🔔 New Freshfry Order!";
+  $("notification-message").textContent =
+    `Order #${id.slice(-7)} assigned. Customer: ${customer}. Tap VIEW ORDER to see details.`;
+
+  $("notification-banner").classList.add("show");
+
+  clearTimeout(bannerTimer);
+  bannerTimer = setTimeout(() => {
+    $("notification-banner").classList.remove("show");
+  }, 15000);
+
+  // This can create an OS notification when permission is granted.
+  // It is not a replacement for FCM push delivery when the app is closed.
+  if ("Notification" in window && Notification.permission === "granted") {
+    try {
+      const notification = new Notification("Freshfry: New Delivery!", {
+        body: `Order #${id.slice(-7)} — ${customer}`,
+        tag: "freshfry-order-" + id,
+        renotify: false,
+        icon: "/logo.png"
+      });
+
+      notification.onclick = () => {
+        window.focus();
+        openOrderInView(id);
+        notification.close();
+      };
+    } catch (error) {
+      console.warn("System notification could not be shown:", error);
+    }
+  }
+}
+
+$("notification-close").addEventListener("click", () => {
+  $("notification-banner").classList.remove("show");
+  clearTimeout(bannerTimer);
+});
+
+$("notification-open").addEventListener("click", () => {
+  $("notification-banner").classList.remove("show");
+  if (notificationOrderId) openOrderInView(notificationOrderId);
+});
+
+function openOrderInView(id) {
+  const element = document.getElementById("order-card-" + id);
+  if (element) {
+    element.scrollIntoView({ behavior:"smooth", block:"center" });
+    element.style.outline = "3px solid #ff6b27";
+    setTimeout(() => element.style.outline = "", 3000);
+  } else {
+    showToast("Order may have been completed or removed. Refresh orders.");
+  }
+}
+
+$("browser-notification-button").addEventListener("click", async () => {
   if (!("Notification" in window)) {
-    message("Browser notifications are not supported on this device.");
+    showToast("Notifications are not supported by this browser.");
     return;
   }
 
   try {
     const permission = await Notification.requestPermission();
-
     if (permission === "granted") {
-      message("Browser notifications enabled. Background delivery still requires push setup.");
+      showToast("Device notifications allowed. Background alerts still need FCM push setup.");
       new Notification("Freshfry Partner", {
-        body: "Notifications are enabled."
+        body:"Notifications are enabled.",
+        icon:"/logo.png"
       });
     } else {
-      message("Notification permission was not granted.");
+      showToast("Notification permission was not granted.");
     }
   } catch (error) {
-    console.warn(error);
-    message("Could not enable browser notifications.");
+    console.error(error);
+    showToast("Could not request notification permission.");
   }
 });
 
-/* ---------------- MAPS / CUSTOMER LOCATION ---------------- */
+/* -------- Customer location and Google Maps navigation -------- */
 
 function getCoordinates(order) {
-  const locationObjects = [
+  const objects = [
     order.customerLocation,
     order.location,
     order.coordinates,
@@ -472,101 +581,221 @@ function getCoordinates(order) {
     order.geoPoint
   ].filter(value => value && typeof value === "object");
 
-  let lat =
-    order.latitude ??
-    order.lat ??
-    order.customerLatitude ??
-    order.deliveryLatitude;
+  let lat = order.latitude ?? order.lat ?? order.customerLatitude ?? order.deliveryLatitude;
+  let lng = order.longitude ?? order.lng ?? order.lon ?? order.customerLongitude ?? order.deliveryLongitude;
 
-  let lng =
-    order.longitude ??
-    order.lng ??
-    order.lon ??
-    order.customerLongitude ??
-    order.deliveryLongitude;
-
-  for (const location of locationObjects) {
-    lat ??= location.latitude ?? location.lat;
-    lng ??= location.longitude ?? location.lng ?? location.lon;
-
-    // Firestore GeoPoint objects
-    lat ??= location._lat;
-    lng ??= location._long;
+  for (const obj of objects) {
+    lat ??= obj.latitude ?? obj.lat ?? obj._lat;
+    lng ??= obj.longitude ?? obj.lng ?? obj.lon ?? obj._long;
   }
 
   lat = Number(lat);
   lng = Number(lng);
 
-  if (
-    Number.isFinite(lat) &&
-    Number.isFinite(lng) &&
-    lat >= -90 && lat <= 90 &&
-    lng >= -180 && lng <= 180
-  ) {
+  if (Number.isFinite(lat) && Number.isFinite(lng) &&
+      lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
     return { lat, lng };
   }
-
   return null;
 }
 
-function getMapsUrl(order) {
+function getMapUrl(order) {
   const coordinates = getCoordinates(order);
 
   if (coordinates) {
     return "https://www.google.com/maps/dir/?api=1&destination=" +
-      encodeURIComponent(coordinates.lat + "," + coordinates.lng) +
+      encodeURIComponent(`${coordinates.lat},${coordinates.lng}`) +
       "&travelmode=driving";
   }
 
-  const possibleMapLink =
+  const savedUrl =
     order.mapUrl ||
     order.googleMapsUrl ||
     order.mapsLink ||
-    (typeof order.customerLocation === "string"
-      ? order.customerLocation
-      : "");
+    order.customerMapUrl ||
+    "";
 
-  if (possibleMapLink) {
+  if (typeof savedUrl === "string" && savedUrl.trim()) {
     try {
-      const url = new URL(possibleMapLink);
-
-      const validHost =
+      const url = new URL(savedUrl);
+      const allowed =
         url.hostname === "maps.app.goo.gl" ||
         url.hostname === "goo.gl" ||
         url.hostname === "google.com" ||
-        url.hostname.endsWith(".google.com") ||
-        url.hostname === "maps.google.com";
+        url.hostname.endsWith(".google.com");
 
-      if (url.protocol === "https:" && validHost) {
-        return url.href;
-      }
+      if (url.protocol === "https:" && allowed) return url.href;
     } catch {}
   }
 
-  const address =
-    order.deliveryAddress ||
-    order.customerAddress ||
-    order.address ||
-    order.addressText ||
-    "";
-
-  if (typeof address === "string" && address.trim().length >= 5) {
+  const address = getAddress(order);
+  if (address !== "Address not provided") {
     return "https://www.google.com/maps/dir/?api=1&destination=" +
-      encodeURIComponent(address.trim()) +
-      "&travelmode=driving";
+      encodeURIComponent(address) + "&travelmode=driving";
   }
 
   return "";
 }
 
-/* ---------------- LIVE ORDER LISTENERS ---------------- */
+/* -------- Order rendering -------- */
 
-function listenForOrders() {
-  stopActive?.();
-  stopHistory?.();
+function renderActiveOrders() {
+  $("active-count").textContent = activeOrders.length;
+  $("active-badge").textContent =
+    `${activeOrders.length} ORDER${activeOrders.length === 1 ? "" : "S"}`;
 
-  activeOrderIds = new Set();
-  initialSnapshotReceived = false;
+  if (!activeOrders.length) {
+    $("active-orders").innerHTML = `
+      <div class="card empty">
+        <i class="fa-solid fa-box-open"></i>
+        <strong>No active deliveries</strong>
+        <p>New orders assigned to you will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  $("active-orders").innerHTML = activeOrders.map(order => {
+    const id = String(order.id);
+    const safeId = escapeHTML(id);
+    const customer = escapeHTML(getCustomer(order));
+    const address = getAddress(order);
+    const phone = getPhone(order);
+    const mapUrl = getMapUrl(order);
+    const total = getTotal(order);
+
+    return `
+      <article class="order-card" id="order-card-${safeId}">
+        <div class="order-top">
+          <div>
+            <div class="order-number">ORDER #${safeId.slice(-7)}</div>
+            <div class="order-date">${escapeHTML(formatDate(order.createdAt || order.orderDate))}</div>
+          </div>
+          <span class="status">OUT FOR DELIVERY</span>
+        </div>
+
+        <div class="order-divider"></div>
+
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-user"></i></div>
+          <div class="info-text">
+            <label>CUSTOMER</label>
+            <div>${customer}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="info-text">
+            <label>DELIVERY ADDRESS</label>
+            <div>${escapeHTML(address)}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+          <div class="info-text">
+            <label>ORDER ITEMS</label>
+            <div class="items-text">${escapeHTML(getItemsText(order))}</div>
+          </div>
+        </div>
+
+        <div class="amount-row">
+          <span>Order total</span>
+          <strong>${formatMoney(total)}</strong>
+        </div>
+
+        <div class="actions">
+          ${phone
+            ? `<a class="call-btn" href="tel:${escapeHTML(phone)}"><i class="fa-solid fa-phone"></i> CALL CUSTOMER</a>`
+            : `<button type="button" disabled>NO PHONE</button>`}
+
+          ${mapUrl
+            ? `<a class="map-btn" href="${escapeHTML(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> NAVIGATE</a>`
+            : `<button type="button" disabled>NO LOCATION</button>`}
+        </div>
+
+        <div class="pin-area">
+          <label for="pin-${safeId}"><i class="fa-solid fa-shield-halved"></i> CUSTOMER DELIVERY PIN</label>
+          <div class="pin-row">
+            <input id="pin-${safeId}" type="password" inputmode="numeric" maxlength="8"
+              placeholder="Enter PIN" autocomplete="off">
+            <button type="button" data-deliver="${safeId}">VERIFY & DELIVER</button>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+
+  $("active-orders").querySelectorAll("[data-deliver]").forEach(button => {
+    button.addEventListener("click", () => markDelivered(button.dataset.deliver, button));
+  });
+}
+
+function renderHistory() {
+  $("delivered-count").textContent = historyOrders.length;
+
+  const total = historyOrders.reduce((sum, order) => {
+    const n = Number(getTotal(order));
+    return sum + (Number.isFinite(n) ? n : 0);
+  }, 0);
+  $("earnings").textContent = formatMoney(total);
+
+  if (!historyOrders.length) {
+    $("history-orders").innerHTML = `
+      <div class="card empty">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <strong>No completed deliveries yet</strong>
+        <p>Your delivered orders will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  $("history-orders").innerHTML = historyOrders.map(order => `
+    <article class="order-card">
+      <div class="order-top">
+        <div>
+          <div class="order-number">ORDER #${escapeHTML(order.id.slice(-7))}</div>
+          <div class="order-date">${escapeHTML(formatDate(order.deliveredAt || order.createdAt))}</div>
+        </div>
+        <span class="status done"><i class="fa-solid fa-check"></i> DELIVERED</span>
+      </div>
+      <div class="order-divider"></div>
+      <div class="info-row">
+        <div class="info-icon"><i class="fa-solid fa-user-check"></i></div>
+        <div class="info-text">
+          <label>CUSTOMER</label>
+          <div>${escapeHTML(getCustomer(order))}</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div class="info-text">
+          <label>DELIVERY ADDRESS</label>
+          <div>${escapeHTML(getAddress(order))}</div>
+        </div>
+      </div>
+      <div class="amount-row">
+        <span>Order total</span>
+        <strong>${formatMoney(getTotal(order))}</strong>
+      </div>
+    </article>
+  `).join("");
+}
+
+/* -------- Live listeners; alert only for newly assigned order IDs -------- */
+
+function stopListeners() {
+  if (stopActive) stopActive();
+  if (stopHistory) stopHistory();
+  stopActive = null;
+  stopHistory = null;
+}
+
+function startListeners() {
+  if (!rider) return;
+
+  stopListeners();
+  knownActiveIds = new Set();
+  initialActiveSnapshotReceived = false;
 
   const activeQuery = query(
     collection(db, "orders"),
@@ -575,49 +804,48 @@ function listenForOrders() {
   );
 
   stopActive = onSnapshot(activeQuery, snapshot => {
-    const incomingIds = new Set(snapshot.docs.map(item => item.id));
     const newOrders = [];
 
-    if (initialSnapshotReceived) {
+    // First snapshot is the initial list, not a new-order alert.
+    // Every later newly appearing order ID triggers one alert.
+    if (initialActiveSnapshotReceived) {
       for (const orderDoc of snapshot.docs) {
-        if (!activeOrderIds.has(orderDoc.id)) {
-          newOrders.push(orderDoc.data());
+        if (!knownActiveIds.has(orderDoc.id)) {
+          newOrders.push({ id:orderDoc.id, ...orderDoc.data() });
         }
       }
     }
 
-    activeOrderIds = incomingIds;
-    initialSnapshotReceived = true;
+    knownActiveIds = new Set(snapshot.docs.map(item => item.id));
+    initialActiveSnapshotReceived = true;
 
-    activeOrders = snapshot.docs.map(item => ({
-      id: item.id,
-      ...item.data()
-    }));
-
+    activeOrders = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+    activeOrders.sort((a,b) =>
+      (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)
+    );
     renderActiveOrders();
 
-    if (newOrders.length > 0) {
-      playOrderAlert();
+    if (newOrders.length) {
+      // Play the sound for every new snapshot event containing new order IDs.
+      playOrderSound();
 
-      const text = newOrders.length === 1
-        ? "A new delivery has been assigned to you."
-        : newOrders.length + " new deliveries have been assigned to you.";
+      // Show the top in-app banner for the newest new order.
+      const newest = newOrders[newOrders.length - 1];
+      showNewOrderNotification(newest);
 
-      message(text);
-
-      if (
-        "Notification" in window &&
-        Notification.permission === "granted"
-      ) {
-        try {
-          new Notification("Freshfry: New Delivery!", { body: text });
-        } catch {}
+      if (newOrders.length > 1) {
+        $("notification-message").textContent =
+          `${newOrders.length} new deliveries assigned. Latest: #${newest.id.slice(-7)}.`;
       }
     }
   }, error => {
     console.error("Active order listener:", error);
-    $("orders").innerHTML =
-      '<div class="card">Unable to load active deliveries. Check Firestore permissions and riderName.</div>';
+    showToast("Unable to load active orders. Check internet and Firestore permissions.");
+    $("active-orders").innerHTML = `
+      <div class="card empty">
+        <strong>Could not load active orders</strong>
+        <p>Check internet, Firestore rules and the riderName field.</p>
+      </div>`;
   });
 
   const historyQuery = query(
@@ -627,252 +855,267 @@ function listenForOrders() {
   );
 
   stopHistory = onSnapshot(historyQuery, snapshot => {
-    deliveredOrders = snapshot.docs.map(item => ({
-      id: item.id,
-      ...item.data()
-    }));
-
+    historyOrders = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+    historyOrders.sort((a,b) =>
+      (b.deliveredAt?.toMillis?.() || 0) - (a.deliveredAt?.toMillis?.() || 0)
+    );
     renderHistory();
   }, error => {
     console.error("History listener:", error);
-    $("history").innerHTML =
-      '<div class="card">Unable to load delivery history.</div>';
+    $("history-orders").innerHTML = `
+      <div class="card empty">
+        <strong>Could not load history</strong>
+        <p>Check internet and Firestore permissions.</p>
+      </div>`;
   });
 }
 
-/* ---------------- ACTIVE ORDER UI ---------------- */
-
-function renderActiveOrders() {
-  activeOrders.sort((a, b) => {
-    const ta = a.createdAt?.toMillis?.() || 0;
-    const tb = b.createdAt?.toMillis?.() || 0;
-    return tb - ta;
-  });
-
-  if (!activeOrders.length) {
-    $("orders").innerHTML =
-      '<div class="card">No active deliveries assigned to you right now.</div>';
-    return;
-  }
-
-  $("orders").innerHTML = activeOrders.map(order => {
-    const customerName =
-      order.customerName || order.name || "Customer";
-
-    const phone = String(getOrderPhone(order) || "");
-    const address =
-      order.deliveryAddress ||
-      order.customerAddress ||
-      order.address ||
-      "Address not provided";
-
-    const items = Array.isArray(order.items)
-      ? order.items.map(item => {
-          if (typeof item === "string") return item;
-
-          return (item.name || item.title || "Item") +
-            " × " + (item.qty || item.quantity || 1);
-        }).join(", ")
-      : "Item details unavailable";
-
-    const total =
-      order.total ??
-      order.totalAmount ??
-      order.amount ??
-      order.grandTotal;
-
-    const mapUrl = getMapsUrl(order);
-
-    return `
-      <article class="card">
-        <span class="status">OUT FOR DELIVERY</span>
-        <h3>Order #${escapeHTML(order.id.slice(-7))}</h3>
-
-        <div class="order-details">
-          <p><strong>Customer:</strong> ${escapeHTML(customerName)}</p>
-          <p><strong>Phone:</strong> ${escapeHTML(phone || "Not provided")}</p>
-          <p><strong>Address:</strong> ${escapeHTML(address)}</p>
-          <p><strong>Items:</strong> ${escapeHTML(items)}</p>
-          <p><strong>Total:</strong> ${escapeHTML(formatMoney(total))}</p>
-          ${order.paymentMethod
-            ? `<p><strong>Payment:</strong> ${escapeHTML(order.paymentMethod)}</p>`
-            : ""}
-        </div>
-
-        ${phone
-          ? `<a class="action call" href="tel:${escapeHTML(phone)}">📞 CALL CUSTOMER</a>`
-          : ""}
-
-        ${mapUrl
-          ? `<a class="action" href="${escapeHTML(mapUrl)}" target="_blank" rel="noopener noreferrer">🗺️ NAVIGATE WITH GOOGLE MAPS</a>`
-          : `<p class="muted">No saved location or address was found for this order.</p>`}
-
-        <div class="order-details">
-          <label for="pin-${escapeHTML(order.id)}"><strong>Customer Delivery PIN</strong></label>
-          <input
-            class="pin-input"
-            id="pin-${escapeHTML(order.id)}"
-            type="tel"
-            inputmode="numeric"
-            maxlength="8"
-            placeholder="Enter PIN"
-            autocomplete="one-time-code"
-          >
-          <button class="green" data-deliver="${escapeHTML(order.id)}">
-            Confirm Delivered
-          </button>
-        </div>
-      </article>
-    `;
-  }).join("");
-
-  $("orders").querySelectorAll("[data-deliver]").forEach(button => {
-    button.addEventListener("click", () => {
-      markDelivered(button.dataset.deliver, button);
-    });
-  });
-}
-
-/* ---------------- DELIVERED HISTORY ---------------- */
-
-function renderHistory() {
-  deliveredOrders.sort((a, b) => {
-    const ta = a.deliveredAt?.toMillis?.() || 0;
-    const tb = b.deliveredAt?.toMillis?.() || 0;
-    return tb - ta;
-  });
-
-  if (!deliveredOrders.length) {
-    $("history").innerHTML =
-      '<div class="card">No delivered orders yet.</div>';
-    return;
-  }
-
-  $("history").innerHTML = deliveredOrders.map(order => {
-    const name = order.customerName || order.name || "Customer";
-    const total =
-      order.total ??
-      order.totalAmount ??
-      order.amount;
-
-    return `
-      <article class="card">
-        <span class="status" style="background:#e7f7eb;color:#16803c">
-          DELIVERED
-        </span>
-        <h3>Order #${escapeHTML(order.id.slice(-7))}</h3>
-        <p><strong>Customer:</strong> ${escapeHTML(name)}</p>
-        <p><strong>Total:</strong> ${escapeHTML(formatMoney(total))}</p>
-      </article>
-    `;
-  }).join("");
-}
-
-/* ---------------- VERIFY PIN AND COMPLETE DELIVERY ---------------- */
+/* -------- Delivery PIN verification -------- */
 
 async function markDelivered(orderId, button) {
-  const input = $("pin-" + orderId);
+  if (!rider) return showToast("Please log in again.");
+
+  const input = document.getElementById("pin-" + orderId);
   const enteredPin = String(input?.value || "").trim();
 
-  if (!enteredPin) {
-    alert("Please enter the customer's delivery PIN.");
-    return;
+  if (!enteredPin) return showToast("Enter the customer's delivery PIN.");
+
+  const order = activeOrders.find(item => item.id === orderId);
+  if (!order) return showToast("Order is no longer active. Refresh orders.");
+
+  const expectedPin = String(order.orderPin ?? order.deliveryPin ?? "").trim();
+  if (!expectedPin) return showToast("No delivery PIN found. Contact admin.");
+
+  if (enteredPin !== expectedPin) {
+    input.value = "";
+    input.focus();
+    return showToast("Incorrect delivery PIN. Please try again.");
   }
 
+  if (!confirm(`Confirm order #${orderId.slice(-7)} has been delivered?`)) return;
+
   button.disabled = true;
-  button.textContent = "Verifying…";
+  button.textContent = "UPDATING...";
 
   try {
     const orderRef = doc(db, "orders", orderId);
-    const orderSnap = await getDoc(orderRef);
+    const latest = await getDoc(orderRef);
 
-    if (!orderSnap.exists()) {
-      throw new Error("Order not found.");
-    }
+    if (!latest.exists()) throw new Error("Order not found.");
 
-    const order = orderSnap.data();
+    const data = latest.data();
 
-    if (order.status !== "out_for_delivery") {
+    if (data.status !== "out_for_delivery") {
       throw new Error("This order is no longer out for delivery.");
     }
 
-    if (normalizeName(order.riderName) !== normalizeName(rider.name)) {
-      throw new Error("This order is not assigned to your rider account.");
+    if (String(data.riderName || "") !== rider.name) {
+      throw new Error("This order is not assigned to this rider.");
     }
 
-    const expectedPin = String(
-      order.deliveryPin ??
-      order.orderPin ??
-      ""
-    ).trim();
-
-    if (!expectedPin) {
-      throw new Error("No delivery PIN is saved for this order. Contact admin.");
-    }
-
-    if (enteredPin !== expectedPin) {
-      throw new Error("Incorrect delivery PIN. Please check with the customer.");
-    }
+    const latestPin = String(data.orderPin ?? data.deliveryPin ?? "").trim();
+    if (enteredPin !== latestPin) throw new Error("Delivery PIN did not match.");
 
     await updateDoc(orderRef, {
       status: "delivered",
       deliveredAt: serverTimestamp()
     });
 
-    alert("Delivery completed successfully.");
+    showToast("Delivery completed successfully.");
   } catch (error) {
-    console.error("Delivery update error:", error);
-    alert(error.message || "Could not complete delivery. Check internet and permissions.");
-  } finally {
+    console.error("Delivery update failed:", error);
+    showToast(error.message || "Could not update order. Check Firebase permissions.");
     button.disabled = false;
-    button.textContent = "Confirm Delivered";
+    button.textContent = "VERIFY & DELIVER";
   }
 }
 
-/* ---------------- REFRESH AND LOGOUT ---------------- */
+/* -------- Login / session -------- */
 
-$("refreshBtn").addEventListener("click", () => {
-  if (!rider) {
-    message("Please log in first.");
+function showDashboard(visible) {
+  $("login-section").classList.toggle("hidden", visible);
+  $("dashboard-section").classList.toggle("hidden", !visible);
+}
+
+async function loginRider(nameInput, phoneInput) {
+  const name = normalizeName(nameInput);
+  const phone = normalizePhone(phoneInput);
+
+  if (name.length < 3) throw new Error("Enter your full name.");
+  if (!/^[6-9]\d{9}$/.test(phone)) throw new Error("Enter a valid 10-digit Indian mobile number.");
+
+  // Preserve the existing rider document ID convention.
+  const riderRef = doc(db, "riders", name);
+  const riderSnap = await getDoc(riderRef);
+
+  if (riderSnap.exists()) {
+    const data = riderSnap.data();
+    const storedPhone = normalizePhone(
+      data.riderPhone || data.phone || data.mobile || ""
+    );
+
+    if (storedPhone && storedPhone !== phone) {
+      throw new Error("This name is registered with a different phone number.");
+    }
+
+    if (!storedPhone) {
+      throw new Error("Rider record has no registered phone number. Ask admin to update it.");
+    }
+  } else {
+    /*
+      Preserves the previous app's first-login behavior.
+      For production, rider accounts should be created by an admin and
+      protected by Firebase Authentication + restrictive Firestore rules.
+    */
+    await setDoc(riderRef, {
+      riderName: name,
+      riderPhone: phone,
+      status: "Online",
+      lastLogin: serverTimestamp()
+    }, { merge:true });
+  }
+
+  rider = { name, phone };
+
+  await updateDoc(riderRef, {
+    status: "Online",
+    lastLogin: serverTimestamp()
+  });
+
+  localStorage.setItem("ff_rider_name", name);
+  localStorage.setItem("ff_rider_phone", phone);
+
+  $("welcome-title").textContent = `Welcome, ${name.split(" ")[0]} 👋`;
+  $("profile-name").textContent = name;
+  $("profile-phone").textContent = phone;
+  $("profile-avatar").textContent = name.charAt(0);
+
+  showDashboard(true);
+  startListeners();
+}
+
+$("riderPhoneInput").addEventListener("input", event => {
+  event.target.value = event.target.value.replace(/\D/g, "").slice(0,10);
+});
+
+$("login-form").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const button = $("login-button");
+  button.disabled = true;
+  button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PLEASE WAIT...';
+
+  try {
+    await loginRider($("riderNameInput").value, $("riderPhoneInput").value);
+    showToast("Welcome to Freshfry Partner.");
+  } catch (error) {
+    console.error("Login error:", error);
+    showToast(error.message || "Login failed. Check internet and Firebase permissions.");
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'START DUTY <i class="fa-solid fa-arrow-right"></i>';
+  }
+});
+
+$("refresh-button").addEventListener("click", () => {
+  if (!rider) return showToast("Please log in first.");
+  startListeners();
+  showToast("Refreshing deliveries...");
+});
+
+$("logout-button").addEventListener("click", async () => {
+  if (!confirm("Log out from this device?")) return;
+
+  stopListeners();
+
+  try {
+    if (rider) {
+      await updateDoc(doc(db, "riders", rider.name), {
+        status:"Offline",
+        lastLogout:serverTimestamp()
+      });
+    }
+  } catch (error) {
+    console.warn("Could not update rider status:", error);
+  }
+
+  localStorage.removeItem("ff_rider_name");
+  localStorage.removeItem("ff_rider_phone");
+
+  rider = null;
+  activeOrders = [];
+  historyOrders = [];
+  knownActiveIds.clear();
+  initialActiveSnapshotReceived = false;
+
+  $("notification-banner").classList.remove("show");
+  showDashboard(false);
+  $("riderNameInput").value = "";
+  $("riderPhoneInput").value = "";
+  showToast("Logged out.");
+});
+
+/* Restore the last signed-in rider on the same device. */
+async function restoreSession() {
+  const name = localStorage.getItem("ff_rider_name");
+  const phone = localStorage.getItem("ff_rider_phone");
+
+  if (!name || !phone || !/^[6-9]\d{9}$/.test(phone)) {
+    showDashboard(false);
     return;
   }
 
-  listenForOrders();
-  message("Refreshing active deliveries and history…");
-});
+  try {
+    const riderSnap = await getDoc(doc(db, "riders", name));
+    if (!riderSnap.exists()) {
+      localStorage.removeItem("ff_rider_name");
+      localStorage.removeItem("ff_rider_phone");
+      showDashboard(false);
+      return;
+    }
 
-$("logoutBtn").addEventListener("click", () => {
-  stopActive?.();
-  stopHistory?.();
+    const data = riderSnap.data();
+    const storedPhone = normalizePhone(data.riderPhone || data.phone || data.mobile || "");
 
-  stopActive = null;
-  stopHistory = null;
-  rider = null;
-  activeOrders = [];
-  deliveredOrders = [];
-  activeOrderIds.clear();
-  initialSnapshotReceived = false;
-  soundEnabled = false;
+    if (!storedPhone || storedPhone !== phone) {
+      localStorage.removeItem("ff_rider_name");
+      localStorage.removeItem("ff_rider_phone");
+      showDashboard(false);
+      return;
+    }
 
-  $("dashboard").classList.add("hidden");
-  $("loginCard").classList.remove("hidden");
-  $("riderName").value = "";
-  $("riderPhone").value = "";
-  $("soundStatus").textContent = "Tap the button once to enable sound alerts.";
-  $("soundBtn").textContent = "🔔 Enable New Order Sound";
-  $("orders").innerHTML = "";
-  $("history").innerHTML = "";
+    rider = { name, phone };
+    $("riderNameInput").value = name;
+    $("riderPhoneInput").value = phone;
 
-  message("Logged out.");
-});
+    $("welcome-title").textContent = `Welcome, ${name.split(" ")[0]} 👋`;
+    $("profile-name").textContent = name;
+    $("profile-phone").textContent = phone;
+    $("profile-avatar").textContent = name.charAt(0);
 
-/* Existing PWA service worker */
+    showDashboard(true);
+    startListeners();
+  } catch (error) {
+    console.error("Session restore failed:", error);
+    showDashboard(false);
+    showToast("Could not reconnect. Check your internet and try again.");
+  }
+}
+
+restoreSession();
+</script>
+
+<script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js")
-      .catch(error => console.warn("Service worker registration:", error));
+      .then(registration => {
+        console.log("Freshfry Partner service worker registered:", registration.scope);
+      })
+      .catch(error => console.error("Service worker registration failed:", error));
   });
 }
 </script>
+
 </body>
 </html>
