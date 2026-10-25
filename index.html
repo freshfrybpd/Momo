@@ -692,6 +692,16 @@ function generateDeliveryPin(){
 async function placeOrder(event){
   event.preventDefault();
 
+  // Allow placing orders only from 5:00 PM onwards
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const openingMinutes = 17 * 60; // 5:00 PM
+
+  if (currentMinutes < openingMinutes) {
+    window.location.replace("https://freshfrymomo.food/freshfry.html");
+    return;
+  }
+
   if(submitting)return;
   if(!cart.length)return showToast("Your box is empty.",true);
 
