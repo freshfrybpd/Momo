@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff5e00">
+  <title>FreshFry | We Open at 5 PM</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #101114;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      padding: 35px 22px;
+      border: 1px solid #343434;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #1b1b1e, #111113);
+      box-shadow: 0 25px 70px #0007;
+    }
+
+    .logo {
+      font-size: 34px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: -2px;
+    }
+
+    .logo span {
+      color: #ff5e00;
+    }
+
+    .food-icon {
+      width: 100px;
+      height: 100px;
+      margin: 28px auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #ff5e00;
+      background: #ff5e001b;
+      border: 1px solid #ff5e0045;
+      font-size: 42px;
+    }
+
+    .label {
+      display: inline-block;
+      padding: 8px 13px;
+      border-radius: 99px;
+      background: #ff5e001b;
+      color: #ff9b66;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    h1 {
+      margin: 20px 0 10px;
+      font-size: clamp(32px, 8vw, 43px);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+    }
+
+    h1 span {
+      color: #ff5e00;
+    }
+
+    .description {
+      margin: 0 auto;
+      max-width: 310px;
+      color: #b8b8bd;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .timer {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 28px 0 18px;
+    }
+
+    .time-box {
+      flex: 1;
+      max-width: 95px;
+      padding: 15px 5px;
+      border: 1px solid #363639;
+      border-radius: 15px;
+      background: #202023;
+    }
+
+    .time-box strong {
+      display: block;
+      font-size: 29px;
+      font-weight: 900;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .time-box small {
+      display: block;
+      margin-top: 5px;
+      color: #9999a0;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .open-time {
+      margin: 18px 0;
+      padding: 15px;
+      border-radius: 14px;
+      background: #ff5e00;
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .footer {
+      margin-top: 22px;
+      color: #77777e;
+      font-size: 11px;
+    }
+
+    .open-now {
+      display: none;
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 13px;
+      background: #14532d;
+      color: #dcfce7;
+      font-weight: 800;
+    }
+
+    @media (max-width: 360px) {
+      .container {
+        padding: 28px 15px;
+      }
+
+      .time-box strong {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="logo">Fresh<span>fry.</span></div>
+
+    <div class="food-icon">
+      <i class="fa-solid fa-bowl-food"></i>
+    </div>
+
+    <div class="label">FRESHLY MADE FOR YOU</div>
+
+    <h1>WE OPEN<br>AT <span>5 PM!</span></h1>
+
+    <p class="description">
+      Our kitchen is getting ready to serve you delicious momos
+      and your favourite food in Baripada.
+    </p>
+
+    <div class="timer" id="timer">
+      <div class="time-box">
+        <strong id="hours">00</strong>
+        <small>HOURS</small>
+      </div>
+
+      <div class="time-box">
+        <strong id="minutes">00</strong>
+        <small>MINUTES</small>
+      </div>
+
+      <div class="time-box">
+        <strong id="seconds">00</strong>
+        <small>SECONDS</small>
+      </div>
+    </div>
+
+    <div class="open-time" id="open-time">
+      <i class="fa-regular fa-clock"></i>
+      OPEN START AT 5:00 PM
+    </div>
+
+    <div class="open-now" id="open-now">
+      <i class="fa-solid fa-circle-check"></i>
+      We're open! Redirecting to our menu...
+    </div>
+
+    <p class="description" id="message">
+      Come back at 5 PM and order something delicious!
+    </p>
+
+    <div class="footer">
+      © FreshFry Momo Baripada
+    </div>
+  </main>
+
+  <script>
+    // Replace this with your existing FreshFry menu URL.
+    const MENU_URL = "https://freshfrymomo.food/";
+
+    function updateTimer() {
+      const now = new Date();
+
+      // Today's opening time: 5:00 PM, local device time.
+      const opening = new Date(now);
+      opening.setHours(17, 0, 0, 0);
+
+      const difference = opening.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        document.getElementById("timer").style.display = "none";
+        document.getElementById("open-time").style.display = "none";
+        document.getElementById("open-now").style.display = "block";
+        document.getElementById("message").textContent =
+          "Our kitchen is open. Let's find your favourites!";
+
+        // Redirect once the opening time arrives.
+        window.location.replace(MENU_URL);
+        return;
+      }
+
+      const hours = Math.floor(difference / 3600000);
+      const minutes = Math.floor((difference % 3600000) / 60000);
+      const seconds = Math.floor((difference % 60000) / 1000);
+
+      document.getElementById("hours").textContent =
+        String(hours).padStart(2, "0");
+
+      document.getElementById("minutes").textContent =
+        String(minutes).padStart(2, "0");
+
+      document.getElementById("seconds").textContent =
+        String(seconds).padStart(2, "0");
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
