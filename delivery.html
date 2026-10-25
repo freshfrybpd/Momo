@@ -730,6 +730,19 @@ async function restoreSession() {
 }
 
 restoreSession();
+
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("Freshfry Partner PWA registered"))
+      .catch(error => console.error("PWA registration failed:", error));
+  });
+}
+</script>
+</body>
+
 </script>
 
 </body>
