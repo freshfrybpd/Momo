@@ -1427,5 +1427,25 @@ window.addEventListener("beforeunload", () => {
 });
 </script>
 
+<script>
+
+/* ADMIN PWA SERVICE WORKER */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("/admin-sw.js", {
+        scope: "/"
+      });
+
+      console.log("Freshfry Admin PWA registered successfully.");
+    } catch (error) {
+      console.error("Admin PWA registration failed:", error);
+    }
+  });
+}
+
+
+</script>
+
 </body>
 </html>
