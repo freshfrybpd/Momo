@@ -725,6 +725,27 @@ function generateDeliveryPin(){
   // Existing frontend PIN generation. Production should use a trusted backend.
   return String(crypto.getRandomValues(new Uint32Array(1))[0]%9000+1000)
 }
+
+function openUPIPayment(amount, orderId) {
+  if (!UPI_ID || UPI_ID === "yourupi@bank") {
+    showToast("Please configure your UPI ID first.", true);
+    return false;
+  }
+
+  const params = new URLSearchParams({
+    pa: UPI_ID,
+    pn: UPI_NAME,
+    am: Number(amount).toFixed(2),
+    cu: "INR",
+    tn: "FreshFry Order " + orderId,
+    tr: orderId
+  });
+
+  const upiUrl = "upi://pay?" + params.toString();
+
+  window.location.href = upiUrl;
+  return true;
+}
 async function placeOrder(event){
   event.preventDefault();
   if(submitting)return;
