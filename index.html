@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root{--orange:#ff5e00;--orange-dark:#e94e00;--black:#101114;--muted:#777b85;--bg:#f7f7f8;--white:#fff;--line:#ececef;--green:#15803d}
@@ -109,11 +109,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .form-control:focus{border-color:var(--orange)}
 textarea.form-control{resize:vertical;min-height:82px}
 .form-hint{font-size:10px;color:var(--muted);line-height:1.5;margin-top:6px}
-.payment-option{border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;align-items:center;gap:10px;margin:8px 0;font-size:12px}
+.payment-option{border:1px solid var(--line);border-radius:13px;padding:12px;display:flex!important;align-items:center;gap:10px;margin:8px 0;font-size:12px;cursor:pointer}
 .payment-option input{accent-color:var(--orange)}
+.payment-option span{flex:1}
+.payment-option.recommended{border-color:#ffb38a;background:#fff7f1}
 .qr-section{margin:16px 0;padding:18px;background:#fff7f1;border:1px solid #ffd9c4;border-radius:18px;text-align:center}
-.qr-box{display:flex;justify-content:center;align-items:center;min-height:220px;background:white;padding:12px;border-radius:14px;max-width:240px;margin:12px auto}
-.qr-box canvas,.qr-box img{max-width:100%;height:auto}
 .order-card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:13px}
 .order-card-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
 .order-id{font-size:10px;color:var(--muted);margin-bottom:5px}
@@ -215,7 +215,7 @@ textarea.form-control{resize:vertical;min-height:82px}
     </div>
     <div class="category-row" id="category-row"><button class="chip active" data-category="all">All Items</button></div>
     <div class="menu-grid" id="menu-grid"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div>
-    <div class="notice"><i class="fa-solid fa-circle-info"></i> Minimum food order ₹100. Delivery fee ₹20 is additional. Confirm the final amount before payment.</div>
+    <div class="notice"><i class="fa-solid fa-circle-info"></i> Minimum food order ₹100. Delivery fee ₹20 is additional. For food subtotal above ₹150, only online UPI payment is available.</div>
   </section>
 
   <section id="orders-section" hidden>
@@ -253,6 +253,7 @@ textarea.form-control{resize:vertical;min-height:82px}
       <div><span class="small-label">Almost ready</span><h2 class="modal-title">Checkout</h2><p class="muted">Confirm your contact and delivery details.</p></div>
       <button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
+
     <form id="checkout-form">
       <div class="form-group"><label for="customer-name">Full name *</label><input class="form-control" id="customer-name" maxlength="80" required autocomplete="name" placeholder="Enter your name"></div>
       <div class="form-group"><label for="customer-phone">Mobile number *</label><input class="form-control" id="customer-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number"></div>
@@ -261,22 +262,44 @@ textarea.form-control{resize:vertical;min-height:82px}
 
       <div class="form-group">
         <label>Payment preference</label>
-        <label class="payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
-        <label class="payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-google-pay"></i><span>UPI payment — scan QR or open UPI app</span></label>
-        <p class="form-hint">The QR contains your checkout amount. Payment stays unverified until independently confirmed.</p>
+
+        <label class="payment-option" id="cod-payment-option">
+          <input type="radio" name="payment-method" value="COD" checked>
+          <i class="fa-solid fa-money-bill-wave"></i>
+          <span>Cash on delivery</span>
+        </label>
+
+        <label class="payment-option" id="upi-payment-option">
+          <input type="radio" name="payment-method" value="UPI">
+          <i class="fa-brands fa-google-pay"></i>
+          <span>Online UPI payment</span>
+        </label>
+
+        <p class="form-hint" id="payment-rule-hint">
+          Food subtotal above ₹150 requires online UPI payment.
+        </p>
       </div>
 
       <div id="upi-qr-section" class="qr-section" hidden>
-        <h3 style="margin:0 0 8px;font-size:17px;">Scan & Pay with UPI</h3>
-        <p style="font-size:12px;color:#666;margin:0 0 12px;">Scan this QR using a UPI app.</p>
-        <div id="upi-qr" class="qr-box"></div>
-        <p style="margin:12px 0 4px;font-size:12px;color:#666;">Pay exactly</p>
-        <strong id="upi-qr-amount" style="font-size:28px;color:#ff5e00;">₹0</strong>
-        <p style="font-size:12px;margin:10px 0 0;">UPI ID: <strong>8984225311@ybl</strong></p>
-        <p style="font-size:10px;line-height:1.5;color:#777;">Verify the recipient and amount in your UPI app before paying.</p>
-        <button type="button" id="upi-open-app" class="secondary-btn" style="margin-top:12px;">
-          <i class="fa-solid fa-mobile-screen-button"></i> Open UPI App
-        </button>
+        <h3 style="margin:0 0 8px;font-size:17px;"><i class="fa-solid fa-mobile-screen-button"></i> Pay with UPI</h3>
+        <p style="font-size:12px;color:#666;margin:0 0 12px;">No QR code required. Open your UPI app after placing the order.</p>
+
+        <div style="background:white;border:1px solid #ffd9c4;border-radius:14px;padding:15px;">
+          <p style="margin:0 0 5px;font-size:11px;color:#777;">PAYABLE AMOUNT</p>
+          <strong id="upi-qr-amount" style="font-size:30px;color:#ff5e00;">₹0</strong>
+
+          <div style="margin-top:15px;text-align:left;">
+            <p style="font-size:11px;color:#777;margin:0 0 5px;">UPI ID</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <strong id="upi-id-display" style="font-size:14px;overflow-wrap:anywhere;">Q147892962@ybl</strong>
+              <button type="button" id="upi-copy-btn" class="secondary-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:10px;line-height:1.6;color:#777;margin:12px 0 0;">
+          Verify the recipient and amount in your UPI app. Opening the app does not confirm payment.
+        </p>
       </div>
 
       <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
@@ -342,6 +365,7 @@ const $=id=>document.getElementById(id);
 
 const DELIVERY_FEE=20;
 const MINIMUM_ORDER=100;
+const COD_MAX_SUBTOTAL=150;
 const UPI_ID="Q147892962@ybl";
 const UPI_NAME="ABINASH BARIK";
 const CART_KEY="ff_cart_v2";
@@ -394,6 +418,37 @@ function getPhone(){
 function validPhone(phone){return /^[6-9]\d{9}$/.test(phone)}
 function subtotal(){return cart.reduce((sum,item)=>sum+item.price*item.qty,0)}
 function total(){return subtotal()+(cart.length?DELIVERY_FEE:0)}
+
+/* PAYMENT RULE
+   Food subtotal <= ₹150: COD and UPI available.
+   Food subtotal > ₹150: only UPI available.
+*/
+
+function updatePaymentOptions(){
+  const foodSubtotal=subtotal();
+  const codOption=$("cod-payment-option");
+  const upiOption=$("upi-payment-option");
+  const codRadio=document.querySelector('input[name="payment-method"][value="COD"]');
+  const upiRadio=document.querySelector('input[name="payment-method"][value="UPI"]');
+  const hint=$("payment-rule-hint");
+
+  const onlineOnly=foodSubtotal>COD_MAX_SUBTOTAL;
+
+  codOption.hidden=onlineOnly;
+  codRadio.disabled=onlineOnly;
+
+  if(onlineOnly){
+    upiRadio.checked=true;
+    upiOption.classList.add("recommended");
+    hint.textContent="Your food subtotal is above ₹150. Cash on delivery is unavailable. Please pay online using UPI.";
+  }else{
+    upiOption.classList.remove("recommended");
+    hint.textContent="For food subtotal above ₹150, only online UPI payment is available.";
+    if(!codRadio.checked&&!upiRadio.checked)codRadio.checked=true;
+  }
+
+  return onlineOnly;
+}
 
 function showToast(message,error=false){
   const toast=$("toast");
@@ -528,7 +583,7 @@ function addToCart(itemId,size){
   showToast(name+" added to your box");
 }
 
-/* DYNAMIC UPI QR */
+/* UPI — NO QR CODE */
 
 function makeUPILink(amount,reference="FreshFry"){
   const params=new URLSearchParams({
@@ -544,20 +599,23 @@ function makeUPILink(amount,reference="FreshFry"){
 function updateUPIQR(){
   const section=$("upi-qr-section");
   const method=document.querySelector('input[name="payment-method"]:checked')?.value;
+  const foodSubtotal=subtotal();
 
-  if(method!=="UPI"){
+  updatePaymentOptions();
+
+  const currentMethod=document.querySelector('input[name="payment-method"]:checked')?.value;
+
+  if(currentMethod!=="UPI"){
     section.hidden=true;
     currentUPILink="";
-    $("upi-qr").innerHTML="";
+    $("place-order-btn").textContent="Place Order";
     return;
   }
-
-  const foodSubtotal=subtotal();
 
   if(!cart.length||foodSubtotal<MINIMUM_ORDER){
     section.hidden=true;
     currentUPILink="";
-    $("upi-qr").innerHTML="";
+    $("place-order-btn").textContent="Place Order";
     return;
   }
 
@@ -565,27 +623,9 @@ function updateUPIQR(){
   currentUPILink=makeUPILink(payable,"FreshFry Checkout");
 
   $("upi-qr-amount").textContent=money(payable);
-  $("upi-qr").innerHTML="";
+  $("upi-id-display").textContent=UPI_ID;
   section.hidden=false;
-
-  if(typeof window.QRCode==="undefined"){
-    $("upi-qr").textContent="QR library could not load. Check your internet connection.";
-    return;
-  }
-
-  new window.QRCode($("upi-qr"),{
-    text:currentUPILink,
-    width:200,
-    height:200,
-    colorDark:"#101114",
-    colorLight:"#ffffff",
-    correctLevel:window.QRCode.CorrectLevel.M
-  });
-}
-
-function openUPIPayment(amount,orderId){
-  const link=makeUPILink(amount,"FreshFry Order "+orderId);
-  window.location.href=link;
+  $("place-order-btn").textContent="Place Order & Pay Online";
 }
 
 /* CART */
@@ -692,12 +732,12 @@ function generateDeliveryPin(){
 async function placeOrder(event){
   event.preventDefault();
 
-  // Allow placing orders only from 5:00 PM onwards
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-  const openingMinutes = 17 * 60; // 5:00 PM
+  // Opening time: 5:00 PM local time.
+  const now=new Date();
+  const currentMinutes=now.getHours()*60+now.getMinutes();
+  const openingMinutes=17*60;
 
-  if (currentMinutes < openingMinutes) {
+  if(currentMinutes<openingMinutes){
     window.location.replace("https://freshfrymomo.food/freshfry.html");
     return;
   }
@@ -709,17 +749,27 @@ async function placeOrder(event){
   const phone=$("customer-phone").value.replace(/\D/g,"");
   const address=$("customer-address").value.trim();
   const note=$("customer-note").value.trim();
-  const paymentMethod=document.querySelector('input[name="payment-method"]:checked')?.value||"COD";
+  const orderSubtotal=subtotal();
+
+  // Enforce payment rule in JavaScript as well as the UI.
+  let paymentMethod=document.querySelector('input[name="payment-method"]:checked')?.value||"COD";
+
+  if(orderSubtotal>COD_MAX_SUBTOTAL){
+    paymentMethod="UPI";
+    document.querySelector('input[name="payment-method"][value="UPI"]').checked=true;
+  }
 
   if(name.length<2)return showToast("Please enter your full name.",true);
   if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
   if(address.length<8)return showToast("Please enter your complete address.",true);
 
-  const orderSubtotal=subtotal();
-
   if(orderSubtotal<MINIMUM_ORDER){
     renderCart();
     return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-orderSubtotal)} more.`,true);
+  }
+
+  if(orderSubtotal>COD_MAX_SUBTOTAL&&paymentMethod!=="UPI"){
+    return showToast("Orders above ₹150 require online UPI payment.",true);
   }
 
   if(cart.some(i=>!Number.isFinite(i.price)||i.price<0||!Number.isInteger(i.qty)||i.qty<1)){
@@ -772,12 +822,13 @@ async function placeOrder(event){
     startOrdersListener();
     showOrdersPage();
 
+    // Preserve the submitted order before clearing the cart.
     cart=[];
     saveCart();
     renderCart();
 
     if(paymentMethod==="UPI"){
-      showToast("Order saved as payment pending. Opening UPI app...");
+      showToast("Order saved. Opening UPI app. Payment is pending verification.");
       openUPIPayment(orderTotal,ref.id);
     }else{
       $("confirmation-order-id").textContent="Order #"+ref.id;
@@ -790,8 +841,13 @@ async function placeOrder(event){
   }finally{
     submitting=false;
     $("place-order-btn").disabled=!cart.length||subtotal()<MINIMUM_ORDER;
-    $("place-order-btn").textContent="Place Order";
+    updateUPIQR();
   }
+}
+
+function openUPIPayment(amount,orderId){
+  const link=makeUPILink(amount,"FreshFry Order "+orderId);
+  window.location.href=link;
 }
 
 /* ORDERS + TRACKING */
@@ -991,12 +1047,19 @@ $("checkout-open").addEventListener("click",openCheckout);
 $("checkout-form").addEventListener("submit",placeOrder);
 
 document.querySelectorAll('input[name="payment-method"]').forEach(input=>{
-  input.addEventListener("change",updateUPIQR);
+  input.addEventListener("change",()=>{
+    updatePaymentOptions();
+    updateUPIQR();
+  });
 });
 
-$("upi-open-app").addEventListener("click",()=>{
-  if(!currentUPILink)return showToast("Select UPI and check your cart total first.",true);
-  window.location.href=currentUPILink;
+$("upi-copy-btn").addEventListener("click",async()=>{
+  try{
+    await navigator.clipboard.writeText(UPI_ID);
+    showToast("UPI ID copied successfully.");
+  }catch{
+    showToast("Please copy UPI ID manually: "+UPI_ID,true);
+  }
 });
 
 $("search-input").addEventListener("input",event=>{
@@ -1100,6 +1163,7 @@ window.addEventListener("offline",()=>showToast("Internet connection lost.",true
 
 updateUserUI();
 renderCart();
+updatePaymentOptions();
 startMenuListener();
 startOrdersListener();
 </script>
