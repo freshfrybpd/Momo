@@ -806,13 +806,20 @@ async function placeOrder(event){
     updateUserUI();
     closeModal("checkout-modal");
 
-    $("confirmation-order-id").textContent="Order #"+ref.id;
-    $("confirmation-pin").textContent=deliveryPin;
-    openModal("confirmation-modal");
+$("confirmation-order-id").textContent = "Order #" + ref.id;
+$("confirmation-pin").textContent = deliveryPin;
 
-    startOrdersListener();
-    selectedOrderId=ref.id;
-    showOrdersPage()
+startOrdersListener();
+selectedOrderId = ref.id;
+showOrdersPage();
+
+if (paymentMethod === "UPI") {
+  showToast("Order saved. Opening UPI payment...");
+
+  openUPIPayment(orderTotal, ref.id);
+} else {
+  openModal("confirmation-modal");
+}
   }catch(error){
     console.error("Order creation failed:",error);
     showToast("Order could not be placed. Check your connection or Firebase permissions.",true)
