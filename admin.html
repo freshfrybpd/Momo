@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +12,9 @@
 <meta name="apple-mobile-web-app-title" content="Freshfry Admin">
 <link rel="apple-touch-icon" href="/logo.png">
 <title>Freshfry Admin</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
 <style>
 *{box-sizing:border-box}
 body{font-family:Outfit,sans-serif;background:#f2f4f9;color:#101827}
@@ -27,10 +24,11 @@ button{cursor:pointer}
 .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
 .admin-tab{display:none}
 .admin-tab.active-tab{display:block}
-.tab-btn{white-space:nowrap;padding:12px 16px;border-radius:15px;font-size:12px;font-weight:900;background:#f0f2f7;color:#657087}
+.tab-btn{white-space:nowrap;padding:12px 16px;border-radius:15px;font-size:11px;font-weight:900;background:#f0f2f7;color:#657087}
 .tab-btn.active{background:#ff6900;color:white}
 .field{width:100%;padding:13px 15px;border-radius:14px;background:#f8fafc;border:1px solid #e0e5ed;outline:none;font-size:13px}
 .field:focus{border-color:#ff7900}
+.field:disabled{opacity:.6}
 .card{background:white;border:1px solid #e4e8f0;border-radius:24px;overflow:hidden}
 .orange{background:#ff6900;color:white}
 .muted{color:#8993a5}
@@ -43,7 +41,7 @@ button{cursor:pointer}
 .status-cancelled{background:#fee2e2;color:#b91c1c}
 .stat{background:white;border:1px solid #e4e8f0;border-radius:20px;padding:17px}
 .stat-value{font-size:27px;font-weight:900;margin-top:8px;overflow-wrap:anywhere}
-.action{padding:10px 12px;border-radius:12px;font-size:11px;font-weight:900}
+.action{padding:10px 12px;border-radius:12px;font-size:10px;font-weight:900}
 .empty{padding:28px 15px;text-align:center;color:#8993a5;background:white;border:1px solid #e4e8f0;border-radius:20px}
 .toast{display:none;position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:300;background:#101827;color:white;padding:13px 18px;border-radius:14px;font-size:12px;font-weight:800;max-width:90%}
 .modal{display:none;position:fixed;inset:0;z-index:200;background:#0008;align-items:center;justify-content:center;padding:16px}
@@ -52,141 +50,117 @@ button{cursor:pointer}
 @media(min-width:640px){.main-wrap{padding-top:25px}}
 </style>
 </head>
-
 <body class="min-h-screen pb-10">
-
 <header class="bg-[#101827] text-white sticky top-0 z-50 shadow-xl">
 <div class="max-w-6xl mx-auto px-4 py-4">
+ <div class="flex items-center justify-between gap-3">
+  <div class="flex items-center gap-3">
+   <div class="w-11 h-11 rounded-2xl orange flex items-center justify-center text-xl"><i class="fa-solid fa-bowl-food"></i></div>
+   <div><h1 class="font-black text-xl">Freshfry <span class="text-orange-400">Admin</span></h1><p class="text-[10px] text-slate-400">Restaurant operations · Baripada</p></div>
+  </div>
+  <div id="connection-pill" class="text-[10px] font-black px-3 py-2 rounded-full bg-slate-700">CONNECTING</div>
+ </div>
+ <nav class="flex gap-2 mt-5 overflow-x-auto no-scrollbar pb-1">
+  <button class="tab-btn active" data-tab="orders"><i class="fa-solid fa-receipt mr-1"></i> ORDERS</button>
+  <button class="tab-btn" data-tab="menu"><i class="fa-solid fa-utensils mr-1"></i> MENU</button>
+  <button class="tab-btn" data-tab="users"><i class="fa-solid fa-users mr-1"></i> CUSTOMERS</button>
+  <button class="tab-btn" data-tab="riders"><i class="fa-solid fa-motorcycle mr-1"></i> RIDERS</button>
+ </nav>
+ <div class="flex flex-wrap gap-2 mt-4">
+  <button id="sound-btn" class="action orange"><i class="fa-solid fa-volume-high mr-2"></i> ENABLE ORDER SOUND</button>
+  <button id="notification-btn" class="action bg-slate-700 text-white"><i class="fa-solid fa-bell mr-2"></i> ENABLE NOTIFICATIONS</button>
+  <button id="refresh-btn" class="action bg-white text-slate-900"><i class="fa-solid fa-rotate-right mr-1"></i> REFRESH</button>
+ </div>
+
+ <!-- STORE OPEN / CLOSE -->
+ <div class="mt-4 p-4 rounded-2xl bg-slate-800">
   <div class="flex items-center justify-between gap-3">
-    <div class="flex items-center gap-3">
-      <div class="w-11 h-11 rounded-2xl orange flex items-center justify-center text-xl">
-        <i class="fa-solid fa-bowl-food"></i>
-      </div>
-      <div>
-        <h1 class="font-black text-xl">Freshfry <span class="text-orange-400">Admin</span></h1>
-        <p class="text-[10px] text-slate-400">Restaurant operations · Baripada</p>
-      </div>
-    </div>
-    <div id="connection-pill" class="text-[10px] font-black px-3 py-2 rounded-full bg-slate-700">CONNECTING</div>
+   <div>
+    <h3 class="font-black text-white">Store Availability</h3>
+    <p id="store-status-text" class="text-xs mt-1 text-slate-300">Checking store status...</p>
+   </div>
+   <button id="store-toggle" disabled class="px-5 py-3 rounded-xl font-black text-xs bg-slate-500 text-white">LOADING...</button>
   </div>
+ </div>
 
-  <nav class="flex gap-2 mt-5 overflow-x-auto no-scrollbar pb-1">
-    <button class="tab-btn active" data-tab="orders"><i class="fa-solid fa-receipt mr-1"></i> ORDERS</button>
-    <button class="tab-btn" data-tab="menu"><i class="fa-solid fa-utensils mr-1"></i> MENU</button>
-    <button class="tab-btn" data-tab="users"><i class="fa-solid fa-users mr-1"></i> CUSTOMERS</button>
-    <button class="tab-btn" data-tab="riders"><i class="fa-solid fa-motorcycle mr-1"></i> RIDERS</button>
-  </nav>
-
-  <div class="flex flex-wrap gap-2 mt-4">
-    <button id="sound-btn" class="action orange"><i class="fa-solid fa-volume-high mr-2"></i> ENABLE ORDER SOUND</button>
-    <button id="notification-btn" class="action bg-slate-700 text-white"><i class="fa-solid fa-bell mr-2"></i> ENABLE NOTIFICATIONS</button>
-    <button id="refresh-btn" class="action bg-white text-slate-900"><i class="fa-solid fa-rotate-right mr-1"></i> REFRESH</button>
-  </div>
-  <p id="connection-message" class="text-xs text-slate-400 mt-3">Connecting to Firebase...</p>
-
-  <div id="new-order-alert" class="hidden mt-4 p-4 rounded-2xl bg-orange-500 text-white">
-    <strong><i class="fa-solid fa-bell mr-2"></i> NEW FRESHFRY ORDER!</strong>
-    <p id="new-order-message" class="text-sm mt-2"></p>
-    <button id="dismiss-alert" class="mt-3 px-4 py-2 rounded-xl bg-white text-orange-600 font-black text-xs">DISMISS</button>
-  </div>
+ <p id="connection-message" class="text-xs text-slate-400 mt-3">Connecting to Firebase...</p>
+ <div id="new-order-alert" class="hidden mt-4 p-4 rounded-2xl bg-orange-500 text-white">
+  <strong><i class="fa-solid fa-bell mr-2"></i> NEW FRESHFRY ORDER!</strong>
+  <p id="new-order-message" class="text-sm mt-2"></p>
+  <button id="dismiss-alert" class="mt-3 px-4 py-2 rounded-xl bg-white text-orange-600 font-black text-xs">DISMISS</button>
+ </div>
 </div>
 </header>
 
 <main class="max-w-6xl mx-auto p-4 main-wrap">
 
-<!-- ORDERS -->
 <section id="tab-orders" class="admin-tab active-tab">
-  <p class="text-[10px] font-black tracking-widest text-orange-600">LIVE OPERATIONS</p>
-  <h2 class="text-3xl font-black mt-1 mb-5">Orders Dashboard</h2>
-
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-    <div class="stat"><i class="fa-solid fa-box text-orange-500"></i><div id="stat-active" class="stat-value">0</div><p class="text-[10px] muted font-bold">ACTIVE ORDERS</p></div>
-    <div class="stat"><i class="fa-solid fa-clock text-blue-500"></i><div id="stat-pending" class="stat-value">0</div><p class="text-[10px] muted font-bold">PENDING</p></div>
-    <div class="stat"><i class="fa-solid fa-check text-green-500"></i><div id="stat-today" class="stat-value">0</div><p class="text-[10px] muted font-bold">DELIVERED TODAY</p></div>
-    <div class="stat"><i class="fa-solid fa-indian-rupee-sign text-purple-500"></i><div id="stat-sales" class="stat-value">₹0</div><p class="text-[10px] muted font-bold">TODAY'S DELIVERED TOTAL</p></div>
-  </div>
-
-  <div class="bg-white rounded-2xl border p-3 mb-5 flex flex-col sm:flex-row gap-3">
-    <input id="order-search" class="field" placeholder="Search name, phone or order ID">
-    <select id="order-filter" class="field sm:max-w-52">
-      <option value="all">All statuses</option>
-      <option value="pending">Pending</option>
-      <option value="preparing">Preparing</option>
-      <option value="out_for_delivery">Out for delivery</option>
-      <option value="delivered">Delivered</option>
-      <option value="cancelled">Cancelled</option>
-    </select>
-  </div>
-  <div id="orders-list" class="space-y-4"><div class="empty">Loading orders...</div></div>
+ <p class="text-[10px] font-black tracking-widest text-orange-600">LIVE OPERATIONS</p>
+ <h2 class="text-3xl font-black mt-1 mb-5">Orders Dashboard</h2>
+ <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+  <div class="stat"><i class="fa-solid fa-box text-orange-500"></i><div id="stat-active" class="stat-value">0</div><p class="text-[10px] muted font-bold">ACTIVE ORDERS</p></div>
+  <div class="stat"><i class="fa-solid fa-clock text-blue-500"></i><div id="stat-pending" class="stat-value">0</div><p class="text-[10px] muted font-bold">PENDING</p></div>
+  <div class="stat"><i class="fa-solid fa-check text-green-500"></i><div id="stat-today" class="stat-value">0</div><p class="text-[10px] muted font-bold">DELIVERED TODAY</p></div>
+  <div class="stat"><i class="fa-solid fa-indian-rupee-sign text-purple-500"></i><div id="stat-sales" class="stat-value">₹0</div><p class="text-[10px] muted font-bold">TODAY'S DELIVERED TOTAL</p></div>
+ </div>
+ <div class="bg-white rounded-2xl border p-3 mb-5 flex flex-col sm:flex-row gap-3">
+  <input id="order-search" class="field" placeholder="Search name, phone or order ID">
+  <select id="order-filter" class="field sm:max-w-52">
+   <option value="all">All statuses</option><option value="pending">Pending</option><option value="preparing">Preparing</option><option value="out_for_delivery">Out for delivery</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option>
+  </select>
+ </div>
+ <div id="orders-list" class="space-y-4"><div class="empty">Loading orders...</div></div>
 </section>
 
-<!-- MENU -->
 <section id="tab-menu" class="admin-tab">
-  <h2 class="text-3xl font-black mb-5">Menu Management</h2>
-  <form id="menu-form" class="card p-5 mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <input id="menu-name" class="field" placeholder="Food item name" maxlength="100" required>
-    <input id="menu-price" class="field" type="number" min="1" step="1" placeholder="Price ₹" required>
-    <input id="menu-image" class="field sm:col-span-2" type="url" placeholder="Image URL (optional)">
-    <select id="menu-type" class="field">
-      <option value="Veg">Veg</option>
-      <option value="Non-Veg">Non-Veg</option>
-    </select>
-    <button class="orange rounded-2xl font-black py-3" id="menu-submit">ADD MENU ITEM</button>
-  </form>
-  <div class="flex justify-between items-center mb-4">
-    <h3 class="font-black text-xl">Live Menu</h3>
-    <span id="menu-count" class="pill bg-orange-100 text-orange-700">0 items</span>
-  </div>
-  <div id="menu-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"><div class="empty">Loading menu...</div></div>
+ <h2 class="text-3xl font-black mb-5">Menu Management</h2>
+ <form id="menu-form" class="card p-5 mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+  <input id="menu-name" class="field" placeholder="Food item name" maxlength="100" required>
+  <input id="menu-price" class="field" type="number" min="1" step="1" placeholder="Price ₹" required>
+  <input id="menu-image" class="field sm:col-span-2" type="url" placeholder="Image URL (optional)">
+  <select id="menu-type" class="field"><option value="Veg">Veg</option><option value="Non-Veg">Non-Veg</option></select>
+  <button class="orange rounded-2xl font-black py-3" id="menu-submit">ADD MENU ITEM</button>
+ </form>
+ <div class="flex justify-between items-center mb-4"><h3 class="font-black text-xl">Live Menu</h3><span id="menu-count" class="pill bg-orange-100 text-orange-700">0 items</span></div>
+ <div id="menu-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"><div class="empty">Loading menu...</div></div>
 </section>
 
-<!-- CUSTOMERS -->
 <section id="tab-users" class="admin-tab">
-  <p class="text-[10px] font-black tracking-widest text-orange-600">CUSTOMER DATABASE</p>
-  <h2 class="text-3xl font-black mt-1">All Customers</h2>
-  <p class="text-sm muted mt-2 mb-5">Combined from users, customers and orders collections. Customers are merged by phone number where available.</p>
-
-  <div class="grid grid-cols-2 gap-3 mb-4">
-    <div class="stat"><div id="customer-total" class="stat-value">0</div><p class="text-[10px] muted font-bold">TOTAL CUSTOMERS</p></div>
-    <div class="stat"><div id="customer-new-total" class="stat-value">0</div><p class="text-[10px] muted font-bold">NEW · LAST 7 DAYS</p></div>
-  </div>
-
-  <input id="user-search" class="field mb-4" placeholder="Search customer name or phone...">
-  <p id="customer-source-status" class="text-xs muted mb-3">Loading customer records...</p>
-  <div id="user-list" class="space-y-4"><div class="empty">Loading all customers...</div></div>
+ <p class="text-[10px] font-black tracking-widest text-orange-600">CUSTOMER DATABASE</p>
+ <h2 class="text-3xl font-black mt-1">All Customers</h2>
+ <p class="text-sm muted mt-2 mb-5">Combined from users, customers and orders collections. Duplicate phone numbers are merged.</p>
+ <div class="grid grid-cols-2 gap-3 mb-4">
+  <div class="stat"><div id="customer-total" class="stat-value">0</div><p class="text-[10px] muted font-bold">TOTAL CUSTOMERS</p></div>
+  <div class="stat"><div id="customer-new-total" class="stat-value">0</div><p class="text-[10px] muted font-bold">NEW · LAST 7 DAYS</p></div>
+ </div>
+ <input id="user-search" class="field mb-4" placeholder="Search customer name or phone...">
+ <p id="customer-source-status" class="text-xs muted mb-3">Loading customer records...</p>
+ <div id="user-list" class="space-y-4"><div class="empty">Loading all customers...</div></div>
 </section>
 
-<!-- RIDERS -->
 <section id="tab-riders" class="admin-tab">
-  <h2 class="text-3xl font-black mb-2">Rider Fleet</h2>
-  <p class="text-sm muted mb-5">Delivery estimate: ₹20 per delivered order today.</p>
-  <div class="grid grid-cols-2 gap-3 mb-5">
-    <div class="stat"><div id="rider-total" class="stat-value">0</div><p class="text-[10px] muted font-bold">TOTAL RIDERS</p></div>
-    <div class="stat"><div id="rider-online" class="stat-value">0</div><p class="text-[10px] muted font-bold">ONLINE RIDERS</p></div>
-  </div>
-  <div id="rider-list" class="space-y-4"><div class="empty">Loading riders...</div></div>
+ <h2 class="text-3xl font-black mb-2">Rider Fleet</h2>
+ <p class="text-sm muted mb-5">Delivery estimate: ₹20 per delivered order today.</p>
+ <div class="grid grid-cols-2 gap-3 mb-5">
+  <div class="stat"><div id="rider-total" class="stat-value">0</div><p class="text-[10px] muted font-bold">TOTAL RIDERS</p></div>
+  <div class="stat"><div id="rider-online" class="stat-value">0</div><p class="text-[10px] muted font-bold">ONLINE RIDERS</p></div>
+ </div>
+ <div id="rider-list" class="space-y-4"><div class="empty">Loading riders...</div></div>
 </section>
 </main>
 
 <div id="toast" class="toast"></div>
-
 <div id="rider-modal" class="modal">
-  <div class="modal-box">
-    <div class="flex justify-between items-center">
-      <h3 class="text-xl font-black">Assign Rider</h3>
-      <button id="close-rider-modal" class="p-2"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <p id="assign-order-label" class="text-xs muted mt-2"></p>
-    <div id="rider-choices" class="space-y-3 mt-5"></div>
-  </div>
+ <div class="modal-box">
+  <div class="flex justify-between items-center"><h3 class="text-xl font-black">Assign Rider</h3><button id="close-rider-modal" class="p-2"><i class="fa-solid fa-xmark"></i></button></div>
+  <p id="assign-order-label" class="text-xs muted mt-2"></p>
+  <div id="rider-choices" class="space-y-3 mt-5"></div>
+ </div>
 </div>
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
- getFirestore,collection,onSnapshot,doc,updateDoc,deleteDoc,
- addDoc,serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {getFirestore,collection,onSnapshot,doc,updateDoc,deleteDoc,addDoc,serverTimestamp,setDoc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -200,580 +174,355 @@ const firebaseConfig={
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const $=id=>document.getElementById(id);
-
-let orders=[],menuItems=[],riders=[];
+let orders=[],menuItems=[],riders=[],customers=[];
 let customerSources={users:[],customers:[],orders:[]};
-let customers=[];
-let selectedOrderId=null;
-let toastTimer=null;
-let firstOrderSnapshot=true;
+let selectedOrderId=null,toastTimer=null,firstOrderSnapshot=true;
 const knownOrderIds=new Set();
-let audioContext=null;
-let soundEnabled=false;
-let soundQueue=Promise.resolve();
+let audioContext=null,soundEnabled=false,soundQueue=Promise.resolve();
 const RIDER_RATE=20;
 
-function toast(message){
- const el=$("toast");
- el.textContent=message;
- el.style.display="block";
- clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>el.style.display="none",3000);
+function toast(m){
+ const e=$("toast");e.textContent=m;e.style.display="block";
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.style.display="none",3000);
 }
 function esc(v){
- return String(v??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function money(v){
- const n=Number(v);
- return "₹"+(Number.isFinite(n)?n.toLocaleString("en-IN"):"0");
-}
+function money(v){const n=Number(v);return "₹"+(Number.isFinite(n)?n.toLocaleString("en-IN"):"0")}
 function toDate(v){
  if(!v)return null;
  if(typeof v.toDate==="function")return v.toDate();
  if(typeof v==="number")return new Date(v);
  if(typeof v==="object"&&v.seconds!=null)return new Date(v.seconds*1000);
- const d=new Date(v);
- return Number.isNaN(d.getTime())?null:d;
+ const d=new Date(v);return Number.isNaN(d.getTime())?null:d;
 }
 function dateText(v){
  const d=toDate(v);
- return d&&!Number.isNaN(d.getTime())?d.toLocaleString("en-IN",{
-  day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"
- }):"Time unavailable";
+ return d&&!Number.isNaN(d.getTime())?d.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"Time unavailable";
 }
 function isToday(v){
  const d=toDate(v),n=new Date();
  return !!d&&!Number.isNaN(d.getTime())&&d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();
 }
 function normalizePhone(v){
- let digits=String(v??"").replace(/\D/g,"");
- if(digits.length===12&&digits.startsWith("91"))digits=digits.slice(2);
- if(digits.length===11&&digits.startsWith("0"))digits=digits.slice(1);
- return digits;
+ let d=String(v??"").replace(/\D/g,"");
+ if(d.length===12&&d.startsWith("91"))d=d.slice(2);
+ if(d.length===11&&d.startsWith("0"))d=d.slice(1);
+ return d;
 }
-function statusLabel(s){
- return ({pending:"Pending",preparing:"Preparing",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled"})[s]||s||"Unknown";
-}
-function phoneOf(o){
- return o.customerPhone||o.phone||o.mobile||o.phoneNumber||o.mobileNumber||"";
-}
-function nameOf(o){
- return o.customerName||o.name||o.fullName||o.displayName||o.username||"Customer";
-}
-function addressOf(o){
- return o.deliveryAddress||o.customerLocation||o.address||o.location||o.deliveryLocation||"Address unavailable";
-}
+function statusLabel(s){return ({pending:"Pending",preparing:"Preparing",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled"})[s]||s||"Unknown"}
+function phoneOf(o){return o.customerPhone||o.phone||o.mobile||o.phoneNumber||o.mobileNumber||""}
+function nameOf(o){return o.customerName||o.name||o.fullName||o.displayName||o.username||"Customer"}
+function addressOf(o){return o.deliveryAddress||o.customerLocation||o.address||o.location||o.deliveryLocation||"Address unavailable"}
 function paymentOf(o){
- const p=String(o.paymentStatus||"").toLowerCase();
- if(p)return p;
+ const p=String(o.paymentStatus||"").toLowerCase();if(p)return p;
  const m=String(o.paymentMethod||"").toLowerCase();
  if(m==="cod"||m.includes("cash"))return "cash_on_delivery";
  if(m.includes("upi"))return "unverified";
  return "pending";
 }
-function paymentLabel(p){
- return ({pending:"Pending",paid:"Paid",failed:"Failed",unverified:"Unverified",cash_on_delivery:"Cash on Delivery"})[p]||p;
-}
+function paymentLabel(p){return ({pending:"Pending",paid:"Paid",failed:"Failed",unverified:"Unverified",cash_on_delivery:"Cash on Delivery"})[p]||p}
 function orderItems(o){
  if(!Array.isArray(o.items))return "Items unavailable";
  return o.items.map(i=>typeof i==="string"?i:`${i.qty??i.quantity??1} × ${i.name||i.title||"Item"}`).join(", ")||"Items unavailable";
 }
-function setConnection(ok,message){
+function setConnection(ok,msg){
  $("connection-pill").textContent=ok?"CONNECTED · LIVE":"CONNECTION ERROR";
  $("connection-pill").className="text-[10px] font-black px-3 py-2 rounded-full "+(ok?"bg-green-800 text-green-200":"bg-red-800 text-red-200");
- $("connection-message").textContent=message||(ok?"Connected · Live Firestore updates":"Check Firebase permissions");
+ $("connection-message").textContent=msg||(ok?"Connected · Live Firestore updates":"Check Firebase permissions");
 }
 
-/* Tabs */
-function showTab(tab){
+/* TABS */
+function showTab(t){
  document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active-tab"));
- $("tab-"+tab).classList.add("active-tab");
- document.querySelectorAll(".tab-btn").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));
+ $("tab-"+t).classList.add("active-tab");
+ document.querySelectorAll(".tab-btn").forEach(x=>x.classList.toggle("active",x.dataset.tab===t));
 }
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 
-/* Sound and browser notifications */
+/* SOUND + BROWSER NOTIFICATIONS */
 function playSound(){
  if(!soundEnabled||!audioContext)return;
  soundQueue=soundQueue.then(async()=>{
   try{
    if(audioContext.state==="suspended")await audioContext.resume();
    for(let i=0;i<3;i++){
-    const osc=audioContext.createOscillator(),gain=audioContext.createGain();
-    osc.frequency.value=i===1?1046:880;
-    gain.gain.setValueAtTime(.001,audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.2,audioContext.currentTime+.03);
-    gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.25);
-    osc.connect(gain);gain.connect(audioContext.destination);
-    osc.start();osc.stop(audioContext.currentTime+.27);
+    const o=audioContext.createOscillator(),g=audioContext.createGain();
+    o.frequency.value=i===1?1046:880;
+    g.gain.setValueAtTime(.001,audioContext.currentTime);
+    g.gain.exponentialRampToValueAtTime(.2,audioContext.currentTime+.03);
+    g.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.25);
+    o.connect(g);g.connect(audioContext.destination);o.start();o.stop(audioContext.currentTime+.27);
     await new Promise(r=>setTimeout(r,330));
    }
-  }catch(e){console.error(e);}
+  }catch(e){console.error(e)}
  });
 }
 $("sound-btn").addEventListener("click",async()=>{
  try{
   const AC=window.AudioContext||window.webkitAudioContext;
-  if(!AC){toast("Sound not supported by this browser.");return;}
-  audioContext=audioContext||new AC();
-  await audioContext.resume();
-  soundEnabled=true;
-  $("sound-btn").textContent="SOUND ENABLED";
-  $("sound-btn").classList.remove("orange");
-  $("sound-btn").classList.add("bg-green-700");
-  playSound();
- }catch(e){toast("Could not enable sound.");}
+  if(!AC){toast("Sound not supported");return}
+  audioContext=audioContext||new AC();await audioContext.resume();soundEnabled=true;
+  $("sound-btn").textContent="SOUND ENABLED";$("sound-btn").classList.replace("orange","bg-green-700");playSound();
+ }catch(e){toast("Could not enable sound")}
 });
 $("notification-btn").addEventListener("click",async()=>{
- if(!("Notification" in window)){toast("Browser notifications are not supported.");return;}
+ if(!("Notification"in window)){toast("Notifications not supported");return}
  try{
   const p=await Notification.requestPermission();
-  if(p==="granted"){
-   $("notification-btn").textContent="NOTIFICATIONS ENABLED";
-   $("notification-btn").classList.remove("bg-slate-700");
-   $("notification-btn").classList.add("bg-green-700");
-   toast("Browser notifications enabled.");
-  }else toast("Allow notifications in browser settings.");
- }catch(e){toast("Could not enable notifications.");}
+  if(p==="granted"){$("notification-btn").textContent="NOTIFICATIONS ENABLED";$("notification-btn").classList.replace("bg-slate-700","bg-green-700");toast("Browser notifications enabled")}
+  else toast("Allow notifications in browser settings");
+ }catch(e){toast("Could not enable notifications")}
 });
 function alertNewOrder(o){
  $("new-order-message").textContent=`Order #${o.id} · ${nameOf(o)} · ${money(o.total)}`;
- $("new-order-alert").classList.remove("hidden");
- playSound();
- if("Notification" in window&&Notification.permission==="granted"){
-  try{
-   const n=new Notification("New Freshfry Order!",{
-    body:`${nameOf(o)} · ${money(o.total)}`,
-    icon:"/logo.png",tag:"freshfry-"+o.id
-   });
-   n.onclick=()=>{window.focus();n.close();};
-  }catch(e){console.warn(e);}
+ $("new-order-alert").classList.remove("hidden");playSound();
+ if("Notification"in window&&Notification.permission==="granted"){
+  try{const n=new Notification("New Freshfry Order!",{body:`${nameOf(o)} · ${money(o.total)}`,icon:"/logo.png",tag:"freshfry-"+o.id});n.onclick=()=>{window.focus();n.close()}}catch(e){console.warn(e)}
  }
 }
 $("dismiss-alert").addEventListener("click",()=>$("new-order-alert").classList.add("hidden"));
+
+/* STORE OPEN/CLOSED */
+const storeRef=doc(db,"settings","storeStatus");
+let storeLoaded=false,storeOpen=null,storeBusy=false;
+function renderStore(){
+ const b=$("store-toggle"),t=$("store-status-text");
+ b.disabled=!storeLoaded||storeBusy;b.setAttribute("aria-pressed",String(storeOpen===true));
+ if(!storeLoaded){b.textContent="STATUS UNAVAILABLE";b.className="px-5 py-3 rounded-xl font-black text-xs bg-slate-500 text-white";t.textContent="Could not confirm store status";return}
+ if(storeBusy){b.textContent="SAVING...";return}
+ if(storeOpen){
+  b.textContent="CLOSE STORE";b.className="px-5 py-3 rounded-xl font-black text-xs bg-green-600 text-white";
+  t.textContent="STORE OPEN · Customer checkout allowed";t.className="text-xs mt-1 text-green-300";
+ }else{
+  b.textContent="OPEN STORE";b.className="px-5 py-3 rounded-xl font-black text-xs bg-red-600 text-white";
+  t.textContent="STORE CLOSED · New checkout should be blocked";t.className="text-xs mt-1 text-red-300";
+ }
+}
+onSnapshot(storeRef,s=>{
+ storeOpen=s.exists()?s.data().isOpen===true:true;storeLoaded=true;renderStore();
+},e=>{
+ console.error("Store status:",e);storeLoaded=false;renderStore();
+ $("store-status-text").textContent="Firestore access denied or connection failed";
+});
+$("store-toggle").addEventListener("click",async()=>{
+ if(!storeLoaded||storeBusy)return;
+ const next=!storeOpen;
+ if(!confirm(next?"Open the store for customer orders?":"Close the store and stop new customer orders?"))return;
+ storeBusy=true;renderStore();
+ try{
+  await setDoc(storeRef,{isOpen:next,updatedAt:serverTimestamp()},{merge:true});
+  storeOpen=next;toast(next?"Store is OPEN":"Store is CLOSED");
+ }catch(e){console.error(e);toast("Store status update failed. Check Firestore rules.")}
+ finally{storeBusy=false;renderStore()}
+});
 
 /* ORDERS */
 function renderOrderStats(){
  const active=orders.filter(o=>!["delivered","cancelled"].includes(o.status));
  const pending=orders.filter(o=>o.status==="pending");
- const delivered=orders.filter(o=>o.status==="delivered"&&isToday(o.deliveredAt||o.updatedAt||o.createdAt));
- $("stat-active").textContent=active.length;
- $("stat-pending").textContent=pending.length;
- $("stat-today").textContent=delivered.length;
- $("stat-sales").textContent=money(delivered.reduce((s,o)=>s+(Number(o.total)||0),0));
+ const del=orders.filter(o=>o.status==="delivered"&&isToday(o.deliveredAt||o.updatedAt||o.createdAt));
+ $("stat-active").textContent=active.length;$("stat-pending").textContent=pending.length;
+ $("stat-today").textContent=del.length;$("stat-sales").textContent=money(del.reduce((s,o)=>s+(Number(o.total)||0),0));
 }
 function renderOrders(){
  renderOrderStats();
- const q=$("order-search").value.trim().toLowerCase(),filter=$("order-filter").value;
- const list=orders.filter(o=>{
-  const searchable=[o.id,nameOf(o),phoneOf(o),orderItems(o),o.riderName].join(" ").toLowerCase();
-  return (!q||searchable.includes(q))&&(filter==="all"||o.status===filter);
- });
- if(!list.length){$("orders-list").innerHTML='<div class="empty">No matching orders.</div>';return;}
+ const q=$("order-search").value.trim().toLowerCase(),f=$("order-filter").value;
+ const list=orders.filter(o=>(!q||[o.id,nameOf(o),phoneOf(o),orderItems(o),o.riderName].join(" ").toLowerCase().includes(q))&&(f==="all"||o.status===f));
+ if(!list.length){$("orders-list").innerHTML='<div class="empty">No matching orders.</div>';return}
  $("orders-list").innerHTML=list.map(o=>{
-  const phone=normalizePhone(phoneOf(o));
-  const payment=paymentOf(o);
-  let action="";
+  const phone=normalizePhone(phoneOf(o)),payment=paymentOf(o);let action="";
   if(o.status==="pending")action=`<button class="action bg-slate-900 text-white" data-order-action="prepare" data-id="${esc(o.id)}">PREPARE</button>`;
   if(o.status==="preparing")action=`<button class="action orange" data-order-action="assign" data-id="${esc(o.id)}">ASSIGN RIDER</button>`;
-  if(o.status==="out_for_delivery")action=`<span class="pill bg-orange-100 text-orange-700">WITH ${esc(o.riderName||"RIDER")}</span>`;
   const map="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(addressOf(o));
   return `<article class="card p-5 shadow-sm">
-   <div class="flex justify-between gap-3">
-    <div class="min-w-0">
-     <p class="text-[10px] muted font-black">ORDER #${esc(o.id)}</p>
-     <h3 class="text-lg font-black mt-1 break-words">${esc(nameOf(o))}</h3>
-     <p class="text-xs muted mt-1">${esc(dateText(o.createdAt))}</p>
-    </div>
-    <div class="text-right shrink-0">
-     <p class="text-xl font-black">${money(o.total)}</p>
-     <span class="pill status-${esc(o.status||"pending")}">${esc(statusLabel(o.status))}</span>
-    </div>
-   </div>
+   <div class="flex justify-between gap-3"><div class="min-w-0"><p class="text-[10px] muted font-black">ORDER #${esc(o.id)}</p><h3 class="text-lg font-black mt-1 break-words">${esc(nameOf(o))}</h3><p class="text-xs muted mt-1">${esc(dateText(o.createdAt))}</p></div>
+   <div class="text-right shrink-0"><p class="text-xl font-black">${money(o.total)}</p><span class="pill status-${esc(o.status||"pending")}">${esc(statusLabel(o.status))}</span></div></div>
    <div class="mt-4 p-4 rounded-2xl bg-slate-50 space-y-3 text-xs">
     <p><i class="fa-solid fa-phone text-orange-500 mr-2"></i>${phone?esc(phoneOf(o)):"Phone unavailable"}</p>
     <p><i class="fa-solid fa-location-dot text-orange-500 mr-2"></i>${esc(addressOf(o))}</p>
     <p><i class="fa-solid fa-basket-shopping text-orange-500 mr-2"></i>${esc(orderItems(o))}</p>
-    <p><i class="fa-solid fa-wallet text-orange-500 mr-2"></i>${esc(o.paymentMethod||"Payment method unavailable")} · ${esc(paymentLabel(payment))}</p>
+    <p><i class="fa-solid fa-wallet text-orange-500 mr-2"></i>${esc(o.paymentMethod||"Not specified")} · ${esc(paymentLabel(payment))}</p>
     ${o.deliveryPin?`<p><i class="fa-solid fa-key text-orange-500 mr-2"></i>Delivery PIN: ${esc(o.deliveryPin)}</p>`:""}
     ${o.riderName?`<p><i class="fa-solid fa-motorcycle text-orange-500 mr-2"></i>${esc(o.riderName)} ${esc(o.riderPhone||"")}</p>`:""}
    </div>
-   <div class="flex flex-wrap gap-2 mt-4 items-center">
-    ${action}
-    <select class="field flex-1 min-w-36" data-status-select="${esc(o.id)}" aria-label="Change order status">
-     ${["pending","preparing","out_for_delivery","delivered","cancelled"].map(s=>`<option value="${s}" ${o.status===s?"selected":""}>${statusLabel(s)}</option>`).join("")}
-    </select>
-    <select class="field flex-1 min-w-36" data-payment-select="${esc(o.id)}" aria-label="Change payment status">
-     ${["pending","paid","failed","unverified","cash_on_delivery"].map(s=>`<option value="${s}" ${payment===s?"selected":""}>${paymentLabel(s)}</option>`).join("")}
-    </select>
+   <div class="flex flex-wrap gap-2 mt-4 items-center">${action}
+    <select class="field flex-1 min-w-36" data-status-select="${esc(o.id)}">${["pending","preparing","out_for_delivery","delivered","cancelled"].map(s=>`<option value="${s}" ${o.status===s?"selected":""}>${statusLabel(s)}</option>`).join("")}</select>
+    <select class="field flex-1 min-w-36" data-payment-select="${esc(o.id)}">${["pending","paid","failed","unverified","cash_on_delivery"].map(s=>`<option value="${s}" ${payment===s?"selected":""}>${paymentLabel(s)}</option>`).join("")}</select>
     ${phone?`<a class="action bg-green-100 text-green-800" href="https://wa.me/91${esc(phone)}" target="_blank" rel="noopener">WHATSAPP</a>`:""}
     <a class="action bg-blue-100 text-blue-800" href="${esc(map)}" target="_blank" rel="noopener">MAP</a>
     <button class="action bg-red-100 text-red-700" data-order-action="delete" data-id="${esc(o.id)}">DELETE</button>
-   </div>
-  </article>`;
+   </div></article>`;
  }).join("");
 }
 $("order-search").addEventListener("input",renderOrders);
 $("order-filter").addEventListener("change",renderOrders);
-
 $("orders-list").addEventListener("click",async e=>{
  const b=e.target.closest("[data-order-action]");if(!b)return;
- const id=b.dataset.id,action=b.dataset.orderAction;
- if(action==="assign"){openRiderModal(id);return;}
+ const id=b.dataset.id,a=b.dataset.orderAction;if(a==="assign"){openRiderModal(id);return}
  try{
-  if(action==="prepare"){
-   if(!confirm("Move this order to Preparing?"))return;
-   await updateDoc(doc(db,"orders",id),{status:"preparing",updatedAt:serverTimestamp()});
-   toast("Order moved to Preparing.");
-  }
-  if(action==="delete"){
-   if(!confirm("Permanently delete this order?"))return;
-   await deleteDoc(doc(db,"orders",id));toast("Order deleted.");
-  }
- }catch(err){console.error(err);toast("Order action failed. Check Firestore rules.");}
+  if(a==="prepare"){if(!confirm("Move this order to Preparing?"))return;await updateDoc(doc(db,"orders",id),{status:"preparing",updatedAt:serverTimestamp()});toast("Order moved to Preparing")}
+  if(a==="delete"){if(!confirm("Permanently delete this order?"))return;await deleteDoc(doc(db,"orders",id));toast("Order deleted")}
+ }catch(err){console.error(err);toast("Order action failed. Check Firestore rules.")}
 });
 $("orders-list").addEventListener("change",async e=>{
- const statusSelect=e.target.closest("[data-status-select]");
- const paymentSelect=e.target.closest("[data-payment-select]");
- if(statusSelect){
-  const id=statusSelect.dataset.statusSelect,newStatus=statusSelect.value;
-  if(!confirm("Change order status to "+statusLabel(newStatus)+"?")){renderOrders();return;}
-  try{
-   const patch={status:newStatus,updatedAt:serverTimestamp()};
-   if(newStatus==="delivered")patch.deliveredAt=serverTimestamp();
-   await updateDoc(doc(db,"orders",id),patch);toast("Order status updated.");
-  }catch(err){console.error(err);toast("Status update failed.");renderOrders();}
- }
- if(paymentSelect){
-  const id=paymentSelect.dataset.paymentSelect,newStatus=paymentSelect.value;
-  if(newStatus==="paid"&&!confirm("Have you verified that payment was actually received?")){renderOrders();return;}
-  try{
-   await updateDoc(doc(db,"orders",id),{paymentStatus:newStatus,paymentStatusUpdatedAt:serverTimestamp()});
-   toast("Payment status updated.");
-  }catch(err){console.error(err);toast("Payment update failed.");renderOrders();}
- }
+ const s=e.target.closest("[data-status-select]"),p=e.target.closest("[data-payment-select]");
+ if(s){const id=s.dataset.statusSelect,v=s.value;if(!confirm("Change order status to "+statusLabel(v)+"?")){renderOrders();return}
+  try{const patch={status:v,updatedAt:serverTimestamp()};if(v==="delivered")patch.deliveredAt=serverTimestamp();await updateDoc(doc(db,"orders",id),patch);toast("Order status updated")}catch(err){console.error(err);toast("Status update failed");renderOrders()}}
+ if(p){const id=p.dataset.paymentSelect,v=p.value;if(v==="paid"&&!confirm("Have you verified the payment was actually received?")){renderOrders();return}
+  try{await updateDoc(doc(db,"orders",id),{paymentStatus:v,paymentStatusUpdatedAt:serverTimestamp()});toast("Payment status updated")}catch(err){console.error(err);toast("Payment update failed");renderOrders()}}
 });
 
 /* MENU */
 function renderMenu(){
  $("menu-count").textContent=menuItems.length+" items";
- if(!menuItems.length){$("menu-list").innerHTML='<div class="empty">No menu items found.</div>';return;}
+ if(!menuItems.length){$("menu-list").innerHTML='<div class="empty">No menu items found.</div>';return}
  $("menu-list").innerHTML=menuItems.map(i=>{
-  const inStock=i.inStock!==false;
-  const image=typeof i.image==="string"&&/^https?:\/\//i.test(i.image)?i.image:"";
-  return `<article class="card">
-   ${image?`<img src="${esc(image)}" alt="${esc(i.name)}" class="w-full h-44 object-cover" onerror="this.style.display='none'">`:`<div class="h-28 bg-orange-50 flex items-center justify-center text-orange-400 text-3xl"><i class="fa-solid fa-bowl-food"></i></div>`}
-   <div class="p-4">
-    <div class="flex justify-between gap-2"><h3 class="font-black">${esc(i.name||"Unnamed item")}</h3><b class="text-orange-600">${money(i.price)}</b></div>
-    <p class="text-xs muted mt-2">${esc(i.type||"Veg")} · ${inStock?"In Stock":"Out of Stock"}</p>
-    <button class="action w-full mt-4 ${inStock?"bg-green-100 text-green-800":"bg-slate-100"}" data-menu-action="stock" data-id="${esc(i.id)}" data-stock="${inStock}">${inStock?"MARK OUT OF STOCK":"MARK IN STOCK"}</button>
-    <button class="action w-full mt-2 bg-red-100 text-red-700" data-menu-action="delete" data-id="${esc(i.id)}">REMOVE ITEM</button>
-   </div>
-  </article>`;
+  const stock=i.inStock!==false,img=typeof i.image==="string"&&/^https?:\/\//i.test(i.image)?i.image:"";
+  return `<article class="card">${img?`<img src="${esc(img)}" alt="${esc(i.name)}" class="w-full h-44 object-cover" onerror="this.style.display='none'">`:`<div class="h-28 bg-orange-50 flex items-center justify-center text-orange-400 text-3xl"><i class="fa-solid fa-bowl-food"></i></div>`}
+   <div class="p-4"><div class="flex justify-between gap-2"><h3 class="font-black">${esc(i.name||"Unnamed item")}</h3><b class="text-orange-600">${money(i.price)}</b></div><p class="text-xs muted mt-2">${esc(i.type||"Veg")} · ${stock?"In Stock":"Out of Stock"}</p>
+   <button class="action w-full mt-4 ${stock?"bg-green-100 text-green-800":"bg-slate-100"}" data-menu-action="stock" data-id="${esc(i.id)}" data-stock="${stock}">${stock?"MARK OUT OF STOCK":"MARK IN STOCK"}</button>
+   <button class="action w-full mt-2 bg-red-100 text-red-700" data-menu-action="delete" data-id="${esc(i.id)}">REMOVE ITEM</button></div></article>`;
  }).join("");
 }
 $("menu-list").addEventListener("click",async e=>{
  const b=e.target.closest("[data-menu-action]");if(!b)return;
- const id=b.dataset.id;
  try{
-  if(b.dataset.menuAction==="stock"){
-   const next=b.dataset.stock!=="true";
-   await updateDoc(doc(db,"menu",id),{inStock:next});toast(next?"Item is in stock.":"Item marked out of stock.");
-  }else if(b.dataset.menuAction==="delete"){
-   if(!confirm("Permanently remove this menu item?"))return;
-   await deleteDoc(doc(db,"menu",id));toast("Menu item removed.");
-  }
- }catch(err){console.error(err);toast("Menu action failed. Check permissions.");}
+  if(b.dataset.menuAction==="stock"){const next=b.dataset.stock!=="true";await updateDoc(doc(db,"menu",b.dataset.id),{inStock:next});toast(next?"Item in stock":"Item out of stock")}
+  else if(b.dataset.menuAction==="delete"){if(!confirm("Permanently remove this menu item?"))return;await deleteDoc(doc(db,"menu",b.dataset.id));toast("Menu item removed")}
+ }catch(err){console.error(err);toast("Menu action failed. Check permissions.")}
 });
 $("menu-form").addEventListener("submit",async e=>{
- e.preventDefault();
- const name=$("menu-name").value.trim(),price=Number($("menu-price").value),image=$("menu-image").value.trim(),type=$("menu-type").value;
- if(!name||!Number.isFinite(price)||price<=0){toast("Enter a valid name and price.");return;}
- if(image&&!/^https?:\/\//i.test(image)){toast("Image URL must start with http:// or https://");return;}
- const btn=$("menu-submit");btn.disabled=true;btn.textContent="ADDING...";
- try{
-  await addDoc(collection(db,"menu"),{name,price,image,type,inStock:true,createdAt:serverTimestamp()});
-  $("menu-form").reset();toast("Menu item added.");
- }catch(err){console.error(err);toast("Could not add menu item. Check permissions.");}
- finally{btn.disabled=false;btn.textContent="ADD MENU ITEM";}
+ e.preventDefault();const name=$("menu-name").value.trim(),price=Number($("menu-price").value),image=$("menu-image").value.trim(),type=$("menu-type").value;
+ if(!name||!Number.isFinite(price)||price<=0){toast("Enter a valid name and price");return}
+ if(image&&!/^https?:\/\//i.test(image)){toast("Image URL must start with http:// or https://");return}
+ const b=$("menu-submit");b.disabled=true;b.textContent="ADDING...";
+ try{await addDoc(collection(db,"menu"),{name,price,image,type,inStock:true,createdAt:serverTimestamp()});$("menu-form").reset();toast("Menu item added")}
+ catch(err){console.error(err);toast("Could not add item. Check permissions")}
+ finally{b.disabled=false;b.textContent="ADD MENU ITEM"}
 });
 
-/* CUSTOMERS: MERGE USERS + CUSTOMERS + ORDERS */
-function customerDate(record){
-  const keys=[
-    "createdAt","registeredAt","registrationDate","created_at",
-    "joinedAt","timestamp","createdOn","dateCreated"
-  ];
-  for(const k of keys){
-    const d=toDate(record[k]);
-    if(d&&!Number.isNaN(d.getTime()))return d;
-  }
-  return null;
+/* CUSTOMERS: MERGE users + customers + orders */
+function customerDate(r){
+ for(const k of ["createdAt","registeredAt","registrationDate","created_at","joinedAt","timestamp","createdOn","dateCreated"]){const d=toDate(r[k]);if(d&&!Number.isNaN(d.getTime()))return d}
+ return null;
 }
-function getFirstOrderDate(c){
- const dates=(c.orderDates||[]).map(toDate).filter(d=>d&&!Number.isNaN(d.getTime()));
- return dates.length?new Date(Math.min(...dates.map(d=>d.getTime()))):null;
-}
-function isNewCustomer(c){
- const d=c.registeredDate||getFirstOrderDate(c);
- if(!d)return false;
- const age=Date.now()-d.getTime();
- return age>=0&&age<=7*24*60*60*1000;
-}
+function firstOrderDate(c){const ds=c.orderDates.filter(Boolean);return ds.length?new Date(Math.min(...ds.map(d=>d.getTime()))):null}
+function isNewCustomer(c){const d=c.registeredDate||firstOrderDate(c);if(!d)return false;const age=Date.now()-d.getTime();return age>=0&&age<=7*86400000}
 function mergeCustomers(){
  const map=new Map();
- const addRecord=(record,source)=>{
-  const rawPhone=phoneOf(record);
-  const normalized=normalizePhone(rawPhone);
-  const name=nameOf(record);
-  const key=normalized?("phone:"+normalized):("doc:"+source+":"+record.id);
+ function add(r,source){
+  const raw=phoneOf(r),norm=normalizePhone(raw),name=nameOf(r),key=norm?"phone:"+norm:"doc:"+source+":"+r.id;
   let c=map.get(key);
-  if(!c){
-   c={
-    key,phone:rawPhone||"",normalizedPhone:normalized,
-    name:name==="Customer"?"":name,
-    address:addressOf(record),
-    registeredDate:customerDate(record),
-    lastOrderDate:null,orderCount:0,totalSpent:0,
-    orderDates:[],sources:new Set(),orderIds:new Set()
-   };
-   map.set(key,c);
-  }
+  if(!c){c={key,phone:raw||"",normalizedPhone:norm,name:name==="Customer"?"":name,address:"Address unavailable",registeredDate:customerDate(r),lastOrderDate:null,orderCount:0,totalSpent:0,orderDates:[],sources:new Set(),orderIds:new Set()};map.set(key,c)}
   c.sources.add(source);
-  if((!c.name||c.name==="Customer")&&name&&name!=="Customer")c.name=name;
-  if((!c.phone||normalizePhone(c.phone)==="")&&rawPhone)c.phone=rawPhone;
-  if((!c.address||c.address==="Address unavailable")&&addressOf(record)!=="Address unavailable")c.address=addressOf(record);
-  const rd=customerDate(record);
-  if(rd&&(!c.registeredDate||rd<c.registeredDate))c.registeredDate=rd;
-  if(source==="orders"){
-   if(!c.orderIds.has(record.id)){
-    c.orderIds.add(record.id);
-    c.orderCount++;
-    const od=toDate(record.createdAt);
-    if(od&&!Number.isNaN(od.getTime())){
-     c.orderDates.push(od);
-     if(!c.lastOrderDate||od>c.lastOrderDate)c.lastOrderDate=od;
-    }
-    c.totalSpent+=Number(record.total)||0;
-   }
-   const od=toDate(record.createdAt);
-   if(od&&(!c.lastOrderDate||od>c.lastOrderDate))c.lastOrderDate=od;
-   if(addressOf(record)!=="Address unavailable")c.address=addressOf(record);
+  if((!c.name||c.name==="Customer")&&name!=="Customer")c.name=name;
+  if(!c.phone&&raw)c.phone=raw;
+  const ad=addressOf(r);if(ad!=="Address unavailable")c.address=ad;
+  const rd=customerDate(r);if(rd&&(!c.registeredDate||rd<c.registeredDate))c.registeredDate=rd;
+  if(source==="orders"&&!c.orderIds.has(r.id)){
+   c.orderIds.add(r.id);c.orderCount++;c.totalSpent+=Number(r.total)||0;
+   const od=toDate(r.createdAt);
+   if(od&&!Number.isNaN(od.getTime())){c.orderDates.push(od);if(!c.lastOrderDate||od>c.lastOrderDate)c.lastOrderDate=od}
   }
- };
- customerSources.users.forEach(r=>addRecord(r,"users"));
- customerSources.customers.forEach(r=>addRecord(r,"customers"));
- customerSources.orders.forEach(r=>addRecord(r,"orders"));
-
- customers=[...map.values()].map(c=>{
-  c.sources=[...c.sources];
-  c.orderIds=[...c.orderIds];
-  return c;
- });
- customers.sort((a,b)=>{
-  const ad=a.lastOrderDate||a.registeredDate;
-  const bd=b.lastOrderDate||b.registeredDate;
-  return (bd?.getTime()||0)-(ad?.getTime()||0);
- });
+ }
+ customerSources.users.forEach(r=>add(r,"users"));
+ customerSources.customers.forEach(r=>add(r,"customers"));
+ customerSources.orders.forEach(r=>add(r,"orders"));
+ customers=[...map.values()].map(c=>({...c,sources:[...c.sources],orderIds:[...c.orderIds]}));
+ customers.sort((a,b)=>((b.lastOrderDate||b.registeredDate)?.getTime()||0)-((a.lastOrderDate||a.registeredDate)?.getTime()||0));
  renderUsers();
 }
 function renderUsers(){
  const q=$("user-search").value.trim().toLowerCase();
- const list=customers.filter(c=>
-  [c.name,c.phone,c.address].join(" ").toLowerCase().includes(q)
- );
+ const list=customers.filter(c=>[c.name,c.phone,c.address].join(" ").toLowerCase().includes(q));
  $("customer-total").textContent=customers.length;
  $("customer-new-total").textContent=customers.filter(isNewCustomer).length;
- $("customer-source-status").textContent=
-  `Loaded records — users: ${customerSources.users.length}, customers: ${customerSources.customers.length}, orders: ${customerSources.orders.length}. Unique customer records: ${customers.length}.`;
-
- if(!list.length){
-  $("user-list").innerHTML='<div class="empty"><i class="fa-solid fa-users text-2xl"></i><p class="mt-2 font-bold">No customers found</p><p class="text-xs mt-1">Try another search or check Firestore permissions.</p></div>';
-  return;
- }
+ $("customer-source-status").textContent=`Loaded — users: ${customerSources.users.length}, customers: ${customerSources.customers.length}, orders: ${customerSources.orders.length}. Unique records: ${customers.length}.`;
+ if(!list.length){$("user-list").innerHTML='<div class="empty"><i class="fa-solid fa-users text-2xl"></i><p class="mt-2 font-bold">No customers found</p><p class="text-xs mt-1">Check the collection access and customer phone/name fields.</p></div>';return}
  $("user-list").innerHTML=list.map(c=>{
-  const phone=normalizePhone(c.phone);
-  const validPhone=/^\d{10}$/.test(phone);
-  const firstLetter=(c.name||"C").trim().charAt(0).toUpperCase()||"C";
+  const p=normalizePhone(c.phone),valid=/^\d{10}$/.test(p),letter=(c.name||"C").trim().charAt(0).toUpperCase()||"C";
   const latest=c.lastOrderDate?dateText(c.lastOrderDate):"No order date available";
-  const whatsappMessage=`Hello ${c.name||"Customer"}! 👋\n\nWelcome to Freshfry! 🍜\nVisit our website to explore our menu and place your order:\nhttps://freshfrymomo.food/\n\nFresh food, fresh happiness! ❤️`;
-  const whatsapp=validPhone?`https://wa.me/91${phone}?text=${encodeURIComponent(whatsappMessage)}`:"";
-  const isNew=isNewCustomer(c);
+  const msg=`Hello ${c.name||"Customer"}! 👋\n\nWelcome to Freshfry! 🍜\nVisit our website to explore the menu and order:\nhttps://freshfrymomo.food/\n\nFresh food, fresh happiness! ❤️`;
+  const wa=valid?`https://wa.me/91${p}?text=${encodeURIComponent(msg)}`:"";
   return `<article class="card p-5 shadow-sm">
-   <div class="flex items-start gap-3">
-    <div class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl font-black shrink-0">${esc(firstLetter)}</div>
-    <div class="min-w-0 flex-1">
-     <div class="flex flex-wrap items-center gap-2">
-      <h3 class="font-black text-lg break-words">${esc(c.name||"Customer")}</h3>
-      ${isNew?'<span class="pill new-badge"><i class="fa-solid fa-sparkles mr-1"></i>NEW</span>':""}
-     </div>
-     <p class="text-sm muted mt-1 break-all">${esc(c.phone||"Phone unavailable")}</p>
-     <p class="text-xs muted mt-2"><i class="fa-regular fa-calendar mr-1"></i>Last order: ${esc(latest)}</p>
-     <p class="text-xs muted mt-2 break-words"><i class="fa-solid fa-location-dot mr-1 text-orange-500"></i>${esc(c.address||"Address unavailable")}</p>
-     <p class="text-xs muted mt-2">Orders: <b>${c.orderCount}</b> · Order total: <b>${money(c.totalSpent)}</b></p>
-     <p class="text-[10px] muted mt-2">Sources: ${esc(c.sources.join(", "))}</p>
-    </div>
-   </div>
-   <div class="grid grid-cols-2 gap-2 mt-4">
-    ${validPhone?`<a class="action bg-green-100 text-green-800 text-center py-3" href="${esc(whatsapp)}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</a>`:'<button class="action bg-slate-100 text-slate-400" disabled>No valid phone</button>'}
-    <button class="action bg-slate-100 text-slate-900 py-3" data-copy-phone="${esc(c.phone)}"><i class="fa-regular fa-copy mr-1"></i> Copy Phone</button>
-   </div>
-  </article>`;
+   <div class="flex items-start gap-3"><div class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl font-black shrink-0">${esc(letter)}</div>
+   <div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><h3 class="font-black text-lg break-words">${esc(c.name||"Customer")}</h3>${isNewCustomer(c)?'<span class="pill new-badge"><i class="fa-solid fa-sparkles mr-1"></i>NEW</span>':""}</div>
+   <p class="text-sm muted mt-1 break-all">${esc(c.phone||"Phone unavailable")}</p>
+   <p class="text-xs muted mt-2"><i class="fa-regular fa-calendar mr-1"></i>Last order: ${esc(latest)}</p>
+   <p class="text-xs muted mt-2 break-words"><i class="fa-solid fa-location-dot mr-1 text-orange-500"></i>${esc(c.address)}</p>
+   <p class="text-xs muted mt-2">Orders: <b>${c.orderCount}</b> · Order total: <b>${money(c.totalSpent)}</b></p>
+   <p class="text-[10px] muted mt-2">Sources: ${esc(c.sources.join(", "))}</p></div></div>
+   <div class="grid grid-cols-2 gap-2 mt-4">${valid?`<a class="action bg-green-100 text-green-800 text-center py-3" href="${esc(wa)}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</a>`:'<button class="action bg-slate-100 text-slate-400" disabled>No valid phone</button>'}
+   <button class="action bg-slate-100 text-slate-900 py-3" data-copy-phone="${esc(c.phone)}"><i class="fa-regular fa-copy mr-1"></i> Copy Phone</button></div></article>`;
  }).join("");
 }
 $("user-search").addEventListener("input",renderUsers);
 $("user-list").addEventListener("click",async e=>{
- const b=e.target.closest("[data-copy-phone]");if(!b)return;
- const value=b.dataset.copyPhone||"";
+ const b=e.target.closest("[data-copy-phone]");if(!b)return;const v=b.dataset.copyPhone||"";
  try{
-  if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(value);
-  else{
-   const input=document.createElement("textarea");input.value=value;
-   input.style.position="fixed";input.style.opacity="0";document.body.appendChild(input);
-   input.select();const ok=document.execCommand("copy");input.remove();
-   if(!ok)throw new Error("Copy failed");
-  }
-  toast("Phone number copied.");
- }catch(err){toast("Copy failed. Phone: "+value);}
+  if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(v);
+  else{const x=document.createElement("textarea");x.value=v;x.style.position="fixed";x.style.opacity="0";document.body.appendChild(x);x.select();if(!document.execCommand("copy"))throw Error("copy failed");x.remove()}
+  toast("Phone number copied");
+ }catch(err){toast("Copy failed. Phone: "+v)}
 });
 
 /* RIDERS */
 function renderRiders(){
  $("rider-total").textContent=riders.length;
  $("rider-online").textContent=riders.filter(r=>String(r.status||"").toLowerCase()==="online").length;
- if(!riders.length){$("rider-list").innerHTML='<div class="empty">No rider records found in the riders collection.</div>';return;}
+ if(!riders.length){$("rider-list").innerHTML='<div class="empty">No rider records found in the riders collection.</div>';return}
  $("rider-list").innerHTML=riders.map(r=>{
-  const name=r.riderName||r.name||"Rider";
-  const phone=r.riderPhone||r.phone||"";
-  const delivered=orders.filter(o=>o.status==="delivered"&&(o.riderName||"")===name&&isToday(o.deliveredAt||o.updatedAt||o.createdAt)).length;
-  const amount=delivered*RIDER_RATE;
+  const name=r.riderName||r.name||"Rider",phone=r.riderPhone||r.phone||"";
+  const del=orders.filter(o=>o.status==="delivered"&&(o.riderName||"")===name&&isToday(o.deliveredAt||o.updatedAt||o.createdAt)).length;
   const online=String(r.status||"").toLowerCase()==="online";
-  return `<article class="card p-5">
-   <div class="flex justify-between gap-3">
-    <div><h3 class="font-black">${esc(name)}</h3><p class="text-sm muted mt-1">${esc(phone||"Phone unavailable")}</p><span class="pill mt-2 ${online?"bg-green-100 text-green-700":"bg-slate-100 text-slate-500"}">${online?"ONLINE":"OFFLINE"}</span></div>
-    <div class="text-right"><p class="text-xs muted">Today's estimate</p><p class="text-2xl font-black text-orange-600">${money(amount)}</p><p class="text-xs muted">${delivered} delivered orders</p></div>
-   </div>
-   <button class="action bg-red-100 text-red-700 mt-4" data-delete-rider="${esc(r.id)}">REMOVE RIDER</button>
-  </article>`;
+  return `<article class="card p-5"><div class="flex justify-between gap-3"><div><h3 class="font-black">${esc(name)}</h3><p class="text-sm muted mt-1">${esc(phone||"Phone unavailable")}</p><span class="pill mt-2 ${online?"bg-green-100 text-green-700":"bg-slate-100 text-slate-500"}">${online?"ONLINE":"OFFLINE"}</span></div><div class="text-right"><p class="text-xs muted">Today's estimate</p><p class="text-2xl font-black text-orange-600">${money(del*RIDER_RATE)}</p><p class="text-xs muted">${del} delivered orders</p></div></div><button class="action bg-red-100 text-red-700 mt-4" data-delete-rider="${esc(r.id)}">REMOVE RIDER</button></article>`;
  }).join("");
 }
 $("rider-list").addEventListener("click",async e=>{
  const b=e.target.closest("[data-delete-rider]");if(!b)return;
  if(!confirm("Delete this rider record?"))return;
- try{await deleteDoc(doc(db,"riders",b.dataset.deleteRider));toast("Rider deleted.");}
- catch(err){console.error(err);toast("Could not delete rider.");}
+ try{await deleteDoc(doc(db,"riders",b.dataset.deleteRider));toast("Rider deleted")}catch(err){console.error(err);toast("Could not delete rider")}
 });
-
-/* RIDER ASSIGNMENT */
-function openRiderModal(orderId){
- selectedOrderId=orderId;
- $("assign-order-label").textContent="Assign rider to order #"+orderId;
- if(!riders.length){
-  $("rider-choices").innerHTML='<div class="empty">No riders found. Add rider records to the riders collection first.</div>';
- }else{
-  $("rider-choices").innerHTML=riders.map(r=>`
-   <button class="w-full p-4 rounded-2xl bg-slate-50 border text-left" data-assign="${esc(r.id)}">
-    <strong>${esc(r.riderName||r.name||"Rider")}</strong>
-    <p class="text-xs muted mt-1">${esc(r.riderPhone||r.phone||"No phone")} · ${esc(r.status||"Offline")}</p>
-   </button>`).join("");
- }
+function openRiderModal(id){
+ selectedOrderId=id;$("assign-order-label").textContent="Assign rider to order #"+id;
+ $("rider-choices").innerHTML=riders.length?riders.map(r=>`<button class="w-full p-4 rounded-2xl bg-slate-50 border text-left" data-assign="${esc(r.id)}"><strong>${esc(r.riderName||r.name||"Rider")}</strong><p class="text-xs muted mt-1">${esc(r.riderPhone||r.phone||"No phone")} · ${esc(r.status||"Offline")}</p></button>`).join(""):'<div class="empty">No riders found in the riders collection.</div>';
  $("rider-modal").classList.add("show");
 }
 $("close-rider-modal").addEventListener("click",()=>$("rider-modal").classList.remove("show"));
-$("rider-modal").addEventListener("click",e=>{if(e.target===$("rider-modal"))$("rider-modal").classList.remove("show");});
+$("rider-modal").addEventListener("click",e=>{if(e.target===$("rider-modal"))$("rider-modal").classList.remove("show")});
 $("rider-choices").addEventListener("click",async e=>{
  const b=e.target.closest("[data-assign]");if(!b||!selectedOrderId)return;
- const rider=riders.find(r=>r.id===b.dataset.assign);if(!rider)return;
+ const r=riders.find(x=>x.id===b.dataset.assign);if(!r)return;
  if(!confirm("Assign this rider to order #"+selectedOrderId+"?"))return;
  try{
-  await updateDoc(doc(db,"orders",selectedOrderId),{
-   status:"out_for_delivery",
-   riderName:rider.riderName||rider.name||"Rider",
-   riderPhone:rider.riderPhone||rider.phone||"",
-   assignedAt:serverTimestamp(),updatedAt:serverTimestamp()
-  });
-  $("rider-modal").classList.remove("show");selectedOrderId=null;
-  toast("Rider assigned.");
- }catch(err){console.error(err);toast("Rider assignment failed.");}
+  await updateDoc(doc(db,"orders",selectedOrderId),{status:"out_for_delivery",riderName:r.riderName||r.name||"Rider",riderPhone:r.riderPhone||r.phone||"",assignedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  $("rider-modal").classList.remove("show");selectedOrderId=null;toast("Rider assigned");
+ }catch(err){console.error(err);toast("Rider assignment failed")}
 });
 
 /* LIVE FIRESTORE LISTENERS */
-function subscribe(path,callback,errorCallback){
- return onSnapshot(collection(db,path),snapshot=>{
-  callback(snapshot.docs.map(d=>({id:d.id,...d.data()})));
- },err=>{
-  console.error("Firestore "+path+" listener:",err);
-  errorCallback?.(err);
- });
+function listen(path,cb,errcb){
+ return onSnapshot(collection(db,path),s=>cb(s.docs.map(d=>({id:d.id,...d.data()}))),e=>{console.error(path,e);if(errcb)errcb(e)});
 }
 const unsubscribers=[];
-
-unsubscribers.push(subscribe("orders",rows=>{
- customerSources.orders=rows;
- orders=rows;
+unsubscribers.push(listen("orders",rows=>{
+ customerSources.orders=rows;orders=rows;
  orders.sort((a,b)=>(toDate(b.createdAt)?.getTime()||0)-(toDate(a.createdAt)?.getTime()||0));
- if(firstOrderSnapshot){
-  rows.forEach(o=>knownOrderIds.add(o.id));
-  firstOrderSnapshot=false;
- }else{
-  rows.forEach(o=>{
-   if(!knownOrderIds.has(o.id)){
-    knownOrderIds.add(o.id);
-    alertNewOrder(o);
-   }
-  });
- }
- setConnection(true,"Connected · Live Firestore updates");
- renderOrders();renderRiders();mergeCustomers();
-},err=>{
- setConnection(false,"Orders collection error. Check Firestore rules.");
- $("orders-list").innerHTML='<div class="empty">Unable to load orders. Check Firebase rules and browser console.</div>';
-}));
-
-unsubscribers.push(subscribe("users",rows=>{
- customerSources.users=rows;mergeCustomers();
-},err=>{
- console.warn("users collection unavailable:",err.message);
- customerSources.users=[];
- mergeCustomers();
-}));
-
-unsubscribers.push(subscribe("customers",rows=>{
- customerSources.customers=rows;mergeCustomers();
-},err=>{
- console.warn("customers collection unavailable:",err.message);
- customerSources.customers=[];
- mergeCustomers();
-}));
-
-unsubscribers.push(subscribe("menu",rows=>{
- menuItems=rows;renderMenu();
-},err=>{
- console.error(err);$("menu-list").innerHTML='<div class="empty">Unable to load menu. Check Firestore rules.</div>';
-}));
-
-unsubscribers.push(subscribe("riders",rows=>{
- riders=rows;renderRiders();
- if($("rider-modal").classList.contains("show"))openRiderModal(selectedOrderId);
-},err=>{
- console.error(err);$("rider-list").innerHTML='<div class="empty">Unable to load riders. Check Firestore rules.</div>';
-}));
-
-$("refresh-btn").addEventListener("click",()=>{
- renderOrders();renderMenu();renderUsers();renderRiders();
- toast("Dashboard refreshed. Live listeners remain active.");
-});
-
-window.addEventListener("beforeunload",()=>unsubscribers.forEach(fn=>fn()));
-
-if("serviceWorker" in navigator){
+ if(firstOrderSnapshot){rows.forEach(o=>knownOrderIds.add(o.id));firstOrderSnapshot=false}
+ else rows.forEach(o=>{if(!knownOrderIds.has(o.id)){knownOrderIds.add(o.id);alertNewOrder(o)}});
+ setConnection(true,"Connected · Live Firestore updates");renderOrders();renderRiders();mergeCustomers();
+},e=>{setConnection(false,"Orders collection error. Check Firestore rules.");$("orders-list").innerHTML='<div class="empty">Unable to load orders. Check Firestore rules.</div>'}));
+unsubscribers.push(listen("users",rows=>{customerSources.users=rows;mergeCustomers()},e=>{customerSources.users=[];mergeCustomers()}));
+unsubscribers.push(listen("customers",rows=>{customerSources.customers=rows;mergeCustomers()},e=>{customerSources.customers=[];mergeCustomers()}));
+unsubscribers.push(listen("menu",rows=>{menuItems=rows;renderMenu()},e=>{$("menu-list").innerHTML='<div class="empty">Unable to load menu. Check Firestore rules.</div>'}));
+unsubscribers.push(listen("riders",rows=>{riders=rows;renderRiders();if($("rider-modal").classList.contains("show"))openRiderModal(selectedOrderId)},e=>{$("rider-list").innerHTML='<div class="empty">Unable to load riders. Check Firestore rules.</div>'}));
+$("refresh-btn").addEventListener("click",()=>{renderOrders();renderMenu();renderUsers();renderRiders();toast("Dashboard refreshed; live listeners are active")});
+window.addEventListener("beforeunload",()=>{unsubscribers.forEach(fn=>fn());clearTimeout(toastTimer)});
+if("serviceWorker"in navigator){
  window.addEventListener("load",async()=>{
-  try{
-   await navigator.serviceWorker.register("/admin-sw.js",{scope:"/"});
-   console.log("Freshfry admin service worker registered.");
-  }catch(e){console.warn("Admin service worker registration failed:",e);}
+  try{await navigator.serviceWorker.register("/admin-sw.js",{scope:"/"});console.log("Admin service worker registered")}
+  catch(e){console.warn("Admin service worker registration failed",e)}
  });
 }
 </script>
