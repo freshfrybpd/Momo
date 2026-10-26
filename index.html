@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,6 +43,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .hero h1 span{color:var(--orange)}
 .hero p{font-size:13px;color:#d0d0d3;line-height:1.7;max-width:330px}
 .hero-tag{display:inline-flex;gap:8px;align-items:center;background:white;color:var(--black);padding:11px 15px;border-radius:12px;font-size:11px;font-weight:900;margin-top:7px;border:0}
+
+.store-status{margin-top:16px;background:white;border:1px solid var(--line);border-radius:17px;padding:15px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 5px 20px #00000005}
+.store-status-icon{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:grid;place-items:center;background:#fff3e8;color:var(--orange);font-size:20px}
+.store-status-title{font-size:13px;font-weight:900}
+.store-status-message{font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 0}
+.store-status.open{background:#f0fdf4;border-color:#bbf7d0}
+.store-status.open .store-status-icon{background:#dcfce7;color:#15803d}
+.store-status.closed{background:#fef2f2;border-color:#fecaca}
+.store-status.closed .store-status-icon{background:#fee2e2;color:#b91c1c}
+.store-status.error{background:#fff7ed;border-color:#fed7aa}
 
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:32px 0 17px}
 .section-head h2{font-size:23px;margin:0;font-weight:900;letter-spacing:-.7px}
@@ -216,6 +225,15 @@ textarea.form-control{resize:vertical;min-height:82px}
     </div>
   </section>
 
+  <!-- NEW: Store status controlled by the Admin panel -->
+  <section id="store-status-banner" class="store-status error" aria-live="polite">
+    <div class="store-status-icon"><i id="store-status-icon" class="fa-solid fa-circle-notch fa-spin"></i></div>
+    <div>
+      <div id="store-status-title" class="store-status-title">Checking store status...</div>
+      <p id="store-status-message" class="store-status-message">Please wait while we connect to FreshFry.</p>
+    </div>
+  </section>
+
   <div class="search-wrap">
     <i class="fa-solid fa-magnifying-glass"></i>
     <input id="search-input" class="search" type="search" placeholder="Search your favourite food..." autocomplete="off">
@@ -274,9 +292,7 @@ textarea.form-control{resize:vertical;min-height:82px}
       <div class="form-group">
         <label for="customer-address">Delivery address *</label>
         <textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea>
-        <div class="location-actions">
-          <button type="button" id="use-current-location" class="secondary-btn"><i class="fa-solid fa-location-crosshairs"></i> Use My Current Location</button>
-        </div>
+        <div class="location-actions"><button type="button" id="use-current-location" class="secondary-btn"><i class="fa-solid fa-location-crosshairs"></i> Use My Current Location</button></div>
         <p class="form-hint" id="location-status" aria-live="polite">Allow location access to attach your GPS coordinates to this order.</p>
         <a id="open-location-map" class="map-link" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="fa-solid fa-map-location-dot"></i> View selected location on Google Maps</a>
         <label style="margin-top:14px">Choose your area</label>
@@ -293,21 +309,15 @@ textarea.form-control{resize:vertical;min-height:82px}
 
       <div class="form-group">
         <label>Payment preference</label>
-        <label class="payment-option" id="cod-payment-option">
-          <input type="radio" name="payment-method" value="COD" checked>
-          <i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span>
-        </label>
-        <label class="payment-option" id="upi-payment-option">
-          <input type="radio" name="payment-method" value="UPI">
-          <i class="fa-brands fa-whatsapp" style="color:#168b45"></i><span>UPI QR code via WhatsApp</span>
-        </label>
+        <label class="payment-option" id="cod-payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
+        <label class="payment-option" id="upi-payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i><span>UPI QR code via WhatsApp</span></label>
         <p class="form-hint" id="payment-rule-hint">For food subtotal above ₹150, only online UPI QR-request payment is available.</p>
       </div>
 
       <div id="upi-qr-section" class="qr-section" hidden>
         <h3 style="margin:0 0 8px;font-size:17px"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i> Request UPI QR Code</h3>
-        <p style="font-size:12px;color:#666;margin:0 0 12px">No QR code will be displayed here. Place the order, then send a QR request through WhatsApp. We will send you the QR code manually.</p>
-        <div class="payment-pending-note"><strong>Payment process</strong><br>1. Place the order.<br>2. Request the QR code on WhatsApp.<br>3. Pay after receiving the QR code.<br>4. Your payment will be marked Paid after verification.</div>
+        <p style="font-size:12px;color:#666;margin:0 0 12px">Place the order, then request a QR code through WhatsApp. Payment is not automatically verified by this page.</p>
+        <div class="payment-pending-note"><strong>Payment process</strong><br>1. Place the order.<br>2. Request the QR code on WhatsApp.<br>3. Pay after receiving it.<br>4. Wait for payment confirmation.</div>
       </div>
 
       <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
@@ -345,7 +355,7 @@ textarea.form-control{resize:vertical;min-height:82px}
     <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px"><i class="fa-solid fa-check"></i></div>
     <span class="small-label">Freshfry order received</span><h2 class="modal-title" style="margin-top:8px">Order received!</h2>
     <p class="muted" id="confirmation-order-id"></p>
-    <div id="confirmation-payment-note" class="payment-pending-note" hidden style="margin-top:14px">Your order is saved, but your UPI payment is <strong>pending verification</strong>. Request the QR code through WhatsApp, pay after receiving it, and wait for payment confirmation.</div>
+    <div id="confirmation-payment-note" class="payment-pending-note" hidden style="margin-top:14px">Your UPI payment is pending verification. Request the QR code through WhatsApp and wait for payment confirmation.</div>
     <div class="confirm-pin-card"><div class="confirm-pin-label"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="confirm-pin-number" id="confirmation-pin">----</div><p class="delivery-pin-note">Keep this PIN private. Share it with the rider only when your order arrives.</p></div>
     <button class="whatsapp-btn" id="request-qr-whatsapp" hidden><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>
     <button class="primary-btn" id="confirmation-track" style="margin-top:14px">Track my order</button>
@@ -357,7 +367,10 @@ textarea.form-control{resize:vertical;min-height:82px}
 
 <script type="module">
 import {initializeApp,getApp,getApps} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {getFirestore,collection,onSnapshot,query,where,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getFirestore,collection,onSnapshot,query,where,addDoc,serverTimestamp,
+  doc,getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={
   apiKey:"AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
@@ -377,6 +390,7 @@ const MINIMUM_ORDER=100;
 const COD_MAX_SUBTOTAL=150;
 const WHATSAPP_NUMBER="8984225311";
 const CART_KEY="ff_cart_v2";
+const STORE_STATUS_REF=doc(db,"settings","storeStatus");
 const ACTIVE_STATUSES=["payment_pending","pending","accepted","preparing","out_for_delivery"];
 const STATUS_STEPS=[
   {key:"pending",label:"Placed"},
@@ -394,10 +408,14 @@ let orders=[];
 let selectedOrderId=null;
 let menuUnsubscribe=null;
 let ordersUnsubscribe=null;
+let storeStatusUnsubscribe=null;
 let toastTimer=null;
 let submitting=false;
 let selectedDeliveryLocation=null;
 let lastWhatsAppURL="";
+let storeStatusLoaded=false;
+let storeIsOpen=false;
+let storeStatusError=false;
 
 function readCart(){
   try{
@@ -406,26 +424,18 @@ function readCart(){
     return data.filter(x=>x&&typeof x.id==="string"&&typeof x.name==="string"&&Number.isFinite(x.price)&&x.price>=0&&Number.isInteger(x.qty)&&x.qty>0).slice(0,100);
   }catch{return []}
 }
-
 function saveCart(){
   try{localStorage.setItem(CART_KEY,JSON.stringify(cart))}
   catch{showToast("Could not save cart on this device.",true)}
 }
-
 function escapeHTML(value){
   return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
-
-function money(value){
-  return "₹"+Number(value||0).toLocaleString("en-IN",{maximumFractionDigits:2});
-}
-
-function getPhone(){
-  return (localStorage.getItem("ff_phone")||"").replace(/\D/g,"").slice(-10);
-}
-
+function money(value){return "₹"+Number(value||0).toLocaleString("en-IN",{maximumFractionDigits:2})}
+function getPhone(){return (localStorage.getItem("ff_phone")||"").replace(/\D/g,"").slice(-10)}
 function validPhone(phone){return /^[6-9]\d{9}$/.test(phone)}
 function subtotal(){return cart.reduce((sum,item)=>sum+item.price*item.qty,0)}
+function storeCanAcceptOrders(){return storeStatusLoaded&&!storeStatusError&&storeIsOpen}
 
 function showToast(message,error=false){
   const toast=$("toast");
@@ -435,26 +445,19 @@ function showToast(message,error=false){
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>toast.classList.remove("show"),3500);
 }
-
 function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
-
 function openDrawer(id){
   $("overlay").classList.add("show");
   $(id).classList.add("show");
   document.body.style.overflow="hidden";
 }
-
 function closeDrawers(){
   $("overlay").classList.remove("show");
   document.querySelectorAll(".drawer").forEach(el=>el.classList.remove("show"));
   document.body.style.overflow="";
 }
-
-function closeAllModals(){
-  document.querySelectorAll(".modal").forEach(el=>el.classList.remove("show"));
-}
-
+function closeAllModals(){document.querySelectorAll(".modal").forEach(el=>el.classList.remove("show"))}
 function updateUserUI(){
   const phone=getPhone();
   $("user-label").textContent=phone?phone.slice(0,2)+"••••"+phone.slice(-2):"Login";
@@ -462,7 +465,88 @@ function updateUserUI(){
   $("logout-btn").style.display=phone?"block":"none";
 }
 
-/* MENU: Original Firebase menu and type filter */
+/* ADMIN STORE STATUS: settings/storeStatus -> isOpen */
+function renderStoreStatus(){
+  const banner=$("store-status-banner");
+  const icon=$("store-status-icon");
+  const title=$("store-status-title");
+  const message=$("store-status-message");
+
+  banner.classList.remove("open","closed","error");
+
+  if(!storeStatusLoaded||storeStatusError){
+    banner.classList.add("error");
+    icon.className="fa-solid fa-circle-exclamation";
+    title.textContent="Store status unavailable";
+    message.textContent="We cannot confirm whether ordering is open. Please try again shortly.";
+  }else if(storeIsOpen){
+    banner.classList.add("open");
+    icon.className="fa-solid fa-circle-check";
+    title.textContent="FreshFry is OPEN!";
+    message.textContent="We're accepting orders. Choose your favourites.";
+  }else{
+    banner.classList.add("closed");
+    icon.className="fa-solid fa-store";
+    title.textContent="FreshFry is currently CLOSED";
+    message.textContent="We're not accepting new orders right now. Please visit us later.";
+  }
+
+  const allowed=storeCanAcceptOrders();
+  document.querySelectorAll("[data-add]").forEach(button=>{
+    button.disabled=!allowed;
+    button.title=allowed?"":"Ordering is currently unavailable";
+  });
+
+  $("checkout-open").disabled=!allowed||!cart.length||subtotal()<MINIMUM_ORDER;
+  $("place-order-btn").disabled=!allowed||!cart.length||subtotal()<MINIMUM_ORDER||submitting;
+}
+
+function startStoreStatusListener(){
+  if(storeStatusUnsubscribe)storeStatusUnsubscribe();
+
+  storeStatusLoaded=false;
+  storeStatusError=false;
+  storeIsOpen=false;
+  renderStoreStatus();
+
+  storeStatusUnsubscribe=onSnapshot(STORE_STATUS_REF,snapshot=>{
+    storeStatusLoaded=true;
+    storeStatusError=false;
+    // Fail closed: a missing document or missing isOpen=true means CLOSED.
+    storeIsOpen=snapshot.exists()&&snapshot.data().isOpen===true;
+    renderStoreStatus();
+    renderMenu();
+    renderCart();
+  },error=>{
+    console.error("Store status listener failed:",error);
+    storeStatusLoaded=false;
+    storeStatusError=true;
+    storeIsOpen=false;
+    renderStoreStatus();
+    renderMenu();
+    renderCart();
+  });
+}
+
+async function verifyStoreIsOpen(){
+  try{
+    const snapshot=await getDoc(STORE_STATUS_REF);
+    storeStatusLoaded=true;
+    storeStatusError=false;
+    storeIsOpen=snapshot.exists()&&snapshot.data().isOpen===true;
+    renderStoreStatus();
+    return storeIsOpen;
+  }catch(error){
+    console.error("Store status verification failed:",error);
+    storeStatusLoaded=false;
+    storeStatusError=true;
+    storeIsOpen=false;
+    renderStoreStatus();
+    return false;
+  }
+}
+
+/* MENU */
 function startMenuListener(){
   if(menuUnsubscribe)menuUnsubscribe();
   $("menu-grid").innerHTML='<div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div>';
@@ -489,30 +573,23 @@ function startMenuListener(){
     $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>';
   });
 }
-
 function renderCategories(){
   const categories=[...new Set(menuItems.map(x=>x.type).filter(Boolean))];
   if(selectedCategory!=="all"&&!categories.includes(selectedCategory))selectedCategory="all";
-
   $("category-row").innerHTML=
     `<button class="chip ${selectedCategory==="all"?"active":""}" data-category="all">All Types</button>`+
     categories.map(c=>`<button class="chip ${selectedCategory===c?"active":""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("");
 }
-
 function safeImageURL(value){
-  try{
-    const url=new URL(value);
-    return ["https:","http:"].includes(url.protocol)?url.href:"";
-  }catch{return ""}
+  try{const url=new URL(value);return ["https:","http:"].includes(url.protocol)?url.href:""}
+  catch{return ""}
 }
-
 function renderMenu(){
   const visible=menuItems.filter(item=>{
     const matchesCategory=selectedCategory==="all"||item.type===selectedCategory;
     const matchesSearch=(item.name+" "+item.type+" "+item.description).toLowerCase().includes(searchTerm);
     return matchesCategory&&matchesSearch&&item.available;
   });
-
   $("menu-count").textContent=`${visible.length} ITEMS`;
 
   if(!visible.length){
@@ -523,7 +600,7 @@ function renderMenu(){
   $("menu-grid").innerHTML=visible.map(item=>{
     const type=item.type.toLowerCase().includes("non")?"nonveg":"veg";
     const image=safeImageURL(item.image);
-
+    const disabled=!storeCanAcceptOrders()?"disabled":"";
     return `
       <article class="food-card">
         <div class="food-image">
@@ -534,15 +611,16 @@ function renderMenu(){
           <h3 class="food-name">${escapeHTML(item.name)}</h3>
           ${item.description?`<p class="food-description">${escapeHTML(item.description)}</p>`:'<p class="food-description">Freshly prepared for you.</p>'}
           <div class="price-row">
-            <button class="price-btn" data-add="${escapeHTML(item.id)}" data-size="half">Half ${money(item.halfPrice)}</button>
-            <button class="price-btn full" data-add="${escapeHTML(item.id)}" data-size="full">Full ${money(item.fullPrice)}</button>
+            <button class="price-btn" data-add="${escapeHTML(item.id)}" data-size="half" ${disabled}>Half ${money(item.halfPrice)}</button>
+            <button class="price-btn full" data-add="${escapeHTML(item.id)}" data-size="full" ${disabled}>Full ${money(item.fullPrice)}</button>
           </div>
         </div>
       </article>`;
   }).join("");
+  renderStoreStatus();
 }
 
-/* PAYMENT: no QR image and no automatic UPI app launch */
+/* PAYMENT */
 function updatePaymentOptions(){
   const foodSubtotal=subtotal();
   const codOption=$("cod-payment-option");
@@ -566,7 +644,6 @@ function updatePaymentOptions(){
   }
   return onlineOnly;
 }
-
 function updateUPIQR(){
   updatePaymentOptions();
   const method=document.querySelector('input[name="payment-method"]:checked')?.value;
@@ -590,6 +667,10 @@ function buildWhatsAppURL({name,phone,orderId,amount,address}){
 
 /* CART */
 function addToCart(itemId,size){
+  if(!storeCanAcceptOrders()){
+    showToast("FreshFry is closed or store status is unavailable.",true);
+    return;
+  }
   const item=menuItems.find(x=>x.id===itemId&&x.available);
   if(!item)return showToast("This item is currently unavailable.",true);
 
@@ -605,7 +686,6 @@ function addToCart(itemId,size){
   renderCart();
   showToast(name+" added to your box");
 }
-
 function renderCart(){
   const count=cart.reduce((sum,item)=>sum+item.qty,0);
   $("cart-count").textContent=count>99?"99+":count;
@@ -621,14 +701,12 @@ function renderCart(){
   $("delivery-fee").textContent=money(deliveryFee);
   $("grand-total").textContent=money(payable);
   $("checkout-total").textContent=money(payable);
-
-  $("checkout-open").disabled=!cart.length||belowMinimum;
-  $("place-order-btn").disabled=!cart.length||belowMinimum||submitting;
+  $("checkout-open").disabled=!storeCanAcceptOrders()||!cart.length||belowMinimum;
+  $("place-order-btn").disabled=!storeCanAcceptOrders()||!cart.length||belowMinimum||submitting;
 
   $("min-order-notice").textContent=belowMinimum
     ?`Minimum food order is ${money(MINIMUM_ORDER)}. Add ${money(MINIMUM_ORDER-foodSubtotal)} more to continue.`
     :"";
-
   $("checkout-minimum-notice").textContent=belowMinimum
     ?`Your food subtotal is ${money(foodSubtotal)}. Add ${money(MINIMUM_ORDER-foodSubtotal)} more to place the order.`
     :"";
@@ -636,6 +714,7 @@ function renderCart(){
   if(!cart.length){
     $("cart-content").innerHTML='<div class="empty-state"><i class="fa-solid fa-bag-shopping"></i><p>Your box is empty.</p><p>Add something delicious from the menu.</p></div>';
     updateUPIQR();
+    renderStoreStatus();
     return;
   }
 
@@ -643,8 +722,7 @@ function renderCart(){
     <div class="cart-line">
       <div class="cart-item-icon"><i class="fa-solid fa-utensils"></i></div>
       <div class="cart-item-info">
-        <h4>${escapeHTML(item.name)}</h4>
-        <p>${money(item.price)} each</p>
+        <h4>${escapeHTML(item.name)}</h4><p>${money(item.price)} each</p>
         <div class="qty-control" style="margin-top:9px">
           <button data-qty="${escapeHTML(item.id)}" data-delta="-1" aria-label="Decrease quantity">−</button>
           <strong style="font-size:12px">${item.qty}</strong>
@@ -658,8 +736,8 @@ function renderCart(){
     </div>`).join("");
 
   updateUPIQR();
+  renderStoreStatus();
 }
-
 function changeQuantity(id,delta){
   const item=cart.find(x=>x.id===id);
   if(!item)return;
@@ -669,26 +747,25 @@ function changeQuantity(id,delta){
   saveCart();
   renderCart();
 }
-
 function removeItem(id){
   cart=cart.filter(x=>x.id!==id);
   saveCart();
   renderCart();
 }
 
-function openCheckout(){
-  if(!cart.length)return showToast("Your box is empty.",true);
-  if(subtotal()<MINIMUM_ORDER){
-    return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-subtotal())} more.`,true);
+async function openCheckout(){
+  if(!await verifyStoreIsOpen()){
+    showToast("FreshFry is closed or store status is unavailable.",true);
+    return;
   }
+  if(!cart.length)return showToast("Your box is empty.",true);
+  if(subtotal()<MINIMUM_ORDER)return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-subtotal())} more.`,true);
 
   closeDrawers();
   $("customer-phone").value=getPhone();
   $("customer-name").value=localStorage.getItem("ff_customer_name")||"";
   $("customer-address").value=localStorage.getItem("ff_customer_address")||"";
-  $("location-status").textContent=selectedDeliveryLocation
-    ?"GPS location selected for this checkout."
-    :"Allow location access to attach your GPS coordinates to this order.";
+  $("location-status").textContent=selectedDeliveryLocation?"GPS location selected for this checkout.":"Allow location access to attach your GPS coordinates to this order.";
 
   if(selectedDeliveryLocation){
     $("open-location-map").href=selectedDeliveryLocation.mapUrl;
@@ -709,27 +786,22 @@ function setDeliveryLocation(latitude,longitude){
     longitude:Number(longitude),
     mapUrl:`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`
   };
-
   const address=$("customer-address");
   const gpsLine=`GPS Location: ${Number(latitude).toFixed(6)}, ${Number(longitude).toFixed(6)}`;
   const withoutOldGps=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:")).join("\n").trim();
   address.value=withoutOldGps?`${withoutOldGps}\n${gpsLine}`:gpsLine;
-
   $("location-status").textContent="GPS coordinates captured. The map link will guide the delivery rider to this pin.";
   $("open-location-map").href=selectedDeliveryLocation.mapUrl;
   $("open-location-map").hidden=false;
 }
-
 $("use-current-location").addEventListener("click",()=>{
   if(!navigator.geolocation){
     $("location-status").textContent="This browser does not support GPS location. Please enter your address manually.";
     return;
   }
-
   const button=$("use-current-location");
   button.disabled=true;
   $("location-status").textContent="Getting your current location. Please allow location access...";
-
   navigator.geolocation.getCurrentPosition(position=>{
     setDeliveryLocation(position.coords.latitude,position.coords.longitude);
     button.disabled=false;
@@ -743,7 +815,6 @@ $("use-current-location").addEventListener("click",()=>{
     button.disabled=false;
   },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
 });
-
 document.querySelectorAll(".area-suggestion").forEach(button=>{
   button.addEventListener("click",()=>{
     const area=button.dataset.area;
@@ -751,14 +822,9 @@ document.querySelectorAll(".area-suggestion").forEach(button=>{
     const lines=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:"));
     const remaining=lines.slice(1).filter(Boolean);
     address.value=[area,...remaining].join("\n");
-
-    document.querySelectorAll(".area-suggestion").forEach(item=>{
-      item.classList.toggle("recommended",item===button);
-    });
+    document.querySelectorAll(".area-suggestion").forEach(item=>item.classList.toggle("recommended",item===button));
   });
 });
-
-/* DELIVERY PIN */
 function generateDeliveryPin(){
   const values=new Uint32Array(1);
   crypto.getRandomValues(values);
@@ -768,16 +834,20 @@ function generateDeliveryPin(){
 /* CHECKOUT + FIRESTORE */
 async function placeOrder(event){
   event.preventDefault();
+  if(submitting)return;
 
-  // Existing opening-time restriction: 5 PM local time.
+  if(!await verifyStoreIsOpen()){
+    showToast("FreshFry is closed or store status is unavailable. Your order was not submitted.",true);
+    return;
+  }
+
+  // Retains the existing 5 PM opening-time rule.
   const now=new Date();
-  const currentMinutes=now.getHours()*60+now.getMinutes();
-  if(currentMinutes<17*60){
+  if(now.getHours()*60+now.getMinutes()<17*60){
     window.location.replace("https://freshfrymomo.food/freshfry.html");
     return;
   }
 
-  if(submitting)return;
   if(!cart.length)return showToast("Your box is empty.",true);
 
   const name=$("customer-name").value.trim();
@@ -795,16 +865,9 @@ async function placeOrder(event){
   if(name.length<2)return showToast("Please enter your full name.",true);
   if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
   if(address.length<8)return showToast("Please enter your complete delivery address.",true);
-  if(orderSubtotal<MINIMUM_ORDER){
-    renderCart();
-    return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-orderSubtotal)} more.`,true);
-  }
-  if(orderSubtotal>COD_MAX_SUBTOTAL&&paymentMethod!=="UPI"){
-    return showToast("Orders above ₹150 require online UPI payment.",true);
-  }
-  if(cart.some(i=>!Number.isFinite(i.price)||i.price<0||!Number.isInteger(i.qty)||i.qty<1)){
-    return showToast("Please check your cart.",true);
-  }
+  if(orderSubtotal<MINIMUM_ORDER)return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-orderSubtotal)} more.`,true);
+  if(orderSubtotal>COD_MAX_SUBTOTAL&&paymentMethod!=="UPI")return showToast("Orders above ₹150 require online UPI payment.",true);
+  if(cart.some(i=>!Number.isFinite(i.price)||i.price<0||!Number.isInteger(i.qty)||i.qty<1))return showToast("Please check your cart.",true);
 
   const orderItems=cart.map(i=>({
     name:i.name,
@@ -812,7 +875,6 @@ async function placeOrder(event){
     qty:i.qty,
     menuItemId:i.menuId||""
   }));
-
   const deliveryFee=DELIVERY_FEE;
   const orderTotal=orderSubtotal+deliveryFee;
   const deliveryPin=generateDeliveryPin();
@@ -823,6 +885,9 @@ async function placeOrder(event){
   $("place-order-btn").textContent="Creating order...";
 
   try{
+    // Verify store status once more immediately before writing.
+    if(!await verifyStoreIsOpen())throw new Error("STORE_CLOSED");
+
     const ref=await addDoc(collection(db,"orders"),{
       customerPhone:phone,
       customerName:name,
@@ -849,10 +914,7 @@ async function placeOrder(event){
     localStorage.setItem("ff_customer_name",name);
     localStorage.setItem("ff_customer_address",address);
 
-    lastWhatsAppURL=buildWhatsAppURL({
-      name,phone,orderId:ref.id,amount:orderTotal,address
-    });
-
+    lastWhatsAppURL=buildWhatsAppURL({name,phone,orderId:ref.id,amount:orderTotal,address});
     updateUserUI();
     closeModal("checkout-modal");
     selectedOrderId=ref.id;
@@ -868,51 +930,38 @@ async function placeOrder(event){
     $("request-qr-whatsapp").hidden=paymentMethod!=="UPI";
     openModal("confirmation-modal");
 
-    if(paymentMethod==="UPI"){
-      showToast("Order saved. Request the QR code on WhatsApp to pay.");
-    }else{
-      showToast("Your order has been placed successfully.");
-    }
+    showToast(paymentMethod==="UPI"?"Order saved. Request the QR code on WhatsApp.":"Your order has been placed successfully.");
   }catch(error){
     console.error("Order creation failed:",error);
-    showToast("Order could not be created. Check connection or Firebase permissions.",true);
+    showToast(error.message==="STORE_CLOSED"
+      ?"Store is closed. Your order was not submitted."
+      :"Order could not be created. Check connection or Firebase permissions.",true);
   }finally{
     submitting=false;
-    $("place-order-btn").disabled=!cart.length||subtotal()<MINIMUM_ORDER;
+    $("place-order-btn").disabled=!storeCanAcceptOrders()||!cart.length||subtotal()<MINIMUM_ORDER;
     updateUPIQR();
+    renderStoreStatus();
   }
 }
 
 /* ORDER STATUS + TRACKING */
 function normalizeStatus(value){
   const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
-  const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",cancelled:"cancelled",canceled:"cancelled"};
+  const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",canceled:"cancelled"};
   return aliases[s]||s;
 }
-
 function statusLabel(status){
   return ({
-    payment_pending:"Payment Pending",
-    pending:"Pending",
-    accepted:"Accepted",
-    preparing:"Preparing",
-    out_for_delivery:"Out for delivery",
-    delivered:"Delivered",
-    cancelled:"Cancelled",
-    rejected:"Rejected"
+    payment_pending:"Payment Pending",pending:"Pending",accepted:"Accepted",
+    preparing:"Preparing",out_for_delivery:"Out for delivery",delivered:"Delivered",
+    cancelled:"Cancelled",rejected:"Rejected"
   })[normalizeStatus(status)]||String(status||"Pending");
 }
-
 function startOrdersListener(){
   const phone=getPhone();
-  if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null;}
+  if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null}
   orders=[];
-
-  if(!validPhone(phone)){
-    renderOrders();
-    updateOrderTicker();
-    return;
-  }
+  if(!validPhone(phone)){renderOrders();updateOrderTicker();return}
 
   ordersUnsubscribe=onSnapshot(query(collection(db,"orders"),where("customerPhone","==",phone)),snapshot=>{
     orders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
@@ -925,25 +974,19 @@ function startOrdersListener(){
     $("orders-list").innerHTML='<div class="empty-state"><p>Could not load your orders. Please try again later.</p></div>';
   });
 }
-
 function renderOrders(){
   if(!getPhone()){
     $("orders-list").innerHTML='<div class="empty-state"><i class="fa-regular fa-user"></i><p>Login with your phone number to view orders.</p><button class="primary-btn" id="orders-login">Login</button></div>';
     return;
   }
-
   if(!orders.length){
     $("orders-list").innerHTML='<div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders found yet.</p><p>Your orders will appear here after checkout.</p><button class="secondary-btn" id="orders-menu">Explore menu</button></div>';
     return;
   }
-
   $("orders-list").innerHTML=orders.map(order=>{
     const status=normalizeStatus(order.status);
     const items=Array.isArray(order.items)?order.items:[];
-    const paymentText=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"
-      ?"Payment Pending"
-      :(order.paymentStatus||"unverified");
-
+    const paymentText=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"?"Payment Pending":(order.paymentStatus||"unverified");
     return `
       <article class="order-card">
         <div class="order-card-top">
@@ -958,19 +1001,12 @@ function renderOrders(){
       </article>`;
   }).join("");
 }
-
 function validCoordinates(latitude,longitude){
-  return Number.isFinite(Number(latitude))&&Number.isFinite(Number(longitude))&&
-    Number(latitude)>=-90&&Number(latitude)<=90&&
-    Number(longitude)>=-180&&Number(longitude)<=180;
+  return Number.isFinite(Number(latitude))&&Number.isFinite(Number(longitude))&&Number(latitude)>=-90&&Number(latitude)<=90&&Number(longitude)>=-180&&Number(longitude)<=180;
 }
-
 function renderTracking(){
   const order=orders.find(x=>x.id===selectedOrderId);
-  if(!order){
-    $("tracking-content").innerHTML='<p class="muted">Waiting for order details. Please refresh shortly.</p>';
-    return;
-  }
+  if(!order){$("tracking-content").innerHTML='<p class="muted">Waiting for order details. Please refresh shortly.</p>';return}
 
   const status=normalizeStatus(order.status);
   const cancelled=["cancelled","rejected"].includes(status);
@@ -979,23 +1015,15 @@ function renderTracking(){
     const done=!cancelled&&current>=index;
     return `<div class="progress-step ${done?"done":""}"><div class="circle"><i class="fa-solid ${done?"fa-check":"fa-circle"}"></i></div>${escapeHTML(step.label)}</div>`;
   }).join("");
-
   const items=Array.isArray(order.items)?order.items:[];
   const pin=/^\d{4}$/.test(String(order.deliveryPin||""))?String(order.deliveryPin):"";
   const showPin=status==="out_for_delivery"&&pin;
   const paymentPending=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid";
-  const mapUrl=validCoordinates(order.deliveryLatitude,order.deliveryLongitude)
-    ?`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(order.deliveryLatitude+","+order.deliveryLongitude)}`
-    :"";
 
   $("tracking-id").textContent="Order #"+order.id;
   $("tracking-content").innerHTML=`
-    <div class="status-banner">
-      Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
-      <div style="color:#bbb;font-size:10px;margin-top:5px">
-        Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.
-        ${paymentPending?"Payment has not been verified. Request the QR code and complete payment before waiting for confirmation.":"Status updates when the restaurant updates your order."}
-      </div>
+    <div class="status-banner">Current status: <strong>${escapeHTML(statusLabel(status))}</strong>
+      <div style="color:#bbb;font-size:10px;margin-top:5px">Payment status: ${escapeHTML(order.paymentStatus||"unverified")}. ${paymentPending?"Payment has not been verified.":"Status updates when the restaurant updates your order."}</div>
     </div>
     ${showPin?`<div class="delivery-pin-card"><div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="delivery-pin-number">${escapeHTML(pin)}</div><p class="delivery-pin-note">Share this PIN with your rider when your food arrives.</p></div>`:""}
     ${cancelled?`<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}.</p>`:`<div class="progress">${steps}</div>`}
@@ -1005,31 +1033,27 @@ function renderTracking(){
     <div class="total-row"><span>Delivery fee</span><strong>${money(Number(order.deliveryFee)||0)}</strong></div>
     <div class="total-row final"><span>Total</span><span>${money(Number(order.total)||0)}</span></div>
     ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
- 
-    ${order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"?`<button type="button" class="whatsapp-btn" id="tracking-request-qr" style="margin-top:12px"><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>`:""}
+    ${paymentPending?`<button type="button" class="whatsapp-btn" id="tracking-request-qr" style="margin-top:12px"><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>`:""}
     <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.</p>`;
 
   const requestButton=$("tracking-content").querySelector("#tracking-request-qr");
-  if(requestButton){
-    requestButton.addEventListener("click",()=>{
-      const url=buildWhatsAppURL({
-        name:String(order.customerName||"Customer"),
-        phone:String(order.customerPhone||""),
-        orderId:order.id,
-        amount:Number(order.total)||0,
-        address:String(order.deliveryAddress||"")
-      });
-      window.open(url,"_blank","noopener,noreferrer");
+  if(requestButton)requestButton.addEventListener("click",()=>{
+    const url=buildWhatsAppURL({
+      name:String(order.customerName||"Customer"),
+      phone:String(order.customerPhone||""),
+      orderId:order.id,
+      amount:Number(order.total)||0,
+      address:String(order.deliveryAddress||"")
     });
-  }
+    window.open(url,"_blank","noopener,noreferrer");
+  });
 }
 
 /* ACTIVE ORDER TICKER */
 function updateOrderTicker(){
   let wrap=$("order-ticker-wrap");
   const active=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
-
-  if(!active){if(wrap)wrap.remove();return;}
+  if(!active){if(wrap)wrap.remove();return}
 
   if(!wrap){
     wrap=document.createElement("div");
@@ -1039,7 +1063,6 @@ function updateOrderTicker(){
       <button type="button" id="order-ticker-track" class="order-ticker-track"><i class="fa-solid fa-fire-burner"></i> <span id="order-ticker-status">ORDER PENDING · TRACK</span></button>
       <div id="order-ticker-pin" class="order-ticker-pin" hidden><span class="order-ticker-pin-label">DELIVERY PIN</span><span id="order-ticker-pin-number" class="order-ticker-pin-number">----</span></div>`;
     document.body.appendChild(wrap);
-
     $("order-ticker-track").addEventListener("click",()=>{
       const latest=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
       if(!latest)return;
@@ -1048,11 +1071,9 @@ function updateOrderTicker(){
       openModal("order-modal");
     });
   }
-
   const status=normalizeStatus(active.status);
   const pin=String(active.deliveryPin||"");
   const showPin=status==="out_for_delivery"&&/^\d{4}$/.test(pin);
-
   $("order-ticker-status").textContent=`${statusLabel(status).toUpperCase()} · TRACK`;
   $("order-ticker-pin").hidden=!showPin;
   $("order-ticker-pin-number").textContent=showPin?pin:"----";
@@ -1065,14 +1086,12 @@ function showOrdersPage(){
   document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="orders-section"));
   $("orders-section").scrollIntoView({behavior:"smooth",block:"start"});
 }
-
 function showHome(){
   $("menu-section").hidden=false;
   $("orders-section").hidden=true;
   document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="home"));
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
 function showMenu(){
   $("menu-section").hidden=false;
   $("orders-section").hidden=true;
@@ -1081,32 +1100,25 @@ function showMenu(){
 }
 
 /* EVENTS */
-$("header-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer");});
-$("bottom-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer");});
-
+$("header-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer")});
+$("bottom-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer")});
 $("header-orders").addEventListener("click",()=>{
   if(!getPhone())return openModal("login-modal");
   startOrdersListener();
   showOrdersPage();
 });
-
 $("login-open").addEventListener("click",()=>openModal("login-modal"));
 $("explore-menu").addEventListener("click",showMenu);
 $("checkout-open").addEventListener("click",openCheckout);
 $("checkout-form").addEventListener("submit",placeOrder);
 
 document.querySelectorAll('input[name="payment-method"]').forEach(input=>{
-  input.addEventListener("change",()=>{
-    updatePaymentOptions();
-    updateUPIQR();
-  });
+  input.addEventListener("change",()=>{updatePaymentOptions();updateUPIQR()});
 });
-
 $("search-input").addEventListener("input",event=>{
   searchTerm=event.target.value.trim().toLowerCase();
   renderMenu();
 });
-
 $("category-row").addEventListener("click",event=>{
   const button=event.target.closest("[data-category]");
   if(!button)return;
@@ -1114,13 +1126,10 @@ $("category-row").addEventListener("click",event=>{
   renderCategories();
   renderMenu();
 });
-
 $("menu-grid").addEventListener("click",event=>{
   const button=event.target.closest("[data-add]");
   if(button)addToCart(button.dataset.add,button.dataset.size);
-
   if(event.target.closest("#retry-menu"))startMenuListener();
-
   if(event.target.closest("#show-all-food")){
     selectedCategory="all";
     searchTerm="";
@@ -1129,18 +1138,15 @@ $("menu-grid").addEventListener("click",event=>{
     renderMenu();
   }
 });
-
 $("cart-content").addEventListener("click",event=>{
   const qty=event.target.closest("[data-qty]");
   const remove=event.target.closest("[data-remove]");
   if(qty)changeQuantity(qty.dataset.qty,Number(qty.dataset.delta));
   if(remove)removeItem(remove.dataset.remove);
 });
-
 $("orders-list").addEventListener("click",event=>{
   if(event.target.closest("#orders-login"))return openModal("login-modal");
   if(event.target.closest("#orders-menu"))return showMenu();
-
   const button=event.target.closest("[data-track]");
   if(button){
     selectedOrderId=button.dataset.track;
@@ -1148,17 +1154,14 @@ $("orders-list").addEventListener("click",event=>{
     openModal("order-modal");
   }
 });
-
 $("tracking-refresh").addEventListener("click",()=>{
   startOrdersListener();
   renderTracking();
   showToast("Refreshing order details...");
 });
-
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeDrawers));
 $("overlay").addEventListener("click",closeDrawers);
 document.querySelectorAll("[data-modal-close]").forEach(b=>b.addEventListener("click",closeAllModals));
-
 document.querySelectorAll(".modal").forEach(modal=>modal.addEventListener("click",event=>{
   if(event.target===modal)closeModal(modal.id);
 }));
@@ -1167,7 +1170,6 @@ document.querySelectorAll(".nav-item[data-page]").forEach(button=>{
   button.addEventListener("click",()=>{
     if(button.dataset.page==="home")showHome();
     if(button.dataset.page==="menu-section")showMenu();
-
     if(button.dataset.page==="orders-section"){
       if(!getPhone())return openModal("login-modal");
       startOrdersListener();
@@ -1180,14 +1182,12 @@ $("login-form").addEventListener("submit",event=>{
   event.preventDefault();
   const phone=$("login-phone").value.replace(/\D/g,"");
   if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
-
   localStorage.setItem("ff_phone",phone);
   updateUserUI();
   closeModal("login-modal");
   startOrdersListener();
   showToast("Phone number saved on this device.");
 });
-
 $("logout-btn").addEventListener("click",()=>{
   localStorage.removeItem("ff_phone");
   updateUserUI();
@@ -1195,18 +1195,15 @@ $("logout-btn").addEventListener("click",()=>{
   closeModal("login-modal");
   showToast("Logged out on this device.");
 });
-
 $("request-qr-whatsapp").addEventListener("click",()=>{
   if(!lastWhatsAppURL)return showToast("WhatsApp request is unavailable. Open your order and try again.",true);
   window.open(lastWhatsAppURL,"_blank","noopener,noreferrer");
 });
-
 $("confirmation-track").addEventListener("click",()=>{
   closeModal("confirmation-modal");
   renderTracking();
   openModal("order-modal");
 });
-
 $("confirmation-close").addEventListener("click",()=>closeModal("confirmation-modal"));
 
 window.addEventListener("online",()=>showToast("You're back online."));
@@ -1216,6 +1213,7 @@ window.addEventListener("offline",()=>showToast("Internet connection lost.",true
 updateUserUI();
 renderCart();
 updatePaymentOptions();
+startStoreStatusListener();
 startMenuListener();
 startOrdersListener();
 </script>
