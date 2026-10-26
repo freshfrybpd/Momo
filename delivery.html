@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,6 +122,7 @@ button:disabled { opacity:.6;cursor:wait; }
   text-decoration:none;border:0;border-radius:11px;padding:12px 8px;
   font-size:11px;font-weight:900;min-width:0;
 }
+.actions button:disabled { cursor:not-allowed; }
 .call-btn { background:#edf8f2;color:#138351; }
 .map-btn { background:#edf3ff;color:#315fd2; }
 .pin-area { margin-top:13px;padding:13px;background:#f7f8fb;border-radius:13px; }
@@ -208,7 +210,6 @@ button:disabled { opacity:.6;cursor:wait; }
   </div>
 </header>
 
-<!-- New order in-app notification -->
 <div id="notification-banner" class="notification-banner" role="alert" aria-live="assertive">
   <div class="notification-row">
     <div class="notification-icon"><i class="fa-solid fa-bell"></i></div>
@@ -330,7 +331,6 @@ import {
   onSnapshot, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* Existing Freshfry Firebase project */
 const firebaseConfig = {
   apiKey: "AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
   authDomain: "freshfry-39a10.firebaseapp.com",
@@ -356,7 +356,6 @@ let audioContext = null;
 let notificationOrderId = null;
 let toastTimer = null;
 let bannerTimer = null;
-let lastAlertTime = 0;
 
 function showToast(text) {
   const el = $("toast");
@@ -427,7 +426,7 @@ function getTotal(order) {
   return order.total ?? order.grandTotal ?? order.amount ?? order.totalAmount ?? 0;
 }
 
-/* -------- Sound -------- */
+/* ---------------- SOUND ---------------- */
 
 async function prepareSound() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -435,8 +434,8 @@ async function prepareSound() {
 
   if (!audioContext) audioContext = new AudioContextClass();
   if (audioContext.state === "suspended") await audioContext.resume();
-  soundEnabled = true;
 
+  soundEnabled = true;
   $("sound-description").textContent =
     "Sound is enabled. New assigned orders will play an alert while this page is active.";
   $("sound-description").classList.add("sound-enabled");
@@ -455,7 +454,6 @@ function playOrderSound() {
 
     const now = audioContext.currentTime;
 
-    // Repeated alert pattern; uses browser audio, not the phone's native ringtone.
     [0, 0.45, 0.9, 1.35].forEach((delay, index) => {
       const oscillator = audioContext.createOscillator();
       const gain = audioContext.createGain();
@@ -486,16 +484,15 @@ $("sound-button").addEventListener("click", async () => {
   }
 });
 
-/* -------- Notification banner and optional system notification -------- */
+/* ---------------- NOTIFICATIONS ---------------- */
 
 function showNewOrderNotification(order) {
   const id = order.id;
   notificationOrderId = id;
 
-  const customer = getCustomer(order);
   $("notification-title").textContent = "🔔 New Freshfry Order!";
   $("notification-message").textContent =
-    `Order #${id.slice(-7)} assigned. Customer: ${customer}. Tap VIEW ORDER to see details.`;
+    `Order #${id.slice(-7)} assigned. Customer: ${getCustomer(order)}. Tap VIEW ORDER to see details.`;
 
   $("notification-banner").classList.add("show");
 
@@ -504,12 +501,10 @@ function showNewOrderNotification(order) {
     $("notification-banner").classList.remove("show");
   }, 15000);
 
-  // This can create an OS notification when permission is granted.
-  // It is not a replacement for FCM push delivery when the app is closed.
   if ("Notification" in window && Notification.permission === "granted") {
     try {
       const notification = new Notification("Freshfry: New Delivery!", {
-        body: `Order #${id.slice(-7)} — ${customer}`,
+        body: `Order #${id.slice(-7)} — ${getCustomer(order)}`,
         tag: "freshfry-order-" + id,
         renotify: false,
         icon: "/logo.png"
@@ -570,7 +565,7 @@ $("browser-notification-button").addEventListener("click", async () => {
   }
 });
 
-/* -------- Customer location and Google Maps navigation -------- */
+/* ---------------- CUSTOMER LOCATION ---------------- */
 
 function getCoordinates(order) {
   const objects = [
@@ -592,20 +587,28 @@ function getCoordinates(order) {
   lat = Number(lat);
   lng = Number(lng);
 
-  if (Number.isFinite(lat) && Number.isFinite(lng) &&
-      lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+  if (
+    Number.isFinite(lat) && Number.isFinite(lng) &&
+    lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180
+  ) {
     return { lat, lng };
   }
+
   return null;
 }
 
-function getMapUrl(order) {
+/*
+  Resolve customer destination from GPS, saved Google Maps link,
+  or address. The rider's GPS is fetched separately at navigation time.
+*/
+function getMapDestination(order) {
   const coordinates = getCoordinates(order);
 
   if (coordinates) {
-    return "https://www.google.com/maps/dir/?api=1&destination=" +
-      encodeURIComponent(`${coordinates.lat},${coordinates.lng}`) +
-      "&travelmode=driving";
+    return {
+      destination: `${coordinates.lat},${coordinates.lng}`,
+      source: "customer-gps"
+    };
   }
 
   const savedUrl =
@@ -624,20 +627,152 @@ function getMapUrl(order) {
         url.hostname === "google.com" ||
         url.hostname.endsWith(".google.com");
 
-      if (url.protocol === "https:" && allowed) return url.href;
-    } catch {}
+      if (url.protocol === "https:" && allowed) {
+        return {
+          destination: url.href,
+          source: "customer-map-link"
+        };
+      }
+    } catch (error) {
+      console.warn("Invalid saved customer Maps link:", error);
+    }
   }
 
   const address = getAddress(order);
-  if (address !== "Address not provided") {
-    return "https://www.google.com/maps/dir/?api=1&destination=" +
-      encodeURIComponent(address) + "&travelmode=driving";
+
+  if (address && address !== "Address not provided") {
+    return {
+      destination: address,
+      source: "customer-address"
+    };
   }
 
-  return "";
+  return null;
 }
 
-/* -------- Order rendering -------- */
+/*
+  NAVIGATE workflow:
+  1. Find this order's customer destination.
+  2. Request the rider's current GPS location.
+  3. Open Google Maps with the rider as origin and customer as destination.
+  4. If GPS fails, offer address-only navigation.
+*/
+async function navigateToCustomer(orderId, button) {
+  const order = activeOrders.find(item => item.id === orderId);
+
+  if (!order) {
+    showToast("Order not found. Please refresh orders.");
+    return;
+  }
+
+  const target = getMapDestination(order);
+
+  if (!target) {
+    showToast("Customer address or GPS location is missing.");
+    return;
+  }
+
+  const fallbackURL =
+    "https://www.google.com/maps/dir/?api=1&destination=" +
+    encodeURIComponent(target.destination) +
+    "&travelmode=driving";
+
+  if (!navigator.geolocation) {
+    const openFallback = confirm(
+      "This browser does not support GPS location.\n\nOpen Google Maps using the customer address instead?"
+    );
+
+    if (openFallback) window.location.href = fallbackURL;
+    return;
+  }
+
+  const originalHTML = button ? button.innerHTML : "";
+
+  if (button) {
+    button.disabled = true;
+    button.innerHTML =
+      '<i class="fa-solid fa-location-crosshairs fa-spin"></i> FETCHING GPS...';
+  }
+
+  try {
+    /*
+      Geolocation requires HTTPS (or localhost) and location permission.
+      maximumAge: 0 requests a fresh reading instead of a cached position.
+    */
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        resolve,
+        reject,
+        {
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 0
+        }
+      );
+    });
+
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < -90 || latitude > 90 ||
+      longitude < -180 || longitude > 180
+    ) {
+      throw new Error("Invalid GPS coordinates.");
+    }
+
+    const mapsURL = new URL("https://www.google.com/maps/dir/");
+    mapsURL.searchParams.set("api", "1");
+    mapsURL.searchParams.set("origin", `${latitude},${longitude}`);
+    mapsURL.searchParams.set("destination", target.destination);
+    mapsURL.searchParams.set("travelmode", "driving");
+
+    showToast("Current GPS location found. Opening Google Maps...");
+
+    /*
+      Use same-tab navigation to avoid popup blockers after the asynchronous
+      GPS permission request.
+    */
+    window.location.href = mapsURL.href;
+
+  } catch (error) {
+    console.error("Rider GPS error:", error);
+
+    let message = "Could not fetch your current location.";
+
+    if (error.code === 1) {
+      message =
+        "Location permission denied. Allow location access in your browser or phone settings.";
+    } else if (error.code === 2) {
+      message =
+        "Current location unavailable. Turn on Location Services/GPS and try again.";
+    } else if (error.code === 3) {
+      message =
+        "GPS request timed out. Move to an open area and try again.";
+    } else if (error.message) {
+      message = error.message;
+    }
+
+    const openFallback = confirm(
+      message +
+      "\n\nWould you like to open Google Maps using the customer address instead?"
+    );
+
+    if (openFallback) {
+      window.location.href = fallbackURL;
+      return;
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = originalHTML;
+    }
+  }
+}
+
+/* ---------------- ORDER RENDERING ---------------- */
 
 function renderActiveOrders() {
   $("active-count").textContent = activeOrders.length;
@@ -660,7 +795,7 @@ function renderActiveOrders() {
     const customer = escapeHTML(getCustomer(order));
     const address = getAddress(order);
     const phone = getPhone(order);
-    const mapUrl = getMapUrl(order);
+    const mapDestination = getMapDestination(order);
     const total = getTotal(order);
 
     return `
@@ -709,8 +844,10 @@ function renderActiveOrders() {
             ? `<a class="call-btn" href="tel:${escapeHTML(phone)}"><i class="fa-solid fa-phone"></i> CALL CUSTOMER</a>`
             : `<button type="button" disabled>NO PHONE</button>`}
 
-          ${mapUrl
-            ? `<a class="map-btn" href="${escapeHTML(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> NAVIGATE</a>`
+          ${mapDestination
+            ? `<button type="button" class="map-btn" data-navigate="${safeId}">
+                 <i class="fa-solid fa-location-arrow"></i> NAVIGATE
+               </button>`
             : `<button type="button" disabled>NO LOCATION</button>`}
         </div>
 
@@ -726,7 +863,15 @@ function renderActiveOrders() {
   }).join("");
 
   $("active-orders").querySelectorAll("[data-deliver]").forEach(button => {
-    button.addEventListener("click", () => markDelivered(button.dataset.deliver, button));
+    button.addEventListener("click", () => {
+      markDelivered(button.dataset.deliver, button);
+    });
+  });
+
+  $("active-orders").querySelectorAll("[data-navigate]").forEach(button => {
+    button.addEventListener("click", () => {
+      navigateToCustomer(button.dataset.navigate, button);
+    });
   });
 }
 
@@ -737,6 +882,7 @@ function renderHistory() {
     const n = Number(getTotal(order));
     return sum + (Number.isFinite(n) ? n : 0);
   }, 0);
+
   $("earnings").textContent = formatMoney(total);
 
   if (!historyOrders.length) {
@@ -781,7 +927,7 @@ function renderHistory() {
   `).join("");
 }
 
-/* -------- Live listeners; alert only for newly assigned order IDs -------- */
+/* ---------------- FIRESTORE LISTENERS ---------------- */
 
 function stopListeners() {
   if (stopActive) stopActive();
@@ -806,8 +952,6 @@ function startListeners() {
   stopActive = onSnapshot(activeQuery, snapshot => {
     const newOrders = [];
 
-    // First snapshot is the initial list, not a new-order alert.
-    // Every later newly appearing order ID triggers one alert.
     if (initialActiveSnapshotReceived) {
       for (const orderDoc of snapshot.docs) {
         if (!knownActiveIds.has(orderDoc.id)) {
@@ -823,13 +967,12 @@ function startListeners() {
     activeOrders.sort((a,b) =>
       (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)
     );
+
     renderActiveOrders();
 
     if (newOrders.length) {
-      // Play the sound for every new snapshot event containing new order IDs.
       playOrderSound();
 
-      // Show the top in-app banner for the newest new order.
       const newest = newOrders[newOrders.length - 1];
       showNewOrderNotification(newest);
 
@@ -870,7 +1013,7 @@ function startListeners() {
   });
 }
 
-/* -------- Delivery PIN verification -------- */
+/* ---------------- DELIVERY PIN VERIFICATION ---------------- */
 
 async function markDelivered(orderId, button) {
   if (!rider) return showToast("Please log in again.");
@@ -884,6 +1027,7 @@ async function markDelivered(orderId, button) {
   if (!order) return showToast("Order is no longer active. Refresh orders.");
 
   const expectedPin = String(order.orderPin ?? order.deliveryPin ?? "").trim();
+
   if (!expectedPin) return showToast("No delivery PIN found. Contact admin.");
 
   if (enteredPin !== expectedPin) {
@@ -914,7 +1058,10 @@ async function markDelivered(orderId, button) {
     }
 
     const latestPin = String(data.orderPin ?? data.deliveryPin ?? "").trim();
-    if (enteredPin !== latestPin) throw new Error("Delivery PIN did not match.");
+
+    if (enteredPin !== latestPin) {
+      throw new Error("Delivery PIN did not match.");
+    }
 
     await updateDoc(orderRef, {
       status: "delivered",
@@ -930,7 +1077,7 @@ async function markDelivered(orderId, button) {
   }
 }
 
-/* -------- Login / session -------- */
+/* ---------------- LOGIN AND SESSION ---------------- */
 
 function showDashboard(visible) {
   $("login-section").classList.toggle("hidden", visible);
@@ -942,9 +1089,11 @@ async function loginRider(nameInput, phoneInput) {
   const phone = normalizePhone(phoneInput);
 
   if (name.length < 3) throw new Error("Enter your full name.");
-  if (!/^[6-9]\d{9}$/.test(phone)) throw new Error("Enter a valid 10-digit Indian mobile number.");
 
-  // Preserve the existing rider document ID convention.
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    throw new Error("Enter a valid 10-digit Indian mobile number.");
+  }
+
   const riderRef = doc(db, "riders", name);
   const riderSnap = await getDoc(riderRef);
 
@@ -963,9 +1112,9 @@ async function loginRider(nameInput, phoneInput) {
     }
   } else {
     /*
-      Preserves the previous app's first-login behavior.
-      For production, rider accounts should be created by an admin and
-      protected by Firebase Authentication + restrictive Firestore rules.
+      Preserves the original first-login behavior.
+      This is NOT secure identity verification. Production rider accounts
+      should be created by an admin and protected with Firebase Auth/rules.
     */
     await setDoc(riderRef, {
       riderName: name,
@@ -1052,10 +1201,10 @@ $("logout-button").addEventListener("click", async () => {
   showDashboard(false);
   $("riderNameInput").value = "";
   $("riderPhoneInput").value = "";
+
   showToast("Logged out.");
 });
 
-/* Restore the last signed-in rider on the same device. */
 async function restoreSession() {
   const name = localStorage.getItem("ff_rider_name");
   const phone = localStorage.getItem("ff_rider_phone");
@@ -1067,6 +1216,7 @@ async function restoreSession() {
 
   try {
     const riderSnap = await getDoc(doc(db, "riders", name));
+
     if (!riderSnap.exists()) {
       localStorage.removeItem("ff_rider_name");
       localStorage.removeItem("ff_rider_phone");
@@ -1075,7 +1225,9 @@ async function restoreSession() {
     }
 
     const data = riderSnap.data();
-    const storedPhone = normalizePhone(data.riderPhone || data.phone || data.mobile || "");
+    const storedPhone = normalizePhone(
+      data.riderPhone || data.phone || data.mobile || ""
+    );
 
     if (!storedPhone || storedPhone !== phone) {
       localStorage.removeItem("ff_rider_name");
@@ -1085,9 +1237,9 @@ async function restoreSession() {
     }
 
     rider = { name, phone };
+
     $("riderNameInput").value = name;
     $("riderPhoneInput").value = phone;
-
     $("welcome-title").textContent = `Welcome, ${name.split(" ")[0]} 👋`;
     $("profile-name").textContent = name;
     $("profile-phone").textContent = phone;
