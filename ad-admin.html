@@ -1,1 +1,586 @@
-gg
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>FreshFry Ads Admin</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#f8fafc;font-family:Arial,sans-serif}
+header{background:#121d30;padding:18px;border-bottom:1px solid #29374e}
+header h1{margin:0;font-size:23px}
+header p{color:#aab8cd;font-size:13px;margin-bottom:0}
+main{max-width:1050px;margin:auto;padding:15px}
+.card{background:#121d30;border:1px solid #29374e;border-radius:15px;padding:17px;margin-bottom:15px}
+h2{font-size:18px;margin:0 0 15px}
+label{display:block;margin:12px 0 6px;color:#c8d4e5;font-size:13px}
+input,select,textarea{width:100%;padding:12px;background:#091322;color:white;border:1px solid #35445d;border-radius:9px;font:inherit}
+input[type=checkbox]{width:auto}
+textarea{min-height:70px;resize:vertical}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+button{border:0;padding:11px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin:5px 5px 0 0}
+.primary{background:#22c55e;color:#052e16}
+.secondary{background:#293950;color:white}
+.danger{background:#991b1b;color:white}
+.hidden{display:none!important}
+.muted{color:#9eacc1;font-size:13px;line-height:1.5}
+#status{white-space:pre-wrap;color:#86efac;font-size:13px;margin-top:12px}
+.ad-card{background:#0a1425;border:1px solid #35445d;padding:12px;border-radius:12px;margin-top:10px}
+.ad-card img{width:100%;max-height:180px;object-fit:contain}
+.tag{display:inline-block;background:#293950;padding:5px 8px;border-radius:15px;font-size:12px}
+#preview{margin-top:12px;min-height:70px;background:#07101e;border-radius:10px;padding:12px;text-align:center}
+#preview img{max-width:100%;max-height:160px;object-fit:contain}
+@media(max-width:600px){.grid{grid-template-columns:1fr}main{padding:10px}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📢 FreshFry Ads Admin</h1>
+  <p>Manage banners, fullscreen ads, offers, durations and effects</p>
+</header>
+
+<main>
+
+<section class="card" id="pinScreen">
+  <h2>🔐 Admin PIN</h2>
+  <label>Enter PIN</label>
+  <input id="pinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Enter admin PIN">
+  <button class="primary" id="unlockBtn">Open Admin</button>
+  <p class="muted">Demo PIN: 4826. Change this before using the page publicly. This PIN is not secure authentication.</p>
+  <p id="pinMessage" class="muted"></p>
+</section>
+
+<section id="panel" class="hidden">
+
+  <div class="card">
+    <h2>⚙️ General Ad Settings</h2>
+    <div class="grid">
+      <div>
+        <label>Default rotation interval (seconds)</label>
+        <input id="rotation" type="number" min="3" max="300" value="5">
+      </div>
+      <div>
+        <label>Default animation effect</label>
+        <select id="defaultEffect">
+          <option value="slide">Slide</option>
+          <option value="fade">Fade</option>
+          <option value="flash">Flash</option>
+          <option value="shake">Shake</option>
+          <option value="zoom">Zoom</option>
+          <option value="glow">Glow</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      <div>
+        <label>Banner position</label>
+        <select id="position">
+          <option value="bottom">Bottom</option>
+          <option value="top">Top</option>
+          <option value="inline">Inline placement</option>
+        </select>
+      </div>
+      <div>
+        <label>Global ad status</label>
+        <select id="globalStatus">
+          <option value="on">All approved ads enabled</option>
+          <option value="off">All ads disabled</option>
+        </select>
+      </div>
+    </div>
+    <button class="primary" id="saveSettings">Save Settings</button>
+  </div>
+
+  <div class="card">
+    <h2 id="formHeading">➕ Create Advertisement</h2>
+    <input type="hidden" id="editId">
+
+    <label>Business / Advertiser Name *</label>
+    <input id="business" placeholder="Balaji Restaurant">
+
+    <label>Advertisement Title *</label>
+    <input id="title" placeholder="Special offer today">
+
+    <label>Description</label>
+    <textarea id="description" placeholder="Write offer details"></textarea>
+
+    <label>Ad Format</label>
+    <select id="format">
+      <option value="banner">Banner Ad</option>
+      <option value="fullscreen">Full-screen / Interstitial</option>
+      <option value="popup">Popup / Modal</option>
+      <option value="slider">Slider / Carousel</option>
+      <option value="native">Native / Sponsored Card</option>
+      <option value="video">Video Ad</option>
+      <option value="floating">Floating Corner Ad</option>
+      <option value="splash">App Open / Splash Ad</option>
+    </select>
+
+    <label>Banner / Image File</label>
+    <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+
+    <label>Or image URL</label>
+    <input id="imageUrl" type="url" placeholder="https://example.com/banner.webp">
+
+    <label>Video URL (video format only)</label>
+    <input id="videoUrl" type="url" placeholder="https://example.com/ad.mp4">
+
+    <div id="preview"><span class="muted">Advertisement preview</span></div>
+
+    <label>Destination Link (optional)</label>
+    <input id="link" type="url" placeholder="https://example.com or WhatsApp link">
+
+    <div class="grid">
+      <div>
+        <label>Campaign Start *</label>
+        <input id="startDate" type="datetime-local">
+      </div>
+      <div>
+        <label>Campaign End *</label>
+        <input id="endDate" type="datetime-local">
+      </div>
+      <div>
+        <label>Display duration (seconds)</label>
+        <input id="duration" type="number" min="1" max="300" value="5">
+      </div>
+      <div>
+        <label>Delay before showing (seconds)</label>
+        <input id="delay" type="number" min="0" max="300" value="2">
+      </div>
+      <div>
+        <label>Animation effect</label>
+        <select id="effect">
+          <option value="default">Use default setting</option>
+          <option value="slide">Slide</option>
+          <option value="fade">Fade</option>
+          <option value="flash">Flash</option>
+          <option value="shake">Shake</option>
+          <option value="zoom">Zoom</option>
+          <option value="glow">Glow</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      <div>
+        <label>Ad status</label>
+        <select id="adStatus">
+          <option value="draft">Draft / Not active</option>
+          <option value="approved">Approved / Active</option>
+          <option value="paused">Paused</option>
+        </select>
+      </div>
+      <div>
+        <label>Maximum impressions per session</label>
+        <input id="frequency" type="number" min="1" max="100" value="3">
+      </div>
+      <div>
+        <label>CTA button text</label>
+        <input id="cta" placeholder="Order Now" value="Learn More">
+      </div>
+    </div>
+
+    <label><input type="checkbox" id="closeButton" checked> Show close button (where applicable)</label>
+    <label><input type="checkbox" id="skipButton" checked> Allow skip on full-screen/video ads</label>
+    <label><input type="checkbox" id="mobileEnabled" checked> Enable on mobile</label>
+    <label><input type="checkbox" id="desktopEnabled" checked> Enable on desktop</label>
+
+    <button class="primary" id="saveAd">Save Advertisement</button>
+    <button class="secondary" id="clearForm">Clear Form</button>
+    <div id="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Advertisement Library</h2>
+    <p class="muted">Create, edit, preview or remove saved ads. This standalone demo stores data in this browser only.</p>
+    <button class="secondary" id="refresh">Refresh</button>
+    <div id="adList"></div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Analytics</h2>
+    <p id="analytics" class="muted">Demo impressions and clicks are recorded only if the customer-facing demo preview is used.</p>
+    <button class="secondary" id="export">Export Ads JSON</button>
+    <button class="danger" id="logout">Lock Admin</button>
+  </div>
+
+</section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  /*
+   * DEMO ONLY:
+   * PIN is visible to anyone inspecting this HTML.
+   * localStorage is per-browser and is not shared with the customer app.
+   */
+  const DEMO_PIN = "4826";
+  const ADS_KEY = "freshfry_custom_ads_demo_v1";
+  const SETTINGS_KEY = "freshfry_ad_settings_demo_v1";
+
+  const $ = id => document.getElementById(id);
+  const status = text => $("status").textContent = text;
+
+  let ads = readJSON(ADS_KEY, []);
+  let settings = readJSON(SETTINGS_KEY, {
+    rotation: 5,
+    defaultEffect: "slide",
+    position: "bottom",
+    globalStatus: "on"
+  });
+
+  function readJSON(key, fallback) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value == null ? fallback : value;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function persistAds() {
+    localStorage.setItem(ADS_KEY, JSON.stringify(ads));
+  }
+
+  function safe(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[ch]));
+  }
+
+  function validWebURL(value) {
+    if (!value) return true;
+    try {
+      const u = new URL(value);
+      return u.protocol === "https:" || u.protocol === "http:";
+    } catch {
+      return false;
+    }
+  }
+
+  function loadSettings() {
+    $("rotation").value = settings.rotation;
+    $("defaultEffect").value = settings.defaultEffect;
+    $("position").value = settings.position;
+    $("globalStatus").value = settings.globalStatus;
+  }
+
+  $("unlockBtn").addEventListener("click", () => {
+    if ($("pinInput").value !== DEMO_PIN) {
+      $("pinMessage").textContent = "Incorrect PIN.";
+      return;
+    }
+    $("pinScreen").classList.add("hidden");
+    $("panel").classList.remove("hidden");
+    $("pinMessage").textContent = "";
+    loadSettings();
+    renderAds();
+  });
+
+  $("pinInput").addEventListener("keydown", event => {
+    if (event.key === "Enter") $("unlockBtn").click();
+  });
+
+  $("saveSettings").addEventListener("click", () => {
+    settings = {
+      rotation: Math.min(300, Math.max(3, Number($("rotation").value) || 5)),
+      defaultEffect: $("defaultEffect").value,
+      position: $("position").value,
+      globalStatus: $("globalStatus").value
+    };
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    status("Settings saved in this browser.");
+  });
+
+  function getFormData(image) {
+    const business = $("business").value.trim();
+    const title = $("title").value.trim();
+    const start = $("startDate").value;
+    const end = $("endDate").value;
+    const link = $("link").value.trim();
+    const imageUrl = image || $("imageUrl").value.trim();
+    const videoUrl = $("videoUrl").value.trim();
+
+    if (!business || !title || !start || !end) {
+      throw new Error("Business name, title and campaign dates are required.");
+    }
+    if (new Date(end) <= new Date(start)) {
+      throw new Error("Campaign end must be later than campaign start.");
+    }
+    if (!validWebURL(link) || !validWebURL(imageUrl) || !validWebURL(videoUrl)) {
+      throw new Error("Links must use HTTP or HTTPS.");
+    }
+
+    return {
+      business,
+      title,
+      description: $("description").value.trim(),
+      format: $("format").value,
+      imageUrl,
+      videoUrl,
+      link,
+      startAt: new Date(start).toISOString(),
+      endAt: new Date(end).toISOString(),
+      duration: Math.min(300, Math.max(1, Number($("duration").value) || 5)),
+      delay: Math.min(300, Math.max(0, Number($("delay").value) || 0)),
+      effect: $("effect").value,
+      status: $("adStatus").value,
+      frequency: Math.min(100, Math.max(1, Number($("frequency").value) || 3)),
+      cta: $("cta").value.trim() || "Learn More",
+      closeButton: $("closeButton").checked,
+      skipButton: $("skipButton").checked,
+      mobileEnabled: $("mobileEnabled").checked,
+      desktopEnabled: $("desktopEnabled").checked
+    };
+  }
+
+  $("saveAd").addEventListener("click", async () => {
+    $("saveAd").disabled = true;
+    try {
+      const file = $("imageFile").files[0];
+      let image = $("imageUrl").value.trim();
+
+      if (file) {
+        if (!["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)) {
+          throw new Error("Choose a supported image file.");
+        }
+        if (file.size > 2 * 1024 * 1024) {
+          throw new Error("Image must be smaller than 2 MB.");
+        }
+        image = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error("Image could not be read."));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      const data = getFormData(image);
+      const id = $("editId").value || (
+        crypto.randomUUID ? crypto.randomUUID() : String(Date.now())
+      );
+      const old = ads.find(ad => ad.id === id);
+
+      const item = {
+        ...data,
+        id,
+        createdAt: old?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        impressions: old?.impressions || 0,
+        clicks: old?.clicks || 0
+      };
+
+      const next = ads.filter(ad => ad.id !== id);
+      next.unshift(item);
+
+      try {
+        localStorage.setItem(ADS_KEY, JSON.stringify(next));
+      } catch {
+        throw new Error("Browser storage is full. Use a smaller image.");
+      }
+
+      ads = next;
+      clearForm();
+      renderAds();
+      status("Ad saved locally. It is NOT yet published to the customer app.");
+    } catch (error) {
+      status(error.message);
+    } finally {
+      $("saveAd").disabled = false;
+    }
+  });
+
+  function clearForm() {
+    [
+      "editId","business","title","description","imageUrl","videoUrl","link",
+      "startDate","endDate"
+    ].forEach(id => $(id).value = "");
+
+    $("format").value = "banner";
+    $("duration").value = 5;
+    $("delay").value = 2;
+    $("effect").value = "default";
+    $("adStatus").value = "draft";
+    $("frequency").value = 3;
+    $("cta").value = "Learn More";
+    $("closeButton").checked = true;
+    $("skipButton").checked = true;
+    $("mobileEnabled").checked = true;
+    $("desktopEnabled").checked = true;
+    $("imageFile").value = "";
+    $("preview").innerHTML = '<span class="muted">Advertisement preview</span>';
+    $("formHeading").textContent = "➕ Create Advertisement";
+  }
+
+  $("clearForm").addEventListener("click", clearForm);
+  $("refresh").addEventListener("click", renderAds);
+
+  function renderAds() {
+    if (!ads.length) {
+      $("adList").innerHTML = '<p class="muted">No advertisements yet.</p>';
+      $("analytics").textContent = "No ads available.";
+      return;
+    }
+
+    $("adList").innerHTML = ads.map(ad => `
+      <article class="ad-card">
+        ${ad.imageUrl ? `<img src="${safe(ad.imageUrl)}" alt="Ad preview">` : ""}
+        <h3>${safe(ad.title)}</h3>
+        <p>${safe(ad.business)} · <span class="tag">${safe(ad.format)}</span></p>
+        <p class="muted">${safe(ad.description)}</p>
+        <p class="muted">Status: ${safe(ad.status)}<br>
+        Starts: ${safe(ad.startAt)}<br>Ends: ${safe(ad.endAt)}<br>
+        Duration: ${Number(ad.duration)} sec · Effect: ${safe(ad.effect)}<br>
+        Demo impressions: ${Number(ad.impressions || 0)} · Demo clicks: ${Number(ad.clicks || 0)}</p>
+        <button class="secondary" data-edit="${safe(ad.id)}">Edit</button>
+        <button class="secondary" data-toggle="${safe(ad.id)}">Pause / Resume</button>
+        <button class="secondary" data-preview="${safe(ad.id)}">Preview</button>
+        <button class="danger" data-delete="${safe(ad.id)}">Delete</button>
+      </article>
+    `).join("");
+
+    $("adList").querySelectorAll("[data-edit]").forEach(button =>
+      button.addEventListener("click", () => editAd(button.dataset.edit)));
+    $("adList").querySelectorAll("[data-toggle]").forEach(button =>
+      button.addEventListener("click", () => toggleAd(button.dataset.toggle)));
+    $("adList").querySelectorAll("[data-preview]").forEach(button =>
+      button.addEventListener("click", () => previewAd(button.dataset.preview)));
+    $("adList").querySelectorAll("[data-delete]").forEach(button =>
+      button.addEventListener("click", () => deleteAd(button.dataset.delete)));
+
+    const impressions = ads.reduce((sum, ad) => sum + Number(ad.impressions || 0), 0);
+    const clicks = ads.reduce((sum, ad) => sum + Number(ad.clicks || 0), 0);
+    $("analytics").textContent =
+      `Demo records only — Ads: ${ads.length}, Impressions: ${impressions}, Clicks: ${clicks}. These are not live customer analytics.`;
+  }
+
+  function editAd(id) {
+    const ad = ads.find(item => item.id === id);
+    if (!ad) return;
+
+    $("editId").value = ad.id;
+    $("business").value = ad.business;
+    $("title").value = ad.title;
+    $("description").value = ad.description || "";
+    $("format").value = ad.format;
+    $("imageUrl").value = ad.imageUrl || "";
+    $("videoUrl").value = ad.videoUrl || "";
+    $("link").value = ad.link || "";
+    $("startDate").value = toLocal(ad.startAt);
+    $("endDate").value = toLocal(ad.endAt);
+    $("duration").value = ad.duration;
+    $("delay").value = ad.delay;
+    $("effect").value = ad.effect;
+    $("adStatus").value = ad.status;
+    $("frequency").value = ad.frequency;
+    $("cta").value = ad.cta;
+    $("closeButton").checked = ad.closeButton;
+    $("skipButton").checked = ad.skipButton;
+    $("mobileEnabled").checked = ad.mobileEnabled;
+    $("desktopEnabled").checked = ad.desktopEnabled;
+    $("formHeading").textContent = "✏️ Edit Advertisement";
+    showPreview(ad);
+    $("formHeading").scrollIntoView({behavior:"smooth"});
+  }
+
+  function toLocal(value) {
+    const date = new Date(value);
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+      .toISOString().slice(0,16);
+  }
+
+  function toggleAd(id) {
+    ads = ads.map(ad => {
+      if (ad.id !== id) return ad;
+      return {...ad, status: ad.status === "approved" ? "paused" : "approved"};
+    });
+    persistAds();
+    renderAds();
+  }
+
+  function deleteAd(id) {
+    if (!confirm("Delete this advertisement?")) return;
+    ads = ads.filter(ad => ad.id !== id);
+    persistAds();
+    renderAds();
+  }
+
+  function showPreview(ad) {
+    const effect = ad.effect === "default" ? settings.defaultEffect : ad.effect;
+    const animation = {
+      slide:"ffSlide", fade:"ffFade", flash:"ffFlash",
+      shake:"ffShake", zoom:"ffZoom", glow:"ffGlow"
+    }[effect];
+
+    $("preview").innerHTML = `
+      <div style="animation:${animation || "none"} .8s ease">
+        ${ad.imageUrl ? `<img src="${safe(ad.imageUrl)}" alt="Preview">` : ""}
+        <h3>${safe(ad.title)}</h3>
+        <p>${safe(ad.description || "")}</p>
+        <span class="tag">${safe(ad.format)} · ${safe(effect)}</span>
+      </div>`;
+    $("preview").scrollIntoView({behavior:"smooth",block:"center"});
+  }
+
+  function previewAd(id) {
+    const ad = ads.find(item => item.id === id);
+    if (!ad) return;
+    ad.impressions = Number(ad.impressions || 0) + 1;
+    persistAds();
+    showPreview(ad);
+    renderAds();
+  }
+
+  $("imageFile").addEventListener("change", () => {
+    const file = $("imageFile").files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    $("preview").innerHTML = `<img src="${url}" alt="Selected banner preview">`;
+  });
+
+  $("imageUrl").addEventListener("input", () => {
+    const url = $("imageUrl").value.trim();
+    if (validWebURL(url) && url) {
+      $("preview").innerHTML = `<img src="${safe(url)}" alt="Banner preview">`;
+    }
+  });
+
+  $("export").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify({settings, ads}, null, 2)], {
+      type: "application/json"
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "freshfry-ads-demo.json";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  });
+
+  $("logout").addEventListener("click", () => {
+    $("panel").classList.add("hidden");
+    $("pinScreen").classList.remove("hidden");
+    $("pinInput").value = "";
+  });
+
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes ffSlide{from{transform:translateX(25px);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes ffFade{from{opacity:0}to{opacity:1}}
+    @keyframes ffFlash{0%,100%{opacity:1}50%{opacity:.35}}
+    @keyframes ffShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+    @keyframes ffZoom{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes ffGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  `;
+  document.head.appendChild(style);
+
+  loadSettings();
+  renderAds();
+})();
+</script>
+</body>
+</html>
