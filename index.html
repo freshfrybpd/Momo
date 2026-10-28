@@ -191,6 +191,65 @@ textarea.form-control{resize:vertical;min-height:82px}
 @media(prefers-reduced-motion:reduce){
 *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+
+
+/* Fix: Align menu card prices/buttons horizontally */
+.menu-grid,
+#menuGrid,
+.menu-container {
+  align-items: stretch;
+}
+
+.menu-card,
+.food-card,
+.menu-item,
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.menu-card .food-info,
+.food-card .food-info,
+.menu-item .food-info,
+.product-card .food-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.menu-card .price-options,
+.food-card .price-options,
+.menu-item .price-options,
+.product-card .price-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: auto;
+  align-items: stretch;
+}
+
+.menu-card .price-options button,
+.food-card .price-options button,
+.menu-item .price-options button,
+.product-card .price-options button {
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  box-sizing: border-box;
+  margin-top: 0;
+}
+
+/* Keep cards in each row equal height */
+@media (min-width: 600px) {
+  .menu-grid,
+  #menuGrid,
+  .menu-container {
+    align-items: stretch;
+  }
+}
 </style>
 </head>
 <body>
