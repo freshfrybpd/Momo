@@ -1,0 +1,701 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff5e00">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Vendor Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{--orange:#ff5e00;--dark:#171717;--bg:#f5f6f8;--muted:#737782;--line:#e9e9ed;--green:#15803d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:Outfit,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+[hidden]{display:none!important}
+header{background:#fff;border-bottom:1px solid var(--line);padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+.brand{font-size:24px;font-weight:900;font-style:italic}
+.brand span{color:var(--orange)}
+.header-right{display:flex;align-items:center;gap:10px}
+.badge{font-size:11px;color:var(--green);font-weight:800}
+button{border:0;border-radius:10px;padding:11px 15px;font-weight:800;font-size:12px}
+.primary{background:var(--orange);color:white}
+.secondary{background:white;border:1px solid var(--line);color:var(--dark)}
+.danger{background:#fff0f0;color:#b91c1c}
+main{max-width:1150px;margin:auto;padding:22px 16px 70px}
+h1{font-size:27px;margin:0 0 5px}
+h2{font-size:18px;margin:0}
+.sub{font-size:12px;color:var(--muted);line-height:1.6}
+.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:18px;margin-top:18px;min-width:0}
+.login{max-width:410px;margin:70px auto}
+.field{margin:13px 0}
+.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;background:white;outline:none;font-size:13px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--orange)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.stat{background:white;border:1px solid var(--line);padding:17px;border-radius:15px;min-width:0}
+.stat i{color:var(--orange);font-size:18px}
+.stat p{color:var(--muted);font-size:11px;margin:12px 0 5px}
+.stat strong{font-size:24px;overflow-wrap:anywhere}
+.tabs{display:flex;gap:8px;overflow:auto;margin-top:22px}
+.tab{white-space:nowrap;background:white;border:1px solid var(--line);color:#555}
+.tab.active{background:var(--dark);color:white;border-color:var(--dark)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.toolbar input,.toolbar select{padding:11px;border:1px solid var(--line);border-radius:10px;background:white;min-width:0}
+.toolbar input{flex:1;min-width:150px}
+.order-grid,.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.order,.menu-card{border:1px solid var(--line);border-radius:14px;padding:15px;min-width:0}
+.order-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.order-id{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.amount{font-size:22px;font-weight:900;margin-top:7px}
+.tag{display:inline-block;border-radius:7px;padding:6px 8px;background:#fff1e8;color:#a53e00;font-size:10px;font-weight:800}
+.order-items{font-size:12px;line-height:1.8;margin:14px 0;color:#444}
+.order-meta{font-size:11px;color:var(--muted);line-height:1.8;overflow-wrap:anywhere}
+.order-controls{display:flex;gap:8px;margin-top:12px}
+.order-controls select{flex:1;min-width:0;padding:10px;border:1px solid var(--line);border-radius:9px}
+.menu-card h3{font-size:15px;margin:0 0 6px;overflow-wrap:anywhere}
+.menu-card p{font-size:11px;color:var(--muted);line-height:1.6}
+.menu-card .price{font-size:12px;font-weight:800;margin:10px 0}
+.menu-card img{width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:12px;background:#eee}
+.menu-actions{display:flex;gap:8px;flex-wrap:wrap}
+.menu-actions button{flex:1}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.notice{padding:12px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:12px;line-height:1.7;margin-top:12px}
+.error{color:#b91c1c;font-size:12px;line-height:1.6;white-space:pre-wrap}
+.empty{text-align:center;padding:35px 12px;color:var(--muted);font-size:13px;grid-column:1/-1}
+.report-row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12px}
+.report-row:last-child{border-bottom:0}
+#message{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#171717;color:white;border-radius:12px;padding:13px 18px;font-size:12px;z-index:30;max-width:90%;display:none}
+#message.show{display:block}
+@media(max-width:700px){
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.order-grid,.menu-grid{grid-template-columns:1fr}
+header{padding:13px}
+.brand{font-size:21px}
+main{padding:18px 12px 50px}
+.stat strong{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Fresh<span>fry.</span> <span style="color:#777;font-size:11px;font-style:normal;letter-spacing:0">VENDOR</span></div>
+  <div class="header-right">
+    <span id="connection" class="badge">Locked</span>
+    <button id="logout" class="secondary" hidden>Lock</button>
+  </div>
+</header>
+
+<main>
+  <section id="login-panel" class="panel login">
+    <h1>Vendor Access</h1>
+    <p class="sub">Enter your restaurant security PIN.</p>
+    <form id="login-form">
+      <div class="field">
+        <label for="vendor-pin">4-Digit PIN</label>
+        <input id="vendor-pin" type="password" inputmode="numeric"
+          pattern="[0-9]{4}" maxlength="4" autocomplete="off"
+          placeholder="Enter PIN" required>
+      </div>
+      <p id="login-error" class="error" aria-live="polite"></p>
+      <button class="primary" style="width:100%">Unlock Dashboard</button>
+    </form>
+    <p class="sub">Vendor dashboard access.</p>
+  </section>
+
+  <section id="dashboard" hidden>
+    <h1>Restaurant Dashboard</h1>
+    <p class="sub">Manage food, orders and daily performance.</p>
+
+    <div class="stats">
+      <div class="stat"><i class="fa-solid fa-receipt"></i><p>Orders on selected date</p><strong id="stat-orders">0</strong></div>
+      <div class="stat"><i class="fa-solid fa-indian-rupee-sign"></i><p>Recorded order value</p><strong id="stat-revenue">₹0</strong></div>
+      <div class="stat"><i class="fa-solid fa-hourglass-half"></i><p>Pending orders</p><strong id="stat-pending">0</strong></div>
+      <div class="stat"><i class="fa-solid fa-calendar-day"></i><p>All loaded orders</p><strong id="stat-all">0</strong></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="orders-view">Orders</button>
+      <button class="tab" data-tab="menu-view">Manage Menu</button>
+      <button class="tab" data-tab="reports-view">Daily Reports</button>
+      <button class="tab" data-tab="store-view">Store Status</button>
+    </div>
+
+    <section id="orders-view" class="panel">
+      <div class="section-head">
+        <div><h2>Order Management</h2><p class="sub">Customer personal details are not shown.</p></div>
+        <button id="refresh-orders" class="secondary"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+      <div class="toolbar">
+        <input type="date" id="order-date" aria-label="Filter orders by date">
+        <select id="status-filter" aria-label="Filter by status">
+          <option value="all">All statuses</option>
+          <option value="payment_pending">Payment pending</option>
+          <option value="pending">Pending</option>
+          <option value="accepted">Accepted</option>
+          <option value="preparing">Preparing</option>
+          <option value="out_for_delivery">Out for delivery</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div id="orders-list" class="order-grid"><div class="empty">Loading orders...</div></div>
+    </section>
+
+    <section id="menu-view" class="panel" hidden>
+      <div class="section-head">
+        <div><h2>Manage Food Menu</h2><p class="sub">Edit items in your existing menu collection.</p></div>
+        <button id="add-menu" class="primary"><i class="fa-solid fa-plus"></i> Add item</button>
+      </div>
+      <div class="toolbar"><input id="menu-search" placeholder="Search menu..." aria-label="Search menu"></div>
+      <div id="menu-list" class="menu-grid"><div class="empty">Loading menu...</div></div>
+    </section>
+
+    <section id="reports-view" class="panel" hidden>
+      <h2>Daily Reports</h2>
+      <p class="sub">Order totals for a selected date and day-wise history.</p>
+      <div class="toolbar"><input type="date" id="report-date" aria-label="Report date"></div>
+      <div id="report-summary"></div>
+      <h2 style="margin-top:25px">Day-wise history</h2>
+      <div id="daily-history"></div>
+    </section>
+
+    <section id="store-view" class="panel" hidden>
+      <h2>Store Open / Close</h2>
+      <p class="sub">Controls the existing settings/storeStatus document.</p>
+      <div id="store-current" class="notice">Checking status...</div>
+      <div class="toolbar">
+        <button id="store-open" class="primary">Open store</button>
+        <button id="store-close" class="danger">Close store</button>
+      </div>
+    </section>
+  </section>
+
+  <p id="global-error" class="error"></p>
+</main>
+
+<div id="message" role="status" aria-live="polite"></div>
+
+<div id="editor" hidden style="position:fixed;inset:0;z-index:20;background:#0008;overflow:auto;padding:15px">
+  <div class="panel" style="max-width:520px;margin:30px auto">
+    <div class="section-head">
+      <h2 id="editor-title">Add menu item</h2>
+      <button id="editor-close" class="secondary" type="button">Close</button>
+    </div>
+    <form id="menu-form">
+      <input id="item-id" type="hidden">
+      <div class="field"><label for="item-name">Food name *</label><input id="item-name" maxlength="100" required></div>
+      <div class="field">
+        <label for="item-type">Category / type *</label>
+        <select id="item-type" required>
+          <option value="Veg">Veg</option>
+          <option value="Non-Veg">Non-Veg</option>
+          <option value="Momo">Momo</option>
+          <option value="Drinks">Drinks</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field"><label for="item-description">Description</label><textarea id="item-description" maxlength="500"></textarea></div>
+      <div class="field"><label for="item-image">Image URL (HTTPS)</label><input id="item-image" type="url" placeholder="https://..."></div>
+      <div class="field"><label for="item-half">Half price (₹) *</label><input id="item-half" type="number" min="0" step="0.01" required></div>
+      <div class="field"><label for="item-full">Full price (₹) *</label><input id="item-full" type="number" min="0" step="0.01" required></div>
+      <div class="field"><label><input id="item-available" type="checkbox" checked style="width:auto"> Available for ordering</label></div>
+      <p id="editor-error" class="error"></p>
+      <button class="primary" style="width:100%" type="submit">Save menu item</button>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import {initializeApp,getApps,getApp}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getFirestore,collection,onSnapshot,doc,updateDoc,
+  addDoc,serverTimestamp,setDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain:"freshfry-39a10.firebaseapp.com",
+  projectId:"freshfry-39a10",
+  storageBucket:"freshfry-39a10.firebasestorage.app",
+  messagingSenderId:"928483976893",
+  appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app=getApps().length?getApp():initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+const VENDOR_PIN="7788";
+const STATUSES=[
+  "payment_pending","pending","accepted","preparing",
+  "out_for_delivery","delivered","cancelled","rejected"
+];
+const LABELS={
+  payment_pending:"Payment pending",
+  pending:"Pending",
+  accepted:"Accepted",
+  preparing:"Preparing",
+  out_for_delivery:"Out for delivery",
+  delivered:"Delivered",
+  cancelled:"Cancelled",
+  rejected:"Rejected"
+};
+
+let orders=[];
+let menu=[];
+let unsubOrders=null;
+let unsubMenu=null;
+let unsubStore=null;
+let messageTimer=null;
+let locked=true;
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function money(value){
+  return "₹"+(Number(value)||0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+
+function showMessage(text,error=false){
+  const el=$("message");
+  el.textContent=text;
+  el.style.background=error?"#a32323":"#171717";
+  el.classList.add("show");
+  clearTimeout(messageTimer);
+  messageTimer=setTimeout(()=>el.classList.remove("show"),3500);
+}
+
+function errorText(error){
+  const code=error?.code||"";
+  if(code.includes("permission-denied"))
+    return "Permission denied. Check your Firebase Firestore security rules.";
+  if(code.includes("unavailable"))
+    return "Firebase is unavailable. Check your internet connection.";
+  return error?.message||"Something went wrong.";
+}
+
+function normalizeStatus(value){
+  const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
+  const aliases={
+    confirmed:"accepted",cooking:"preparing",
+    on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",
+    complete:"delivered",completed:"delivered",canceled:"cancelled"
+  };
+  return aliases[s]||s;
+}
+
+function timestampDate(value){
+  if(!value)return null;
+  const d=typeof value.toDate==="function"?value.toDate():new Date(value);
+  return Number.isNaN(d.getTime())?null:d;
+}
+
+function dateKey(value){
+  const d=timestampDate(value);
+  if(!d)return "";
+  return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
+}
+
+function todayKey(){return dateKey(new Date())}
+
+function formatDate(value){
+  const d=timestampDate(value);
+  return d?d.toLocaleString("en-IN",{
+    day:"2-digit",month:"short",year:"numeric",
+    hour:"2-digit",minute:"2-digit"
+  }):"Date unavailable";
+}
+
+function stopListeners(){
+  [unsubOrders,unsubMenu,unsubStore].forEach(fn=>{if(fn)fn()});
+  unsubOrders=unsubMenu=unsubStore=null;
+  orders=[];
+  menu=[];
+}
+
+function lockDashboard(){
+  locked=true;
+  stopListeners();
+  $("login-panel").hidden=false;
+  $("dashboard").hidden=true;
+  $("logout").hidden=true;
+  $("vendor-pin").value="";
+  $("connection").textContent="Locked";
+}
+
+function unlockDashboard(){
+  locked=false;
+  $("login-panel").hidden=true;
+  $("dashboard").hidden=false;
+  $("logout").hidden=false;
+  $("connection").textContent="Connecting...";
+  startListeners();
+}
+
+function startListeners(){
+  stopListeners();
+  $("connection").textContent="Connecting...";
+
+  unsubOrders=onSnapshot(collection(db,"orders"),snapshot=>{
+    orders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+    orders.sort((a,b)=>
+      (timestampDate(b.createdAt)?.getTime()||0)-
+      (timestampDate(a.createdAt)?.getTime()||0)
+    );
+    $("connection").textContent="Live updates";
+    renderOrders();
+    renderReports();
+  },error=>{
+    $("connection").textContent="Orders unavailable";
+    $("orders-list").innerHTML='<div class="empty">Could not load orders. Check Firebase rules.</div>';
+    $("global-error").textContent=errorText(error);
+  });
+
+  unsubMenu=onSnapshot(collection(db,"menu"),snapshot=>{
+    menu=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+    renderMenu();
+  },error=>{
+    $("menu-list").innerHTML='<div class="empty">Could not load menu. Check Firebase rules.</div>';
+    $("global-error").textContent=errorText(error);
+  });
+
+  unsubStore=onSnapshot(doc(db,"settings","storeStatus"),snapshot=>{
+    const isOpen=snapshot.exists()&&snapshot.data().isOpen===true;
+    $("store-current").textContent=isOpen
+      ?"STORE IS OPEN — accepting orders."
+      :"STORE IS CLOSED — new orders are disabled in the customer page.";
+  },error=>{
+    $("store-current").textContent="Could not read status: "+errorText(error);
+  });
+}
+
+/* Orders: customer name, phone, address, GPS and PIN are never
+   inserted into the order-card HTML. */
+function renderOrders(){
+  const date=$("order-date").value||todayKey();
+  const statusFilter=$("status-filter").value;
+  const dayOrders=orders.filter(o=>dateKey(o.createdAt)===date);
+
+  const filtered=dayOrders.filter(o=>
+    statusFilter==="all"||normalizeStatus(o.status)===statusFilter
+  );
+
+  $("stat-orders").textContent=dayOrders.length;
+  $("stat-revenue").textContent=money(
+    dayOrders.reduce((sum,o)=>sum+(Number(o.total)||0),0)
+  );
+  $("stat-pending").textContent=dayOrders.filter(o=>
+    ["pending","payment_pending"].includes(normalizeStatus(o.status))
+  ).length;
+  $("stat-all").textContent=orders.length;
+
+  if(!filtered.length){
+    $("orders-list").innerHTML='<div class="empty">No orders found for this date and filter.</div>';
+    return;
+  }
+
+  $("orders-list").innerHTML=filtered.map(order=>{
+    const status=normalizeStatus(order.status);
+    const items=Array.isArray(order.items)?order.items:[];
+    const itemLines=items.map(item=>
+      `${escapeHTML(item.name||"Item")} × ${Number(item.qty)||1}`
+    ).join("<br>")||"Items unavailable";
+
+    const options=STATUSES.map(s=>
+      `<option value="${s}" ${s===status?"selected":""}>${LABELS[s]}</option>`
+    ).join("");
+
+    return `
+      <article class="order">
+        <div class="order-top">
+          <div>
+            <div class="order-id">ORDER #${escapeHTML(order.id)}</div>
+            <div class="amount">${money(order.total)}</div>
+          </div>
+          <span class="tag">${escapeHTML(LABELS[status]||status)}</span>
+        </div>
+        <div class="order-items">${itemLines}</div>
+        <div class="order-meta">
+          <div><i class="fa-regular fa-clock"></i> ${escapeHTML(formatDate(order.createdAt))}</div>
+          <div>Payment: ${escapeHTML(order.paymentMethod||"Not specified")}</div>
+          <div>Payment status: ${escapeHTML(order.paymentStatus||"Unverified")}</div>
+          <div>Food subtotal: ${money(order.subtotal)} · Delivery: ${money(order.deliveryFee)}</div>
+        </div>
+        <div class="order-controls">
+          <select data-status-id="${escapeHTML(order.id)}" aria-label="Update order status">${options}</select>
+          <button class="primary" data-save-status="${escapeHTML(order.id)}">Update</button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+$("orders-list").addEventListener("click",async event=>{
+  const button=event.target.closest("[data-save-status]");
+  if(!button)return;
+
+  const id=button.dataset.saveStatus;
+  const select=[...$("orders-list").querySelectorAll("[data-status-id]")]
+    .find(el=>el.dataset.statusId===id);
+
+  if(!select||!STATUSES.includes(select.value))return;
+
+  button.disabled=true;
+  try{
+    await updateDoc(doc(db,"orders",id),{status:select.value});
+    showMessage("Order status updated.");
+  }catch(error){
+    showMessage(errorText(error),true);
+  }finally{
+    button.disabled=false;
+  }
+});
+
+/* Menu */
+function safeImage(value){
+  try{
+    const u=new URL(value);
+    return ["https:","http:"].includes(u.protocol)?u.href:"";
+  }catch{return ""}
+}
+
+function renderMenu(){
+  const term=$("menu-search").value.trim().toLowerCase();
+  const filtered=menu.filter(item=>
+    String(item.name||"").toLowerCase().includes(term)||
+    String(item.type||"").toLowerCase().includes(term)
+  );
+
+  if(!filtered.length){
+    $("menu-list").innerHTML='<div class="empty">No menu items found.</div>';
+    return;
+  }
+
+  $("menu-list").innerHTML=filtered.map(item=>{
+    const image=safeImage(item.image);
+    const available=item.available!==false&&item.isAvailable!==false;
+
+    return `
+      <article class="menu-card">
+        ${image?`<img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" loading="lazy">`:""}
+        <h3>${escapeHTML(item.name||"Food item")}</h3>
+        <span class="tag">${escapeHTML(item.type||"Food")}</span>
+        <p>${escapeHTML(item.description||item.details||"No description")}</p>
+        <div class="price">Half ${money(item.halfPrice)} · Full ${money(item.fullPrice)}</div>
+        <p>${available?"Available for ordering":"Currently unavailable"}</p>
+        <div class="menu-actions">
+          <button class="secondary" data-edit-menu="${escapeHTML(item.id)}">Edit</button>
+          <button class="${available?"danger":"primary"}"
+            data-toggle-menu="${escapeHTML(item.id)}"
+            data-available="${available}">
+            ${available?"Disable":"Enable"}
+          </button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function openEditor(item=null){
+  $("menu-form").reset();
+  $("editor-error").textContent="";
+  $("item-id").value=item?.id||"";
+  $("editor-title").textContent=item?"Edit menu item":"Add menu item";
+  $("item-name").value=item?.name||"";
+  $("item-type").value=item?.type||"Veg";
+  $("item-description").value=item?.description||item?.details||"";
+  $("item-image").value=item?.image||"";
+  $("item-half").value=item?.halfPrice??"";
+  $("item-full").value=item?.fullPrice??"";
+  $("item-available").checked=item
+    ?item.available!==false&&item.isAvailable!==false:true;
+  $("editor").hidden=false;
+}
+
+$("menu-list").addEventListener("click",async event=>{
+  const edit=event.target.closest("[data-edit-menu]");
+  const toggle=event.target.closest("[data-toggle-menu]");
+
+  if(edit){
+    const item=menu.find(x=>x.id===edit.dataset.editMenu);
+    if(item)openEditor(item);
+  }
+
+  if(toggle){
+    const item=menu.find(x=>x.id===toggle.dataset.toggleMenu);
+    if(!item)return;
+
+    try{
+      await updateDoc(doc(db,"menu",item.id),{
+        available:toggle.dataset.available!=="true"
+      });
+      showMessage("Menu availability updated.");
+    }catch(error){
+      showMessage(errorText(error),true);
+    }
+  }
+});
+
+$("menu-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+
+  const id=$("item-id").value;
+  const name=$("item-name").value.trim();
+  const type=$("item-type").value;
+  const image=$("item-image").value.trim();
+  const halfPrice=Number($("item-half").value);
+  const fullPrice=Number($("item-full").value);
+
+  if(name.length<2){
+    $("editor-error").textContent="Enter a valid food name.";
+    return;
+  }
+  if(!Number.isFinite(halfPrice)||halfPrice<0||
+     !Number.isFinite(fullPrice)||fullPrice<0){
+    $("editor-error").textContent="Enter valid prices.";
+    return;
+  }
+  if(image&&!safeImage(image)){
+    $("editor-error").textContent="Please use a valid HTTP or HTTPS image URL.";
+    return;
+  }
+
+  const data={
+    name,type,image,
+    description:$("item-description").value.trim(),
+    halfPrice,fullPrice,
+    available:$("item-available").checked
+  };
+
+  const button=$("menu-form").querySelector('button[type="submit"]');
+  button.disabled=true;
+
+  try{
+    if(id)await updateDoc(doc(db,"menu",id),data);
+    else await addDoc(collection(db,"menu"),data);
+
+    $("editor").hidden=true;
+    showMessage(id?"Menu item updated.":"Menu item added.");
+  }catch(error){
+    $("editor-error").textContent=errorText(error);
+  }finally{
+    button.disabled=false;
+  }
+});
+
+$("add-menu").addEventListener("click",()=>openEditor());
+$("editor-close").addEventListener("click",()=>$("editor").hidden=true);
+$("menu-search").addEventListener("input",renderMenu);
+
+/* Date-wise and day-wise reports */
+function renderReports(){
+  const date=$("report-date").value||todayKey();
+  const selected=orders.filter(o=>dateKey(o.createdAt)===date);
+  const total=selected.reduce((sum,o)=>sum+(Number(o.total)||0),0);
+
+  $("report-summary").innerHTML=`
+    <div class="report-row"><span>Selected date</span><strong>${escapeHTML(date)}</strong></div>
+    <div class="report-row"><span>Total orders</span><strong>${selected.length}</strong></div>
+    <div class="report-row"><span>Recorded order value</span><strong>${money(total)}</strong></div>
+    <div class="report-row"><span>Delivered orders</span><strong>${selected.filter(o=>normalizeStatus(o.status)==="delivered").length}</strong></div>
+    <div class="report-row"><span>Cancelled / rejected</span><strong>${selected.filter(o=>["cancelled","rejected"].includes(normalizeStatus(o.status))).length}</strong></div>`;
+
+  const days={};
+
+  orders.forEach(order=>{
+    const key=dateKey(order.createdAt);
+    if(!key)return;
+    if(!days[key])days[key]={count:0,total:0};
+    days[key].count++;
+    days[key].total+=Number(order.total)||0;
+  });
+
+  const keys=Object.keys(days).sort((a,b)=>b.localeCompare(a)).slice(0,60);
+
+  $("daily-history").innerHTML=keys.length?keys.map(key=>`
+    <div class="report-row">
+      <span>${escapeHTML(key)}<br><span class="sub">${days[key].count} orders</span></span>
+      <strong>${money(days[key].total)}</strong>
+    </div>`).join(""):'<div class="empty">No order history available.</div>';
+}
+
+/* Store status */
+async function setStoreOpen(isOpen){
+  try{
+    await setDoc(doc(db,"settings","storeStatus"),{
+      isOpen,
+      updatedAt:serverTimestamp()
+    },{merge:true});
+    showMessage(isOpen?"Store opened.":"Store closed.");
+  }catch(error){
+    showMessage(errorText(error),true);
+  }
+}
+
+$("store-open").addEventListener("click",()=>setStoreOpen(true));
+$("store-close").addEventListener("click",()=>setStoreOpen(false));
+
+/* Navigation */
+document.querySelectorAll("[data-tab]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const target=button.dataset.tab;
+    document.querySelectorAll("[data-tab]").forEach(b=>
+      b.classList.toggle("active",b===button)
+    );
+
+    ["orders-view","menu-view","reports-view","store-view"].forEach(id=>{
+      $(id).hidden=id!==target;
+    });
+  });
+});
+
+/* Filters and refresh */
+$("order-date").value=todayKey();
+$("report-date").value=todayKey();
+
+$("order-date").addEventListener("change",renderOrders);
+$("status-filter").addEventListener("change",renderOrders);
+$("report-date").addEventListener("change",renderReports);
+
+$("refresh-orders").addEventListener("click",()=>{
+  renderOrders();
+  renderReports();
+  showMessage("Showing latest loaded data.");
+});
+
+/* PIN login */
+$("login-form").addEventListener("submit",event=>{
+  event.preventDefault();
+
+  if(locked===false)return;
+
+  if($("vendor-pin").value!==VENDOR_PIN){
+    $("login-error").textContent="Incorrect PIN. Please try again.";
+    $("vendor-pin").value="";
+    return;
+  }
+
+  $("login-error").textContent="";
+  unlockDashboard();
+});
+
+$("logout").addEventListener("click",lockDashboard);
+
+/* Start locked */
+lockDashboard();
+</script>
+</body>
+</html>
