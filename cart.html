@@ -2,1023 +2,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#ff5e00">
-  <meta name="description" content="Review your FreshFry Momo cart and get ready to order in Baripada.">
-  <title>My Cart | FreshFry Momo</title>
-
-  <style>
-    :root {
-      --orange: #ff5e00;
-      --orange-dark: #e94f00;
-      --black: #171717;
-      --muted: #777;
-      --bg: #f7f7f7;
-      --white: #fff;
-      --border: #ededed;
-      --green: #16864a;
-      --radius: 18px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--black);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Arial, sans-serif;
-      padding-bottom: 125px;
-    }
-
-    button, a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-      cursor: pointer;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 16px;
-    }
-
-    .topbar-inner {
-      max-width: 850px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      gap: 13px;
-    }
-
-    .back-btn {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: white;
-      font-size: 23px;
-    }
-
-    .brand {
-      flex: 1;
-    }
-
-    .brand-name {
-      font-size: 19px;
-      font-weight: 900;
-      letter-spacing: -.5px;
-    }
-
-    .brand-name span {
-      color: var(--orange);
-    }
-
-    .brand-subtitle {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 3px;
-    }
-
-    .cart-count {
-      background: #fff0e7;
-      color: var(--orange-dark);
-      border-radius: 12px;
-      padding: 9px 12px;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    main {
-      width: min(850px, 100%);
-      margin: 0 auto;
-      padding: 20px 14px;
-    }
-
-    .page-heading {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 8px 2px 18px;
-    }
-
-    .page-heading h1 {
-      margin: 0;
-      font-size: clamp(25px, 6vw, 34px);
-      letter-spacing: -1px;
-    }
-
-    .page-heading p {
-      color: var(--muted);
-      font-size: 13px;
-      margin: 7px 0 0;
-    }
-
-    .clear-btn {
-      border: 0;
-      background: transparent;
-      color: #d84315;
-      font-weight: 750;
-      font-size: 13px;
-      padding: 10px 0 10px 10px;
-    }
-
-    .section-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 15px;
-    }
-
-    .section-title {
-      padding: 17px 16px;
-      font-size: 15px;
-      font-weight: 850;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .cart-item {
-      display: grid;
-      grid-template-columns: 82px minmax(0, 1fr);
-      gap: 13px;
-      padding: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .cart-item:last-child {
-      border-bottom: 0;
-    }
-
-    .food-image {
-      width: 82px;
-      height: 82px;
-      border-radius: 14px;
-      object-fit: cover;
-      background: #fff0e7;
-    }
-
-    .food-placeholder {
-      display: grid;
-      place-items: center;
-      font-size: 34px;
-    }
-
-    .item-content {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .item-name {
-      font-size: 15px;
-      line-height: 1.35;
-      font-weight: 850;
-      overflow-wrap: anywhere;
-    }
-
-    .item-price {
-      font-size: 14px;
-      font-weight: 850;
-      white-space: nowrap;
-    }
-
-    .item-description {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .item-bottom {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .quantity-control {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      background: #fff5ee;
-      border: 1px solid #ffe1ce;
-      padding: 5px 8px;
-      border-radius: 11px;
-    }
-
-    .quantity-control button {
-      border: 0;
-      background: transparent;
-      color: var(--orange-dark);
-      font-size: 21px;
-      font-weight: 800;
-      width: 20px;
-      height: 24px;
-      line-height: 20px;
-    }
-
-    .quantity {
-      min-width: 12px;
-      text-align: center;
-      font-weight: 850;
-      font-size: 14px;
-    }
-
-    .remove-btn {
-      border: 0;
-      background: transparent;
-      color: #888;
-      font-size: 12px;
-      font-weight: 750;
-      padding: 8px 0 8px 8px;
-    }
-
-    .empty-state {
-      display: none;
-      text-align: center;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 42px 20px;
-      margin-bottom: 16px;
-    }
-
-    .empty-icon {
-      font-size: 62px;
-      margin-bottom: 12px;
-    }
-
-    .empty-state h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-    }
-
-    .empty-state p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      margin: 0 auto 22px;
-      max-width: 300px;
-    }
-
-    .primary-btn {
-      border: 0;
-      border-radius: 14px;
-      background: var(--orange);
-      color: white;
-      padding: 14px 18px;
-      font-size: 14px;
-      font-weight: 850;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      transition: background .2s, transform .2s;
-    }
-
-    .primary-btn:active {
-      transform: scale(.98);
-    }
-
-    .primary-btn:hover {
-      background: var(--orange-dark);
-    }
-
-    .promo-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-    }
-
-    .promo-icon {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 42px;
-      border-radius: 13px;
-      display: grid;
-      place-items: center;
-      background: #fff0e7;
-      font-size: 21px;
-    }
-
-    .promo-text {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .promo-text strong {
-      display: block;
-      font-size: 14px;
-    }
-
-    .promo-text span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 4px;
-      line-height: 1.4;
-    }
-
-    .promo-input {
-      width: 100%;
-      min-width: 0;
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .promo-input input {
-      min-width: 0;
-      flex: 1;
-      border: 1px solid #e5e5e5;
-      border-radius: 10px;
-      padding: 12px;
-      outline: none;
-      text-transform: uppercase;
-    }
-
-    .promo-input input:focus {
-      border-color: var(--orange);
-    }
-
-    .promo-input button {
-      background: var(--black);
-      color: white;
-      border: 0;
-      border-radius: 10px;
-      padding: 0 16px;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .promo-message {
-      font-size: 12px;
-      margin-top: 8px;
-      color: var(--green);
-      min-height: 15px;
-    }
-
-    .bill {
-      padding: 16px;
-    }
-
-    .bill-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: #626262;
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
-
-    .bill-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .bill-row.total {
-      border-top: 1px dashed #ddd;
-      padding-top: 16px;
-      margin-top: 5px;
-      color: var(--black);
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .free-delivery {
-      color: var(--green);
-      font-weight: 800;
-    }
-
-    .savings-note {
-      display: none;
-      margin-top: 14px;
-      border-radius: 10px;
-      padding: 11px;
-      background: #effaf2;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 750;
-      line-height: 1.5;
-    }
-
-    .delivery-note {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      color: #666;
-      font-size: 12px;
-      line-height: 1.6;
-      padding: 15px 16px;
-    }
-
-    .delivery-note span:first-child {
-      font-size: 18px;
-    }
-
-    .bottom-checkout {
-      position: fixed;
-      z-index: 30;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255,255,255,.97);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border);
-      padding: 12px 15px calc(12px + env(safe-area-inset-bottom));
-    }
-
-    .checkout-inner {
-      max-width: 820px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .checkout-total small {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .checkout-total strong {
-      font-size: 21px;
-      font-weight: 950;
-    }
-
-    .checkout-btn {
-      min-width: 155px;
-      padding: 15px 18px;
-      flex: 1;
-      max-width: 280px;
-    }
-
-    .checkout-btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .toast {
-      position: fixed;
-      z-index: 50;
-      bottom: 105px;
-      left: 50%;
-      transform: translate(-50%, 15px);
-      opacity: 0;
-      pointer-events: none;
-      color: white;
-      background: #222;
-      padding: 12px 17px;
-      border-radius: 12px;
-      font-size: 13px;
-      box-shadow: 0 6px 25px #0002;
-      transition: .25s;
-      width: max-content;
-      max-width: calc(100% - 32px);
-      text-align: center;
-    }
-
-    .toast.show {
-      transform: translate(-50%, 0);
-      opacity: 1;
-    }
-
-    @media (min-width: 700px) {
-      main {
-        padding-top: 28px;
-      }
-
-      .cart-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1.5fr) minmax(250px, .9fr);
-        gap: 18px;
-        align-items: start;
-      }
-
-      .cart-layout > * {
-        min-width: 0;
-      }
-
-      .cart-layout .right-column {
-        position: sticky;
-        top: 90px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .cart-item {
-        grid-template-columns: 68px minmax(0, 1fr);
-        gap: 10px;
-        padding: 13px;
-      }
-
-      .food-image {
-        width: 68px;
-        height: 68px;
-      }
-
-      .item-name {
-        font-size: 14px;
-      }
-
-      .checkout-btn {
-        min-width: 130px;
-        padding: 14px 12px;
-      }
-
-      .checkout-total strong {
-        font-size: 19px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="description" content="Review your FreshFry Momo cart and order delicious food in Baripada.">
+<title>My Cart | FreshFry Momo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#faf9f7;
+  --line:#eee9e5;
+  --green:#15803d;
+}
+* { box-sizing:border-box }
+body {
+  margin:0;
+  padding:0 0 calc(25px + env(safe-area-inset-bottom));
+  background:var(--bg);
+  color:var(--dark);
+  font-family:'Outfit',sans-serif;
+}
+button,a { font:inherit }
+button { cursor:pointer }
+a { color:inherit;text-decoration:none }
+.wrap { width:min(760px,calc(100% - 28px));margin:auto }
+header {
+  position:sticky;top:0;z-index:10;
+  background:#ffffffed;backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner {
+  width:min(760px,calc(100% - 28px));
+  min-height:68px;margin:auto;
+  display:flex;align-items:center;gap:14px;
+}
+.back {
+  width:42px;height:42px;display:grid;place-items:center;
+  border:1px solid var(--line);border-radius:13px;background:white;
+}
+.brand { font-size:24px;font-weight:900;font-style:italic;letter-spacing:-1px }
+.brand span { color:var(--orange) }
+.header-label { margin-left:auto;color:var(--muted);font-size:11px;font-weight:700 }
+main { padding-top:24px }
+.heading { display:flex;justify-content:space-between;align-items:center;gap:10px }
+.heading h1 { margin:0;font-size:30px;letter-spacing:-1px }
+.heading p { color:var(--muted);font-size:12px;margin:7px 0 0 }
+.count {
+  flex-shrink:0;padding:9px 12px;background:#fff0e7;
+  color:var(--orange);border-radius:12px;font-size:11px;font-weight:900;
+}
+.card {
+  margin-top:20px;background:white;border:1px solid var(--line);
+  border-radius:20px;padding:16px;
+}
+.cart-item {
+  display:grid;grid-template-columns:48px minmax(0,1fr) auto;
+  align-items:center;gap:12px;padding:15px 0;
+  border-bottom:1px solid var(--line);
+}
+.cart-item:last-child { border-bottom:0 }
+.food-icon {
+  width:48px;height:48px;border-radius:14px;
+  background:#fff0e7;color:var(--orange);
+  display:grid;place-items:center;font-size:19px;
+}
+.item-name { font-size:13px;font-weight:900;overflow-wrap:anywhere }
+.item-price { color:var(--orange);font-size:12px;font-weight:800;margin-top:5px }
+.quantity { display:flex;align-items:center;gap:9px;margin-top:10px }
+.quantity button {
+  width:29px;height:29px;border:1px solid var(--line);
+  border-radius:9px;background:white;font-weight:900;
+}
+.quantity span { min-width:14px;text-align:center;font-size:12px;font-weight:900 }
+.item-right { text-align:right }
+.line-total { font-size:12px;font-weight:900;white-space:nowrap }
+.remove {
+  border:0;background:none;color:#999;padding:10px 0 0;
+  font-size:11px;
+}
+.empty { text-align:center;padding:42px 16px }
+.empty i { font-size:42px;color:#ffcfb5 }
+.empty h2 { font-size:20px;margin:17px 0 8px }
+.empty p { color:var(--muted);font-size:12px;line-height:1.7 }
+.btn {
+  width:100%;border:0;border-radius:13px;padding:15px;
+  background:var(--orange);color:white;font-size:12px;
+  font-weight:900;text-align:center;display:block;
+}
+.btn-dark { background:var(--dark);margin-top:10px }
+.summary-title { margin:0 0 15px;font-size:17px;font-weight:900 }
+.summary-row {
+  display:flex;justify-content:space-between;gap:12px;
+  margin:13px 0;font-size:12px;color:#666;
+}
+.summary-row strong { color:var(--dark) }
+.summary-total {
+  border-top:1px dashed #ddd;padding-top:16px;margin-top:16px;
+  font-size:19px;font-weight:900;color:var(--dark);
+}
+.summary-total strong { color:var(--orange) }
+.notice {
+  margin-top:15px;padding:12px;border-radius:12px;
+  background:#fff7ed;color:#9a3412;font-size:11px;line-height:1.6;
+}
+.notice.success { background:#effcf4;color:#166534 }
+.small { color:var(--muted);font-size:10px;line-height:1.6;margin-top:12px }
+footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
+@media(max-width:390px) {
+  .heading h1 { font-size:26px }
+  .card { padding:12px }
+  .cart-item { grid-template-columns:40px minmax(0,1fr) auto;gap:9px }
+  .food-icon { width:40px;height:40px }
+  .line-total { font-size:11px }
+}
+</style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <button class="back-btn" id="backBtn" aria-label="Go back">‹</button>
-      <div class="brand">
-        <div class="brand-name">FreshFry <span>Momo</span></div>
-        <div class="brand-subtitle">Fresh cravings, delivered with love</div>
-      </div>
-      <div class="cart-count" id="headerCount">0 items</div>
+<header>
+  <div class="header-inner">
+    <a class="back" href="index.html" aria-label="Back to menu">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
+    <span class="header-label"><i class="fa-solid fa-lock"></i> YOUR BOX</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="heading">
+    <div>
+      <h1>My Cart <span>🛍️</span></h1>
+      <p>Review your favourites before checkout.</p>
     </div>
-  </header>
+    <span class="count" id="item-count">0 ITEMS</span>
+  </div>
 
-  <main>
-    <div class="page-heading">
-      <div>
-        <h1>My Cart <span>🛒</span></h1>
-        <p id="headingSubtitle">Your delicious picks are waiting.</p>
-      </div>
-      <button class="clear-btn" id="clearCartBtn" type="button">Clear cart</button>
+  <section class="card" id="cart-card">
+    <div id="cart-items"></div>
+  </section>
+
+  <section class="card" id="summary-card">
+    <h2 class="summary-title">Order Summary</h2>
+    <div class="summary-row"><span>Food subtotal</span><strong id="subtotal">₹0</strong></div>
+    <div class="summary-row"><span>Delivery fee</span><strong id="delivery">₹0</strong></div>
+    <div class="summary-row summary-total"><span>Total</span><strong id="total">₹0</strong></div>
+    <div id="order-notice" class="notice">
+      Minimum food order is ₹100. Delivery fee is additional.
     </div>
+    <button type="button" class="btn" id="checkout">PROCEED TO CHECKOUT <i class="fa-solid fa-arrow-right"></i></button>
+    <a class="btn btn-dark" href="index.html"><i class="fa-solid fa-utensils"></i> ADD MORE ITEMS</a>
+    <p class="small">Your cart is saved on this device. Delivery availability and store status are confirmed by FreshFry during checkout.</p>
+  </section>
+</main>
 
-    <div class="empty-state" id="emptyState">
-      <div class="empty-icon">🥟</div>
-      <h2>Your cart is hungry!</h2>
-      <p>Add your favourite momos and snacks to start your FreshFry order.</p>
-      <a href="index.html" class="primary-btn">Explore menu →</a>
-    </div>
+<footer>FreshFry Momo · Baripada, Odisha</footer>
 
-    <div class="cart-layout" id="cartLayout">
-      <div class="left-column">
-        <section class="section-card">
-          <div class="section-title">Your items</div>
-          <div id="cartItems"></div>
-        </section>
+<script>
+(function () {
+  "use strict";
 
-        <section class="section-card">
-          <div class="promo-box">
-            <div class="promo-icon">🏷️</div>
-            <div class="promo-text">
-              <strong>Have a coupon code?</strong>
-              <span>Enter a valid offer code if your store supports it.</span>
-            </div>
-          </div>
-          <div style="padding: 0 16px 16px;">
-            <div class="promo-input">
-              <input id="couponInput" type="text" placeholder="Enter coupon code" autocomplete="off">
-              <button id="applyCouponBtn" type="button">Apply</button>
-            </div>
-            <div class="promo-message" id="couponMessage" aria-live="polite"></div>
-          </div>
-        </section>
+  const CART_KEY = "ff_cart_v2";
+  const DELIVERY_FEE = 20;
+  const MINIMUM_ORDER = 100;
 
-        <section class="section-card">
-          <div class="delivery-note">
-            <span>🛵</span>
-            <span>Delivery charges and delivery availability may depend on your address and the store's current rules. Final charges should be confirmed at checkout.</span>
-          </div>
-        </section>
-      </div>
+  const $ = id => document.getElementById(id);
+  let cart = readCart();
 
-      <div class="right-column">
-        <section class="section-card">
-          <div class="section-title">Bill details</div>
-          <div class="bill">
-            <div class="bill-row">
-              <span>Item subtotal</span>
-              <strong id="subtotal">₹0</strong>
-            </div>
-            <div class="bill-row">
-              <span>Delivery charge</span>
-              <strong id="deliveryCharge">₹0</strong>
-            </div>
-            <div class="bill-row" id="discountRow" hidden>
-              <span>Discount</span>
-              <strong class="free-delivery" id="discountAmount">−₹0</strong>
-            </div>
-            <div class="bill-row total">
-              <span>Total</span>
-              <strong id="grandTotal">₹0</strong>
-            </div>
-            <div class="savings-note" id="savingsNote"></div>
-          </div>
-        </section>
+  function readCart() {
+    try {
+      const data = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+      if (!Array.isArray(data)) return [];
 
-        <section class="section-card">
-          <div class="section-title">Ordering from FreshFry</div>
-          <div class="delivery-note">
-            <span>🍽️</span>
-            <span>Check your items and quantities before proceeding. Your final order details will be shown on the checkout page.</span>
-          </div>
-        </section>
-      </div>
-    </div>
-  </main>
-
-  <footer class="bottom-checkout" id="bottomCheckout">
-    <div class="checkout-inner">
-      <div class="checkout-total">
-        <small>Total amount</small>
-        <strong id="footerTotal">₹0</strong>
-      </div>
-      <button class="primary-btn checkout-btn" id="checkoutBtn" type="button">
-        Proceed to checkout →
-      </button>
-    </div>
-  </footer>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script>
-    "use strict";
-
-    /*
-      FRESHFRY CART COMPATIBILITY
-      ---------------------------
-      This page checks common localStorage cart keys:
-      freshfryCart, cart, cartItems, shoppingCart.
-
-      Supported item examples:
-      { id, name, price, quantity, image }
-      { id, title, price, qty, imageUrl }
-      { name, price, count, img }
-
-      Before going live, align read/write storage with the exact
-      cart format used by your existing index.html.
-    */
-
-    const STORAGE_KEYS = [
-      "freshfryCart",
-      "cart",
-      "cartItems",
-      "shoppingCart"
-    ];
-
-    const CHECKOUT_PAGE = "checkout.html";
-
-    /*
-      Do not guess your delivery pricing. Set this to your existing
-      store rule after confirming the checkout/backend configuration.
-      Current default: ₹0, with final charges to be confirmed at checkout.
-    */
-    const DELIVERY_CHARGE = 0;
-
-    let cart = [];
-    let activeStorageKey = "freshfryCart";
-    let couponDiscount = 0;
-    let activeCoupon = "";
-
-    const $ = (id) => document.getElementById(id);
-
-    function formatMoney(value) {
-      return "₹" + Math.max(0, Number(value) || 0).toLocaleString("en-IN", {
-        maximumFractionDigits: 2
-      });
-    }
-
-    function getFirst(item, keys, fallback = "") {
-      for (const key of keys) {
-        if (item && item[key] !== undefined && item[key] !== null && item[key] !== "") {
-          return item[key];
-        }
-      }
-      return fallback;
-    }
-
-    function normalizeItem(item, index) {
-      if (!item || typeof item !== "object") return null;
-
-      const name = String(getFirst(item, [
-        "name", "title", "productName", "foodName", "itemName"
-      ], "Food item"));
-
-      const price = Number(getFirst(item, [
-        "price", "sellingPrice", "salePrice", "amount", "itemPrice"
-      ], 0));
-
-      const quantity = Number(getFirst(item, [
-        "quantity", "qty", "count"
-      ], 1));
-
-      const image = String(getFirst(item, [
-        "image", "imageUrl", "img", "photo", "photoURL", "thumbnail"
-      ], ""));
-
-      const id = String(getFirst(item, [
-        "id", "productId", "foodId", "itemId", "key"
-      ], name + "-" + index));
-
-      return {
+      return data.filter(item =>
+        item &&
+        typeof item.id === "string" &&
+        typeof item.name === "string" &&
+        Number.isFinite(Number(item.price)) &&
+        Number(item.price) >= 0 &&
+        Number.isInteger(Number(item.qty)) &&
+        Number(item.qty) > 0
+      ).map(item => ({
         ...item,
-        id,
-        name,
-        price: Number.isFinite(price) && price >= 0 ? price : 0,
-        quantity: Number.isFinite(quantity) ? Math.max(1, Math.floor(quantity)) : 1,
-        image
-      };
-    }
-
-    function parseCart(raw) {
-      if (!raw) return [];
-
-      let data;
-      try {
-        data = JSON.parse(raw);
-      } catch {
-        return [];
-      }
-
-      if (Array.isArray(data)) return data;
-      if (data && Array.isArray(data.items)) return data.items;
-      if (data && Array.isArray(data.cart)) return data.cart;
-
+        price: Number(item.price),
+        qty: Math.min(99, Number(item.qty))
+      }));
+    } catch (error) {
+      console.error("Could not read cart:", error);
       return [];
     }
+  }
 
-    function loadCart() {
-      for (const key of STORAGE_KEYS) {
-        const raw = localStorage.getItem(key);
-        if (raw !== null) {
-          const parsed = parseCart(raw);
-          if (parsed.length) {
-            activeStorageKey = key;
-            cart = parsed
-              .map((item, index) => normalizeItem(item, index))
-              .filter(Boolean);
-            return;
-          }
-        }
+  function saveCart() {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      return true;
+    } catch (error) {
+      console.error("Could not save cart:", error);
+      alert("Cart save nahi ho paya. Browser storage check karein.");
+      return false;
+    }
+  }
+
+  function money(value) {
+    return "₹" + Number(value || 0).toLocaleString("en-IN", {
+      maximumFractionDigits: 2
+    });
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char]));
+  }
+
+  function subtotal() {
+    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  }
+
+  function render() {
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    const amount = subtotal();
+    const delivery = cart.length ? DELIVERY_FEE : 0;
+
+    $("item-count").textContent = count + (count === 1 ? " ITEM" : " ITEMS");
+    $("subtotal").textContent = money(amount);
+    $("delivery").textContent = money(delivery);
+    $("total").textContent = money(amount + delivery);
+
+    if (!cart.length) {
+      $("cart-items").innerHTML = `
+        <div class="empty">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <h2>Your box is empty</h2>
+          <p>Add delicious momos and your favourite food from our menu.</p>
+          <a class="btn" href="index.html">EXPLORE MENU</a>
+        </div>`;
+      $("summary-card").hidden = true;
+      return;
+    }
+
+    $("summary-card").hidden = false;
+    $("cart-items").innerHTML = cart.map(item => `
+      <article class="cart-item">
+        <div class="food-icon"><i class="fa-solid fa-utensils"></i></div>
+        <div>
+          <div class="item-name">${escapeHTML(item.name)}</div>
+          <div class="item-price">${money(item.price)} each</div>
+          <div class="quantity">
+            <button type="button" data-action="minus" data-id="${escapeHTML(item.id)}" aria-label="Decrease quantity">−</button>
+            <span>${item.qty}</span>
+            <button type="button" data-action="plus" data-id="${escapeHTML(item.id)}" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="line-total">${money(item.price * item.qty)}</div>
+          <button class="remove" type="button" data-action="remove" data-id="${escapeHTML(item.id)}">
+            <i class="fa-regular fa-trash-can"></i> Remove
+          </button>
+        </div>
+      </article>
+    `).join("");
+
+    const notice = $("order-notice");
+    if (amount < MINIMUM_ORDER) {
+      notice.className = "notice";
+      notice.textContent = `Minimum food order is ${money(MINIMUM_ORDER)}. Add ${money(MINIMUM_ORDER - amount)} more to continue.`;
+    } else {
+      notice.className = "notice success";
+      notice.textContent = "Your food subtotal meets the minimum order requirement.";
+    }
+  }
+
+  $("cart-items").addEventListener("click", function (event) {
+    const button = event.target.closest("[data-action]");
+    if (!button) return;
+
+    const item = cart.find(x => x.id === button.dataset.id);
+    if (!item) return;
+
+    if (button.dataset.action === "plus") {
+      item.qty = Math.min(99, item.qty + 1);
+    } else if (button.dataset.action === "minus") {
+      item.qty -= 1;
+      if (item.qty <= 0) {
+        cart = cart.filter(x => x.id !== item.id);
       }
-
-      cart = [];
+    } else if (button.dataset.action === "remove") {
+      cart = cart.filter(x => x.id !== item.id);
     }
 
-    function saveCart() {
-      try {
-        localStorage.setItem(activeStorageKey, JSON.stringify(cart));
-      } catch (error) {
-        console.error("Could not save cart:", error);
-        showToast("Unable to save cart on this device.");
-      }
+    saveCart();
+    render();
+  });
+
+  $("checkout").addEventListener("click", function () {
+    const amount = subtotal();
+
+    if (!cart.length) {
+      alert("Your cart is empty. Please add items first.");
+      return;
     }
 
-    function getSubtotal() {
-      return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    }
-
-    function getTotalQuantity() {
-      return cart.reduce((sum, item) => sum + item.quantity, 0);
-    }
-
-    function getGrandTotal() {
-      return Math.max(0, getSubtotal() + DELIVERY_CHARGE - couponDiscount);
-    }
-
-    function escapeHTML(value) {
-      return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[char]);
-    }
-
-    function renderCart() {
-      const container = $("cartItems");
-      const empty = cart.length === 0;
-
-      $("emptyState").style.display = empty ? "block" : "none";
-      $("cartLayout").style.display = empty ? "none" : "";
-      $("bottomCheckout").style.display = empty ? "none" : "block";
-      $("clearCartBtn").style.visibility = empty ? "hidden" : "visible";
-
-      const totalQuantity = getTotalQuantity();
-      $("headerCount").textContent = totalQuantity + (totalQuantity === 1 ? " item" : " items");
-      $("headingSubtitle").textContent = empty
-        ? "Your delicious picks are waiting."
-        : "You have " + totalQuantity + (totalQuantity === 1 ? " item" : " items") + " in your cart.";
-
-      container.innerHTML = cart.map((item, index) => {
-        const imageMarkup = item.image
-          ? `<img class="food-image" src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" loading="lazy" onerror="this.outerHTML='<div class=&quot;food-image food-placeholder&quot;>🥟</div>'">`
-          : `<div class="food-image food-placeholder">🥟</div>`;
-
-        return `
-          <article class="cart-item">
-            ${imageMarkup}
-            <div class="item-content">
-              <div class="item-top">
-                <div class="item-name">${escapeHTML(item.name)}</div>
-                <div class="item-price">${formatMoney(item.price * item.quantity)}</div>
-              </div>
-              <div class="item-description">${formatMoney(item.price)} each</div>
-              <div class="item-bottom">
-                <div class="quantity-control" aria-label="Quantity controls for ${escapeHTML(item.name)}">
-                  <button type="button" data-action="decrease" data-index="${index}" aria-label="Decrease quantity">−</button>
-                  <span class="quantity">${item.quantity}</span>
-                  <button type="button" data-action="increase" data-index="${index}" aria-label="Increase quantity">+</button>
-                </div>
-                <button class="remove-btn" type="button" data-action="remove" data-index="${index}">Remove</button>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      const subtotal = getSubtotal();
-      const total = getGrandTotal();
-
-      $("subtotal").textContent = formatMoney(subtotal);
-      $("deliveryCharge").textContent = DELIVERY_CHARGE === 0 ? "To be confirmed" : formatMoney(DELIVERY_CHARGE);
-      $("grandTotal").textContent = formatMoney(total);
-      $("footerTotal").textContent = formatMoney(total);
-
-      $("discountRow").hidden = couponDiscount <= 0;
-      $("discountAmount").textContent = "−" + formatMoney(couponDiscount);
-
-      if (couponDiscount > 0) {
-        $("savingsNote").style.display = "block";
-        $("savingsNote").textContent = "Coupon " + activeCoupon + " applied. You save " + formatMoney(couponDiscount) + ".";
-      } else {
-        $("savingsNote").style.display = "none";
-      }
-
-      $("checkoutBtn").disabled = empty;
-    }
-
-    function updateQuantity(index, change) {
-      const item = cart[index];
-      if (!item) return;
-
-      item.quantity += change;
-
-      if (item.quantity <= 0) {
-        cart.splice(index, 1);
-      }
-
-      saveCart();
-      renderCart();
-    }
-
-    function removeItem(index) {
-      if (!cart[index]) return;
-      const name = cart[index].name;
-      cart.splice(index, 1);
-      saveCart();
-      renderCart();
-      showToast(name + " removed from cart.");
-    }
-
-    function clearCart() {
-      if (!cart.length) return;
-
-      if (!confirm("Remove all items from your cart?")) return;
-
-      cart = [];
-      couponDiscount = 0;
-      activeCoupon = "";
-      saveCart();
-      renderCart();
-      showToast("Cart cleared.");
+    if (amount < MINIMUM_ORDER) {
+      alert(`Minimum food order is ${money(MINIMUM_ORDER)}. Please add ${money(MINIMUM_ORDER - amount)} more.`);
+      return;
     }
 
     /*
-      Coupon behaviour is intentionally non-financial by default.
-      Add your real coupon validation/rules before enabling discounts.
-      This prevents fake coupon codes from reducing the order amount.
+      Existing checkout form and Firebase order creation
+      currently live in index.html. Return there to continue.
+      The cart remains saved under ff_cart_v2.
     */
-    function applyCoupon() {
-      const code = $("couponInput").value.trim().toUpperCase();
+    window.location.href = "index.html#home";
+    alert("Your cart is saved. Please continue checkout from the FreshFry home page.");
+  });
 
-      couponDiscount = 0;
-      activeCoupon = "";
+  window.addEventListener("pageshow", function () {
+    cart = readCart();
+    render();
+  });
 
-      if (!code) {
-        $("couponMessage").style.color = "#d84315";
-        $("couponMessage").textContent = "Please enter a coupon code.";
-        renderCart();
-        return;
-      }
-
-      $("couponMessage").style.color = "#d84315";
-      $("couponMessage").textContent =
-        "Coupon validation is not configured yet. Please check available offers at checkout.";
-      renderCart();
+  window.addEventListener("storage", function (event) {
+    if (event.key === CART_KEY) {
+      cart = readCart();
+      render();
     }
+  });
 
-    function showToast(message) {
-      const toast = $("toast");
-      toast.textContent = message;
-      toast.classList.add("show");
-
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400);
-    }
-
-    $("cartItems").addEventListener("click", event => {
-      const button = event.target.closest("button[data-action]");
-      if (!button) return;
-
-      const index = Number(button.dataset.index);
-      const action = button.dataset.action;
-
-      if (action === "increase") updateQuantity(index, 1);
-      if (action === "decrease") updateQuantity(index, -1);
-      if (action === "remove") removeItem(index);
-    });
-
-    $("clearCartBtn").addEventListener("click", clearCart);
-    $("applyCouponBtn").addEventListener("click", applyCoupon);
-
-    $("backBtn").addEventListener("click", () => {
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.location.href = "index.html";
-      }
-    });
-
-    $("checkoutBtn").addEventListener("click", () => {
-      if (!cart.length) {
-        showToast("Your cart is empty.");
-        return;
-      }
-
-      /*
-        Store a checkout snapshot for the next page.
-        Your existing checkout page should validate the order and price
-        again before creating any real order or accepting payment.
-      */
-      const checkoutData = {
-        items: cart,
-        subtotal: getSubtotal(),
-        deliveryCharge: DELIVERY_CHARGE,
-        discount: couponDiscount,
-        total: getGrandTotal(),
-        createdAt: new Date().toISOString()
-      };
-
-      try {
-        sessionStorage.setItem("freshfryCheckout", JSON.stringify(checkoutData));
-      } catch (error) {
-        console.error("Could not prepare checkout:", error);
-      }
-
-      window.location.href = CHECKOUT_PAGE;
-    });
-
-    window.addEventListener("storage", event => {
-      if (STORAGE_KEYS.includes(event.key)) {
-        loadCart();
-        renderCart();
-      }
-    });
-
-    loadCart();
-    renderCart();
-  </script>
+  render();
+})();
+</script>
 </body>
 </html>
