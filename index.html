@@ -5,381 +5,303 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ff5e00">
-<meta name="description" content="Order delicious momos, combos and your favourite food online from FreshFry in Baripada, Odisha.">
+<meta name="description" content="Order delicious momos and your favourite food online from FreshFry in Baripada, Odisha.">
 <meta name="robots" content="index, follow">
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="https://freshfrymomo.food/">
 <title>FreshFry Momo Baripada | Order Momos Online</title>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-:root{
- --orange:#ff5e00;--orange-dark:#e94e00;--orange-soft:#fff0e7;
- --black:#111114;--black-2:#202024;--muted:#777780;
- --bg:#f7f7f9;--white:#fff;--line:#ececf0;
- --green:#15803d;--radius:22px;--shadow:0 12px 36px #1414190e
-}
+:root{--orange:#ff5e00;--orange-dark:#e94e00;--black:#101114;--muted:#777b85;--bg:#f7f7f8;--white:#fff;--line:#ececef;--green:#15803d}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{margin:0;background:var(--bg);color:var(--black);font-family:Outfit,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:120px;overflow-x:hidden}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--black);font-family:'Outfit',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:100px}
 button,input,textarea,select{font:inherit}
-button{cursor:pointer;-webkit-tap-highlight-color:transparent}
-button:disabled{opacity:.48;cursor:not-allowed}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
 img{display:block;max-width:100%}
 [hidden]{display:none!important}
-button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ffb38a;outline-offset:3px}
-::selection{background:var(--orange);color:white}
-.topbar{position:sticky;top:0;z-index:50;background:#ffffffed;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid #e6e6ebcc;padding:12px max(5%,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{font-size:29px;font-weight:900;font-style:italic;letter-spacing:-1.7px;white-space:nowrap}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ffb38a;outline-offset:2px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:13px 5%;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:27px;font-weight:900;font-style:italic;letter-spacing:-1.5px}
 .brand span{color:var(--orange)}
-.header-actions{display:flex;gap:9px;align-items:center}
-.icon-btn{width:43px;height:43px;border:1px solid var(--line);background:white;border-radius:15px;display:grid;place-items:center;font-size:16px;color:var(--black);position:relative}
-.icon-btn:hover{border-color:#ffc29f;background:#fff8f4}
-.cart-count{position:absolute;right:-4px;top:-5px;background:var(--orange);color:white;min-width:19px;height:19px;border-radius:99px;font-size:10px;font-weight:900;display:grid;place-items:center;padding:0 4px;border:2px solid white}
-.user-btn{display:flex;align-items:center;gap:8px;padding:12px 15px;border:0;background:var(--black);color:white;border-radius:15px;font-size:12px;font-weight:800}
-.user-btn:hover{background:var(--orange)}
+.header-actions{display:flex;gap:10px;align-items:center}
+.icon-btn{width:43px;height:43px;border:1px solid var(--line);background:white;border-radius:15px;position:relative;display:grid;place-items:center;font-size:17px;color:var(--black)}
+.cart-count{position:absolute;right:-4px;top:-5px;background:var(--orange);color:white;min-width:19px;height:19px;border-radius:99px;font-size:10px;font-weight:900;display:grid;place-items:center;padding:0 4px}
+.user-btn{display:flex;align-items:center;gap:8px;padding:10px 13px;border:0;background:var(--black);color:white;border-radius:14px;font-size:12px;font-weight:800}
 .wrap{max-width:1120px;margin:auto;padding:0 20px}
-
-/* Promotional carousel */
-.offer-carousel{margin-top:22px;position:relative;overflow:hidden;border-radius:28px;background:#111114;color:white;box-shadow:0 18px 45px #11111420;isolation:isolate}
-.offer-track{display:flex;transition:transform .55s cubic-bezier(.2,.7,.2,1);will-change:transform}
-.offer-slide{min-width:100%;min-height:300px;position:relative;overflow:hidden;padding:35px 36px;display:flex;align-items:center;background:linear-gradient(115deg,#111114 0%,#21150f 62%,#42200f 100%)}
-.offer-slide:after{content:"";position:absolute;width:260px;height:260px;right:7%;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffb17d,#ff5e00 60%,#d33d00);box-shadow:0 0 0 24px #ff5e0012,0 0 0 48px #ff5e0008;z-index:-1}
-.offer-slide:nth-child(2){background:linear-gradient(115deg,#101012,#252018 65%,#49300e)}
-.offer-slide:nth-child(3){background:linear-gradient(115deg,#111114,#211212 65%,#491d12)}
-.offer-copy{max-width:610px;position:relative;z-index:2}
-.offer-kicker{display:inline-flex;align-items:center;gap:7px;color:#ffc09d;font-size:10px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase}
-.offer-copy h1,.offer-copy h2{font-size:clamp(37px,6vw,66px);line-height:.96;letter-spacing:-2.5px;margin:17px 0 12px;font-weight:900}
-.offer-copy h1 span,.offer-copy h2 span{color:#ff7930}
-.offer-copy p{max-width:360px;color:#d1d1d6;font-size:13px;line-height:1.8;margin:0 0 18px}
-.offer-cta{display:inline-flex;align-items:center;gap:10px;border:0;background:var(--orange);color:white;padding:13px 17px;border-radius:13px;font-size:11px;font-weight:900;box-shadow:0 7px 20px #ff5e0038}
-.offer-cta:hover{background:#ff7730}
-.offer-controls{position:absolute;left:25px;right:25px;bottom:17px;display:flex;justify-content:space-between;align-items:center;z-index:4;pointer-events:none}
-.offer-dots,.offer-arrows{display:flex;gap:7px;align-items:center;pointer-events:auto}
-.offer-dot{width:8px;height:8px;border:0;border-radius:99px;background:#ffffff70;padding:0;transition:width .2s,background .2s}
-.offer-dot.active{width:25px;background:var(--orange)}
-.offer-arrow{width:32px;height:32px;border:1px solid #ffffff50;background:#1111148c;color:white;border-radius:50%;display:grid;place-items:center}
-.offer-arrow:hover{background:var(--orange)}
-.offer-note{font-size:10px;color:#c5c5ca;margin-top:12px}
-.store-status{margin-top:19px;background:white;border:1px solid var(--line);border-radius:18px;padding:15px 17px;display:flex;gap:13px;align-items:center;box-shadow:var(--shadow)}
-.store-status-icon{width:44px;height:44px;flex-shrink:0;border-radius:15px;display:grid;place-items:center;background:var(--orange-soft);color:var(--orange);font-size:19px}
+.hero{margin-top:25px;border-radius:30px;overflow:hidden;background:var(--black);color:white;position:relative;padding:36px 27px;min-height:230px;display:flex;align-items:center}
+.hero:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:var(--orange);right:-65px;top:20px}
+.hero:before{content:"";position:absolute;width:140px;height:140px;border:25px solid #ff9b5d;border-radius:50%;right:60px;bottom:-95px;z-index:1;opacity:.8}
+.hero-content{position:relative;z-index:2;max-width:530px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:900;letter-spacing:1.5px;color:#ffc09d;text-transform:uppercase}
+.hero h1{font-size:clamp(35px,6vw,58px);line-height:.98;letter-spacing:-2px;margin:14px 0}
+.hero h1 span{color:var(--orange)}
+.hero p{font-size:13px;color:#d0d0d3;line-height:1.7;max-width:330px}
+.hero-tag{display:inline-flex;gap:8px;align-items:center;background:white;color:var(--black);padding:11px 15px;border-radius:12px;font-size:11px;font-weight:900;margin-top:7px;border:0}
+.store-status{margin-top:16px;background:white;border:1px solid var(--line);border-radius:17px;padding:15px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 5px 20px #00000005}
+.store-status-icon{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:grid;place-items:center;background:#fff3e8;color:var(--orange);font-size:20px}
 .store-status-title{font-size:13px;font-weight:900}
-.store-status-message{font-size:11px;color:var(--muted);line-height:1.6;margin:4px 0 0}
+.store-status-message{font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 0}
 .store-status.open{background:#f0fdf4;border-color:#bbf7d0}
 .store-status.open .store-status-icon{background:#dcfce7;color:#15803d}
 .store-status.closed{background:#fef2f2;border-color:#fecaca}
 .store-status.closed .store-status-icon{background:#fee2e2;color:#b91c1c}
 .store-status.error{background:#fff7ed;border-color:#fed7aa}
-.search-wrap{position:relative;margin-top:25px}
-.search-wrap>i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#96969f;font-size:15px;pointer-events:none}
-.search{width:100%;padding:16px 17px 16px 48px;background:white;border:1px solid var(--line);border-radius:16px;outline:none;font-size:13px;box-shadow:0 4px 16px #00000003}
-.search:focus{border-color:#ffab80;box-shadow:0 0 0 4px #ff5e000d}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:34px 0 18px}
-.section-head h2{font-size:27px;margin:5px 0 0;font-weight:900;letter-spacing:-1px}
-.section-head p{font-size:11px;color:var(--muted);margin:7px 0 0}
-.small-label{font-size:10px;color:var(--orange);font-weight:900;text-transform:uppercase;letter-spacing:1.5px}
-.category-row{display:flex;gap:9px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;scroll-snap-type:x proximity}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:32px 0 17px}
+.section-head h2{font-size:23px;margin:0;font-weight:900;letter-spacing:-.7px}
+.section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.small-label{font-size:10px;color:var(--orange);font-weight:900;text-transform:uppercase;letter-spacing:1px}
+.search-wrap{position:relative;margin-top:24px}
+.search-wrap i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#999}
+.search{width:100%;padding:16px 15px 16px 45px;background:white;border:1px solid var(--line);border-radius:16px;outline:none;font-size:13px}
+.search:focus{border-color:var(--orange)}
+.category-row{display:flex;gap:9px;overflow-x:auto;padding:3px 0 8px;scrollbar-width:none}
 .category-row::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;border:1px solid #e9e9ed;background:white;border-radius:999px;padding:10px 16px;font-size:11px;font-weight:800;color:#55555e;scroll-snap-align:start}
+.chip{flex-shrink:0;border:1px solid var(--line);background:white;border-radius:999px;padding:10px 16px;font-size:11px;font-weight:800;color:#555}
 .chip.active{background:var(--black);border-color:var(--black);color:white}
-.menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.food-card{background:white;border:1px solid #eeeef1;border-radius:23px;padding:10px;overflow:hidden;min-width:0;transition:transform .2s,box-shadow .2s,border-color .2s;animation:cardEnter .3s ease both}
-.food-card:hover{transform:translateY(-3px);box-shadow:0 16px 35px #0000000b;border-color:#f5d6c5}
-.food-image{aspect-ratio:1.25/1;position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(135deg,#f8e7db,#f3eee9);contain:layout paint}
-.food-image img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
-.food-card:hover .food-image img{transform:scale(1.035)}
-.no-image{width:100%;height:100%;display:grid;place-items:center;color:#c3a18b;font-size:35px}
-.food-type{position:absolute;left:9px;top:9px;background:#fffffff2;border:1px solid #ffffffaa;border-radius:8px;padding:6px 8px;font-size:9px;font-weight:900;text-transform:uppercase}
-.food-type.veg{color:var(--green)}.food-type.nonveg{color:#c52222}
+.menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px}
+.food-card{background:white;border:1px solid var(--line);border-radius:23px;padding:11px;overflow:hidden;min-width:0;transition:transform .2s,box-shadow .2s}
+.food-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #00000008}
+.food-image{aspect-ratio:1.35/1;position:relative;overflow:hidden;border-radius:16px;background:#f0f0f0;contain:layout paint}
+.food-image img{width:100%;height:100%;object-fit:cover}
+.food-image .no-image{width:100%;height:100%;display:grid;place-items:center;color:#b7b7b7;font-size:36px}
+.food-type{position:absolute;left:9px;top:9px;background:white;border-radius:8px;padding:6px 8px;font-size:9px;font-weight:900;text-transform:uppercase}
+.food-type.veg{color:var(--green)}
+.food-type.nonveg{color:#c52222}
 .food-info{padding:13px 3px 3px}
-.food-name{font-size:15px;font-weight:900;text-transform:capitalize;margin:0;line-height:1.35;overflow-wrap:anywhere}
-.food-description{font-size:11px;color:var(--muted);margin:6px 0 13px;line-height:1.55;min-height:17px}
+.food-name{font-size:15px;font-weight:900;text-transform:capitalize;margin:0;line-height:1.3;overflow-wrap:anywhere}
+.food-description{font-size:10px;color:var(--muted);margin:7px 0 13px;line-height:1.5}
 .price-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.price-btn{padding:11px 4px;border-radius:11px;border:1px solid #ffdfcc;background:#fff5ef;color:var(--orange-dark);font-size:10px;font-weight:900}
+.price-btn{padding:10px 5px;border-radius:11px;border:1px solid #ffe1d1;background:#fff5ef;color:var(--orange-dark);font-size:10px;font-weight:900}
 .price-btn.full{background:var(--black);border-color:var(--black);color:white}
-.price-btn:hover:not(:disabled){background:var(--orange);border-color:var(--orange);color:white}
-.empty-state{grid-column:1/-1;background:white;padding:35px 20px;text-align:center;border-radius:22px;border:1px dashed #dedee4;color:var(--muted)}
-.empty-state i{font-size:30px;color:#d1d1d8;margin-bottom:12px}
-.loading-card{height:240px;border-radius:22px;background:linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
-.notice{margin-top:23px;background:#fff3eb;color:#8a3a10;padding:14px 16px;border-radius:15px;font-size:11px;line-height:1.8;border:1px solid #ffe1d0}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#ffffffef;backdrop-filter:blur(18px);border-top:1px solid #eaeaf0;display:flex;justify-content:center;padding:8px 12px calc(8px + env(safe-area-inset-bottom))}
+.loading-card{height:250px;border-radius:22px;background:linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.empty-state{grid-column:1/-1;background:white;padding:35px 20px;text-align:center;border-radius:20px;border:1px dashed #ddd;color:var(--muted)}
+.empty-state i{font-size:30px;color:#ccc;margin-bottom:12px}
+.notice{margin-top:22px;background:#fff3eb;color:#8a3a10;padding:13px 15px;border-radius:14px;font-size:11px;line-height:1.6}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
 .bottom-inner{width:100%;max-width:600px;display:flex;justify-content:space-around}
-.nav-item{background:none;border:0;color:#92929b;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:10px;font-weight:800;padding:7px 16px;border-radius:13px}
-.nav-item i{font-size:19px}.nav-item.active{color:var(--orange)}
-.overlay{position:fixed;inset:0;background:#0c0c0f85;z-index:100;opacity:0;visibility:hidden;transition:.25s;backdrop-filter:blur(3px)}
+.nav-item{background:none;border:0;color:#888;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:10px;font-weight:800;padding:5px 13px}
+.nav-item i{font-size:18px}
+.nav-item.active{color:var(--orange)}
+.overlay{position:fixed;inset:0;background:#0008;z-index:100;opacity:0;visibility:hidden;transition:.25s}
 .overlay.show{opacity:1;visibility:visible}
-.drawer{position:fixed;z-index:101;right:0;top:0;bottom:0;width:min(460px,100%);background:white;transform:translateX(105%);transition:transform .3s;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);box-shadow:-15px 0 50px #00000012}
+.drawer{position:fixed;z-index:101;right:0;top:0;bottom:0;width:min(460px,100%);background:white;transform:translateX(105%);transition:transform .28s ease;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
 .drawer.show{transform:translateX(0)}
 .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:21px;border-bottom:1px solid var(--line)}
-.drawer-head h2{font-size:22px;font-weight:900;margin:4px 0 0}
-.close-btn{width:39px;height:39px;border:0;border-radius:13px;background:#f2f2f4;display:grid;place-items:center}
-.drawer-content{flex:1;overflow-y:auto;padding:17px}
-.cart-line{display:flex;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}
-.cart-item-icon{width:47px;height:47px;flex-shrink:0;background:#fff1e8;color:var(--orange);border-radius:14px;display:grid;place-items:center}
-.cart-item-info{flex:1;min-width:0}.cart-item-info h4{font-size:12px;margin:0 0 6px;overflow-wrap:anywhere}.cart-item-info p{font-size:11px;color:var(--orange);font-weight:900;margin:0}
-.qty-control{display:flex;align-items:center;gap:10px}.qty-control button{width:30px;height:30px;border:1px solid var(--line);background:white;border-radius:10px;font-weight:900}
-.remove-btn{border:0;background:none;color:#aaa;padding:7px}
-.cart-footer{padding:18px;border-top:1px solid var(--line);background:#fafafd}
-.total-row{display:flex;justify-content:space-between;gap:12px;margin:10px 0;font-size:12px;color:#555}
-.total-row strong{color:var(--black)}
-.total-row.final{font-size:19px;font-weight:900;color:var(--black);margin:16px 0;padding-top:10px;border-top:1px dashed #ddd}
+.drawer-head h2{font-size:20px;font-weight:900;margin:0}
+.close-btn{width:37px;height:37px;border:0;border-radius:12px;background:#f2f2f3;display:grid;place-items:center}
+.drawer-content{flex:1;overflow-y:auto;padding:18px}
+.cart-line{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.cart-item-icon{width:48px;height:48px;flex-shrink:0;background:#fff1e8;color:var(--orange);border-radius:14px;display:grid;place-items:center}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-info h4{font-size:12px;margin:0 0 5px;overflow-wrap:anywhere}
+.cart-item-info p{font-size:11px;color:var(--orange);font-weight:900;margin:0}
+.qty-control{display:flex;align-items:center;gap:10px}
+.qty-control button{width:29px;height:29px;border:1px solid var(--line);background:white;border-radius:9px;font-weight:900}
+.remove-btn{border:0;background:none;color:#aaa;padding:5px}
+.cart-footer{padding:20px;border-top:1px solid var(--line);background:#fafafa}
+.total-row{display:flex;justify-content:space-between;gap:12px;margin:9px 0;font-size:12px;color:#555}
+.total-row.final{font-size:19px;font-weight:900;color:var(--black);margin:16px 0}
 .total-row.final span:last-child{color:var(--orange)}
-.minimum-notice{font-size:11px;line-height:1.7;margin:10px 0;color:#c2410c}
-.primary-btn{border:0;background:var(--orange);color:white;width:100%;border-radius:14px;padding:15px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;transition:.2s;box-shadow:0 6px 18px #ff5e0020}
-.primary-btn:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px)}
-.secondary-btn{border:1px solid var(--line);background:white;color:var(--black);border-radius:12px;padding:11px;font-size:11px;font-weight:900}
+.minimum-notice{font-size:11px;line-height:1.5;margin:10px 0;color:#c2410c}
+.primary-btn{border:0;background:var(--orange);color:white;width:100%;border-radius:14px;padding:16px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.4px}
+.secondary-btn{border:1px solid var(--line);background:white;color:var(--black);border-radius:12px;padding:12px;font-size:11px;font-weight:900}
 .form-group{margin-bottom:15px}
-.form-group label{display:block;font-size:11px;font-weight:900;margin-bottom:8px}
-.form-control{width:100%;border:1px solid #e5e5e9;border-radius:12px;background:white;padding:13px;font-size:12px;outline:none}
-.form-control:focus{border-color:var(--orange);box-shadow:0 0 0 4px #ff5e000c}
-textarea.form-control{resize:vertical;min-height:80px}
-.form-hint{font-size:10px;color:var(--muted);line-height:1.7;margin-top:7px}
-.payment-option{border:1px solid var(--line);border-radius:13px;padding:13px;display:flex!important;align-items:center;gap:10px;margin:9px 0;font-size:12px;cursor:pointer}
-.payment-option input{accent-color:var(--orange)}.payment-option span{flex:1}
+.form-group label{display:block;font-size:11px;font-weight:900;margin-bottom:7px}
+.form-control{width:100%;border:1px solid #e5e5e8;border-radius:12px;background:white;padding:13px;font-size:12px;outline:none}
+.form-control:focus{border-color:var(--orange)}
+textarea.form-control{resize:vertical;min-height:82px}
+.form-hint{font-size:10px;color:var(--muted);line-height:1.5;margin-top:6px}
+.payment-option{border:1px solid var(--line);border-radius:13px;padding:12px;display:flex!important;align-items:center;gap:10px;margin:8px 0;font-size:12px;cursor:pointer}
+.payment-option input{accent-color:var(--orange)}
+.payment-option span{flex:1}
 .payment-option.recommended{border-color:#ffb38a;background:#fff7f1}
-.qr-section{margin:15px 0;padding:16px;background:#fff7f1;border:1px solid #ffd9c4;border-radius:17px;text-align:center}
-.coupon-box{margin:15px 0;padding:15px;background:#fff8f3;border:1px dashed #ffb38a;border-radius:16px}
-.coupon-row{display:flex;gap:8px;margin-top:10px}
-.coupon-row input{flex:1;min-width:0;text-transform:uppercase}
-.coupon-result{font-size:11px;line-height:1.6;margin:8px 0 0}
-.coupon-result.success{color:#15803d}.coupon-result.error{color:#b91c1c}
-.order-card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:14px;box-shadow:0 5px 18px #00000004}
+.qr-section{margin:16px 0;padding:18px;background:#fff7f1;border:1px solid #ffd9c4;border-radius:18px;text-align:center}
+.order-card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:13px}
 .order-card-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
-.order-id{font-size:10px;color:var(--muted);margin-bottom:6px}
-.order-status{display:inline-block;border-radius:9px;padding:7px 9px;background:#fff0e7;color:#bd4600;font-size:9px;font-weight:900;text-transform:uppercase}
-.order-items{font-size:11px;color:#666;line-height:1.9;margin:13px 0}
-.order-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:13px;font-size:12px;font-weight:900}
-.progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:22px 0;gap:4px}
+.order-id{font-size:10px;color:var(--muted);margin-bottom:5px}
+.order-status{display:inline-block;border-radius:8px;padding:6px 9px;background:#fff0e7;color:#bd4600;font-size:9px;font-weight:900;text-transform:uppercase}
+.order-items{font-size:11px;color:#666;line-height:1.8;margin:12px 0}
+.order-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:12px;font-size:12px;font-weight:900}
+.progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:20px 0 24px;gap:4px}
 .progress-step{text-align:center;color:#aaa;font-size:9px;font-weight:800}
-.progress-step .circle{width:30px;height:30px;margin:0 auto 7px;border-radius:50%;background:#eee;display:grid;place-items:center}
-.progress-step.done{color:var(--orange)}.progress-step.done .circle{background:var(--orange);color:white}
-.status-banner{background:#151518;color:white;padding:16px;border-radius:16px;font-size:12px;line-height:1.8}
+.progress-step .circle{width:28px;height:28px;margin:0 auto 7px;border-radius:50%;background:#eee;display:grid;place-items:center}
+.progress-step.done{color:var(--orange)}
+.progress-step.done .circle{background:var(--orange);color:white}
+.status-banner{background:#111;color:white;padding:16px;border-radius:16px;font-size:12px;line-height:1.6}
 .status-banner strong{color:#ff9a63}
-.delivery-pin-card,.confirm-pin-card{margin-top:15px;padding:18px;border:1px solid #b7e4c7;border-radius:16px;background:#effcf4;text-align:center}
+.delivery-pin-card,.confirm-pin-card{margin-top:16px;padding:18px;border:1px solid #b7e4c7;border-radius:16px;background:#effcf4;text-align:center}
 .delivery-pin-heading,.confirm-pin-label{color:#15803d;font-size:12px;font-weight:900}
-.delivery-pin-number,.confirm-pin-number{margin:10px 0;color:#166534;font-size:35px;font-weight:900;letter-spacing:9px}
-.delivery-pin-note{margin:0;color:#166534;font-size:11px;line-height:1.7}
-.toast{position:fixed;z-index:200;left:50%;bottom:105px;transform:translate(-50%,15px);opacity:0;visibility:hidden;background:#171719;color:white;border-radius:14px;padding:13px 17px;font-size:12px;width:max-content;max-width:calc(100% - 30px);transition:.25s;box-shadow:0 12px 35px #0002}
-.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}.toast.error{background:#a32323}
-.modal{position:fixed;inset:0;z-index:120;background:#0009;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(4px)}
-.modal.show{display:flex;animation:fadeIn .2s}
-.modal-box{width:100%;max-width:460px;max-height:91dvh;overflow-y:auto;background:white;border-radius:24px;padding:22px;box-shadow:0 24px 80px #0003;animation:modalIn .25s}
-.modal-title{font-size:24px;font-weight:900;letter-spacing:-.7px;margin:5px 0}
-.muted{color:var(--muted);font-size:11px;line-height:1.7}
-.order-ticker-wrap{position:fixed;bottom:86px;left:15px;right:15px;width:calc(100% - 30px);max-width:500px;margin:auto;z-index:39;display:flex;gap:8px;align-items:stretch}
-.order-ticker-track{flex:1;min-width:0;border:0;border-radius:14px;background:var(--orange);color:white;padding:13px 9px;font-size:clamp(10px,2.8vw,13px);font-weight:900;box-shadow:0 8px 25px #0002}
-.order-ticker-pin{min-width:100px;border:1px solid #b7e4c7;border-radius:14px;background:#effcf4;color:#166534;padding:8px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
-.order-ticker-pin-label{font-size:9px;font-weight:900}.order-ticker-pin-number{font-size:22px;font-weight:900;letter-spacing:3px}
+.delivery-pin-number,.confirm-pin-number{margin:10px 0;color:#166534;font-size:36px;font-weight:900;letter-spacing:10px}
+.delivery-pin-note{margin:0;color:#166534;font-size:11px;line-height:1.6}
+.toast{position:fixed;z-index:200;left:50%;bottom:95px;transform:translate(-50%,20px);opacity:0;visibility:hidden;background:#161616;color:white;border-radius:13px;padding:13px 17px;font-size:12px;width:max-content;max-width:calc(100% - 35px);transition:.25s;box-shadow:0 10px 30px #0002}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.toast.error{background:#a32323}
+.modal{position:fixed;inset:0;z-index:120;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal-box{width:100%;max-width:440px;max-height:90dvh;overflow-y:auto;background:white;border-radius:24px;padding:23px}
+.modal-title{font-size:22px;font-weight:900;margin:0 0 6px}
+.muted{color:var(--muted);font-size:11px;line-height:1.6}
+.order-ticker-wrap{position:fixed;bottom:83px;left:15px;right:15px;width:calc(100% - 30px);max-width:500px;margin:auto;z-index:39;display:flex;gap:8px;align-items:stretch}
+.order-ticker-track{flex:1;min-width:0;border:0;border-radius:15px;background:var(--orange);color:white;padding:15px 8px;font-size:clamp(10px,2.8vw,13px);font-weight:900;box-shadow:0 8px 25px #0002}
+.order-ticker-pin{min-width:100px;border:1px solid #b7e4c7;border-radius:15px;background:#effcf4;color:#166534;padding:9px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.order-ticker-pin-label{font-size:9px;font-weight:900;letter-spacing:.4px}
+.order-ticker-pin-number{font-size:23px;line-height:1.3;font-weight:900;letter-spacing:3px}
 .location-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
 .location-actions .secondary-btn{flex:1}
-.map-link{display:block;margin-top:10px;padding:12px;background:#effcf4;border:1px solid #b7e4c7;border-radius:13px;color:#166534;text-decoration:none;font-size:11px;font-weight:900;text-align:center}
-.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:9px;background:#168b45;color:white;border:0;border-radius:14px;padding:14px;width:100%;font-size:12px;font-weight:900;text-decoration:none}
-.payment-pending-note{padding:13px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:13px;font-size:11px;line-height:1.8;text-align:left}
-@keyframes shimmer{to{background-position:-200% 0}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes modalIn{from{transform:translateY(10px) scale(.99);opacity:.6}to{transform:translateY(0) scale(1);opacity:1}}
-@keyframes cardEnter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-@media(min-width:761px){.offer-copy{max-width:58%}}
+.map-link{display:block;margin-top:10px;padding:12px;background:#effcf4;border:1px solid #b7e4c7;border-radius:12px;color:#166534;text-decoration:none;font-size:11px;font-weight:900;text-align:center}
+.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:9px;background:#168b45;color:white;border:0;border-radius:13px;padding:14px;width:100%;font-size:12px;font-weight:900;text-decoration:none}
+.payment-pending-note{padding:12px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:12px;font-size:11px;line-height:1.6;text-align:left}
 @media(max-width:760px){
- .wrap{padding:0 14px}.topbar{padding:10px 14px}
- .offer-carousel{margin-top:16px;border-radius:23px}
- .offer-slide{min-height:260px;padding:27px 20px 52px}
- .offer-slide:after{width:145px;height:145px;right:-50px;top:68%}
- .offer-copy h1,.offer-copy h2{font-size:43px;letter-spacing:-1.8px}
- .offer-copy p{font-size:12px;max-width:275px}
- .offer-kicker{font-size:9px;letter-spacing:1px}
- .offer-controls{left:19px;right:19px;bottom:12px}
- .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
- .section-head{margin:28px 0 15px}.section-head h2{font-size:23px}
- .food-card{padding:8px;border-radius:18px}.food-image{border-radius:13px;aspect-ratio:1.08/1}
- .food-info{padding:11px 2px 2px}.food-name{font-size:13px}
- .food-description{font-size:10px;margin:6px 0 11px}
- .price-btn{font-size:9px;padding:10px 2px}.price-row{gap:5px}
- .nav-item{padding:7px 12px;font-size:9px}.nav-item i{font-size:18px}
- .modal-box{padding:19px;border-radius:22px}
+.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.wrap{padding:0 14px}
+.topbar{padding:12px 15px}
+.hero{margin-top:17px;padding:27px 20px;min-height:220px}
+.hero:after{width:155px;height:155px;right:-65px;top:55px}
+.hero:before{right:4px}
+.hero h1{font-size:40px}
+.food-card{padding:8px;border-radius:19px}
+.food-image{border-radius:13px;aspect-ratio:1.15/1}
+.food-info{padding:11px 2px 2px}
+.food-name{font-size:13px}
+.food-description{font-size:10px;margin:6px 0 11px}
+.price-btn{font-size:9px;padding:10px 2px}
+.section-head h2{font-size:21px}
 }
-@media(max-width:390px){
- .brand{font-size:25px}.header-actions{gap:6px}
- .icon-btn{width:38px;height:38px}.user-btn{padding:10px}.user-btn span{display:none}
- .offer-copy h1,.offer-copy h2{font-size:37px}
- .menu-grid{gap:8px}.food-card{padding:7px}
- .food-name{font-size:12px}.price-btn{font-size:8.5px}
- .progress-step{font-size:8px}.progress-step .circle{width:25px;height:25px}
- .confirm-pin-number,.delivery-pin-number{font-size:30px;letter-spacing:7px}
- .order-ticker-wrap{left:8px;right:8px;width:calc(100% - 16px);gap:5px}
- .order-ticker-pin{min-width:82px}.order-ticker-pin-number{font-size:19px}
+@media(max-width:360px){
+.brand{font-size:23px}
+.user-btn{padding:10px}
+.user-btn span{display:none}
+.hero h1{font-size:35px}
+.menu-grid{gap:9px}
+.progress-step{font-size:8px}
+.progress-step .circle{width:24px;height:24px}
+.confirm-pin-number,.delivery-pin-number{font-size:31px;letter-spacing:7px}
+.order-ticker-wrap{left:8px;right:8px;width:calc(100% - 16px);gap:5px}
+.order-ticker-pin{min-width:82px;padding:7px 6px}
+.order-ticker-pin-number{font-size:19px;letter-spacing:2px}
+.order-ticker-track{padding:12px 5px}
 }
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-reduced-motion:reduce){
+*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
-
 <header class="topbar">
- <div class="brand">Fresh<span>fry.</span></div>
- <div class="header-actions">
-  <button class="icon-btn" id="header-orders" aria-label="My orders"><i class="fa-solid fa-receipt"></i></button>
-  <button class="icon-btn" id="header-cart" aria-label="Shopping cart"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cart-count" hidden>0</span></button>
-  <button class="user-btn" id="login-open"><i class="fa-regular fa-user"></i><span id="user-label">Login</span></button>
- </div>
+  <div class="brand">Fresh<span>fry.</span></div>
+  <div class="header-actions">
+    <button class="icon-btn" id="header-orders" aria-label="My orders"><i class="fa-solid fa-receipt"></i></button>
+    <button class="icon-btn" id="header-cart" aria-label="Shopping cart"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cart-count" hidden>0</span></button>
+    <button class="user-btn" id="login-open"><i class="fa-regular fa-user"></i><span id="user-label">Login</span></button>
+  </div>
 </header>
 
 <main class="wrap" id="home">
-
- <section class="offer-carousel" id="offer-carousel" aria-label="FreshFry combo offers">
-  <div class="offer-track" id="offer-track">
-   <article class="offer-slide">
-    <div class="offer-copy">
-     <span class="offer-kicker"><i class="fa-solid fa-fire"></i> Freshly made. Fastly served.</span>
-     <h1>FAST<br><span>FLAVOR.</span></h1>
-     <p>Your cravings, our kitchen. Discover delicious momos and freshly prepared food in Baripada.</p>
-     <button class="offer-cta" data-explore>EXPLORE MENU <i class="fa-solid fa-arrow-right"></i></button>
+  <section class="hero">
+    <div class="hero-content">
+      <span class="eyebrow"><i class="fa-solid fa-bolt"></i> Freshly made. Fastly served.</span>
+      <h1>FAST<br><span>FLAVOR.</span></h1>
+      <p>Your cravings, our kitchen. Discover delicious food and order your favourites in Baripada.</p>
+      <button class="hero-tag" id="explore-menu">EXPLORE MENU <i class="fa-solid fa-arrow-right"></i></button>
     </div>
-   </article>
-   <article class="offer-slide">
-    <div class="offer-copy">
-     <span class="offer-kicker"><i class="fa-solid fa-box-open"></i> Combo time</span>
-     <h2>MORE TASTE.<br><span>ONE BOX.</span></h2>
-     <p>Build your own food combo. Add your favourite Half and Full portions to your box and order together.</p>
-     <button class="offer-cta" data-explore>BUILD YOUR COMBO <i class="fa-solid fa-arrow-right"></i></button>
-     <div class="offer-note">Final price depends on the items you select.</div>
-    </div>
-   </article>
-   <article class="offer-slide">
-    <div class="offer-copy">
-     <span class="offer-kicker"><i class="fa-solid fa-ticket"></i> A little extra joy</span>
-     <h2>YOUR FOOD.<br><span>YOUR DEAL.</span></h2>
-     <p>Check eligible coupons at checkout and see your discount before placing an order.</p>
-     <button class="offer-cta" id="carousel-coupon">SEE COUPONS <i class="fa-solid fa-arrow-right"></i></button>
-     <div class="offer-note">Coupon eligibility and minimum subtotal apply.</div>
-    </div>
-   </article>
-  </div>
-  <div class="offer-controls">
-   <div class="offer-dots" id="offer-dots">
-    <button class="offer-dot active" data-slide="0" aria-label="Offer 1"></button>
-    <button class="offer-dot" data-slide="1" aria-label="Offer 2"></button>
-    <button class="offer-dot" data-slide="2" aria-label="Offer 3"></button>
-   </div>
-   <div class="offer-arrows">
-    <button class="offer-arrow" id="offer-prev" aria-label="Previous offer"><i class="fa-solid fa-chevron-left"></i></button>
-    <button class="offer-arrow" id="offer-next" aria-label="Next offer"><i class="fa-solid fa-chevron-right"></i></button>
-   </div>
-  </div>
- </section>
+  </section>
 
- <section id="store-status-banner" class="store-status error" aria-live="polite">
-  <div class="store-status-icon"><i id="store-status-icon" class="fa-solid fa-circle-notch fa-spin"></i></div>
-  <div><div id="store-status-title" class="store-status-title">Checking store status...</div><p id="store-status-message" class="store-status-message">Please wait while we connect to FreshFry.</p></div>
- </section>
+  <section id="store-status-banner" class="store-status error" aria-live="polite">
+    <div class="store-status-icon"><i id="store-status-icon" class="fa-solid fa-circle-notch fa-spin"></i></div>
+    <div><div id="store-status-title" class="store-status-title">Checking store status...</div><p id="store-status-message" class="store-status-message">Please wait while we connect to FreshFry.</p></div>
+  </section>
 
- <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="search-input" class="search" type="search" placeholder="Search momos, combos and more..." autocomplete="off"></div>
+  <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="search-input" class="search" type="search" placeholder="Search your favourite food..." autocomplete="off"></div>
 
- <section id="menu-section">
-  <div class="section-head"><div><span class="small-label">Made for your cravings</span><h2>Explore Menu</h2><p>Choose your favourite. Pick your portion.</p></div><span class="small-label" id="menu-count">Loading...</span></div>
-  <div class="category-row" id="category-row"><button class="chip active" data-category="all">All Types</button></div>
-  <div class="menu-grid" id="menu-grid"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div>
-  <div class="notice"><i class="fa-solid fa-circle-info"></i> Minimum food order ₹100. Delivery fee ₹20 is additional. For food subtotal above ₹150, only online UPI QR-request payment is available.</div>
- </section>
-
- <section id="orders-section" hidden>
-  <div class="section-head"><div><span class="small-label">Your food journey</span><h2>My Orders</h2><p>View order details and the latest available status.</p></div></div>
-  <div id="orders-list"></div>
- </section>
+  <section id="menu-section">
+    <div class="section-head"><div><span class="small-label">Made for your cravings</span><h2>Explore Menu</h2><p>Choose your favourite. Pick your portion.</p></div><span class="small-label" id="menu-count">Loading...</span></div>
+    <div class="category-row" id="category-row"><button class="chip active" data-category="all">All Types</button></div>
+    <div class="menu-grid" id="menu-grid"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div>
+    <div class="notice"><i class="fa-solid fa-circle-info"></i> Minimum food order ₹100. Delivery fee ₹20 is additional. For food subtotal above ₹150, only online UPI QR-request payment is available.</div>
+  </section>
+  <section id="orders-section" hidden><div class="section-head"><div><span class="small-label">Your food journey</span><h2>My Orders</h2><p>View order details and the latest available status.</p></div></div><div id="orders-list"></div></section>
 </main>
 
 <div class="bottom-nav"><div class="bottom-inner">
- <button class="nav-item active" data-page="home"><i class="fa-solid fa-house"></i>Home</button>
- <button class="nav-item" data-page="menu-section"><i class="fa-solid fa-utensils"></i>Menu</button>
- <button class="nav-item" data-page="orders-section"><i class="fa-solid fa-receipt"></i>Orders</button>
- <button class="nav-item" id="bottom-cart"><i class="fa-solid fa-bag-shopping"></i>My Box</button>
+  <button class="nav-item active" data-page="home"><i class="fa-solid fa-house"></i>Home</button>
+  <button class="nav-item" data-page="menu-section"><i class="fa-solid fa-utensils"></i>Menu</button>
+  <button class="nav-item" data-page="orders-section"><i class="fa-solid fa-receipt"></i>Orders</button>
+  <button class="nav-item" id="bottom-cart"><i class="fa-solid fa-bag-shopping"></i>My Box</button>
 </div></div>
 
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="cart-drawer" aria-label="Shopping cart">
- <div class="drawer-head"><div><span class="small-label">Almost there</span><h2>Your Box <span id="cart-title-count">(0)</span></h2></div><button class="close-btn" data-close aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button></div>
- <div class="drawer-content" id="cart-content"></div>
- <div class="cart-footer">
-  <div class="total-row"><span>Food subtotal</span><strong id="subtotal">₹0</strong></div>
-  <div class="total-row"><span>Coupon discount</span><strong id="cart-discount">−₹0</strong></div>
-  <div class="total-row"><span>Delivery fee</span><strong id="delivery-fee">₹0</strong></div>
-  <div class="total-row final"><span>Total</span><span id="grand-total">₹0</span></div>
-  <p id="min-order-notice" class="minimum-notice" aria-live="polite"></p>
-  <button class="primary-btn" id="checkout-open">Proceed to Checkout <i class="fa-solid fa-arrow-right"></i></button>
- </div>
+  <div class="drawer-head"><div><span class="small-label">Almost there</span><h2>Your Box <span id="cart-title-count">(0)</span></h2></div><button class="close-btn" data-close aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="drawer-content" id="cart-content"></div>
+  <div class="cart-footer">
+    <div class="total-row"><span>Food subtotal</span><strong id="subtotal">₹0</strong></div>
+    <div class="total-row"><span>Delivery fee</span><strong id="delivery-fee">₹0</strong></div>
+    <div class="total-row final"><span>Total</span><span id="grand-total">₹0</span></div>
+    <p id="min-order-notice" class="minimum-notice" aria-live="polite"></p>
+    <button class="primary-btn" id="checkout-open">Proceed to Checkout <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
 </aside>
 
 <div class="modal" id="checkout-modal"><div class="modal-box">
- <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:20px"><div><span class="small-label">Almost ready</span><h2 class="modal-title">Checkout</h2><p class="muted">Confirm your contact and delivery details.</p></div><button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
- <form id="checkout-form">
-  <div class="form-group"><label for="customer-name">Full name *</label><input class="form-control" id="customer-name" maxlength="80" required autocomplete="name" placeholder="Enter your name"></div>
-  <div class="form-group"><label for="customer-phone">Mobile number *</label><input class="form-control" id="customer-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number"></div>
-  <div class="form-group">
-   <label for="customer-address">Delivery address *</label>
-   <textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea>
-   <div class="location-actions"><button type="button" id="use-current-location" class="secondary-btn"><i class="fa-solid fa-location-crosshairs"></i> Use My Current Location</button></div>
-   <p class="form-hint" id="location-status" aria-live="polite">Allow location access to attach your GPS coordinates to this order.</p>
-   <a id="open-location-map" class="map-link" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="fa-solid fa-map-location-dot"></i> View selected location on Google Maps</a>
-   <label style="margin-top:14px">Choose your area</label>
-   <div class="location-actions">
-    <button type="button" class="secondary-btn area-suggestion" data-area="Bhanjpur, Baripada">Bhanjpur</button>
-    <button type="button" class="secondary-btn area-suggestion" data-area="Bada Bazar, Baripada">Bada Bazar</button>
-    <button type="button" class="secondary-btn area-suggestion" data-area="Station Bazar, Baripada">Station Bazar</button>
-    <button type="button" class="secondary-btn area-suggestion" data-area="Baghra Road, Baripada">Baghra Road</button>
-   </div>
-   <p class="form-hint">Area suggestions can be edited. Add your house number or a nearby landmark too.</p>
-  </div>
-  <div class="form-group"><label for="customer-note">Order note (optional)</label><textarea class="form-control" id="customer-note" maxlength="250" placeholder="Any special instructions?"></textarea></div>
-
-  <section class="coupon-box" aria-label="Coupon code">
-   <strong style="font-size:13px"><i class="fa-solid fa-ticket" style="color:var(--orange)"></i> Have a coupon?</strong>
-   <p class="form-hint">Enter an eligible code to see your discount. One coupon per order.</p>
-   <div class="coupon-row">
-    <input class="form-control" id="coupon-code" maxlength="30" placeholder="ENTER CODE" autocomplete="off" aria-label="Coupon code">
-    <button type="button" class="primary-btn" id="apply-coupon" style="width:auto;padding:12px 16px">Apply</button>
-   </div>
-   <p class="coupon-result" id="coupon-result" aria-live="polite">Try COMBO10 or MOMO20.</p>
-   <button type="button" id="remove-coupon" class="secondary-btn" style="margin-top:8px" hidden>Remove coupon</button>
-  </section>
-
-  <div class="form-group">
-   <label>Payment preference</label>
-   <label class="payment-option" id="cod-payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
-   <label class="payment-option" id="upi-payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i><span>UPI QR code via WhatsApp</span></label>
-   <p class="form-hint" id="payment-rule-hint">For food subtotal above ₹150, only online UPI QR-request payment is available.</p>
-  </div>
-  <div id="upi-qr-section" class="qr-section" hidden><h3 style="margin:0 0 8px;font-size:17px"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i> Request UPI QR Code</h3><p style="font-size:12px;color:#666;margin:0 0 12px">Place the order, then request a QR code through WhatsApp. Payment is not automatically verified by this page.</p><div class="payment-pending-note"><strong>Payment process</strong><br>1. Place the order.<br>2. Request the QR code on WhatsApp.<br>3. Pay after receiving it.<br>4. Wait for payment confirmation.</div></div>
-  <div class="total-row"><span>Food subtotal</span><strong id="checkout-subtotal">₹0</strong></div>
-  <div class="total-row"><span>Coupon discount</span><strong id="checkout-discount">−₹0</strong></div>
-  <div class="total-row"><span>Delivery fee</span><strong id="checkout-delivery">₹0</strong></div>
-  <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
-  <p id="checkout-minimum-notice" class="minimum-notice" aria-live="polite"></p>
-  <button class="primary-btn" id="place-order-btn" type="submit">Place Order</button>
-  <p class="form-hint">Minimum food subtotal is ₹100, excluding delivery fee. Coupon discounts do not reduce the minimum food subtotal requirement.</p>
- </form>
+  <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:20px"><div><span class="small-label">Almost ready</span><h2 class="modal-title">Checkout</h2><p class="muted">Confirm your contact and delivery details.</p></div><button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <form id="checkout-form">
+    <div class="form-group"><label for="customer-name">Full name *</label><input class="form-control" id="customer-name" maxlength="80" required autocomplete="name" placeholder="Enter your name"></div>
+    <div class="form-group"><label for="customer-phone">Mobile number *</label><input class="form-control" id="customer-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel" placeholder="10-digit mobile number"></div>
+    <div class="form-group">
+      <label for="customer-address">Delivery address *</label>
+      <textarea class="form-control" id="customer-address" maxlength="500" required autocomplete="street-address" placeholder="House, street, area, landmark"></textarea>
+      <div class="location-actions"><button type="button" id="use-current-location" class="secondary-btn"><i class="fa-solid fa-location-crosshairs"></i> Use My Current Location</button></div>
+      <p class="form-hint" id="location-status" aria-live="polite">Allow location access to attach your GPS coordinates to this order.</p>
+      <a id="open-location-map" class="map-link" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="fa-solid fa-map-location-dot"></i> View selected location on Google Maps</a>
+      <label style="margin-top:14px">Choose your area</label>
+      <div class="location-actions">
+        <button type="button" class="secondary-btn area-suggestion" data-area="Bhanjpur, Baripada">Bhanjpur</button>
+        <button type="button" class="secondary-btn area-suggestion" data-area="Bada Bazar, Baripada">Bada Bazar</button>
+        <button type="button" class="secondary-btn area-suggestion" data-area="Station Bazar, Baripada">Station Bazar</button>
+        <button type="button" class="secondary-btn area-suggestion" data-area="Baghra Road, Baripada">Baghra Road</button>
+      </div>
+      <p class="form-hint">Area suggestions can be edited. Add your house number or a nearby landmark too.</p>
+    </div>
+    <div class="form-group"><label for="customer-note">Order note (optional)</label><textarea class="form-control" id="customer-note" maxlength="250" placeholder="Any special instructions?"></textarea></div>
+    <div class="form-group">
+      <label>Payment preference</label>
+      <label class="payment-option" id="cod-payment-option"><input type="radio" name="payment-method" value="COD" checked><i class="fa-solid fa-money-bill-wave"></i><span>Cash on delivery</span></label>
+      <label class="payment-option" id="upi-payment-option"><input type="radio" name="payment-method" value="UPI"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i><span>UPI QR code via WhatsApp</span></label>
+      <p class="form-hint" id="payment-rule-hint">For food subtotal above ₹150, only online UPI QR-request payment is available.</p>
+    </div>
+    <div id="upi-qr-section" class="qr-section" hidden><h3 style="margin:0 0 8px;font-size:17px"><i class="fa-brands fa-whatsapp" style="color:#168b45"></i> Request UPI QR Code</h3><p style="font-size:12px;color:#666;margin:0 0 12px">Place the order, then request a QR code through WhatsApp. Payment is not automatically verified by this page.</p><div class="payment-pending-note"><strong>Payment process</strong><br>1. Place the order.<br>2. Request the QR code on WhatsApp.<br>3. Pay after receiving it.<br>4. Wait for payment confirmation.</div></div>
+    <div class="total-row final"><span>Payable total</span><span id="checkout-total">₹0</span></div>
+    <p id="checkout-minimum-notice" class="minimum-notice" aria-live="polite"></p>
+    <button class="primary-btn" id="place-order-btn" type="submit">Place Order</button>
+    <p class="form-hint">Minimum food subtotal is ₹100, excluding delivery fee.</p>
+  </form>
 </div></div>
 
 <div class="modal" id="login-modal"><div class="modal-box">
- <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px"><div><span class="small-label">Welcome to Freshfry</span><h2 class="modal-title">Your account</h2><p class="muted">Enter your phone number to continue.</p></div><button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
- <form id="login-form"><div class="form-group"><label for="login-phone">Mobile number</label><input class="form-control" id="login-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit mobile number"><p class="form-hint">This basic form saves the phone number on this device only. It does not verify identity by OTP.</p></div><button class="primary-btn" type="submit">Continue</button></form>
- <button class="secondary-btn" id="logout-btn" style="width:100%;margin-top:12px;display:none">Log out on this device</button>
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px"><div><span class="small-label">Welcome to Freshfry</span><h2 class="modal-title">Your account</h2><p class="muted">Enter your phone number to continue.</p></div><button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <form id="login-form"><div class="form-group"><label for="login-phone">Mobile number</label><input class="form-control" id="login-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit mobile number"><p class="form-hint">This basic form saves the phone number on this device only. It does not verify identity by OTP.</p></div><button class="primary-btn" type="submit">Continue</button></form>
+  <button class="secondary-btn" id="logout-btn" style="width:100%;margin-top:12px;display:none">Log out on this device</button>
 </div></div>
 
 <div class="modal" id="order-modal"><div class="modal-box">
- <div style="display:flex;justify-content:space-between;align-items:start;gap:10px"><div><span class="small-label">Live updates</span><h2 class="modal-title">Track Order</h2><p class="muted" id="tracking-id"></p></div><button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
- <div id="tracking-content"></div><button class="secondary-btn" id="tracking-refresh" style="width:100%;margin-top:15px">Refresh details</button>
+  <div style="display:flex;justify-content:space-between;align-items:start;gap:10px"><div><span class="small-label">Live updates</span><h2 class="modal-title">Track Order</h2><p class="muted" id="tracking-id"></p></div><button class="close-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <div id="tracking-content"></div><button class="secondary-btn" id="tracking-refresh" style="width:100%;margin-top:15px">Refresh details</button>
 </div></div>
 
 <div class="modal" id="confirmation-modal"><div class="modal-box" style="text-align:center">
- <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px"><i class="fa-solid fa-check"></i></div>
- <span class="small-label">Freshfry order received</span><h2 class="modal-title" style="margin-top:8px">Order received!</h2><p class="muted" id="confirmation-order-id"></p>
- <div id="confirmation-payment-note" class="payment-pending-note" hidden style="margin-top:14px">Your UPI payment is pending verification. Request the QR code through WhatsApp and wait for payment confirmation.</div>
- <div class="confirm-pin-card"><div class="confirm-pin-label"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="confirm-pin-number" id="confirmation-pin">----</div><p class="delivery-pin-note">Keep this PIN private. Share it with the rider only when your order arrives.</p></div>
- <button class="whatsapp-btn" id="request-qr-whatsapp" hidden><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>
- <button class="primary-btn" id="confirmation-track" style="margin-top:14px">Track my order</button><button class="secondary-btn" id="confirmation-close" style="width:100%;margin-top:10px">Continue browsing</button>
+  <div style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e9f9ef;color:#15803d;font-size:28px"><i class="fa-solid fa-check"></i></div>
+  <span class="small-label">Freshfry order received</span><h2 class="modal-title" style="margin-top:8px">Order received!</h2><p class="muted" id="confirmation-order-id"></p>
+  <div id="confirmation-payment-note" class="payment-pending-note" hidden style="margin-top:14px">Your UPI payment is pending verification. Request the QR code through WhatsApp and wait for payment confirmation.</div>
+  <div class="confirm-pin-card"><div class="confirm-pin-label"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="confirm-pin-number" id="confirmation-pin">----</div><p class="delivery-pin-note">Keep this PIN private. Share it with the rider only when your order arrives.</p></div>
+  <button class="whatsapp-btn" id="request-qr-whatsapp" hidden><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>
+  <button class="primary-btn" id="confirmation-track" style="margin-top:14px">Track my order</button><button class="secondary-btn" id="confirmation-close" style="width:100%;margin-top:10px">Continue browsing</button>
 </div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -388,12 +310,12 @@ import {initializeApp,getApp,getApps} from "https://www.gstatic.com/firebasejs/1
 import {getFirestore,collection,onSnapshot,query,where,addDoc,serverTimestamp,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={
- apiKey:"AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
- authDomain:"freshfry-39a10.firebaseapp.com",
- projectId:"freshfry-39a10",
- storageBucket:"freshfry-39a10.firebasestorage.app",
- messagingSenderId:"928483976893",
- appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+  apiKey:"AIzaSyDCb8Z8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain:"freshfry-39a10.firebaseapp.com",
+  projectId:"freshfry-39a10",
+  storageBucket:"freshfry-39a10.firebasestorage.app",
+  messagingSenderId:"928483976893",
+  appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
 };
 const app=getApps().length?getApp():initializeApp(firebaseConfig);
 const db=getFirestore(app);
@@ -404,33 +326,24 @@ const WHATSAPP_NUMBER="918984225311",CART_KEY="ff_cart_v2";
 const STORE_STATUS_REF=doc(db,"settings","storeStatus");
 const ACTIVE_STATUSES=["payment_pending","pending","accepted","preparing","out_for_delivery"];
 const STATUS_STEPS=[
- {key:"pending",label:"Placed"},{key:"accepted",label:"Accepted"},
- {key:"preparing",label:"Preparing"},{key:"out_for_delivery",label:"On the way"},
- {key:"delivered",label:"Delivered"}
+  {key:"pending",label:"Placed"},
+  {key:"accepted",label:"Accepted"},
+  {key:"preparing",label:"Preparing"},
+  {key:"out_for_delivery",label:"On the way"},
+  {key:"delivered",label:"Delivered"}
 ];
-
-/*
- * Demo coupon rules. These are client-side only and are not secure against
- * modification. Configure trusted server-side validation before relying on
- * discounts for production payments.
- */
-const COUPONS={
- COMBO10:{type:"percent",value:10,maxDiscount:30,minSubtotal:150,description:"10% off food subtotal, up to ₹30"},
- MOMO20:{type:"flat",value:20,maxDiscount:20,minSubtotal:200,description:"₹20 off food subtotal of ₹200 or more"}
-};
 
 let menuItems=[],cart=readCart(),selectedCategory="all",searchTerm="",orders=[];
 let selectedOrderId=null,menuUnsubscribe=null,ordersUnsubscribe=null,storeStatusUnsubscribe=null;
 let toastTimer=null,submitting=false,selectedDeliveryLocation=null,lastWhatsAppURL="";
 let storeStatusLoaded=false,storeIsOpen=false,storeStatusError=false;
-let activeCoupon=null,couponDiscount=0,offerIndex=0,offerTimer=null,touchStartX=0;
 
 function readCart(){
- try{
-  const data=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
-  if(!Array.isArray(data))return [];
-  return data.filter(x=>x&&typeof x.id==="string"&&typeof x.name==="string"&&Number.isFinite(x.price)&&x.price>=0&&Number.isInteger(x.qty)&&x.qty>0).slice(0,100);
- }catch{return []}
+  try{
+    const data=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+    if(!Array.isArray(data))return [];
+    return data.filter(x=>x&&typeof x.id==="string"&&typeof x.name==="string"&&Number.isFinite(x.price)&&x.price>=0&&Number.isInteger(x.qty)&&x.qty>0).slice(0,100);
+  }catch{return []}
 }
 function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart))}catch{showToast("Could not save cart on this device.",true)}}
 function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
@@ -438,12 +351,10 @@ function money(value){return "₹"+Number(value||0).toLocaleString("en-IN",{maxi
 function getPhone(){return (localStorage.getItem("ff_phone")||"").replace(/\D/g,"").slice(-10)}
 function validPhone(phone){return /^[6-9]\d{9}$/.test(phone)}
 function subtotal(){return cart.reduce((sum,item)=>sum+item.price*item.qty,0)}
-function deliveryFee(){return cart.length?DELIVERY_FEE:0}
-function payableTotal(){return Math.max(0,subtotal()-couponDiscount)+deliveryFee()}
 function storeCanAcceptOrders(){return storeStatusLoaded&&!storeStatusError&&storeIsOpen}
 function showToast(message,error=false){
- const toast=$("toast");toast.textContent=message;toast.classList.toggle("error",error);toast.classList.add("show");
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),3500);
+  const toast=$("toast");toast.textContent=message;toast.classList.toggle("error",error);toast.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),3500);
 }
 function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
@@ -451,488 +362,418 @@ function openDrawer(id){$("overlay").classList.add("show");$(id).classList.add("
 function closeDrawers(){$("overlay").classList.remove("show");document.querySelectorAll(".drawer").forEach(el=>el.classList.remove("show"));document.body.style.overflow=""}
 function closeAllModals(){document.querySelectorAll(".modal").forEach(el=>el.classList.remove("show"))}
 function updateUserUI(){
- const phone=getPhone();$("user-label").textContent=phone?phone.slice(0,2)+"••••"+phone.slice(-2):"Login";
- $("login-phone").value=phone;$("logout-btn").style.display=phone?"block":"none";
+  const phone=getPhone();$("user-label").textContent=phone?phone.slice(0,2)+"••••"+phone.slice(-2):"Login";
+  $("login-phone").value=phone;$("logout-btn").style.display=phone?"block":"none";
 }
 
-/* Offer carousel */
-function setOffer(index){
- const slides=$("offer-track").children.length;
- offerIndex=(index+slides)%slides;
- $("offer-track").style.transform=`translateX(-${offerIndex*100}%)`;
- document.querySelectorAll(".offer-dot").forEach((dot,i)=>{
-  dot.classList.toggle("active",i===offerIndex);
-  dot.setAttribute("aria-current",i===offerIndex?"true":"false");
- });
-}
-function startOfferTimer(){clearInterval(offerTimer);offerTimer=setInterval(()=>setOffer(offerIndex+1),5000)}
-$("offer-prev").addEventListener("click",()=>{setOffer(offerIndex-1);startOfferTimer()});
-$("offer-next").addEventListener("click",()=>{setOffer(offerIndex+1);startOfferTimer()});
-$("offer-dots").addEventListener("click",e=>{
- const button=e.target.closest("[data-slide]");if(!button)return;
- setOffer(Number(button.dataset.slide));startOfferTimer();
-});
-$("offer-carousel").addEventListener("mouseenter",()=>clearInterval(offerTimer));
-$("offer-carousel").addEventListener("mouseleave",startOfferTimer);
-$("offer-carousel").addEventListener("touchstart",e=>{touchStartX=e.changedTouches[0].screenX},{passive:true});
-$("offer-carousel").addEventListener("touchend",e=>{
- const delta=e.changedTouches[0].screenX-touchStartX;
- if(Math.abs(delta)>45){setOffer(offerIndex+(delta<0?1:-1));startOfferTimer()}
-},{passive:true});
-document.addEventListener("visibilitychange",()=>{
- if(document.hidden)clearInterval(offerTimer);else startOfferTimer();
-});
-document.querySelectorAll("[data-explore]").forEach(button=>button.addEventListener("click",showMenu));
-$("carousel-coupon").addEventListener("click",()=>{
- showMenu();
- setTimeout(()=>{renderCart();openDrawer("cart-drawer");showToast("Coupons are available at checkout.")},250);
-});
-setOffer(0);startOfferTimer();
-
-/* Store status */
 function renderStoreStatus(){
- const banner=$("store-status-banner"),icon=$("store-status-icon"),title=$("store-status-title"),message=$("store-status-message");
- banner.classList.remove("open","closed","error");
- if(!storeStatusLoaded||storeStatusError){
-  banner.classList.add("error");icon.className="fa-solid fa-circle-exclamation";
-  title.textContent="Store status unavailable";message.textContent="We cannot confirm whether ordering is open. Please try again shortly.";
- }else if(storeIsOpen){
-  banner.classList.add("open");icon.className="fa-solid fa-circle-check";
-  title.textContent="FreshFry is OPEN!";message.textContent="We're accepting orders. Choose your favourites.";
- }else{
-  banner.classList.add("closed");icon.className="fa-solid fa-store";
-  title.textContent="FreshFry is currently CLOSED";message.textContent="We're not accepting new orders right now. Please visit us later.";
- }
- const allowed=storeCanAcceptOrders();
- document.querySelectorAll("[data-add]").forEach(button=>{button.disabled=!allowed;button.title=allowed?"":"Ordering is currently unavailable"});
- $("checkout-open").disabled=!allowed||!cart.length||subtotal()<MINIMUM_ORDER;
- $("place-order-btn").disabled=!allowed||!cart.length||subtotal()<MINIMUM_ORDER||submitting;
+  const banner=$("store-status-banner"),icon=$("store-status-icon"),title=$("store-status-title"),message=$("store-status-message");
+  banner.classList.remove("open","closed","error");
+  if(!storeStatusLoaded||storeStatusError){
+    banner.classList.add("error");icon.className="fa-solid fa-circle-exclamation";
+    title.textContent="Store status unavailable";message.textContent="We cannot confirm whether ordering is open. Please try again shortly.";
+  }else if(storeIsOpen){
+    banner.classList.add("open");icon.className="fa-solid fa-circle-check";
+    title.textContent="FreshFry is OPEN!";message.textContent="We're accepting orders. Choose your favourites.";
+  }else{
+    banner.classList.add("closed");icon.className="fa-solid fa-store";
+    title.textContent="FreshFry is currently CLOSED";message.textContent="We're not accepting new orders right now. Please visit us later.";
+  }
+  const allowed=storeCanAcceptOrders();
+  document.querySelectorAll("[data-add]").forEach(button=>{button.disabled=!allowed;button.title=allowed?"":"Ordering is currently unavailable"});
+  $("checkout-open").disabled=!allowed||!cart.length||subtotal()<MINIMUM_ORDER;
+  $("place-order-btn").disabled=!allowed||!cart.length||subtotal()<MINIMUM_ORDER||submitting;
 }
 function startStoreStatusListener(){
- if(storeStatusUnsubscribe)storeStatusUnsubscribe();
- storeStatusLoaded=false;storeStatusError=false;storeIsOpen=false;renderStoreStatus();
- storeStatusUnsubscribe=onSnapshot(STORE_STATUS_REF,snapshot=>{
-  storeStatusLoaded=true;storeStatusError=false;storeIsOpen=snapshot.exists()&&snapshot.data().isOpen===true;
-  renderStoreStatus();renderMenu();renderCart();
- },error=>{
-  console.error("Store status listener failed:",error);
-  storeStatusLoaded=false;storeStatusError=true;storeIsOpen=false;renderStoreStatus();renderMenu();renderCart();
- });
+  if(storeStatusUnsubscribe)storeStatusUnsubscribe();
+  storeStatusLoaded=false;storeStatusError=false;storeIsOpen=false;renderStoreStatus();
+  storeStatusUnsubscribe=onSnapshot(STORE_STATUS_REF,snapshot=>{
+    storeStatusLoaded=true;storeStatusError=false;storeIsOpen=snapshot.exists()&&snapshot.data().isOpen===true;
+    renderStoreStatus();renderMenu();renderCart();
+  },error=>{
+    console.error("Store status listener failed:",error);storeStatusLoaded=false;storeStatusError=true;storeIsOpen=false;
+    renderStoreStatus();renderMenu();renderCart();
+  });
 }
 async function verifyStoreIsOpen(){
- try{
-  const snapshot=await getDoc(STORE_STATUS_REF);
-  storeStatusLoaded=true;storeStatusError=false;storeIsOpen=snapshot.exists()&&snapshot.data().isOpen===true;
-  renderStoreStatus();return storeIsOpen;
- }catch(error){
-  console.error("Store status verification failed:",error);
-  storeStatusLoaded=false;storeStatusError=true;storeIsOpen=false;renderStoreStatus();return false;
- }
+  try{
+    const snapshot=await getDoc(STORE_STATUS_REF);
+    storeStatusLoaded=true;storeStatusError=false;storeIsOpen=snapshot.exists()&&snapshot.data().isOpen===true;
+    renderStoreStatus();return storeIsOpen;
+  }catch(error){
+    console.error("Store status verification failed:",error);storeStatusLoaded=false;storeStatusError=true;storeIsOpen=false;renderStoreStatus();return false;
+  }
 }
 
-/* Menu */
+/* MENU + OPTIMIZED PHOTO LOADING */
 function startMenuListener(){
- if(menuUnsubscribe)menuUnsubscribe();
- $("menu-grid").innerHTML='<div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div>';
- menuUnsubscribe=onSnapshot(collection(db,"menu"),snapshot=>{
-  menuItems=snapshot.docs.map(d=>{
-   const x=d.data();
-   return {id:d.id,name:String(x.name||"Food item"),image:typeof x.image==="string"?x.image:"",type:String(x.type||"Food"),description:String(x.description||x.details||""),halfPrice:Number(x.halfPrice),fullPrice:Number(x.fullPrice),available:x.available!==false&&x.isAvailable!==false};
-  }).filter(x=>Number.isFinite(x.halfPrice)&&x.halfPrice>=0&&Number.isFinite(x.fullPrice)&&x.fullPrice>=0);
-  renderCategories();renderMenu();
- },error=>{
-  console.error("Menu listener:",error);
-  $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>';
- });
+  if(menuUnsubscribe)menuUnsubscribe();
+  $("menu-grid").innerHTML='<div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div>';
+  menuUnsubscribe=onSnapshot(collection(db,"menu"),snapshot=>{
+    menuItems=snapshot.docs.map(d=>{
+      const x=d.data();
+      return {id:d.id,name:String(x.name||"Food item"),image:typeof x.image==="string"?x.image:"",type:String(x.type||"Food"),description:String(x.description||x.details||""),halfPrice:Number(x.halfPrice),fullPrice:Number(x.fullPrice),available:x.available!==false&&x.isAvailable!==false};
+    }).filter(x=>Number.isFinite(x.halfPrice)&&x.halfPrice>=0&&Number.isFinite(x.fullPrice)&&x.fullPrice>=0);
+    renderCategories();renderMenu();
+  },error=>{
+    console.error("Menu listener:",error);
+    $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-wifi"></i><p>Could not load the menu.</p><p>Check your connection and Firestore permissions.</p><button class="secondary-btn" id="retry-menu">Try again</button></div>';
+  });
 }
 function renderCategories(){
- const categories=[...new Set(menuItems.map(x=>x.type).filter(Boolean))];
- if(selectedCategory!=="all"&&!categories.includes(selectedCategory))selectedCategory="all";
- $("category-row").innerHTML=`<button class="chip ${selectedCategory==="all"?"active":""}" data-category="all">All Types</button>`+
- categories.map(c=>`<button class="chip ${selectedCategory===c?"active":""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("");
+  const categories=[...new Set(menuItems.map(x=>x.type).filter(Boolean))];
+  if(selectedCategory!=="all"&&!categories.includes(selectedCategory))selectedCategory="all";
+  $("category-row").innerHTML=`<button class="chip ${selectedCategory==="all"?"active":""}" data-category="all">All Types</button>`+
+    categories.map(c=>`<button class="chip ${selectedCategory===c?"active":""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("");
 }
 function safeImageURL(value){
- try{const url=new URL(value);return ["https:","http:"].includes(url.protocol)?url.href:""}catch{return ""}
+  try{const url=new URL(value);return ["https:","http:"].includes(url.protocol)?url.href:""}catch{return ""}
 }
 function renderMenu(){
- const visible=menuItems.filter(item=>{
-  const matchesCategory=selectedCategory==="all"||item.type===selectedCategory;
-  const matchesSearch=(item.name+" "+item.type+" "+item.description).toLowerCase().includes(searchTerm);
-  return matchesCategory&&matchesSearch&&item.available;
- });
- $("menu-count").textContent=`${visible.length} ITEMS`;
- if(!visible.length){
-  $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-bowl-food"></i><p>No matching food items.</p><p>Try another search or category.</p><button class="secondary-btn" id="show-all-food">Show all food</button></div>';
-  return;
- }
- $("menu-grid").innerHTML=visible.map((item,index)=>{
-  const type=item.type.toLowerCase().includes("non")?"nonveg":"veg";
-  const image=safeImageURL(item.image),disabled=!storeCanAcceptOrders()?"disabled":"";
-  return `<article class="food-card">
-   <div class="food-image">
-    ${image?`<img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" width="600" height="450" loading="${index<4?"eager":"lazy"}" fetchpriority="${index<2?"high":"auto"}" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="no-image" style="display:none"><i class="fa-solid fa-utensils"></i></div>`:`<div class="no-image"><i class="fa-solid fa-utensils"></i></div>`}
-    <span class="food-type ${type}">${escapeHTML(item.type)}</span>
-   </div>
-   <div class="food-info"><h3 class="food-name">${escapeHTML(item.name)}</h3>
-    ${item.description?`<p class="food-description">${escapeHTML(item.description)}</p>`:'<p class="food-description">Freshly prepared for you.</p>'}
-    <div class="price-row">
-     <button class="price-btn" data-add="${escapeHTML(item.id)}" data-size="half" ${disabled}>Half ${money(item.halfPrice)}</button>
-     <button class="price-btn full" data-add="${escapeHTML(item.id)}" data-size="full" ${disabled}>Full ${money(item.fullPrice)}</button>
-    </div>
-   </div></article>`;
- }).join("");
- renderStoreStatus();
+  const visible=menuItems.filter(item=>{
+    const matchesCategory=selectedCategory==="all"||item.type===selectedCategory;
+    const matchesSearch=(item.name+" "+item.type+" "+item.description).toLowerCase().includes(searchTerm);
+    return matchesCategory&&matchesSearch&&item.available;
+  });
+  $("menu-count").textContent=`${visible.length} ITEMS`;
+  if(!visible.length){
+    $("menu-grid").innerHTML='<div class="empty-state"><i class="fa-solid fa-bowl-food"></i><p>No matching food items.</p><p>Try another search or category.</p><button class="secondary-btn" id="show-all-food">Show all food</button></div>';
+    return;
+  }
+
+  $("menu-grid").innerHTML=visible.map((item,index)=>{
+    const type=item.type.toLowerCase().includes("non")?"nonveg":"veg";
+    const image=safeImageURL(item.image);
+    const disabled=!storeCanAcceptOrders()?"disabled":"";
+    return `
+      <article class="food-card">
+        <div class="food-image">
+          ${image?`
+            <img
+              src="${escapeHTML(image)}"
+              alt="${escapeHTML(item.name)}"
+              width="600"
+              height="450"
+              loading="${index<4?"eager":"lazy"}"
+              fetchpriority="${index<2?"high":"auto"}"
+              decoding="async"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"
+            >
+            <div class="no-image" style="display:none"><i class="fa-solid fa-utensils"></i></div>
+          `:`<div class="no-image"><i class="fa-solid fa-utensils"></i></div>`}
+          <span class="food-type ${type}">${escapeHTML(item.type)}</span>
+        </div>
+        <div class="food-info">
+          <h3 class="food-name">${escapeHTML(item.name)}</h3>
+          ${item.description?`<p class="food-description">${escapeHTML(item.description)}</p>`:'<p class="food-description">Freshly prepared for you.</p>'}
+          <div class="price-row">
+            <button class="price-btn" data-add="${escapeHTML(item.id)}" data-size="half" ${disabled}>Half ${money(item.halfPrice)}</button>
+            <button class="price-btn full" data-add="${escapeHTML(item.id)}" data-size="full" ${disabled}>Full ${money(item.fullPrice)}</button>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+  renderStoreStatus();
 }
 
-/* Coupons */
-function clearCoupon(message=""){
- activeCoupon=null;couponDiscount=0;
- $("coupon-result").textContent=message||"Try COMBO10 or MOMO20.";
- $("coupon-result").className="coupon-result";
- $("remove-coupon").hidden=true;
-}
-function calculateCouponDiscount(code){
- const coupon=COUPONS[code];
- if(!coupon)return {ok:false,message:"Invalid coupon code. Check the code and try again."};
- const foodSubtotal=subtotal();
- if(foodSubtotal<coupon.minSubtotal)return {ok:false,message:`This coupon requires a food subtotal of ${money(coupon.minSubtotal)}. Add ${money(coupon.minSubtotal-foodSubtotal)} more.`};
- const amount=coupon.type==="percent"?Math.min(foodSubtotal*coupon.value/100,coupon.maxDiscount):Math.min(coupon.value,coupon.maxDiscount,foodSubtotal);
- return {ok:true,amount:Math.min(foodSubtotal,Math.round(amount*100)/100),coupon};
-}
-function applyCoupon(){
- const code=$("coupon-code").value.trim().toUpperCase();
- if(!code){clearCoupon("Enter a coupon code first.");$("coupon-result").classList.add("error");return}
- const result=calculateCouponDiscount(code);
- if(!result.ok){
-  activeCoupon=null;couponDiscount=0;
-  $("coupon-result").textContent=result.message;$("coupon-result").className="coupon-result error";
-  $("remove-coupon").hidden=true;renderCart();return;
- }
- activeCoupon=code;couponDiscount=result.amount;
- $("coupon-result").textContent=`${code} applied! ${result.coupon.description}. You save ${money(couponDiscount)}.`;
- $("coupon-result").className="coupon-result success";$("remove-coupon").hidden=false;
- renderCart();showToast("Coupon applied. You save "+money(couponDiscount));
-}
-$("apply-coupon").addEventListener("click",applyCoupon);
-$("coupon-code").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();applyCoupon()}});
-$("remove-coupon").addEventListener("click",()=>{
- clearCoupon("Coupon removed.");renderCart();showToast("Coupon removed.");
-});
-function refreshCoupon(){
- if(!activeCoupon){couponDiscount=0;return}
- const result=calculateCouponDiscount(activeCoupon);
- if(!result.ok){
-  const old=activeCoupon;clearCoupon(`${old} removed because your cart no longer meets its minimum subtotal.`);
-  $("coupon-result").classList.add("error");
- }else{
-  couponDiscount=result.amount;
-  $("coupon-result").textContent=`${activeCoupon} applied. You save ${money(couponDiscount)}.`;
-  $("coupon-result").className="coupon-result success";
- }
-}
-
-/* Payment rules */
+/* PAYMENT */
 function updatePaymentOptions(){
- const foodSubtotal=subtotal(),codOption=$("cod-payment-option"),upiOption=$("upi-payment-option");
- const codRadio=document.querySelector('input[name="payment-method"][value="COD"]');
- const upiRadio=document.querySelector('input[name="payment-method"][value="UPI"]');
- const hint=$("payment-rule-hint"),onlineOnly=foodSubtotal>COD_MAX_SUBTOTAL;
- codOption.hidden=onlineOnly;codRadio.disabled=onlineOnly;
- if(onlineOnly){
-  upiRadio.checked=true;upiOption.classList.add("recommended");
-  hint.textContent="Food subtotal is above ₹150. Cash on delivery is unavailable. Place the order and request a UPI QR code on WhatsApp.";
- }else{
-  upiOption.classList.remove("recommended");
-  hint.textContent="For food subtotal above ₹150, only online UPI QR-request payment is available.";
-  if(!codRadio.checked&&!upiRadio.checked)codRadio.checked=true;
- }
- return onlineOnly;
+  const foodSubtotal=subtotal(),codOption=$("cod-payment-option"),upiOption=$("upi-payment-option");
+  const codRadio=document.querySelector('input[name="payment-method"][value="COD"]');
+  const upiRadio=document.querySelector('input[name="payment-method"][value="UPI"]');
+  const hint=$("payment-rule-hint"),onlineOnly=foodSubtotal>COD_MAX_SUBTOTAL;
+  codOption.hidden=onlineOnly;codRadio.disabled=onlineOnly;
+  if(onlineOnly){
+    upiRadio.checked=true;upiOption.classList.add("recommended");
+    hint.textContent="Food subtotal is above ₹150. Cash on delivery is unavailable. Place the order and request a UPI QR code on WhatsApp.";
+  }else{
+    upiOption.classList.remove("recommended");
+    hint.textContent="For food subtotal above ₹150, only online UPI QR-request payment is available.";
+    if(!codRadio.checked&&!upiRadio.checked)codRadio.checked=true;
+  }
+  return onlineOnly;
 }
 function updateUPIQR(){
- updatePaymentOptions();
- const method=document.querySelector('input[name="payment-method"]:checked')?.value;
- const eligible=cart.length>0&&subtotal()>=MINIMUM_ORDER&&method==="UPI";
- $("upi-qr-section").hidden=!eligible;
- $("place-order-btn").textContent=method==="UPI"?"Place Order & Request QR":"Place Order";
+  updatePaymentOptions();
+  const method=document.querySelector('input[name="payment-method"]:checked')?.value;
+  const eligible=cart.length>0&&subtotal()>=MINIMUM_ORDER&&method==="UPI";
+  $("upi-qr-section").hidden=!eligible;
+  $("place-order-btn").textContent=method==="UPI"?"Place Order & Request QR":"Place Order";
 }
 function buildWhatsAppURL({name,phone,orderId,amount,address}){
- const message=["Hello, my name is "+name+".","I want to pay through UPI QR code. Please give me the QR code to pay.","FreshFry order ID: "+orderId,"Order amount: "+money(amount),"My mobile number: "+phone,"Delivery address: "+address,"Thank you!"].join("\n");
- return "https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
+  const message=["Hello, my name is "+name+".","I want to pay through UPI QR code. Please give me the QR code to pay.","FreshFry order ID: "+orderId,"Order amount: "+money(amount),"My mobile number: "+phone,"Delivery address: "+address,"Thank you!"].join("\n");
+  return "https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
 }
 
-/* Cart */
+/* CART */
 function addToCart(itemId,size){
- if(!storeCanAcceptOrders()){showToast("FreshFry is closed or store status is unavailable.",true);return}
- const item=menuItems.find(x=>x.id===itemId&&x.available);
- if(!item)return showToast("This item is currently unavailable.",true);
- const price=size==="half"?item.halfPrice:item.fullPrice;
- const name=`${item.name} (${size==="half"?"Half":"Full"})`;
- const key=item.id+"_"+size,existing=cart.find(x=>x.id===key);
- if(existing)existing.qty=Math.min(existing.qty+1,99);
- else cart.push({id:key,menuId:item.id,name,price,qty:1,size});
- refreshCoupon();saveCart();renderCart();showToast(name+" added to your box");
+  if(!storeCanAcceptOrders()){showToast("FreshFry is closed or store status is unavailable.",true);return}
+  const item=menuItems.find(x=>x.id===itemId&&x.available);
+  if(!item)return showToast("This item is currently unavailable.",true);
+  const price=size==="half"?item.halfPrice:item.fullPrice;
+  const name=`${item.name} (${size==="half"?"Half":"Full"})`;
+  const key=item.id+"_"+size,existing=cart.find(x=>x.id===key);
+  if(existing)existing.qty=Math.min(existing.qty+1,99);
+  else cart.push({id:key,menuId:item.id,name,price,qty:1,size});
+  saveCart();renderCart();showToast(name+" added to your box");
 }
 function renderCart(){
- const count=cart.reduce((sum,item)=>sum+item.qty,0),foodSubtotal=subtotal();
- $("cart-count").textContent=count>99?"99+":count;$("cart-count").hidden=count===0;
- $("cart-title-count").textContent=`(${count})`;
- const fee=deliveryFee(),discount=Math.min(couponDiscount,foodSubtotal),payable=Math.max(0,foodSubtotal-discount)+fee;
- const belowMinimum=cart.length>0&&foodSubtotal<MINIMUM_ORDER;
- $("subtotal").textContent=money(foodSubtotal);$("cart-discount").textContent="−"+money(discount);
- $("delivery-fee").textContent=money(fee);$("grand-total").textContent=money(payable);
- $("checkout-subtotal").textContent=money(foodSubtotal);$("checkout-discount").textContent="−"+money(discount);
- $("checkout-delivery").textContent=money(fee);$("checkout-total").textContent=money(payable);
- $("checkout-open").disabled=!storeCanAcceptOrders()||!cart.length||belowMinimum;
- $("place-order-btn").disabled=!storeCanAcceptOrders()||!cart.length||belowMinimum||submitting;
- $("min-order-notice").textContent=belowMinimum?`Minimum food order is ${money(MINIMUM_ORDER)}. Add ${money(MINIMUM_ORDER-foodSubtotal)} more to continue.`:"";
- $("checkout-minimum-notice").textContent=belowMinimum?`Your food subtotal is ${money(foodSubtotal)}. Add ${money(MINIMUM_ORDER-foodSubtotal)} more to place the order.`:"";
- if(!cart.length){
-  $("cart-content").innerHTML='<div class="empty-state"><i class="fa-solid fa-bag-shopping"></i><p>Your box is empty.</p><p>Add something delicious from the menu.</p></div>';
-  clearCoupon();updateUPIQR();renderStoreStatus();return;
- }
- $("cart-content").innerHTML=cart.map(item=>`
-  <div class="cart-line"><div class="cart-item-icon"><i class="fa-solid fa-utensils"></i></div>
-   <div class="cart-item-info"><h4>${escapeHTML(item.name)}</h4><p>${money(item.price)} each</p>
-    <div class="qty-control" style="margin-top:9px"><button data-qty="${escapeHTML(item.id)}" data-delta="-1" aria-label="Decrease quantity">−</button><strong style="font-size:12px">${item.qty}</strong><button data-qty="${escapeHTML(item.id)}" data-delta="1" aria-label="Increase quantity">+</button></div>
-   </div><div style="text-align:right"><strong style="font-size:12px">${money(item.price*item.qty)}</strong><br><button class="remove-btn" data-remove="${escapeHTML(item.id)}" aria-label="Remove item"><i class="fa-regular fa-trash-can"></i></button></div>
-  </div>`).join("");
- updateUPIQR();renderStoreStatus();
+  const count=cart.reduce((sum,item)=>sum+item.qty,0);
+  $("cart-count").textContent=count>99?"99+":count;$("cart-count").hidden=count===0;
+  $("cart-title-count").textContent=`(${count})`;
+  const foodSubtotal=subtotal(),deliveryFee=cart.length?DELIVERY_FEE:0,payable=foodSubtotal+deliveryFee;
+  const belowMinimum=cart.length>0&&foodSubtotal<MINIMUM_ORDER;
+  $("subtotal").textContent=money(foodSubtotal);$("delivery-fee").textContent=money(deliveryFee);
+  $("grand-total").textContent=money(payable);$("checkout-total").textContent=money(payable);
+  $("checkout-open").disabled=!storeCanAcceptOrders()||!cart.length||belowMinimum;
+  $("place-order-btn").disabled=!storeCanAcceptOrders()||!cart.length||belowMinimum||submitting;
+  $("min-order-notice").textContent=belowMinimum?`Minimum food order is ${money(MINIMUM_ORDER)}. Add ${money(MINIMUM_ORDER-foodSubtotal)} more to continue.`:"";
+  $("checkout-minimum-notice").textContent=belowMinimum?`Your food subtotal is ${money(foodSubtotal)}. Add ${money(MINIMUM_ORDER-foodSubtotal)} more to place the order.`:"";
+  if(!cart.length){
+    $("cart-content").innerHTML='<div class="empty-state"><i class="fa-solid fa-bag-shopping"></i><p>Your box is empty.</p><p>Add something delicious from the menu.</p></div>';
+    updateUPIQR();renderStoreStatus();return;
+  }
+  $("cart-content").innerHTML=cart.map(item=>`
+    <div class="cart-line">
+      <div class="cart-item-icon"><i class="fa-solid fa-utensils"></i></div>
+      <div class="cart-item-info"><h4>${escapeHTML(item.name)}</h4><p>${money(item.price)} each</p>
+        <div class="qty-control" style="margin-top:9px"><button data-qty="${escapeHTML(item.id)}" data-delta="-1" aria-label="Decrease quantity">−</button><strong style="font-size:12px">${item.qty}</strong><button data-qty="${escapeHTML(item.id)}" data-delta="1" aria-label="Increase quantity">+</button></div>
+      </div>
+      <div style="text-align:right"><strong style="font-size:12px">${money(item.price*item.qty)}</strong><br><button class="remove-btn" data-remove="${escapeHTML(item.id)}" aria-label="Remove item"><i class="fa-regular fa-trash-can"></i></button></div>
+    </div>`).join("");
+  updateUPIQR();renderStoreStatus();
 }
 function changeQuantity(id,delta){
- const item=cart.find(x=>x.id===id);if(!item)return;
- item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);if(item.qty>99)item.qty=99;
- refreshCoupon();saveCart();renderCart();
+  const item=cart.find(x=>x.id===id);if(!item)return;
+  item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);if(item.qty>99)item.qty=99;
+  saveCart();renderCart();
 }
-function removeItem(id){cart=cart.filter(x=>x.id!==id);refreshCoupon();saveCart();renderCart()}
+function removeItem(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
 
 async function openCheckout(){
- if(!await verifyStoreIsOpen()){showToast("FreshFry is closed or store status is unavailable.",true);return}
- if(!cart.length)return showToast("Your box is empty.",true);
- if(subtotal()<MINIMUM_ORDER)return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-subtotal())} more.`,true);
- closeDrawers();
- $("customer-phone").value=getPhone();
- $("customer-name").value=localStorage.getItem("ff_customer_name")||"";
- $("customer-address").value=localStorage.getItem("ff_customer_address")||"";
- $("location-status").textContent=selectedDeliveryLocation?"GPS location selected for this checkout.":"Allow location access to attach your GPS coordinates to this order.";
- if(selectedDeliveryLocation){$("open-location-map").href=selectedDeliveryLocation.mapUrl;$("open-location-map").hidden=false}
- else $("open-location-map").hidden=true;
- refreshCoupon();renderCart();updateUPIQR();openModal("checkout-modal");
+  if(!await verifyStoreIsOpen()){showToast("FreshFry is closed or store status is unavailable.",true);return}
+  if(!cart.length)return showToast("Your box is empty.",true);
+  if(subtotal()<MINIMUM_ORDER)return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-subtotal())} more.`,true);
+  closeDrawers();
+  $("customer-phone").value=getPhone();
+  $("customer-name").value=localStorage.getItem("ff_customer_name")||"";
+  $("customer-address").value=localStorage.getItem("ff_customer_address")||"";
+  $("location-status").textContent=selectedDeliveryLocation?"GPS location selected for this checkout.":"Allow location access to attach your GPS coordinates to this order.";
+  if(selectedDeliveryLocation){$("open-location-map").href=selectedDeliveryLocation.mapUrl;$("open-location-map").hidden=false}
+  else $("open-location-map").hidden=true;
+  renderCart();updateUPIQR();openModal("checkout-modal");
 }
 
 /* GPS */
 function setDeliveryLocation(latitude,longitude){
- selectedDeliveryLocation={latitude:Number(latitude),longitude:Number(longitude),mapUrl:`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`};
- const address=$("customer-address"),gpsLine=`GPS Location: ${Number(latitude).toFixed(6)}, ${Number(longitude).toFixed(6)}`;
- const withoutOldGps=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:")).join("\n").trim();
- address.value=withoutOldGps?`${withoutOldGps}\n${gpsLine}`:gpsLine;
- $("location-status").textContent="GPS coordinates captured. The map link will guide the delivery rider to this pin.";
- $("open-location-map").href=selectedDeliveryLocation.mapUrl;$("open-location-map").hidden=false;
+  selectedDeliveryLocation={latitude:Number(latitude),longitude:Number(longitude),mapUrl:`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`};
+  const address=$("customer-address"),gpsLine=`GPS Location: ${Number(latitude).toFixed(6)}, ${Number(longitude).toFixed(6)}`;
+  const withoutOldGps=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:")).join("\n").trim();
+  address.value=withoutOldGps?`${withoutOldGps}\n${gpsLine}`:gpsLine;
+  $("location-status").textContent="GPS coordinates captured. The map link will guide the delivery rider to this pin.";
+  $("open-location-map").href=selectedDeliveryLocation.mapUrl;$("open-location-map").hidden=false;
 }
 $("use-current-location").addEventListener("click",()=>{
- if(!navigator.geolocation){$("location-status").textContent="This browser does not support GPS location. Please enter your address manually.";return}
- const button=$("use-current-location");button.disabled=true;
- $("location-status").textContent="Getting your current location. Please allow location access...";
- navigator.geolocation.getCurrentPosition(position=>{
-  setDeliveryLocation(position.coords.latitude,position.coords.longitude);button.disabled=false;
- },error=>{
-  const messages={1:"Location permission denied. Allow location access in browser settings.",2:"Location unavailable. Check GPS and try again outdoors.",3:"Location request timed out. Please try again."};
-  $("location-status").textContent=messages[error.code]||"Could not get GPS location. Enter your address manually.";button.disabled=false;
- },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+  if(!navigator.geolocation){$("location-status").textContent="This browser does not support GPS location. Please enter your address manually.";return}
+  const button=$("use-current-location");button.disabled=true;
+  $("location-status").textContent="Getting your current location. Please allow location access...";
+  navigator.geolocation.getCurrentPosition(position=>{
+    setDeliveryLocation(position.coords.latitude,position.coords.longitude);button.disabled=false;
+  },error=>{
+    const messages={1:"Location permission denied. Allow location access in browser settings.",2:"Location unavailable. Check GPS and try again outdoors.",3:"Location request timed out. Please try again."};
+    $("location-status").textContent=messages[error.code]||"Could not get GPS location. Enter your address manually.";button.disabled=false;
+  },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
 });
 document.querySelectorAll(".area-suggestion").forEach(button=>button.addEventListener("click",()=>{
- const area=button.dataset.area,address=$("customer-address");
- const lines=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:"));
- address.value=[area,...lines.slice(1).filter(Boolean)].join("\n");
- document.querySelectorAll(".area-suggestion").forEach(item=>item.classList.toggle("recommended",item===button));
+  const area=button.dataset.area,address=$("customer-address");
+  const lines=address.value.split("\n").filter(line=>!line.startsWith("GPS Location:"));
+  address.value=[area,...lines.slice(1).filter(Boolean)].join("\n");
+  document.querySelectorAll(".area-suggestion").forEach(item=>item.classList.toggle("recommended",item===button));
 }));
 function generateDeliveryPin(){const values=new Uint32Array(1);crypto.getRandomValues(values);return String(values[0]%9000+1000)}
 
-/* Order placement */
+/* ORDER PLACEMENT */
 async function placeOrder(event){
- event.preventDefault();if(submitting)return;
- if(!await verifyStoreIsOpen()){showToast("FreshFry is closed or store status is unavailable. Your order was not submitted.",true);return}
- const now=new Date();
- if(now.getHours()*60+now.getMinutes()<17*60){window.location.replace("https://freshfrymomo.food/freshfry.html");return}
- if(!cart.length)return showToast("Your box is empty.",true);
- const name=$("customer-name").value.trim(),phone=$("customer-phone").value.replace(/\D/g,"");
- const address=$("customer-address").value.trim(),note=$("customer-note").value.trim(),orderSubtotal=subtotal();
- let paymentMethod=document.querySelector('input[name="payment-method"]:checked')?.value||"COD";
- if(orderSubtotal>COD_MAX_SUBTOTAL){paymentMethod="UPI";document.querySelector('input[name="payment-method"][value="UPI"]').checked=true}
- if(name.length<2)return showToast("Please enter your full name.",true);
- if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
- if(address.length<8)return showToast("Please enter your complete delivery address.",true);
- if(orderSubtotal<MINIMUM_ORDER)return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-orderSubtotal)} more.`,true);
- if(orderSubtotal>COD_MAX_SUBTOTAL&&paymentMethod!=="UPI")return showToast("Orders above ₹150 require online UPI payment.",true);
- if(cart.some(i=>!Number.isFinite(i.price)||i.price<0||!Number.isInteger(i.qty)||i.qty<1))return showToast("Please check your cart.",true);
+  event.preventDefault();if(submitting)return;
+  if(!await verifyStoreIsOpen()){showToast("FreshFry is closed or store status is unavailable. Your order was not submitted.",true);return}
+  const now=new Date();
+  if(now.getHours()*60+now.getMinutes()<17*60){window.location.replace("https://freshfrymomo.food/freshfry.html");return}
+  if(!cart.length)return showToast("Your box is empty.",true);
+  const name=$("customer-name").value.trim(),phone=$("customer-phone").value.replace(/\D/g,"");
+  const address=$("customer-address").value.trim(),note=$("customer-note").value.trim(),orderSubtotal=subtotal();
+  let paymentMethod=document.querySelector('input[name="payment-method"]:checked')?.value||"COD";
+  if(orderSubtotal>COD_MAX_SUBTOTAL){paymentMethod="UPI";document.querySelector('input[name="payment-method"][value="UPI"]').checked=true}
+  if(name.length<2)return showToast("Please enter your full name.",true);
+  if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
+  if(address.length<8)return showToast("Please enter your complete delivery address.",true);
+  if(orderSubtotal<MINIMUM_ORDER)return showToast(`Minimum food order is ₹${MINIMUM_ORDER}. Add ${money(MINIMUM_ORDER-orderSubtotal)} more.`,true);
+  if(orderSubtotal>COD_MAX_SUBTOTAL&&paymentMethod!=="UPI")return showToast("Orders above ₹150 require online UPI payment.",true);
+  if(cart.some(i=>!Number.isFinite(i.price)||i.price<0||!Number.isInteger(i.qty)||i.qty<1))return showToast("Please check your cart.",true);
 
- /* Recalculate the applied coupon immediately before creating the order. */
- refreshCoupon();
- const appliedCoupon=activeCoupon||"",discount=Math.min(couponDiscount,orderSubtotal);
- const orderItems=cart.map(i=>({name:i.name,price:i.price,qty:i.qty,menuItemId:i.menuId||""}));
- const fee=DELIVERY_FEE,orderTotal=Math.max(0,orderSubtotal-discount)+fee;
- const deliveryPin=generateDeliveryPin(),gps=selectedDeliveryLocation;
- submitting=true;$("place-order-btn").disabled=true;$("place-order-btn").textContent="Creating order...";
- try{
-  if(!await verifyStoreIsOpen())throw new Error("STORE_CLOSED");
-  const ref=await addDoc(collection(db,"orders"),{
-   customerPhone:phone,customerName:name,deliveryAddress:address,customerLocation:address,
-   deliveryLatitude:gps?gps.latitude:null,deliveryLongitude:gps?gps.longitude:null,deliveryMapUrl:gps?gps.mapUrl:"",
-   note,paymentMethod,paymentStatus:paymentMethod==="UPI"?"pending":"cash_on_delivery",
-   items:orderItems,subtotal:orderSubtotal,discount,couponCode:appliedCoupon,deliveryFee:fee,total:orderTotal,deliveryPin,
-   status:paymentMethod==="UPI"?"payment_pending":"pending",createdAt:serverTimestamp()
-  });
-  localStorage.setItem("ff_last_order_id",ref.id);localStorage.setItem("ff_last_delivery_pin",deliveryPin);
-  localStorage.setItem("ff_phone",phone);localStorage.setItem("ff_customer_name",name);localStorage.setItem("ff_customer_address",address);
-  lastWhatsAppURL=buildWhatsAppURL({name,phone,orderId:ref.id,amount:orderTotal,address});
-  updateUserUI();closeModal("checkout-modal");selectedOrderId=ref.id;startOrdersListener();
-  cart=[];saveCart();clearCoupon();$("coupon-code").value="";renderCart();
-  $("confirmation-order-id").textContent="Order #"+ref.id;$("confirmation-pin").textContent=deliveryPin;
-  $("confirmation-payment-note").hidden=paymentMethod!=="UPI";$("request-qr-whatsapp").hidden=paymentMethod!=="UPI";
-  openModal("confirmation-modal");
-  showToast(paymentMethod==="UPI"?"Order saved. Request the QR code on WhatsApp.":"Your order has been placed successfully.");
- }catch(error){
-  console.error("Order creation failed:",error);
-  showToast(error.message==="STORE_CLOSED"?"Store is closed. Your order was not submitted.":"Order could not be created. Check connection or Firebase permissions.",true);
- }finally{
-  submitting=false;$("place-order-btn").disabled=!storeCanAcceptOrders()||!cart.length||subtotal()<MINIMUM_ORDER;
-  updateUPIQR();renderStoreStatus();
- }
+  const orderItems=cart.map(i=>({name:i.name,price:i.price,qty:i.qty,menuItemId:i.menuId||""}));
+  const deliveryFee=DELIVERY_FEE,orderTotal=orderSubtotal+deliveryFee,deliveryPin=generateDeliveryPin(),gps=selectedDeliveryLocation;
+  submitting=true;$("place-order-btn").disabled=true;$("place-order-btn").textContent="Creating order...";
+  try{
+    if(!await verifyStoreIsOpen())throw new Error("STORE_CLOSED");
+    const ref=await addDoc(collection(db,"orders"),{
+      customerPhone:phone,customerName:name,deliveryAddress:address,customerLocation:address,
+      deliveryLatitude:gps?gps.latitude:null,deliveryLongitude:gps?gps.longitude:null,deliveryMapUrl:gps?gps.mapUrl:"",
+      note,paymentMethod,paymentStatus:paymentMethod==="UPI"?"pending":"cash_on_delivery",
+      items:orderItems,subtotal:orderSubtotal,deliveryFee,total:orderTotal,deliveryPin,
+      status:paymentMethod==="UPI"?"payment_pending":"pending",createdAt:serverTimestamp()
+    });
+    localStorage.setItem("ff_last_order_id",ref.id);localStorage.setItem("ff_last_delivery_pin",deliveryPin);
+    localStorage.setItem("ff_phone",phone);localStorage.setItem("ff_customer_name",name);localStorage.setItem("ff_customer_address",address);
+    lastWhatsAppURL=buildWhatsAppURL({name,phone,orderId:ref.id,amount:orderTotal,address});
+    updateUserUI();closeModal("checkout-modal");selectedOrderId=ref.id;startOrdersListener();
+    cart=[];saveCart();renderCart();
+    $("confirmation-order-id").textContent="Order #"+ref.id;$("confirmation-pin").textContent=deliveryPin;
+    $("confirmation-payment-note").hidden=paymentMethod!=="UPI";$("request-qr-whatsapp").hidden=paymentMethod!=="UPI";
+    openModal("confirmation-modal");
+    showToast(paymentMethod==="UPI"?"Order saved. Request the QR code on WhatsApp.":"Your order has been placed successfully.");
+  }catch(error){
+    console.error("Order creation failed:",error);
+    showToast(error.message==="STORE_CLOSED"?"Store is closed. Your order was not submitted.":"Order could not be created. Check connection or Firebase permissions.",true);
+  }finally{
+    submitting=false;$("place-order-btn").disabled=!storeCanAcceptOrders()||!cart.length||subtotal()<MINIMUM_ORDER;
+    updateUPIQR();renderStoreStatus();
+  }
 }
 
-/* Order tracking */
+/* ORDER TRACKING */
 function normalizeStatus(value){
- const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
- const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",canceled:"cancelled"};
- return aliases[s]||s;
+  const s=String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
+  const aliases={confirmed:"accepted",cooking:"preparing",on_the_way:"out_for_delivery",outfordelivery:"out_for_delivery",complete:"delivered",completed:"delivered",canceled:"cancelled"};
+  return aliases[s]||s;
 }
 function statusLabel(status){
- return ({payment_pending:"Payment Pending",pending:"Pending",accepted:"Accepted",preparing:"Preparing",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled",rejected:"Rejected"})[normalizeStatus(status)]||String(status||"Pending");
+  return ({payment_pending:"Payment Pending",pending:"Pending",accepted:"Accepted",preparing:"Preparing",out_for_delivery:"Out for delivery",delivered:"Delivered",cancelled:"Cancelled",rejected:"Rejected"})[normalizeStatus(status)]||String(status||"Pending");
 }
 function startOrdersListener(){
- const phone=getPhone();if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null}
- orders=[];if(!validPhone(phone)){renderOrders();updateOrderTicker();return}
- ordersUnsubscribe=onSnapshot(query(collection(db,"orders"),where("customerPhone","==",phone)),snapshot=>{
-  orders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
-  orders.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
-  renderOrders();if(selectedOrderId)renderTracking();updateOrderTicker();
- },error=>{
-  console.error("Order listener:",error);
-  $("orders-list").innerHTML='<div class="empty-state"><p>Could not load your orders. Please try again later.</p></div>';
- });
+  const phone=getPhone();if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null}
+  orders=[];if(!validPhone(phone)){renderOrders();updateOrderTicker();return}
+  ordersUnsubscribe=onSnapshot(query(collection(db,"orders"),where("customerPhone","==",phone)),snapshot=>{
+    orders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+    orders.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+    renderOrders();if(selectedOrderId)renderTracking();updateOrderTicker();
+  },error=>{
+    console.error("Order listener:",error);
+    $("orders-list").innerHTML='<div class="empty-state"><p>Could not load your orders. Please try again later.</p></div>';
+  });
 }
 function renderOrders(){
- if(!getPhone()){
-  $("orders-list").innerHTML='<div class="empty-state"><i class="fa-regular fa-user"></i><p>Login with your phone number to view orders.</p><button class="primary-btn" id="orders-login">Login</button></div>';return;
- }
- if(!orders.length){
-  $("orders-list").innerHTML='<div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders found yet.</p><p>Your orders will appear here after checkout.</p><button class="secondary-btn" id="orders-menu">Explore menu</button></div>';return;
- }
- $("orders-list").innerHTML=orders.map(order=>{
-  const status=normalizeStatus(order.status),items=Array.isArray(order.items)?order.items:[];
-  const paymentText=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"?"Payment Pending":(order.paymentStatus||"unverified");
-  return `<article class="order-card"><div class="order-card-top"><div><div class="order-id">ORDER #${escapeHTML(order.id.slice(0,8).toUpperCase())}</div><strong style="font-size:16px">${money(Number(order.total)||0)}</strong></div><span class="order-status">${escapeHTML(statusLabel(status))}</span></div><div class="order-items">${items.map(i=>`${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}`).join("<br>")||"Order details unavailable"}</div><div class="order-card-bottom"><span>${escapeHTML(order.paymentMethod||"Payment unavailable")}<br><small>${escapeHTML(paymentText)}</small></span><button class="secondary-btn" data-track="${escapeHTML(order.id)}">Track details</button></div></article>`;
- }).join("");
+  if(!getPhone()){
+    $("orders-list").innerHTML='<div class="empty-state"><i class="fa-regular fa-user"></i><p>Login with your phone number to view orders.</p><button class="primary-btn" id="orders-login">Login</button></div>';return;
+  }
+  if(!orders.length){
+    $("orders-list").innerHTML='<div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders found yet.</p><p>Your orders will appear here after checkout.</p><button class="secondary-btn" id="orders-menu">Explore menu</button></div>';return;
+  }
+  $("orders-list").innerHTML=orders.map(order=>{
+    const status=normalizeStatus(order.status),items=Array.isArray(order.items)?order.items:[];
+    const paymentText=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid"?"Payment Pending":(order.paymentStatus||"unverified");
+    return `<article class="order-card"><div class="order-card-top"><div><div class="order-id">ORDER #${escapeHTML(order.id.slice(0,8).toUpperCase())}</div><strong style="font-size:16px">${money(Number(order.total)||0)}</strong></div><span class="order-status">${escapeHTML(statusLabel(status))}</span></div><div class="order-items">${items.map(i=>`${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}`).join("<br>")||"Order details unavailable"}</div><div class="order-card-bottom"><span>${escapeHTML(order.paymentMethod||"Payment unavailable")}<br><small>${escapeHTML(paymentText)}</small></span><button class="secondary-btn" data-track="${escapeHTML(order.id)}">Track details</button></div></article>`;
+  }).join("");
 }
 function renderTracking(){
- const order=orders.find(x=>x.id===selectedOrderId);
- if(!order){$("tracking-content").innerHTML='<p class="muted">Waiting for order details. Please refresh shortly.</p>';return}
- const status=normalizeStatus(order.status),cancelled=["cancelled","rejected"].includes(status);
- const current=STATUS_STEPS.findIndex(x=>x.key===status);
- const steps=STATUS_STEPS.map((step,index)=>{
-  const done=!cancelled&&current>=index;
-  return `<div class="progress-step ${done?"done":""}"><div class="circle"><i class="fa-solid ${done?"fa-check":"fa-circle"}"></i></div>${escapeHTML(step.label)}</div>`;
- }).join("");
- const items=Array.isArray(order.items)?order.items:[];
- const pin=/^\d{4}$/.test(String(order.deliveryPin||""))?String(order.deliveryPin):"";
- const showPin=status==="out_for_delivery"&&pin;
- const paymentPending=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid";
- $("tracking-id").textContent="Order #"+order.id;
- $("tracking-content").innerHTML=`
-  <div class="status-banner">Current status: <strong>${escapeHTML(statusLabel(status))}</strong><div style="color:#bbb;font-size:10px;margin-top:5px">Payment status: ${escapeHTML(order.paymentStatus||"unverified")}. ${paymentPending?"Payment has not been verified.":"Status updates when the restaurant updates your order."}</div></div>
-  ${showPin?`<div class="delivery-pin-card"><div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="delivery-pin-number">${escapeHTML(pin)}</div><p class="delivery-pin-note">Share this PIN with your rider when your food arrives.</p></div>`:""}
-  ${cancelled?`<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}.</p>`:`<div class="progress">${steps}</div>`}
-  <h3 style="font-size:14px;margin:22px 0 10px">Order summary</h3>
-  ${items.map(i=>`<div class="total-row"><span>${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
-  <div class="total-row"><span>Food subtotal</span><strong>${money(Number(order.subtotal)||0)}</strong></div>
-  ${Number(order.discount)>0?`<div class="total-row"><span>Coupon ${escapeHTML(order.couponCode||"")}</span><strong>−${money(Number(order.discount))}</strong></div>`:""}
-  <div class="total-row"><span>Delivery fee</span><strong>${money(Number(order.deliveryFee)||0)}</strong></div>
-  <div class="total-row final"><span>Total</span><span>${money(Number(order.total)||0)}</span></div>
-  ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
-  ${paymentPending?`<button type="button" class="whatsapp-btn" id="tracking-request-qr" style="margin-top:12px"><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>`:""}
-  <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.</p>`;
- const requestButton=$("tracking-content").querySelector("#tracking-request-qr");
- if(requestButton)requestButton.addEventListener("click",()=>{
-  const url=buildWhatsAppURL({name:String(order.customerName||"Customer"),phone:String(order.customerPhone||""),orderId:order.id,amount:Number(order.total)||0,address:String(order.deliveryAddress||"")});
-  window.open(url,"_blank","noopener,noreferrer");
- });
-}
-
-/* Active order ticker */
-function updateOrderTicker(){
- let wrap=$("order-ticker-wrap");
- const active=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
- if(!active){if(wrap)wrap.remove();return}
- if(!wrap){
-  wrap=document.createElement("div");wrap.id="order-ticker-wrap";wrap.className="order-ticker-wrap";
-  wrap.innerHTML=`<button type="button" id="order-ticker-track" class="order-ticker-track"><i class="fa-solid fa-fire-burner"></i> <span id="order-ticker-status">ORDER PENDING · TRACK</span></button><div id="order-ticker-pin" class="order-ticker-pin" hidden><span class="order-ticker-pin-label">DELIVERY PIN</span><span id="order-ticker-pin-number" class="order-ticker-pin-number">----</span></div>`;
-  document.body.appendChild(wrap);
-  $("order-ticker-track").addEventListener("click",()=>{
-   const latest=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));if(!latest)return;
-   selectedOrderId=latest.id;renderTracking();openModal("order-modal");
+  const order=orders.find(x=>x.id===selectedOrderId);
+  if(!order){$("tracking-content").innerHTML='<p class="muted">Waiting for order details. Please refresh shortly.</p>';return}
+  const status=normalizeStatus(order.status),cancelled=["cancelled","rejected"].includes(status);
+  const current=STATUS_STEPS.findIndex(x=>x.key===status);
+  const steps=STATUS_STEPS.map((step,index)=>{
+    const done=!cancelled&&current>=index;
+    return `<div class="progress-step ${done?"done":""}"><div class="circle"><i class="fa-solid ${done?"fa-check":"fa-circle"}"></i></div>${escapeHTML(step.label)}</div>`;
+  }).join("");
+  const items=Array.isArray(order.items)?order.items:[];
+  const pin=/^\d{4}$/.test(String(order.deliveryPin||""))?String(order.deliveryPin):"";
+  const showPin=status==="out_for_delivery"&&pin;
+  const paymentPending=order.paymentMethod==="UPI"&&String(order.paymentStatus||"pending").toLowerCase()!=="paid";
+  $("tracking-id").textContent="Order #"+order.id;
+  $("tracking-content").innerHTML=`
+    <div class="status-banner">Current status: <strong>${escapeHTML(statusLabel(status))}</strong><div style="color:#bbb;font-size:10px;margin-top:5px">Payment status: ${escapeHTML(order.paymentStatus||"unverified")}. ${paymentPending?"Payment has not been verified.":"Status updates when the restaurant updates your order."}</div></div>
+    ${showPin?`<div class="delivery-pin-card"><div class="delivery-pin-heading"><i class="fa-solid fa-shield-halved"></i> YOUR DELIVERY PIN</div><div class="delivery-pin-number">${escapeHTML(pin)}</div><p class="delivery-pin-note">Share this PIN with your rider when your food arrives.</p></div>`:""}
+    ${cancelled?`<p style="color:#b91c1c;font-size:12px;margin-top:15px">This order is ${escapeHTML(statusLabel(status).toLowerCase())}.</p>`:`<div class="progress">${steps}</div>`}
+    <h3 style="font-size:14px;margin:22px 0 10px">Order summary</h3>
+    ${items.map(i=>`<div class="total-row"><span>${escapeHTML(i.name||"Item")} × ${Number(i.qty)||1}</span><strong>${money((Number(i.price)||0)*(Number(i.qty)||1))}</strong></div>`).join("")}
+    <div class="total-row"><span>Food subtotal</span><strong>${money(Number(order.subtotal)||0)}</strong></div>
+    <div class="total-row"><span>Delivery fee</span><strong>${money(Number(order.deliveryFee)||0)}</strong></div>
+    <div class="total-row final"><span>Total</span><span>${money(Number(order.total)||0)}</span></div>
+    ${order.deliveryAddress?`<p class="muted"><strong>Delivery address:</strong><br>${escapeHTML(order.deliveryAddress)}</p>`:""}
+    ${paymentPending?`<button type="button" class="whatsapp-btn" id="tracking-request-qr" style="margin-top:12px"><i class="fa-brands fa-whatsapp"></i> Request QR Code on WhatsApp</button>`:""}
+    <p class="muted">Payment preference: ${escapeHTML(order.paymentMethod||"Not specified")}. Payment status: ${escapeHTML(order.paymentStatus||"unverified")}.</p>`;
+  const requestButton=$("tracking-content").querySelector("#tracking-request-qr");
+  if(requestButton)requestButton.addEventListener("click",()=>{
+    const url=buildWhatsAppURL({name:String(order.customerName||"Customer"),phone:String(order.customerPhone||""),orderId:order.id,amount:Number(order.total)||0,address:String(order.deliveryAddress||"")});
+    window.open(url,"_blank","noopener,noreferrer");
   });
- }
- const status=normalizeStatus(active.status),pin=String(active.deliveryPin||"");
- const showPin=status==="out_for_delivery"&&/^\d{4}$/.test(pin);
- $("order-ticker-status").textContent=`${statusLabel(status).toUpperCase()} · TRACK`;
- $("order-ticker-pin").hidden=!showPin;$("order-ticker-pin-number").textContent=showPin?pin:"----";
 }
 
-/* Navigation */
+/* ACTIVE ORDER TICKER */
+function updateOrderTicker(){
+  let wrap=$("order-ticker-wrap");
+  const active=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));
+  if(!active){if(wrap)wrap.remove();return}
+  if(!wrap){
+    wrap=document.createElement("div");wrap.id="order-ticker-wrap";wrap.className="order-ticker-wrap";
+    wrap.innerHTML=`<button type="button" id="order-ticker-track" class="order-ticker-track"><i class="fa-solid fa-fire-burner"></i> <span id="order-ticker-status">ORDER PENDING · TRACK</span></button><div id="order-ticker-pin" class="order-ticker-pin" hidden><span class="order-ticker-pin-label">DELIVERY PIN</span><span id="order-ticker-pin-number" class="order-ticker-pin-number">----</span></div>`;
+    document.body.appendChild(wrap);
+    $("order-ticker-track").addEventListener("click",()=>{
+      const latest=orders.find(o=>ACTIVE_STATUSES.includes(normalizeStatus(o.status)));if(!latest)return;
+      selectedOrderId=latest.id;renderTracking();openModal("order-modal");
+    });
+  }
+  const status=normalizeStatus(active.status),pin=String(active.deliveryPin||"");
+  const showPin=status==="out_for_delivery"&&/^\d{4}$/.test(pin);
+  $("order-ticker-status").textContent=`${statusLabel(status).toUpperCase()} · TRACK`;
+  $("order-ticker-pin").hidden=!showPin;$("order-ticker-pin-number").textContent=showPin?pin:"----";
+}
+
+/* NAVIGATION */
 function showOrdersPage(){
- $("menu-section").hidden=true;$("orders-section").hidden=false;
- document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="orders-section"));
- $("orders-section").scrollIntoView({behavior:"smooth",block:"start"});
+  $("menu-section").hidden=true;$("orders-section").hidden=false;
+  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="orders-section"));
+  $("orders-section").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function showHome(){
- $("menu-section").hidden=false;$("orders-section").hidden=true;
- document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="home"));
- window.scrollTo({top:0,behavior:"smooth"});
+  $("menu-section").hidden=false;$("orders-section").hidden=true;
+  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="home"));
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function showMenu(){
- $("menu-section").hidden=false;$("orders-section").hidden=true;
- document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="menu-section"));
- $("menu-section").scrollIntoView({behavior:"smooth",block:"start"});
+  $("menu-section").hidden=false;$("orders-section").hidden=true;
+  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="menu-section"));
+  $("menu-section").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-/* Events */
+/* EVENTS */
 $("header-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer")});
 $("bottom-cart").addEventListener("click",()=>{renderCart();openDrawer("cart-drawer")});
 $("header-orders").addEventListener("click",()=>{
- if(!getPhone())return openModal("login-modal");startOrdersListener();showOrdersPage();
+  if(!getPhone())return openModal("login-modal");startOrdersListener();showOrdersPage();
 });
 $("login-open").addEventListener("click",()=>openModal("login-modal"));
+$("explore-menu").addEventListener("click",showMenu);
 $("checkout-open").addEventListener("click",openCheckout);
 $("checkout-form").addEventListener("submit",placeOrder);
 document.querySelectorAll('input[name="payment-method"]').forEach(input=>input.addEventListener("change",()=>{updatePaymentOptions();updateUPIQR()}));
 $("search-input").addEventListener("input",event=>{searchTerm=event.target.value.trim().toLowerCase();renderMenu()});
 $("category-row").addEventListener("click",event=>{
- const button=event.target.closest("[data-category]");if(!button)return;
- selectedCategory=button.dataset.category;renderCategories();renderMenu();
+  const button=event.target.closest("[data-category]");if(!button)return;
+  selectedCategory=button.dataset.category;renderCategories();renderMenu();
 });
 $("menu-grid").addEventListener("click",event=>{
- const button=event.target.closest("[data-add]");if(button)addToCart(button.dataset.add,button.dataset.size);
- if(event.target.closest("#retry-menu"))startMenuListener();
- if(event.target.closest("#show-all-food")){selectedCategory="all";searchTerm="";$("search-input").value="";renderCategories();renderMenu()}
+  const button=event.target.closest("[data-add]");if(button)addToCart(button.dataset.add,button.dataset.size);
+  if(event.target.closest("#retry-menu"))startMenuListener();
+  if(event.target.closest("#show-all-food")){selectedCategory="all";searchTerm="";$("search-input").value="";renderCategories();renderMenu()}
 });
 $("cart-content").addEventListener("click",event=>{
- const qty=event.target.closest("[data-qty]"),remove=event.target.closest("[data-remove]");
- if(qty)changeQuantity(qty.dataset.qty,Number(qty.dataset.delta));if(remove)removeItem(remove.dataset.remove);
+  const qty=event.target.closest("[data-qty]"),remove=event.target.closest("[data-remove]");
+  if(qty)changeQuantity(qty.dataset.qty,Number(qty.dataset.delta));if(remove)removeItem(remove.dataset.remove);
 });
 $("orders-list").addEventListener("click",event=>{
- if(event.target.closest("#orders-login"))return openModal("login-modal");
- if(event.target.closest("#orders-menu"))return showMenu();
- const button=event.target.closest("[data-track]");
- if(button){selectedOrderId=button.dataset.track;renderTracking();openModal("order-modal")}
+  if(event.target.closest("#orders-login"))return openModal("login-modal");
+  if(event.target.closest("#orders-menu"))return showMenu();
+  const button=event.target.closest("[data-track]");
+  if(button){selectedOrderId=button.dataset.track;renderTracking();openModal("order-modal")}
 });
 $("tracking-refresh").addEventListener("click",()=>{startOrdersListener();renderTracking();showToast("Refreshing order details...")});
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeDrawers));
@@ -940,30 +781,30 @@ $("overlay").addEventListener("click",closeDrawers);
 document.querySelectorAll("[data-modal-close]").forEach(b=>b.addEventListener("click",closeAllModals));
 document.querySelectorAll(".modal").forEach(modal=>modal.addEventListener("click",event=>{if(event.target===modal)closeModal(modal.id)}));
 document.querySelectorAll(".nav-item[data-page]").forEach(button=>button.addEventListener("click",()=>{
- if(button.dataset.page==="home")showHome();
- if(button.dataset.page==="menu-section")showMenu();
- if(button.dataset.page==="orders-section"){
-  if(!getPhone())return openModal("login-modal");startOrdersListener();showOrdersPage();
- }
+  if(button.dataset.page==="home")showHome();
+  if(button.dataset.page==="menu-section")showMenu();
+  if(button.dataset.page==="orders-section"){
+    if(!getPhone())return openModal("login-modal");startOrdersListener();showOrdersPage();
+  }
 }));
 $("login-form").addEventListener("submit",event=>{
- event.preventDefault();const phone=$("login-phone").value.replace(/\D/g,"");
- if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
- localStorage.setItem("ff_phone",phone);updateUserUI();closeModal("login-modal");startOrdersListener();showToast("Phone number saved on this device.");
+  event.preventDefault();const phone=$("login-phone").value.replace(/\D/g,"");
+  if(!validPhone(phone))return showToast("Enter a valid 10-digit Indian mobile number.",true);
+  localStorage.setItem("ff_phone",phone);updateUserUI();closeModal("login-modal");startOrdersListener();showToast("Phone number saved on this device.");
 });
 $("logout-btn").addEventListener("click",()=>{
- localStorage.removeItem("ff_phone");updateUserUI();startOrdersListener();closeModal("login-modal");showToast("Logged out on this device.");
+  localStorage.removeItem("ff_phone");updateUserUI();startOrdersListener();closeModal("login-modal");showToast("Logged out on this device.");
 });
 $("request-qr-whatsapp").addEventListener("click",()=>{
- if(!lastWhatsAppURL)return showToast("WhatsApp request is unavailable. Open your order and try again.",true);
- window.open(lastWhatsAppURL,"_blank","noopener,noreferrer");
+  if(!lastWhatsAppURL)return showToast("WhatsApp request is unavailable. Open your order and try again.",true);
+  window.open(lastWhatsAppURL,"_blank","noopener,noreferrer");
 });
 $("confirmation-track").addEventListener("click",()=>{closeModal("confirmation-modal");renderTracking();openModal("order-modal")});
 $("confirmation-close").addEventListener("click",()=>closeModal("confirmation-modal"));
 window.addEventListener("online",()=>showToast("You're back online."));
 window.addEventListener("offline",()=>showToast("Internet connection lost.",true));
 
-/* Start */
+/* START */
 updateUserUI();
 renderCart();
 updatePaymentOptions();
@@ -974,11 +815,11 @@ startOrdersListener();
 
 <script>
 if("serviceWorker" in navigator){
- window.addEventListener("load",()=>{
-  navigator.serviceWorker.register("/service-worker.js")
-   .then(registration=>console.log("FreshFry PWA ready:",registration.scope))
-   .catch(error=>console.error("PWA registration failed:",error));
- });
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("/service-worker.js")
+      .then(registration=>console.log("FreshFry PWA ready:",registration.scope))
+      .catch(error=>console.error("PWA registration failed:",error));
+  });
 }
 </script>
 </body>
