@@ -1129,18 +1129,14 @@ function showMenu(){
 
 /* EVENTS */
 
-/* FIX 1: prevent navigation to cart.html and open the cart drawer */
-$("header-cart").addEventListener("click",event=>{
+$("header-cart").addEventListener("click", function(event) {
   event.preventDefault();
-  renderCart();
-  openDrawer("cart-drawer");
+  window.location.href = "cart.html";
 });
 
-/* FIX 2: bottom My Box button opens the same cart */
-$("bottom-cart").addEventListener("click",event=>{
+$("bottom-cart").addEventListener("click", function(event) {
   event.preventDefault();
-  renderCart();
-  openDrawer("cart-drawer");
+  window.location.href = "cart.html";
 });
 
 /* FIX 3: removed the old header-orders handler because no such element exists.
