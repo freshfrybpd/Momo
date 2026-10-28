@@ -442,8 +442,12 @@ textarea.form-control { resize:vertical;min-height:82px }
   <div class="topbar-inner">
     <a class="brand" href="#home" aria-label="FreshFry home">Fresh<span>Fry.</span><small>M O M O</small></a>
     <div class="header-actions">
-      <button class="icon-btn" id="header-orders" aria-label="My orders"><i class="fa-solid fa-receipt"></i></button>
-      <button class="icon-btn" id="header-cart" aria-label="Shopping cart"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cart-count" hidden>0</span></button>
+    <a class="icon-btn" id="header-cart"
+   href="cart.html" aria-label="Shopping cart"
+   style="text-decoration:none">
+  <i class="fa-solid fa-bag-shopping"></i>
+  <span class="cart-count" id="cart-count" hidden>0</span>
+</a>
       <button class="user-btn" id="login-open"><i class="fa-regular fa-user"></i><span id="user-label">Login</span></button>
     </div>
   </div>
