@@ -1,1 +1,570 @@
-yyy
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="description" content="Complete your FreshFry Momo food order in Baripada, Odisha.">
+<meta name="robots" content="noindex,follow">
+<title>Checkout | FreshFry Momo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#faf9f7;
+  --line:#eee9e5;
+  --green:#15803d;
+}
+* { box-sizing:border-box }
+body {
+  margin:0;background:var(--bg);color:var(--dark);
+  font-family:'Outfit',sans-serif;padding-bottom:30px;
+}
+button,input,textarea { font:inherit }
+button { cursor:pointer }
+button:disabled { opacity:.55;cursor:not-allowed }
+a { color:inherit;text-decoration:none }
+[hidden] { display:none!important }
+.wrap { width:min(900px,calc(100% - 28px));margin:auto }
+header {
+  position:sticky;top:0;z-index:20;background:#ffffffed;
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+}
+.header-inner {
+  min-height:66px;display:flex;align-items:center;gap:13px;
+}
+.back {
+  height:40px;width:40px;border:1px solid var(--line);
+  border-radius:12px;background:white;display:grid;place-items:center;
+}
+.brand { font-size:24px;font-weight:900;font-style:italic;letter-spacing:-1px }
+.brand span { color:var(--orange) }
+.secure { margin-left:auto;font-size:10px;color:var(--green);font-weight:800 }
+.page-heading { padding:25px 0 17px }
+.page-heading h1 { margin:0;font-size:30px;letter-spacing:-1px }
+.page-heading p { color:var(--muted);font-size:12px;line-height:1.6;margin:7px 0 0 }
+.layout { display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.85fr);gap:20px;align-items:start }
+.card { background:white;border:1px solid var(--line);border-radius:19px;padding:19px;margin-bottom:16px }
+.card-title { display:flex;align-items:center;gap:10px;margin:0 0 18px;font-size:16px;font-weight:900 }
+.card-title i { color:var(--orange) }
+.field { margin-bottom:15px }
+.field:last-child { margin-bottom:0 }
+.field label,.label { display:block;font-size:11px;font-weight:900;margin-bottom:7px }
+.control {
+  width:100%;padding:13px;border:1px solid #e5e5e8;border-radius:11px;
+  background:white;outline:none;font-size:12px;color:var(--dark);
+}
+.control:focus { border-color:var(--orange);box-shadow:0 0 0 3px #ff5e0014 }
+textarea.control { min-height:85px;resize:vertical }
+.hint { color:var(--muted);font-size:10px;line-height:1.6;margin:7px 0 0 }
+.area-buttons { display:flex;flex-wrap:wrap;gap:7px;margin-top:10px }
+.area-btn {
+  background:white;border:1px solid var(--line);border-radius:9px;
+  padding:9px 11px;font-size:10px;font-weight:800;
+}
+.area-btn.active { border-color:var(--orange);background:#fff2e9;color:#bd4600 }
+.secondary {
+  border:1px solid var(--line);background:white;color:var(--dark);
+  border-radius:11px;padding:12px;font-size:11px;font-weight:900;
+}
+.location-btn { width:100%;margin-top:10px;color:var(--green);border-color:#bbf7d0 }
+.map-link {
+  display:block;background:#effcf4;border:1px solid #bbf7d0;
+  border-radius:10px;color:#166534;text-align:center;padding:11px;
+  font-size:11px;font-weight:800;margin-top:10px;
+}
+.payment-option {
+  display:flex;align-items:center;gap:10px;padding:13px;
+  border:1px solid var(--line);border-radius:12px;margin-top:9px;
+  font-size:12px;font-weight:700;cursor:pointer;
+}
+.payment-option:has(input:checked) { border-color:#ffb38a;background:#fff7f1 }
+.payment-option input { accent-color:var(--orange) }
+.payment-option span { flex:1 }
+.payment-option small { display:block;color:var(--muted);font-size:10px;font-weight:400;margin-top:4px }
+.payment-info {
+  margin-top:13px;padding:13px;border-radius:12px;background:#fff7ed;
+  border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.7;
+}
+.items { margin-bottom:13px }
+.item {
+  display:flex;justify-content:space-between;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--line);font-size:11px;
+}
+.item-name { font-weight:800;overflow-wrap:anywhere }
+.item-detail { color:var(--muted);margin-top:4px;font-size:10px }
+.item-price { font-weight:900;white-space:nowrap }
+.row { display:flex;justify-content:space-between;gap:10px;margin:13px 0;font-size:12px;color:#666 }
+.row strong { color:var(--dark) }
+.row.total { border-top:1px dashed #ddd;padding-top:16px;margin-top:17px;font-size:20px;font-weight:900;color:var(--dark) }
+.row.total strong { color:var(--orange) }
+.notice { border-radius:11px;padding:11px;background:#fff7ed;color:#9a3412;font-size:10px;line-height:1.6;margin:13px 0 }
+.primary {
+  display:block;width:100%;padding:15px;border:0;border-radius:12px;
+  background:var(--orange);color:white;font-size:12px;font-weight:900;
+}
+.primary:active { transform:scale(.99) }
+.safe-note { text-align:center;font-size:10px;color:var(--muted);line-height:1.6;margin-top:12px }
+.result { display:none;margin-top:15px;padding:15px;border-radius:13px;font-size:12px;line-height:1.6;overflow-wrap:anywhere }
+.result.show { display:block }
+.result.success { background:#effcf4;border:1px solid #bbf7d0;color:#166534 }
+.result.error { background:#fef2f2;border:1px solid #fecaca;color:#991b1b }
+.whatsapp {
+  display:block;margin-top:12px;background:#168b45;color:white;
+  border-radius:11px;padding:13px;text-align:center;font-weight:900;font-size:12px;
+}
+footer { text-align:center;color:var(--muted);font-size:10px;padding:22px 10px }
+@media(max-width:700px) {
+  .layout { grid-template-columns:1fr;gap:0 }
+  .summary-card { order:-1 }
+  .page-heading h1 { font-size:27px }
+  .card { padding:16px }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap header-inner">
+    <a class="back" href="cart.html" aria-label="Back to cart"><i class="fa-solid fa-arrow-left"></i></a>
+    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
+    <span class="secure"><i class="fa-solid fa-shield-halved"></i> CHECKOUT</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-heading">
+    <h1>Complete your order 🧡</h1>
+    <p>Add your delivery details and confirm your FreshFry order.</p>
+  </div>
+
+  <form id="checkout-form" novalidate>
+    <div class="layout">
+      <div>
+        <section class="card">
+          <h2 class="card-title"><i class="fa-regular fa-user"></i> Customer details</h2>
+          <div class="field">
+            <label for="customer-name">Full name *</label>
+            <input class="control" id="customer-name" maxlength="80" autocomplete="name" required placeholder="Enter your full name">
+          </div>
+          <div class="field">
+            <label for="customer-phone">Mobile number *</label>
+            <input class="control" id="customer-phone" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" required placeholder="10-digit mobile number">
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title"><i class="fa-solid fa-location-dot"></i> Delivery address</h2>
+          <div class="field">
+            <label for="customer-address">Complete address *</label>
+            <textarea class="control" id="customer-address" maxlength="500" autocomplete="street-address" required placeholder="House number, street, area and landmark"></textarea>
+          </div>
+
+          <div class="field">
+            <span class="label">Choose your area</span>
+            <div class="area-buttons">
+              <button class="area-btn" type="button" data-area="Bhanjpur, Baripada">Bhanjpur</button>
+              <button class="area-btn" type="button" data-area="Bada Bazar, Baripada">Bada Bazar</button>
+              <button class="area-btn" type="button" data-area="Station Bazar, Baripada">Station Bazar</button>
+              <button class="area-btn" type="button" data-area="Baghra Road, Baripada">Baghra Road</button>
+            </div>
+            <p class="hint">Select an area, then add your house number and landmark.</p>
+          </div>
+
+          <button class="secondary location-btn" id="use-location" type="button">
+            <i class="fa-solid fa-location-crosshairs"></i> Use my current location
+          </button>
+          <p class="hint" id="location-status" aria-live="polite">GPS is optional. You can enter your address manually.</p>
+          <a class="map-link" id="map-link" href="#" target="_blank" rel="noopener noreferrer" hidden>View location on Google Maps</a>
+
+          <div class="field" style="margin-top:17px">
+            <label for="customer-note">Order note (optional)</label>
+            <textarea class="control" id="customer-note" maxlength="250" placeholder="Any special instructions?"></textarea>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title"><i class="fa-solid fa-wallet"></i> Payment method</h2>
+
+          <label class="payment-option" id="cod-option">
+            <input type="radio" name="payment-method" value="COD" checked>
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Cash on delivery<small>Pay when your order arrives</small></span>
+          </label>
+
+          <label class="payment-option" id="upi-option">
+            <input type="radio" name="payment-method" value="UPI">
+            <i class="fa-brands fa-whatsapp" style="color:#168b45"></i>
+            <span>UPI QR via WhatsApp<small>Request a QR code and pay after receiving it</small></span>
+          </label>
+
+          <div id="payment-info" class="payment-info" hidden>
+            Food subtotal is above ₹150. COD is unavailable for this order. Request your UPI QR code through WhatsApp. Payment is not automatically verified by this page.
+          </div>
+          <p class="hint">For food subtotal above ₹150, only the UPI QR request option is available.</p>
+        </section>
+      </div>
+
+      <aside>
+        <section class="card summary-card">
+          <h2 class="card-title"><i class="fa-solid fa-receipt"></i> Order summary</h2>
+          <div id="cart-items" class="items"></div>
+          <div class="row"><span>Food subtotal</span><strong id="subtotal">₹0</strong></div>
+          <div class="row"><span>Delivery fee</span><strong id="delivery-fee">₹20</strong></div>
+          <div class="row total"><span>Total</span><strong id="grand-total">₹0</strong></div>
+          <div class="notice" id="minimum-notice">Minimum food order ₹100, excluding delivery.</div>
+          <button class="primary" id="place-order" type="submit">PLACE ORDER <i class="fa-solid fa-arrow-right"></i></button>
+          <p class="safe-note"><i class="fa-solid fa-lock"></i> Your order details are submitted to FreshFry.</p>
+          <div id="result" class="result" role="status" aria-live="polite"></div>
+          <a id="whatsapp-link" class="whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="fa-brands fa-whatsapp"></i> Request UPI QR on WhatsApp</a>
+        </section>
+      </aside>
+    </div>
+  </form>
+</main>
+
+<footer>FreshFry Momo · Baripada, Odisha</footer>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc, getDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Keep this configuration consistent with the FreshFry website. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const CART_KEY = "ff_cart_v2";
+const DELIVERY_FEE = 20;
+const MINIMUM_ORDER = 100;
+const COD_MAX_SUBTOTAL = 150;
+const WHATSAPP_NUMBER = "918984225311";
+
+const $ = id => document.getElementById(id);
+let cart = readCart();
+let deliveryLocation = null;
+let submitting = false;
+
+function readCart() {
+  try {
+    const value = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    if (!Array.isArray(value)) return [];
+    return value.filter(item =>
+      item &&
+      typeof item.id === "string" &&
+      typeof item.name === "string" &&
+      Number.isFinite(Number(item.price)) &&
+      Number(item.price) >= 0 &&
+      Number.isInteger(Number(item.qty)) &&
+      Number(item.qty) > 0
+    ).map(item => ({
+      ...item,
+      price: Number(item.price),
+      qty: Math.min(99, Number(item.qty))
+    }));
+  } catch {
+    return [];
+  }
+}
+
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[char]));
+}
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {maximumFractionDigits:2});
+}
+
+function subtotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+function validPhone(value) {
+  return /^[6-9]\d{9}$/.test(value);
+}
+
+function showResult(message, success = false) {
+  const result = $("result");
+  result.textContent = message;
+  result.className = "result show " + (success ? "success" : "error");
+}
+
+function renderCart() {
+  const amount = subtotal();
+  const delivery = cart.length ? DELIVERY_FEE : 0;
+
+  $("subtotal").textContent = money(amount);
+  $("delivery-fee").textContent = money(delivery);
+  $("grand-total").textContent = money(amount + delivery);
+
+  if (!cart.length) {
+    $("cart-items").innerHTML = `
+      <p style="font-size:12px;color:#a32323;line-height:1.6">
+        Your cart is empty. Please add items from the menu first.
+      </p>
+      <a href="index.html" style="color:#ff5e00;font-size:12px;font-weight:900">← Return to menu</a>`;
+    $("place-order").disabled = true;
+  } else {
+    $("cart-items").innerHTML = cart.map(item => `
+      <div class="item">
+        <div>
+          <div class="item-name">${escapeHTML(item.name)}</div>
+          <div class="item-detail">Qty: ${item.qty} × ${money(item.price)}</div>
+        </div>
+        <div class="item-price">${money(item.price * item.qty)}</div>
+      </div>
+    `).join("");
+    $("place-order").disabled = amount < MINIMUM_ORDER;
+  }
+
+  $("minimum-notice").textContent = !cart.length
+    ? "Your cart is empty."
+    : amount < MINIMUM_ORDER
+      ? `Add ${money(MINIMUM_ORDER - amount)} more to meet the ₹100 minimum.`
+      : "Minimum order requirement met. Delivery fee is additional.";
+
+  updatePaymentOptions();
+}
+
+function updatePaymentOptions() {
+  const amount = subtotal();
+  const onlineOnly = amount > COD_MAX_SUBTOTAL;
+  const cod = document.querySelector('input[name="payment-method"][value="COD"]');
+  const upi = document.querySelector('input[name="payment-method"][value="UPI"]');
+
+  $("cod-option").hidden = onlineOnly;
+  cod.disabled = onlineOnly;
+
+  if (onlineOnly) {
+    upi.checked = true;
+    $("upi-option").classList.add("recommended");
+  } else {
+    $("upi-option").classList.remove("recommended");
+  }
+
+  $("payment-info").hidden = !onlineOnly;
+}
+
+document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+  input.addEventListener("change", updatePaymentOptions);
+});
+
+document.querySelectorAll("[data-area]").forEach(button => {
+  button.addEventListener("click", () => {
+    const area = button.dataset.area;
+    const address = $("customer-address");
+    const existing = address.value.trim();
+
+    if (!existing || existing === area) {
+      address.value = area + ", Baripada, Odisha";
+    } else if (!existing.includes(area)) {
+      address.value = area + ", Baripada, Odisha\n" + existing;
+    }
+
+    document.querySelectorAll("[data-area]").forEach(item => {
+      item.classList.toggle("active", item === button);
+    });
+  });
+});
+
+$("use-location").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    $("location-status").textContent = "GPS is not supported by this browser. Enter your address manually.";
+    return;
+  }
+
+  const button = $("use-location");
+  button.disabled = true;
+  $("location-status").textContent = "Getting your location. Please allow location access...";
+
+  navigator.geolocation.getCurrentPosition(position => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    deliveryLocation = { latitude, longitude };
+    const gpsLine = `GPS Location: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+    const address = $("customer-address");
+    const lines = address.value.split("\n").filter(line => !line.startsWith("GPS Location:"));
+    address.value = [...lines.filter(Boolean), gpsLine].join("\n");
+
+    $("map-link").href = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+    $("map-link").hidden = false;
+    $("location-status").textContent = "GPS location added to your address.";
+    button.disabled = false;
+  }, error => {
+    $("location-status").textContent =
+      error.code === 1
+        ? "Location permission denied. Enter your address manually or allow GPS in browser settings."
+        : "Could not get your location. Please enter your address manually.";
+    button.disabled = false;
+  }, { enableHighAccuracy:true, timeout:20000, maximumAge:0 });
+});
+
+function makeWhatsAppURL(details) {
+  const message = [
+    "Hello FreshFry, I want to request a UPI QR code.",
+    "Order ID: " + details.orderId,
+    "Customer: " + details.name,
+    "Mobile: " + details.phone,
+    "Amount: " + money(details.amount),
+    "Address: " + details.address
+  ].join("\n");
+
+  return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+}
+
+function makeDeliveryPin() {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return String(array[0] % 9000 + 1000);
+}
+
+async function placeOrder(event) {
+  event.preventDefault();
+  if (submitting) return;
+
+  cart = readCart();
+  renderCart();
+
+  if (!cart.length) {
+    showResult("Your cart is empty. Return to the menu and add food first.");
+    return;
+  }
+
+  const foodSubtotal = subtotal();
+
+  if (foodSubtotal < MINIMUM_ORDER) {
+    showResult(`Minimum food order is ${money(MINIMUM_ORDER)}.`);
+    return;
+  }
+
+  const name = $("customer-name").value.trim();
+  const phone = $("customer-phone").value.replace(/\D/g, "");
+  const address = $("customer-address").value.trim();
+  const note = $("customer-note").value.trim();
+  let paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || "COD";
+
+  if (name.length < 2) return showResult("Please enter your full name.");
+  if (!validPhone(phone)) return showResult("Enter a valid 10-digit Indian mobile number.");
+  if (address.length < 8) return showResult("Please enter your complete delivery address.");
+
+  if (foodSubtotal > COD_MAX_SUBTOTAL) paymentMethod = "UPI";
+
+  const button = $("place-order");
+  submitting = true;
+  button.disabled = true;
+  button.textContent = "CREATING ORDER...";
+
+  try {
+    const storeSnapshot = await getDoc(doc(db, "settings", "storeStatus"));
+
+    if (!storeSnapshot.exists() || storeSnapshot.data().isOpen !== true) {
+      throw new Error("FreshFry is currently closed or store status is unavailable. Your order was not placed.");
+    }
+
+    const items = cart.map(item => ({
+      name: item.name,
+      price: item.price,
+      qty: item.qty,
+      menuItemId: item.menuId || ""
+    }));
+
+    const deliveryFee = DELIVERY_FEE;
+    const total = foodSubtotal + deliveryFee;
+    const deliveryPin = makeDeliveryPin();
+
+    const orderRef = await addDoc(collection(db, "orders"), {
+      customerName: name,
+      customerPhone: phone,
+      deliveryAddress: address,
+      customerLocation: address,
+      deliveryLatitude: deliveryLocation ? deliveryLocation.latitude : null,
+      deliveryLongitude: deliveryLocation ? deliveryLocation.longitude : null,
+      deliveryMapUrl: deliveryLocation
+        ? `https://www.google.com/maps/dir/?api=1&destination=${deliveryLocation.latitude},${deliveryLocation.longitude}`
+        : "",
+      note,
+      paymentMethod,
+      paymentStatus: paymentMethod === "UPI" ? "pending" : "cash_on_delivery",
+      items,
+      subtotal: foodSubtotal,
+      deliveryFee,
+      total,
+      deliveryPin,
+      status: paymentMethod === "UPI" ? "payment_pending" : "pending",
+      createdAt: serverTimestamp()
+    });
+
+    localStorage.setItem("ff_last_order_id", orderRef.id);
+    localStorage.setItem("ff_last_delivery_pin", deliveryPin);
+    localStorage.setItem("ff_phone", phone);
+    localStorage.setItem("ff_customer_name", name);
+    localStorage.setItem("ff_customer_address", address);
+
+    cart = [];
+    saveCart();
+    renderCart();
+
+    showResult(
+      `Order placed successfully! Order ID: ${orderRef.id}. Your delivery PIN is ${deliveryPin}. Keep this PIN private and share it with the rider when your order arrives.`,
+      true
+    );
+
+    if (paymentMethod === "UPI") {
+      $("whatsapp-link").href = makeWhatsAppURL({
+        orderId: orderRef.id,
+        name,
+        phone,
+        amount: total,
+        address
+      });
+      $("whatsapp-link").hidden = false;
+      $("whatsapp-link").textContent = "Request UPI QR on WhatsApp";
+    } else {
+      $("whatsapp-link").hidden = true;
+    }
+
+    $("checkout-form").reset();
+  } catch (error) {
+    console.error("Checkout failed:", error);
+    showResult(error.message || "Could not submit your order. Please try again.");
+  } finally {
+    submitting = false;
+    button.innerHTML = 'PLACE ORDER <i class="fa-solid fa-arrow-right"></i>';
+    button.disabled = !cart.length || subtotal() < MINIMUM_ORDER;
+  }
+}
+
+$("checkout-form").addEventListener("submit", placeOrder);
+
+(function loadSavedCustomer() {
+  $("customer-name").value = localStorage.getItem("ff_customer_name") || "";
+  $("customer-phone").value = (localStorage.getItem("ff_phone") || "").replace(/\D/g, "").slice(-10);
+  $("customer-address").value = localStorage.getItem("ff_customer_address") || "";
+})();
+
+renderCart();
+</script>
+</body>
+</html>
