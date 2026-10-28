@@ -305,7 +305,16 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
     render();
   });
 
-  $("checkout").addEventListener("click", function () {
+ $("checkout").addEventListener("click", function () {
+  const amount = subtotal();
+
+  if (amount < 100) {
+    alert("Minimum food order ₹100 hai.");
+    return;
+  }
+
+  window.location.href = "checkout.html";
+});
     const amount = subtotal();
 
     if (!cart.length) {
