@@ -180,7 +180,7 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:22px 10px }
             <i class="fa-solid fa-location-crosshairs"></i> Use my current location
           </button>
           <p class="hint" id="location-status" aria-live="polite">GPS is optional. You can enter your address manually.</p>
-          <a class="map-link" id="map-link" href="#" target="_blank" rel="noopener noreferrer" hidden>View location on Google Maps</a>
+          
 
           <div class="field" style="margin-top:17px">
             <label for="customer-note">Order note (optional)</label>
@@ -408,8 +408,7 @@ $("use-location").addEventListener("click", () => {
     const lines = address.value.split("\n").filter(line => !line.startsWith("GPS Location:"));
     address.value = [...lines.filter(Boolean), gpsLine].join("\n");
 
-    $("map-link").href = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
-    $("map-link").hidden = false;
+  
     $("location-status").textContent = "GPS location added to your address.";
     button.disabled = false;
   }, error => {
