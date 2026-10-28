@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#ff5e00">
 <meta name="description" content="Review your FreshFry Momo cart and order delicious food in Baripada.">
 <title>My Cart | FreshFry Momo</title>
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -19,7 +20,9 @@
   --line:#eee9e5;
   --green:#15803d;
 }
+
 * { box-sizing:border-box }
+
 body {
   margin:0;
   padding:0 0 calc(25px + env(safe-area-inset-bottom));
@@ -27,110 +30,304 @@ body {
   color:var(--dark);
   font-family:'Outfit',sans-serif;
 }
+
 button,a { font:inherit }
 button { cursor:pointer }
+button:disabled { opacity:.5;cursor:not-allowed }
 a { color:inherit;text-decoration:none }
-.wrap { width:min(760px,calc(100% - 28px));margin:auto }
+
+.wrap {
+  width:min(760px,calc(100% - 28px));
+  margin:auto;
+}
+
 header {
-  position:sticky;top:0;z-index:10;
-  background:#ffffffed;backdrop-filter:blur(12px);
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#ffffffed;
+  backdrop-filter:blur(12px);
   border-bottom:1px solid var(--line);
 }
+
 .header-inner {
   width:min(760px,calc(100% - 28px));
-  min-height:68px;margin:auto;
-  display:flex;align-items:center;gap:14px;
+  min-height:68px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:14px;
 }
+
 .back {
-  width:42px;height:42px;display:grid;place-items:center;
-  border:1px solid var(--line);border-radius:13px;background:white;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:white;
 }
-.brand { font-size:24px;font-weight:900;font-style:italic;letter-spacing:-1px }
+
+.brand {
+  font-size:24px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:-1px;
+}
+
 .brand span { color:var(--orange) }
-.header-label { margin-left:auto;color:var(--muted);font-size:11px;font-weight:700 }
+
+.header-label {
+  margin-left:auto;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
 main { padding-top:24px }
-.heading { display:flex;justify-content:space-between;align-items:center;gap:10px }
-.heading h1 { margin:0;font-size:30px;letter-spacing:-1px }
-.heading p { color:var(--muted);font-size:12px;margin:7px 0 0 }
+
+.heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.heading h1 {
+  margin:0;
+  font-size:30px;
+  letter-spacing:-1px;
+}
+
+.heading p {
+  color:var(--muted);
+  font-size:12px;
+  margin:7px 0 0;
+}
+
 .count {
-  flex-shrink:0;padding:9px 12px;background:#fff0e7;
-  color:var(--orange);border-radius:12px;font-size:11px;font-weight:900;
+  flex-shrink:0;
+  padding:9px 12px;
+  background:#fff0e7;
+  color:var(--orange);
+  border-radius:12px;
+  font-size:11px;
+  font-weight:900;
 }
+
 .card {
-  margin-top:20px;background:white;border:1px solid var(--line);
-  border-radius:20px;padding:16px;
+  margin-top:20px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:16px;
 }
+
 .cart-item {
-  display:grid;grid-template-columns:48px minmax(0,1fr) auto;
-  align-items:center;gap:12px;padding:15px 0;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  padding:15px 0;
   border-bottom:1px solid var(--line);
 }
+
 .cart-item:last-child { border-bottom:0 }
+
 .food-icon {
-  width:48px;height:48px;border-radius:14px;
-  background:#fff0e7;color:var(--orange);
-  display:grid;place-items:center;font-size:19px;
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:#fff0e7;
+  color:var(--orange);
+  display:grid;
+  place-items:center;
+  font-size:19px;
 }
-.item-name { font-size:13px;font-weight:900;overflow-wrap:anywhere }
-.item-price { color:var(--orange);font-size:12px;font-weight:800;margin-top:5px }
-.quantity { display:flex;align-items:center;gap:9px;margin-top:10px }
+
+.item-name {
+  font-size:13px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.item-price {
+  color:var(--orange);
+  font-size:12px;
+  font-weight:800;
+  margin-top:5px;
+}
+
+.quantity {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:10px;
+}
+
 .quantity button {
-  width:29px;height:29px;border:1px solid var(--line);
-  border-radius:9px;background:white;font-weight:900;
+  width:29px;
+  height:29px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:white;
+  font-weight:900;
 }
-.quantity span { min-width:14px;text-align:center;font-size:12px;font-weight:900 }
+
+.quantity span {
+  min-width:14px;
+  text-align:center;
+  font-size:12px;
+  font-weight:900;
+}
+
 .item-right { text-align:right }
-.line-total { font-size:12px;font-weight:900;white-space:nowrap }
+
+.line-total {
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
 .remove {
-  border:0;background:none;color:#999;padding:10px 0 0;
+  border:0;
+  background:none;
+  color:#999;
+  padding:10px 0 0;
   font-size:11px;
 }
-.empty { text-align:center;padding:42px 16px }
-.empty i { font-size:42px;color:#ffcfb5 }
-.empty h2 { font-size:20px;margin:17px 0 8px }
-.empty p { color:var(--muted);font-size:12px;line-height:1.7 }
+
+.empty {
+  text-align:center;
+  padding:42px 16px;
+}
+
+.empty i {
+  font-size:42px;
+  color:#ffcfb5;
+}
+
+.empty h2 {
+  font-size:20px;
+  margin:17px 0 8px;
+}
+
+.empty p {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
 .btn {
-  width:100%;border:0;border-radius:13px;padding:15px;
-  background:var(--orange);color:white;font-size:12px;
-  font-weight:900;text-align:center;display:block;
+  width:100%;
+  border:0;
+  border-radius:13px;
+  padding:15px;
+  background:var(--orange);
+  color:white;
+  font-size:12px;
+  font-weight:900;
+  text-align:center;
+  display:block;
 }
-.btn-dark { background:var(--dark);margin-top:10px }
-.summary-title { margin:0 0 15px;font-size:17px;font-weight:900 }
+
+.btn-dark {
+  background:var(--dark);
+  margin-top:10px;
+}
+
+.summary-title {
+  margin:0 0 15px;
+  font-size:17px;
+  font-weight:900;
+}
+
 .summary-row {
-  display:flex;justify-content:space-between;gap:12px;
-  margin:13px 0;font-size:12px;color:#666;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin:13px 0;
+  font-size:12px;
+  color:#666;
 }
+
 .summary-row strong { color:var(--dark) }
+
 .summary-total {
-  border-top:1px dashed #ddd;padding-top:16px;margin-top:16px;
-  font-size:19px;font-weight:900;color:var(--dark);
+  border-top:1px dashed #ddd;
+  padding-top:16px;
+  margin-top:16px;
+  font-size:19px;
+  font-weight:900;
+  color:var(--dark);
 }
+
 .summary-total strong { color:var(--orange) }
+
 .notice {
-  margin-top:15px;padding:12px;border-radius:12px;
-  background:#fff7ed;color:#9a3412;font-size:11px;line-height:1.6;
+  margin-top:15px;
+  padding:12px;
+  border-radius:12px;
+  background:#fff7ed;
+  color:#9a3412;
+  font-size:11px;
+  line-height:1.6;
 }
-.notice.success { background:#effcf4;color:#166534 }
-.small { color:var(--muted);font-size:10px;line-height:1.6;margin-top:12px }
-footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
+
+.notice.success {
+  background:#effcf4;
+  color:#166534;
+}
+
+.small {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  margin-top:12px;
+}
+
+footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  padding:25px 10px;
+}
+
 @media(max-width:390px) {
   .heading h1 { font-size:26px }
   .card { padding:12px }
-  .cart-item { grid-template-columns:40px minmax(0,1fr) auto;gap:9px }
-  .food-icon { width:40px;height:40px }
+
+  .cart-item {
+    grid-template-columns:40px minmax(0,1fr) auto;
+    gap:9px;
+  }
+
+  .food-icon {
+    width:40px;
+    height:40px;
+  }
+
   .line-total { font-size:11px }
 }
 </style>
 </head>
 
 <body>
+
 <header>
   <div class="header-inner">
     <a class="back" href="index.html" aria-label="Back to menu">
       <i class="fa-solid fa-arrow-left"></i>
     </a>
-    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
-    <span class="header-label"><i class="fa-solid fa-lock"></i> YOUR BOX</span>
+
+    <a class="brand" href="index.html">
+      Fresh<span>Fry.</span>
+    </a>
+
+    <span class="header-label">
+      <i class="fa-solid fa-lock"></i> YOUR BOX
+    </span>
   </div>
 </header>
 
@@ -140,6 +337,7 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
       <h1>My Cart <span>🛍️</span></h1>
       <p>Review your favourites before checkout.</p>
     </div>
+
     <span class="count" id="item-count">0 ITEMS</span>
   </div>
 
@@ -147,17 +345,41 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
     <div id="cart-items"></div>
   </section>
 
-  <section class="card" id="summary-card">
+  <section class="card" id="summary-card" hidden>
     <h2 class="summary-title">Order Summary</h2>
-    <div class="summary-row"><span>Food subtotal</span><strong id="subtotal">₹0</strong></div>
-    <div class="summary-row"><span>Delivery fee</span><strong id="delivery">₹0</strong></div>
-    <div class="summary-row summary-total"><span>Total</span><strong id="total">₹0</strong></div>
-    <div id="order-notice" class="notice">
+
+    <div class="summary-row">
+      <span>Food subtotal</span>
+      <strong id="subtotal">₹0</strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Delivery fee</span>
+      <strong id="delivery">₹0</strong>
+    </div>
+
+    <div class="summary-row summary-total">
+      <span>Total</span>
+      <strong id="total">₹0</strong>
+    </div>
+
+    <div id="order-notice" class="notice" aria-live="polite">
       Minimum food order is ₹100. Delivery fee is additional.
     </div>
-    <button type="button" class="btn" id="checkout">PROCEED TO CHECKOUT <i class="fa-solid fa-arrow-right"></i></button>
-    <a class="btn btn-dark" href="index.html"><i class="fa-solid fa-utensils"></i> ADD MORE ITEMS</a>
-    <p class="small">Your cart is saved on this device. Delivery availability and store status are confirmed by FreshFry during checkout.</p>
+
+    <button type="button" class="btn" id="checkout">
+      PROCEED TO CHECKOUT
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+    <a class="btn btn-dark" href="index.html#menu-section">
+      <i class="fa-solid fa-utensils"></i> ADD MORE ITEMS
+    </a>
+
+    <p class="small">
+      Your cart is saved on this device. Store status and order availability
+      will be checked during checkout.
+    </p>
   </section>
 </main>
 
@@ -170,47 +392,55 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
   const CART_KEY = "ff_cart_v2";
   const DELIVERY_FEE = 20;
   const MINIMUM_ORDER = 100;
+  const MAX_QUANTITY = 99;
 
   const $ = id => document.getElementById(id);
+
   let cart = readCart();
 
   function readCart() {
-  try {
-    const raw = localStorage.getItem("ff_cart_v2");
-    if (!raw) return [];
+    try {
+      const raw = localStorage.getItem(CART_KEY);
 
-    const data = JSON.parse(raw);
-    if (!Array.isArray(data)) return [];
+      if (!raw) return [];
 
-    return data
-      .filter(item =>
-        item &&
-        item.id != null &&
-        typeof item.name === "string" &&
-        Number.isFinite(Number(item.price)) &&
-        Number(item.price) >= 0 &&
-        Number.isFinite(Number(item.qty)) &&
-        Number(item.qty) > 0
-      )
-      .map(item => ({
-        ...item,
-        id: String(item.id),
-        name: String(item.name),
-        price: Number(item.price),
-        qty: Math.min(99, Math.floor(Number(item.qty)))
-      }));
-  } catch (error) {
-    console.error("Could not read cart:", error);
-    return [];
+      const data = JSON.parse(raw);
+
+      if (!Array.isArray(data)) return [];
+
+      return data
+        .filter(item =>
+          item &&
+          item.id != null &&
+          typeof item.name === "string" &&
+          Number.isFinite(Number(item.price)) &&
+          Number(item.price) >= 0 &&
+          Number.isFinite(Number(item.qty)) &&
+          Number(item.qty) > 0
+        )
+        .map(item => ({
+          ...item,
+          id: String(item.id),
+          name: String(item.name),
+          price: Number(item.price),
+          qty: Math.min(
+            MAX_QUANTITY,
+            Math.floor(Number(item.qty))
+          )
+        }))
+        .filter(item => item.qty > 0);
+    } catch (error) {
+      console.error("FreshFry cart read error:", error);
+      return [];
+    }
   }
-}
 
   function saveCart() {
     try {
       localStorage.setItem(CART_KEY, JSON.stringify(cart));
       return true;
     } catch (error) {
-      console.error("Could not save cart:", error);
+      console.error("FreshFry cart save error:", error);
       alert("Cart save nahi ho paya. Browser storage check karein.");
       return false;
     }
@@ -224,16 +454,19 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
 
   function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, char => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
     }[char]));
   }
 
   function subtotal() {
-    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    return cart.reduce(
+      (sum, item) => sum + item.price * item.qty,
+      0
+    );
   }
 
   function render() {
@@ -241,7 +474,9 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
     const amount = subtotal();
     const delivery = cart.length ? DELIVERY_FEE : 0;
 
-    $("item-count").textContent = count + (count === 1 ? " ITEM" : " ITEMS");
+    $("item-count").textContent =
+      count + (count === 1 ? " ITEM" : " ITEMS");
+
     $("subtotal").textContent = money(amount);
     $("delivery").textContent = money(delivery);
     $("total").textContent = money(amount + delivery);
@@ -251,29 +486,60 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
         <div class="empty">
           <i class="fa-solid fa-bag-shopping"></i>
           <h2>Your box is empty</h2>
-          <p>Add delicious momos and your favourite food from our menu.</p>
-          <a class="btn" href="index.html">EXPLORE MENU</a>
-        </div>`;
+          <p>
+            Add delicious momos and your favourite food from our menu.
+          </p>
+          <a class="btn" href="index.html#menu-section">
+            EXPLORE MENU
+          </a>
+        </div>
+      `;
+
       $("summary-card").hidden = true;
       return;
     }
 
     $("summary-card").hidden = false;
+
     $("cart-items").innerHTML = cart.map(item => `
       <article class="cart-item">
-        <div class="food-icon"><i class="fa-solid fa-utensils"></i></div>
+        <div class="food-icon">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+
         <div>
           <div class="item-name">${escapeHTML(item.name)}</div>
           <div class="item-price">${money(item.price)} each</div>
+
           <div class="quantity">
-            <button type="button" data-action="minus" data-id="${escapeHTML(item.id)}" aria-label="Decrease quantity">−</button>
+            <button
+              type="button"
+              data-action="minus"
+              data-id="${escapeHTML(item.id)}"
+              aria-label="Decrease quantity">−</button>
+
             <span>${item.qty}</span>
-            <button type="button" data-action="plus" data-id="${escapeHTML(item.id)}" aria-label="Increase quantity">+</button>
+
+            <button
+              type="button"
+              data-action="plus"
+              data-id="${escapeHTML(item.id)}"
+              aria-label="Increase quantity"
+              ${item.qty >= MAX_QUANTITY ? "disabled" : ""}>+</button>
           </div>
         </div>
+
         <div class="item-right">
-          <div class="line-total">${money(item.price * item.qty)}</div>
-          <button class="remove" type="button" data-action="remove" data-id="${escapeHTML(item.id)}">
+          <div class="line-total">
+            ${money(item.price * item.qty)}
+          </div>
+
+          <button
+            class="remove"
+            type="button"
+            data-action="remove"
+            data-id="${escapeHTML(item.id)}"
+            aria-label="Remove ${escapeHTML(item.name)}">
             <i class="fa-regular fa-trash-can"></i> Remove
           </button>
         </div>
@@ -281,66 +547,68 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
     `).join("");
 
     const notice = $("order-notice");
+
     if (amount < MINIMUM_ORDER) {
       notice.className = "notice";
-      notice.textContent = `Minimum food order is ${money(MINIMUM_ORDER)}. Add ${money(MINIMUM_ORDER - amount)} more to continue.`;
+      notice.textContent =
+        `Minimum food order is ${money(MINIMUM_ORDER)}. ` +
+        `Add ${money(MINIMUM_ORDER - amount)} more to continue.`;
     } else {
       notice.className = "notice success";
-      notice.textContent = "Your food subtotal meets the minimum order requirement.";
+      notice.textContent =
+        "Your food subtotal meets the minimum order requirement.";
     }
+
+    $("checkout").disabled = amount < MINIMUM_ORDER;
   }
 
   $("cart-items").addEventListener("click", function (event) {
     const button = event.target.closest("[data-action]");
+
     if (!button) return;
 
-    const item = cart.find(x => x.id === button.dataset.id);
+    const id = button.dataset.id;
+    const action = button.dataset.action;
+    const item = cart.find(x => x.id === id);
+
     if (!item) return;
 
-    if (button.dataset.action === "plus") {
-      item.qty = Math.min(99, item.qty + 1);
-    } else if (button.dataset.action === "minus") {
-      item.qty -= 1;
-      if (item.qty <= 0) {
-        cart = cart.filter(x => x.id !== item.id);
+    if (action === "plus") {
+      if (item.qty < MAX_QUANTITY) {
+        item.qty += 1;
       }
-    } else if (button.dataset.action === "remove") {
-      cart = cart.filter(x => x.id !== item.id);
+    } else if (action === "minus") {
+      item.qty -= 1;
+
+      if (item.qty <= 0) {
+        cart = cart.filter(x => x.id !== id);
+      }
+    } else if (action === "remove") {
+      cart = cart.filter(x => x.id !== id);
     }
 
-    saveCart();
-    render();
+    if (saveCart()) {
+      render();
+    }
   });
 
- $("checkout").addEventListener("click", function () {
-  const amount = subtotal();
-
-  if (amount < 100) {
-    alert("Minimum food order ₹100 hai.");
-    return;
-  }
-
-  window.location.href = "checkout.html";
-});
-    const amount = subtotal();
-
+  $("checkout").addEventListener("click", function () {
     if (!cart.length) {
       alert("Your cart is empty. Please add items first.");
       return;
     }
 
+    const amount = subtotal();
+
     if (amount < MINIMUM_ORDER) {
-      alert(`Minimum food order is ${money(MINIMUM_ORDER)}. Please add ${money(MINIMUM_ORDER - amount)} more.`);
+      alert(
+        `Minimum food order is ${money(MINIMUM_ORDER)}. ` +
+        `Please add ${money(MINIMUM_ORDER - amount)} more.`
+      );
       return;
     }
 
-    /*
-      Existing checkout form and Firebase order creation
-      currently live in index.html. Return there to continue.
-      The cart remains saved under ff_cart_v2.
-    */
-    window.location.href = "index.html#home";
-    alert("Your cart is saved. Please continue checkout from the FreshFry home page.");
+    window.location.href = "checkout.html";
   });
 
   window.addEventListener("pageshow", function () {
@@ -349,7 +617,7 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
   });
 
   window.addEventListener("storage", function (event) {
-    if (event.key === CART_KEY) {
+    if (event.key === CART_KEY || event.key === null) {
       cart = readCart();
       render();
     }
@@ -358,5 +626,6 @@ footer { text-align:center;color:var(--muted);font-size:10px;padding:25px 10px }
   render();
 })();
 </script>
+
 </body>
 </html>
