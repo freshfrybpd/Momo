@@ -1,1 +1,612 @@
-xx
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="description" content="FreshFry Momo notifications, order updates and special offers.">
+<title>Notifications | FreshFry Momo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --orange: #ff5e00;
+  --orange-dark: #e94d00;
+  --black: #101010;
+  --card: #191919;
+  --muted: #969696;
+  --line: #2b2b2b;
+  --white: #ffffff;
+  --green: #37d67a;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: #101010;
+  color: white;
+  font-family: Inter, sans-serif;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+button, a { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+}
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(16,16,16,.94);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: 15px 18px;
+}
+.topbar-inner {
+  max-width: 760px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.back-btn {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: white;
+  border-radius: 14px;
+}
+.brand { flex: 1; }
+.brand-name { font-size: 19px; font-weight: 900; letter-spacing: -.6px; }
+.brand-name span { color: var(--orange); }
+.brand-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.top-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #25170f;
+  color: var(--orange);
+  display: grid;
+  place-items: center;
+}
+main {
+  width: 100%;
+  max-width: 760px;
+  padding: 24px 16px;
+  margin: auto;
+}
+.hero {
+  background: linear-gradient(125deg,#2b170d,#191919 65%);
+  border: 1px solid #482714;
+  border-radius: 24px;
+  padding: 23px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero:after {
+  content: " ";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(255,94,0,.12);
+  right: -45px;
+  top: -48px;
+}
+.eyebrow {
+  color: #ff9a5e;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+.hero h1 { font-size: 28px; margin: 10px 0 7px; letter-spacing: -1px; }
+.hero p { font-size: 12px; line-height: 1.7; color: #c1c1c1; margin: 0; max-width: 340px; }
+.hero-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.count-pill {
+  background: var(--orange);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.count-label { color: #bdbdbd; font-size: 11px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 27px 0 15px;
+}
+.section-head h2 { margin: 0; font-size: 16px; font-weight: 800; }
+.text-btn {
+  color: var(--orange);
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 8px 0 8px 8px;
+}
+.filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  scrollbar-width: none;
+}
+.filters::-webkit-scrollbar { display: none; }
+.filter {
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  background: #191919;
+  color: #aaa;
+  border-radius: 12px;
+  padding: 10px 15px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.filter.active {
+  color: white;
+  background: var(--orange);
+  border-color: var(--orange);
+}
+.notice-list { display: grid; gap: 11px; margin-top: 17px; }
+.notice {
+  display: flex;
+  gap: 13px;
+  padding: 16px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  position: relative;
+  transition: border-color .2s, opacity .2s;
+}
+.notice.unread { border-color: #633116; background: linear-gradient(110deg,#21160f,#191919 65%); }
+.notice-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  font-size: 17px;
+}
+.icon-order { background: #282014; color: #ffb24d; }
+.icon-offer { background: #321b10; color: var(--orange); }
+.icon-delivery { background: #12291e; color: var(--green); }
+.icon-info { background: #1c2236; color: #8ba9ff; }
+.notice-content { flex: 1; min-width: 0; }
+.notice-title-row { display: flex; align-items: flex-start; gap: 8px; }
+.notice h3 { margin: 2px 0 7px; font-size: 13px; line-height: 1.5; font-weight: 800; }
+.unread-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: var(--orange);
+  border-radius: 50%;
+  margin-top: 7px;
+}
+.notice p { margin: 0; color: #aaa; font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+.notice-time { margin-top: 10px; color: #777; font-size: 10px; }
+.notice-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 11px;
+  color: #ff8a49;
+  font-size: 10px;
+  font-weight: 800;
+}
+.notice-menu {
+  background: transparent;
+  border: 0;
+  color: #777;
+  align-self: flex-start;
+  padding: 5px;
+}
+.empty {
+  text-align: center;
+  padding: 48px 20px;
+  border: 1px dashed #363636;
+  border-radius: 20px;
+  margin-top: 16px;
+}
+.empty-icon {
+  width: 66px;
+  height: 66px;
+  border-radius: 22px;
+  background: #24170f;
+  color: var(--orange);
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+  margin: 0 auto 18px;
+}
+.empty h3 { margin: 0 0 8px; font-size: 16px; }
+.empty p { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 0; }
+.empty[hidden] { display: none; }
+.bottom-nav {
+  position: fixed;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(18,18,18,.97);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
+  padding: 11px 8px calc(11px + env(safe-area-inset-bottom));
+}
+.bottom-inner {
+  max-width: 600px;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #777;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 54px;
+}
+.nav-item i { font-size: 18px; }
+.nav-item.active { color: var(--orange); }
+.toast {
+  position: fixed;
+  bottom: calc(92px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translate(-50%, 15px);
+  background: #292929;
+  border: 1px solid #414141;
+  color: white;
+  padding: 12px 17px;
+  border-radius: 13px;
+  font-size: 12px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+  max-width: calc(100% - 32px);
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%,0); }
+@media (min-width: 600px) {
+  main { padding: 30px 22px; }
+  .hero { padding: 30px; }
+  .hero h1 { font-size: 33px; }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back-btn" href="index.html" aria-label="Back to home">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="brand">
+      <div class="brand-name">Fresh<span>Fry</span></div>
+      <div class="brand-sub">Your notifications</div>
+    </div>
+    <div class="top-icon"><i class="fa-regular fa-bell"></i></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Your FreshFry inbox</div>
+    <h1>Stay in the loop<span style="color:var(--orange)">.</span></h1>
+    <p>Order updates, delivery information and special offers — all in one place.</p>
+    <div class="hero-bottom">
+      <span class="count-pill" id="unreadCount">0 UNREAD</span>
+      <span class="count-label">Keep up with what's cooking.</span>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <h2>All notifications</h2>
+    <button class="text-btn" id="markAllBtn" type="button">Mark all as read</button>
+  </div>
+
+  <div class="filters" aria-label="Filter notifications">
+    <button class="filter active" data-filter="all" type="button">All</button>
+    <button class="filter" data-filter="unread" type="button">Unread</button>
+    <button class="filter" data-filter="order" type="button">Orders</button>
+    <button class="filter" data-filter="offer" type="button">Offers</button>
+  </div>
+
+  <div id="noticeList" class="notice-list"></div>
+
+  <div id="emptyState" class="empty" hidden>
+    <div class="empty-icon"><i class="fa-regular fa-bell-slash"></i></div>
+    <h3 id="emptyTitle">You're all caught up!</h3>
+    <p id="emptyDescription">New notifications will appear here when available.</p>
+  </div>
+
+  <div style="text-align:center;margin-top:23px">
+    <button class="text-btn" id="clearReadBtn" type="button">
+      <i class="fa-regular fa-trash-can"></i> Clear read notifications
+    </button>
+  </div>
+
+  <p style="color:#666;text-align:center;font-size:10px;line-height:1.7;margin-top:20px">
+    This page currently stores its demo notifications on this device.
+    Live order alerts are not connected yet.
+  </p>
+</main>
+
+<nav class="bottom-nav" aria-label="Main navigation">
+  <div class="bottom-inner">
+    <a class="nav-item" href="index.html">
+      <i class="fa-solid fa-house"></i><span>HOME</span>
+    </a>
+    <a class="nav-item" href="index.html#menu-section">
+      <i class="fa-solid fa-utensils"></i><span>MENU</span>
+    </a>
+    <a class="nav-item" href="cart.html">
+      <i class="fa-solid fa-bag-shopping"></i><span>CART</span>
+    </a>
+    <a class="nav-item active" href="notifications.html">
+      <i class="fa-regular fa-bell"></i><span>ALERTS</span>
+    </a>
+    <a class="nav-item" href="profile.html">
+      <i class="fa-regular fa-user"></i><span>PROFILE</span>
+    </a>
+  </div>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "ff_notifications_v1";
+  const list = document.getElementById("noticeList");
+  const emptyState = document.getElementById("emptyState");
+  const unreadCount = document.getElementById("unreadCount");
+  const markAllBtn = document.getElementById("markAllBtn");
+  const clearReadBtn = document.getElementById("clearReadBtn");
+  let currentFilter = "all";
+  let toastTimer;
+
+  // Demo messages are only local examples, not actual order updates.
+  const demoNotifications = [
+    {
+      id: "welcome-demo",
+      type: "info",
+      title: "Welcome to FreshFry!",
+      message: "Your favourite food and fresh flavours are just a few taps away.",
+      time: Date.now(),
+      read: false,
+      demo: true,
+      actionText: "Explore menu",
+      actionUrl: "index.html#menu-section"
+    },
+    {
+      id: "offer-demo",
+      type: "offer",
+      title: "Craving something delicious?",
+      message: "Check the offers page for available promotions. Sample offers may not be redeemable.",
+      time: Date.now() - 60000,
+      read: false,
+      demo: true,
+      actionText: "View offers",
+      actionUrl: "offers.html"
+    }
+  ];
+
+  function loadNotifications() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved !== null) {
+        const data = JSON.parse(saved);
+        if (Array.isArray(data)) return data;
+      }
+    } catch (error) {
+      console.warn("Could not load saved notifications.", error);
+    }
+    return [...demoNotifications];
+  }
+
+  let notifications = loadNotifications();
+
+  function saveNotifications() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
+    } catch (error) {
+      console.warn("Could not save notifications.", error);
+      showToast("Could not save changes on this device.");
+    }
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
+
+  function safeLocalUrl(value) {
+    const allowed = ["index.html", "cart.html", "offers.html", "profile.html",
+      "my-orders.html", "track-order.html", "notifications.html"];
+    try {
+      const url = new URL(value, window.location.href);
+      if (url.origin !== window.location.origin) return "index.html";
+      const filename = url.pathname.split("/").pop();
+      if (!allowed.includes(filename)) return "index.html";
+      return url.pathname + url.search + url.hash;
+    } catch {
+      return "index.html";
+    }
+  }
+
+  function iconFor(type) {
+    if (type === "order") return ["fa-receipt", "icon-order"];
+    if (type === "offer") return ["fa-tags", "icon-offer"];
+    if (type === "delivery") return ["fa-motorcycle", "icon-delivery"];
+    return ["fa-bell", "icon-info"];
+  }
+
+  function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) return "Recently";
+    const diff = Math.max(0, Date.now() - date.getTime());
+    if (diff < 60000) return "Just now";
+    if (diff < 3600000) return Math.floor(diff / 60000) + " min ago";
+    if (diff < 86400000) return Math.floor(diff / 3600000) + " hr ago";
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric", month: "short", year: "numeric"
+    });
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+  }
+
+  function visibleNotifications() {
+    return notifications.filter(item => {
+      if (currentFilter === "unread") return !item.read;
+      if (currentFilter === "order") return item.type === "order" || item.type === "delivery";
+      if (currentFilter === "offer") return item.type === "offer";
+      return true;
+    }).sort((a, b) => Number(b.time) - Number(a.time));
+  }
+
+  function render() {
+    const unread = notifications.filter(item => !item.read).length;
+    unreadCount.textContent = unread + (unread === 1 ? " UNREAD" : " UNREAD");
+    markAllBtn.style.opacity = unread ? "1" : ".45";
+    markAllBtn.disabled = unread === 0;
+
+    const visible = visibleNotifications();
+    list.replaceChildren();
+
+    emptyState.hidden = visible.length > 0;
+    if (visible.length === 0) {
+      document.getElementById("emptyTitle").textContent =
+        currentFilter === "unread" ? "You're all caught up!" : "Nothing here yet";
+      document.getElementById("emptyDescription").textContent =
+        currentFilter === "unread"
+          ? "You've read all notifications."
+          : "Notifications matching this filter will appear here.";
+    }
+
+    visible.forEach(item => {
+      const [icon, iconClass] = iconFor(item.type);
+      const article = document.createElement("article");
+      article.className = "notice" + (item.read ? "" : " unread");
+
+      const title = escapeHTML(item.title);
+      const message = escapeHTML(item.message);
+      const time = escapeHTML(formatTime(item.time));
+      const action = item.actionText
+        ? `<a class="notice-action" href="${escapeHTML(safeLocalUrl(item.actionUrl || "index.html"))}" data-action-id="${escapeHTML(item.id)}">${escapeHTML(item.actionText)} <i class="fa-solid fa-arrow-right"></i></a>`
+        : "";
+
+      article.innerHTML = `
+        <div class="notice-icon ${iconClass}"><i class="fa-solid ${icon}"></i></div>
+        <div class="notice-content">
+          <div class="notice-title-row">
+            <h3>${title}</h3>
+            ${item.read ? "" : '<span class="unread-dot" aria-label="Unread"></span>'}
+          </div>
+          <p>${message}</p>
+          <div class="notice-time"><i class="fa-regular fa-clock"></i> ${time}</div>
+          ${action}
+        </div>
+        <button class="notice-menu" type="button" aria-label="${item.read ? "Delete" : "Mark as read"} notification" data-id="${escapeHTML(item.id)}">
+          <i class="fa-solid ${item.read ? "fa-trash-can" : "fa-check"}"></i>
+        </button>
+      `;
+
+      const menuButton = article.querySelector(".notice-menu");
+      menuButton.addEventListener("click", () => {
+        if (!item.read) {
+          item.read = true;
+          saveNotifications();
+          render();
+          showToast("Marked as read");
+        } else {
+          notifications = notifications.filter(n => n.id !== item.id);
+          saveNotifications();
+          render();
+          showToast("Notification removed");
+        }
+      });
+
+      const actionLink = article.querySelector("[data-action-id]");
+      if (actionLink) {
+        actionLink.addEventListener("click", () => {
+          item.read = true;
+          saveNotifications();
+        });
+      }
+
+      list.appendChild(article);
+    });
+  }
+
+  document.querySelectorAll(".filter").forEach(button => {
+    button.addEventListener("click", () => {
+      currentFilter = button.dataset.filter;
+      document.querySelectorAll(".filter").forEach(filter => {
+        const active = filter === button;
+        filter.classList.toggle("active", active);
+        filter.setAttribute("aria-pressed", String(active));
+      });
+      render();
+    });
+  });
+
+  markAllBtn.addEventListener("click", () => {
+    notifications.forEach(item => item.read = true);
+    saveNotifications();
+    render();
+    showToast("All notifications marked as read");
+  });
+
+  clearReadBtn.addEventListener("click", () => {
+    const readCount = notifications.filter(item => item.read).length;
+    if (!readCount) {
+      showToast("No read notifications to clear");
+      return;
+    }
+    if (!window.confirm("Remove all read notifications from this device?")) return;
+    notifications = notifications.filter(item => !item.read);
+    saveNotifications();
+    render();
+    showToast("Read notifications cleared");
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
