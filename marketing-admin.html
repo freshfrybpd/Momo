@@ -1,1 +1,905 @@
-dd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="robots" content="noindex,nofollow">
+<title>Marketing Admin | FreshFry</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#f7f7f8;
+  --line:#ececef;
+  --green:#15803d;
+  --red:#b91c1c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--dark);
+  font-family:'Outfit',sans-serif
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+[hidden]{display:none!important}
+.wrap{width:min(1200px,calc(100% - 28px));margin:auto}
+header{
+  position:sticky;top:0;z-index:10;background:#fff;
+  border-bottom:1px solid var(--line)
+}
+.header-inner{
+  min-height:68px;display:flex;align-items:center;
+  gap:12px;padding:10px 0
+}
+.brand{font-size:25px;font-weight:900;font-style:italic;letter-spacing:-1px}
+.brand span{color:var(--orange)}
+.header-tag{
+  margin-left:auto;padding:9px 12px;border-radius:10px;
+  background:#fff2e9;color:#c44800;font-size:11px;font-weight:900
+}
+main{padding:25px 0 50px}
+h1{font-size:29px;letter-spacing:-1px;margin:0}
+h2{font-size:18px;margin:0}
+p{line-height:1.6}
+.muted{color:var(--muted);font-size:12px}
+.card{
+  background:#fff;border:1px solid var(--line);
+  border-radius:18px;padding:19px;margin-bottom:17px;min-width:0
+}
+.auth-card{max-width:430px;margin:40px auto}
+.field{margin-bottom:14px}
+label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}
+input,textarea,select{
+  width:100%;border:1px solid #dedee3;border-radius:10px;
+  padding:12px;background:#fff;color:var(--dark);outline:none;font-size:13px
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--orange);box-shadow:0 0 0 3px #ff5e0015
+}
+textarea{min-height:90px;resize:vertical}
+button{
+  border:0;border-radius:10px;padding:12px 15px;
+  font-size:12px;font-weight:900
+}
+.primary{background:var(--orange);color:#fff}
+.secondary{background:#fff;border:1px solid var(--line);color:var(--dark)}
+.danger{background:#fff0f0;color:var(--red);border:1px solid #fecaca}
+.full{width:100%}
+.grid{
+  display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);
+  gap:18px;align-items:start
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.tab{background:#fff;border:1px solid var(--line);color:#555}
+.tab.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+.section{display:none}
+.section.active{display:block}
+.notice{
+  padding:12px;border-radius:10px;background:#fff7ed;color:#9a3412;
+  font-size:11px;line-height:1.7;margin-bottom:14px
+}
+.preview{
+  position:relative;overflow:hidden;border-radius:16px;min-height:190px;
+  background:#171717;color:white;display:flex;align-items:center;padding:22px
+}
+.preview img{
+  position:absolute;right:0;top:0;width:58%;height:100%;object-fit:cover;
+  opacity:.65;mask-image:linear-gradient(to right,transparent,#000 45%)
+}
+.preview-copy{position:relative;z-index:1;width:75%;overflow-wrap:anywhere}
+.preview-kicker{
+  color:#ffb18b;font-size:10px;font-weight:900;letter-spacing:1px
+}
+.preview h3{font-size:25px;line-height:1.1;margin:10px 0}
+.preview p{font-size:12px;color:#eee}
+.coupon-pill{
+  display:inline-block;background:var(--orange);color:white;
+  border-radius:7px;padding:7px 10px;font-size:11px;font-weight:900
+}
+.saved-list{display:grid;gap:10px}
+.saved-item{
+  display:flex;gap:12px;align-items:flex-start;
+  border:1px solid var(--line);border-radius:13px;padding:13px;min-width:0
+}
+.saved-item img{
+  width:76px;height:76px;object-fit:cover;border-radius:10px;
+  background:#f3f3f3;flex-shrink:0
+}
+.saved-copy{flex:1;min-width:0;overflow-wrap:anywhere}
+.saved-copy h3{font-size:14px;margin:0 0 5px}
+.saved-copy p{font-size:11px;color:var(--muted);margin:5px 0}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.status{
+  display:inline-block;border-radius:20px;padding:5px 8px;
+  font-size:10px;font-weight:900
+}
+.status.on{background:#dcfce7;color:#166534}
+.status.off{background:#f3f4f6;color:#555}
+.result{font-size:12px;margin-top:12px;line-height:1.6;overflow-wrap:anywhere}
+.result.error{color:var(--red)}
+.result.success{color:var(--green)}
+.divider{height:1px;background:var(--line);margin:18px 0}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px}
+@media(max-width:760px){
+  .grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  h1{font-size:25px}
+  .card{padding:15px}
+  .preview{min-height:170px}
+  .preview h3{font-size:22px}
+  .saved-item img{width:60px;height:60px}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">Fresh<span>Fry.</span></a>
+    <span class="header-tag">
+      <i class="fa-solid fa-shield-halved"></i> MARKETING ADMIN
+    </span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- PIN LOGIN -->
+  <section id="login-screen" class="card auth-card">
+    <h1>Admin Login</h1>
+    <p class="muted">Enter your marketing admin PIN to continue.</p>
+
+    <form id="pin-form">
+      <div class="field">
+        <label for="admin-pin">4-digit PIN</label>
+        <input
+          id="admin-pin"
+          type="password"
+          inputmode="numeric"
+          pattern="[0-9]{4}"
+          maxlength="4"
+          autocomplete="off"
+          placeholder="Enter PIN"
+          required
+        >
+      </div>
+      <button class="primary full" type="submit">UNLOCK ADMIN</button>
+    </form>
+
+    <div id="login-result" class="result" role="status"></div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <section id="admin-screen" hidden>
+    <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+      <div>
+        <h1>Marketing Control</h1>
+        <p class="muted">Manage FreshFry offers, coupons and notification records.</p>
+      </div>
+      <button id="lock-btn" class="secondary">
+        <i class="fa-solid fa-lock"></i> Lock Panel
+      </button>
+    </div>
+
+    <div class="notice">
+      <strong>Firebase security:</strong> The PIN is a basic interface lock, not secure
+      authentication. Keep Firestore rules restricted to authorized administrators.
+      This page uses the collections <code>marketingOffers</code> and
+      <code>marketingNotifications</code>. Customer pages need separate integration
+      before these records appear in the customer app.
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="offers-section">Offers & Coupons</button>
+      <button class="tab" data-tab="notifications-section">Notifications</button>
+    </div>
+
+    <!-- OFFERS -->
+    <section id="offers-section" class="section active">
+      <div class="grid">
+        <div class="card">
+          <h2 id="offer-heading">Create offer</h2>
+          <p class="muted">Add a promotional offer or coupon.</p>
+
+          <form id="offer-form">
+            <input type="hidden" id="offer-id">
+
+            <div class="field">
+              <label for="offer-title">Offer title *</label>
+              <input id="offer-title" maxlength="100" required
+                placeholder="Weekend Momo Deal">
+            </div>
+
+            <div class="field">
+              <label for="offer-subtitle">Subtitle</label>
+              <input id="offer-subtitle" maxlength="180"
+                placeholder="Save on your favourite momos">
+            </div>
+
+            <div class="field">
+              <label for="offer-image">Banner image URL</label>
+              <input id="offer-image" type="url" maxlength="1000"
+                placeholder="https://example.com/banner.jpg">
+            </div>
+
+            <div class="field">
+              <label for="offer-link">Click-through URL</label>
+              <input id="offer-link" type="url" maxlength="1000"
+                placeholder="https://freshfrymomo.food/">
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="coupon-code">Coupon code</label>
+                <input id="coupon-code" maxlength="40" placeholder="FRESH20">
+              </div>
+              <div class="field">
+                <label for="discount-type">Discount type</label>
+                <select id="discount-type">
+                  <option value="percent">Percentage (%)</option>
+                  <option value="flat">Flat amount (₹)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="discount-value">Discount value</label>
+                <input id="discount-value" type="number" min="0" max="100"
+                  step="0.01" value="10" required>
+              </div>
+              <div class="field">
+                <label for="minimum-spend">Minimum food subtotal (₹)</label>
+                <input id="minimum-spend" type="number" min="0" step="1" value="0">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="offer-start">Start date *</label>
+                <input id="offer-start" type="datetime-local" required>
+              </div>
+              <div class="field">
+                <label for="offer-end">End date *</label>
+                <input id="offer-end" type="datetime-local" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>
+                <input id="offer-active" type="checkbox" checked
+                  style="width:auto;margin-right:7px">
+                Offer active
+              </label>
+            </div>
+
+            <button class="primary full" id="save-offer-btn" type="submit">
+              SAVE OFFER
+            </button>
+            <button class="secondary full" id="cancel-edit-btn"
+              type="button" style="margin-top:8px" hidden>
+              CANCEL EDIT
+            </button>
+            <div id="offer-result" class="result" role="status"></div>
+          </form>
+        </div>
+
+        <div>
+          <div class="card">
+            <h2>Live preview</h2>
+            <p class="muted">Preview of your promotional banner.</p>
+
+            <div class="preview">
+              <img id="preview-image" alt="" hidden>
+              <div class="preview-copy">
+                <div class="preview-kicker">FRESHFRY SPECIAL</div>
+                <h3 id="preview-title">Your next favourite deal</h3>
+                <p id="preview-subtitle">Fresh offers for your cravings.</p>
+                <span id="preview-coupon" class="coupon-pill">SAVE TODAY</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Saved offers</h2>
+            <p class="muted">Edit or activate/deactivate existing offers.</p>
+            <button id="refresh-offers" class="secondary full" type="button">
+              <i class="fa-solid fa-rotate"></i> Refresh offers
+            </button>
+            <div class="divider"></div>
+            <div id="offer-list" class="saved-list">
+              <p class="muted">Unlock the panel to load offers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTIFICATIONS -->
+    <section id="notifications-section" class="section">
+      <div class="grid">
+        <div class="card">
+          <h2>Create notification record</h2>
+          <p class="muted">Prepare a notification for future push integration.</p>
+
+          <div class="notice">
+            Saving a record does <strong>not</strong> send a push notification to
+            customers. A secure backend and customer notification tokens are needed
+            for real push delivery.
+          </div>
+
+          <form id="notification-form">
+            <div class="field">
+              <label for="notification-title">Notification title *</label>
+              <input id="notification-title" maxlength="100" required
+                placeholder="FreshFry has a new offer!">
+            </div>
+
+            <div class="field">
+              <label for="notification-message">Message *</label>
+              <textarea id="notification-message" maxlength="500" required
+                placeholder="Tell customers about your latest offer."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="notification-image">Image URL (optional)</label>
+              <input id="notification-image" type="url" maxlength="1000"
+                placeholder="https://example.com/banner.jpg">
+            </div>
+
+            <div class="field">
+              <label for="notification-link">Click-through URL (optional)</label>
+              <input id="notification-link" type="url" maxlength="1000"
+                placeholder="https://freshfrymomo.food/offers.html">
+            </div>
+
+            <button class="primary full" id="save-notification-btn" type="submit">
+              SAVE NOTIFICATION RECORD
+            </button>
+            <div id="notification-result" class="result" role="status"></div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Notification history</h2>
+          <p class="muted">Previously saved notification records.</p>
+          <button id="refresh-notifications" class="secondary full" type="button">
+            <i class="fa-solid fa-rotate"></i> Refresh history
+          </button>
+          <div class="divider"></div>
+          <div id="notification-list" class="saved-list">
+            <p class="muted">Unlock the panel to load notification records.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer>FreshFry Momo · Baripada, Odisha</footer>
+
+<script type="module">
+import { initializeApp, getApps, getApp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+/*
+ * IMPORTANT:
+ * The PIN below is visible to anyone who inspects this public JavaScript.
+ * It only hides the interface; it does not securely authorize database access.
+ * Firestore Security Rules must independently restrict writes to administrators.
+ */
+const ADMIN_PIN = "7788";
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let unlocked = false;
+let offersCache = [];
+let notificationsCache = [];
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
+function safeURL(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  try {
+    const url = new URL(raw);
+    return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function showResult(id, message, success = false) {
+  const el = $(id);
+  el.textContent = message;
+  el.className = "result " + (success ? "success" : "error");
+}
+
+function requireUnlocked() {
+  if (!unlocked) throw new Error("Please unlock the admin panel first.");
+}
+
+function unlockPanel() {
+  unlocked = true;
+  $("login-screen").hidden = true;
+  $("admin-screen").hidden = false;
+  $("admin-pin").value = "";
+  loadOffers();
+  loadNotifications();
+}
+
+function lockPanel() {
+  unlocked = false;
+  $("login-screen").hidden = false;
+  $("admin-screen").hidden = true;
+  $("admin-pin").value = "";
+}
+
+$("pin-form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  if ($("admin-pin").value === ADMIN_PIN) {
+    showResult("login-result", "PIN accepted.", true);
+    unlockPanel();
+  } else {
+    showResult("login-result", "Incorrect PIN. Please try again.");
+    $("admin-pin").value = "";
+    $("admin-pin").focus();
+  }
+});
+
+$("lock-btn").addEventListener("click", lockPanel);
+
+document.querySelectorAll("[data-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("[data-tab]").forEach(tab =>
+      tab.classList.toggle("active", tab === button)
+    );
+
+    document.querySelectorAll(".section").forEach(section =>
+      section.classList.toggle("active", section.id === button.dataset.tab)
+    );
+  });
+});
+
+/* Live preview */
+function updatePreview() {
+  $("preview-title").textContent =
+    $("offer-title").value.trim() || "Your next favourite deal";
+
+  $("preview-subtitle").textContent =
+    $("offer-subtitle").value.trim() || "Fresh offers for your cravings.";
+
+  const code = $("coupon-code").value.trim();
+  const type = $("discount-type").value;
+  const value = Number($("discount-value").value || 0);
+
+  $("preview-coupon").textContent = code
+    ? "CODE: " + code
+    : type === "percent"
+      ? value + "% OFF"
+      : "₹" + value + " OFF";
+
+  const image = safeURL($("offer-image").value);
+  $("preview-image").hidden = !image;
+
+  if (image) {
+    $("preview-image").src = image;
+    $("preview-image").onerror = () => {
+      $("preview-image").hidden = true;
+    };
+  } else {
+    $("preview-image").removeAttribute("src");
+  }
+}
+
+[
+  "offer-title",
+  "offer-subtitle",
+  "offer-image",
+  "coupon-code",
+  "discount-type",
+  "discount-value"
+].forEach(id => {
+  $(id).addEventListener("input", updatePreview);
+  $(id).addEventListener("change", updatePreview);
+});
+
+function getOfferFormData() {
+  return {
+    title: $("offer-title").value.trim(),
+    subtitle: $("offer-subtitle").value.trim(),
+    imageUrl: safeURL($("offer-image").value),
+    clickUrl: safeURL($("offer-link").value),
+    couponCode: $("coupon-code").value.trim().toUpperCase(),
+    discountType: $("discount-type").value,
+    discountValue: Number($("discount-value").value),
+    minimumSpend: Number($("minimum-spend").value),
+    startAt: $("offer-start").value
+      ? new Date($("offer-start").value) : null,
+    endAt: $("offer-end").value
+      ? new Date($("offer-end").value) : null,
+    active: $("offer-active").checked
+  };
+}
+
+function validateOffer(data) {
+  if (!data.title) throw new Error("Enter an offer title.");
+  if ($("offer-image").value.trim() && !data.imageUrl)
+    throw new Error("Enter a valid HTTP or HTTPS image URL.");
+  if ($("offer-link").value.trim() && !data.clickUrl)
+    throw new Error("Enter a valid HTTP or HTTPS click URL.");
+  if (!data.startAt || !data.endAt)
+    throw new Error("Select both start and end dates.");
+  if (data.endAt <= data.startAt)
+    throw new Error("End date must be after start date.");
+  if (!Number.isFinite(data.discountValue) || data.discountValue < 0)
+    throw new Error("Discount value cannot be negative.");
+  if (data.discountType === "percent" && data.discountValue > 100)
+    throw new Error("Percentage discount cannot exceed 100%.");
+  if (!Number.isFinite(data.minimumSpend) || data.minimumSpend < 0)
+    throw new Error("Minimum spend cannot be negative.");
+}
+
+$("offer-form").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  try {
+    requireUnlocked();
+
+    const data = getOfferFormData();
+    validateOffer(data);
+
+    const editId = $("offer-id").value;
+    $("save-offer-btn").disabled = true;
+    $("save-offer-btn").textContent = "SAVING...";
+
+    const payload = {
+      ...data,
+      updatedAt: serverTimestamp()
+    };
+
+    if (editId) {
+      await updateDoc(doc(db, "marketingOffers", editId), payload);
+    } else {
+      await addDoc(collection(db, "marketingOffers"), {
+        ...payload,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    resetOfferForm();
+    showResult("offer-result", "Offer saved successfully.", true);
+    await loadOffers();
+  } catch (error) {
+    console.error(error);
+    showResult(
+      "offer-result",
+      error.code === "permission-denied"
+        ? "Firebase denied access. Configure secure admin-only Firestore rules."
+        : error.message || "Could not save offer."
+    );
+  } finally {
+    $("save-offer-btn").disabled = false;
+    $("save-offer-btn").textContent = $("offer-id").value
+      ? "UPDATE OFFER" : "SAVE OFFER";
+  }
+});
+
+function resetOfferForm() {
+  $("offer-form").reset();
+  $("offer-id").value = "";
+  $("discount-value").value = "10";
+  $("minimum-spend").value = "0";
+  $("offer-active").checked = true;
+  $("offer-heading").textContent = "Create offer";
+  $("save-offer-btn").textContent = "SAVE OFFER";
+  $("cancel-edit-btn").hidden = true;
+  updatePreview();
+}
+
+$("cancel-edit-btn").addEventListener("click", resetOfferForm);
+
+function asDate(value) {
+  if (!value) return null;
+  if (typeof value.toDate === "function") return value.toDate();
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) ? date : null;
+}
+
+function dateText(value) {
+  const date = asDate(value);
+  return date ? date.toLocaleString("en-IN") : "Not set";
+}
+
+function inputDate(value) {
+  const date = asDate(value);
+  if (!date) return "";
+  const offset = date.getTimezoneOffset();
+  return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
+}
+
+function editOffer(id) {
+  const item = offersCache.find(offer => offer.id === id);
+  if (!item) return;
+
+  $("offer-id").value = item.id;
+  $("offer-title").value = item.title || "";
+  $("offer-subtitle").value = item.subtitle || "";
+  $("offer-image").value = item.imageUrl || "";
+  $("offer-link").value = item.clickUrl || "";
+  $("coupon-code").value = item.couponCode || "";
+  $("discount-type").value = item.discountType || "percent";
+  $("discount-value").value = item.discountValue ?? 10;
+  $("minimum-spend").value = item.minimumSpend ?? 0;
+  $("offer-start").value = inputDate(item.startAt);
+  $("offer-end").value = inputDate(item.endAt);
+  $("offer-active").checked = item.active === true;
+
+  $("offer-heading").textContent = "Edit offer";
+  $("save-offer-btn").textContent = "UPDATE OFFER";
+  $("cancel-edit-btn").hidden = false;
+  updatePreview();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function toggleOffer(id) {
+  try {
+    requireUnlocked();
+    const item = offersCache.find(offer => offer.id === id);
+    if (!item) return;
+
+    await updateDoc(doc(db, "marketingOffers", id), {
+      active: !item.active,
+      updatedAt: serverTimestamp()
+    });
+
+    await loadOffers();
+  } catch (error) {
+    console.error(error);
+    alert("Could not update offer. Check Firestore permissions.");
+  }
+}
+
+async function deleteOffer(id) {
+  if (!confirm("Delete this offer permanently?")) return;
+
+  try {
+    requireUnlocked();
+    await deleteDoc(doc(db, "marketingOffers", id));
+    await loadOffers();
+  } catch (error) {
+    console.error(error);
+    alert("Could not delete offer. Check Firestore permissions.");
+  }
+}
+
+async function loadOffers() {
+  if (!unlocked) return;
+
+  $("offer-list").innerHTML = '<p class="muted">Loading offers...</p>';
+
+  try {
+    const snapshot = await getDocs(collection(db, "marketingOffers"));
+    offersCache = snapshot.docs.map(d => ({id:d.id,...d.data()}));
+
+    offersCache.sort((a,b) =>
+      (asDate(b.createdAt)?.getTime() || 0) -
+      (asDate(a.createdAt)?.getTime() || 0)
+    );
+
+    if (!offersCache.length) {
+      $("offer-list").innerHTML = '<p class="muted">No offers created yet.</p>';
+      return;
+    }
+
+    $("offer-list").innerHTML = offersCache.map(item => {
+      const image = safeURL(item.imageUrl);
+      const discount = item.discountType === "flat"
+        ? "₹" + Number(item.discountValue || 0) + " OFF"
+        : Number(item.discountValue || 0) + "% OFF";
+
+      return `
+        <article class="saved-item">
+          ${image
+            ? `<img src="${escapeHTML(image)}" alt="" loading="lazy">`
+            : `<div style="width:76px;height:76px;border-radius:10px;background:#fff2e9;display:grid;place-items:center;color:#ff5e00;flex-shrink:0"><i class="fa-solid fa-tag fa-xl"></i></div>`
+          }
+          <div class="saved-copy">
+            <h3>${escapeHTML(item.title || "Untitled offer")}</h3>
+            <p>${escapeHTML(item.subtitle || "")}</p>
+            <p><strong>${escapeHTML(discount)}</strong>
+              ${item.couponCode ? " · Code: " + escapeHTML(item.couponCode) : ""}
+            </p>
+            <p>Starts: ${escapeHTML(dateText(item.startAt))}</p>
+            <p>Ends: ${escapeHTML(dateText(item.endAt))}</p>
+            <span class="status ${item.active ? "on" : "off"}">
+              ${item.active ? "ACTIVE" : "INACTIVE"}
+            </span>
+            <div class="actions">
+              <button class="secondary" data-edit="${escapeHTML(item.id)}">Edit</button>
+              <button class="secondary" data-toggle="${escapeHTML(item.id)}">
+                ${item.active ? "Deactivate" : "Activate"}
+              </button>
+              <button class="danger" data-delete="${escapeHTML(item.id)}">Delete</button>
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+
+    $("offer-list").querySelectorAll("[data-edit]").forEach(button =>
+      button.addEventListener("click", () => editOffer(button.dataset.edit))
+    );
+
+    $("offer-list").querySelectorAll("[data-toggle]").forEach(button =>
+      button.addEventListener("click", () => toggleOffer(button.dataset.toggle))
+    );
+
+    $("offer-list").querySelectorAll("[data-delete]").forEach(button =>
+      button.addEventListener("click", () => deleteOffer(button.dataset.delete))
+    );
+  } catch (error) {
+    console.error(error);
+    $("offer-list").innerHTML =
+      '<p class="result error">Could not load offers. Firebase may be denying access. Check admin-only Firestore rules.</p>';
+  }
+}
+
+$("refresh-offers").addEventListener("click", loadOffers);
+
+/* Notifications are saved as records; this does not send push notifications. */
+$("notification-form").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  try {
+    requireUnlocked();
+
+    const title = $("notification-title").value.trim();
+    const message = $("notification-message").value.trim();
+    const imageInput = $("notification-image").value.trim();
+    const linkInput = $("notification-link").value.trim();
+    const imageUrl = safeURL(imageInput);
+    const clickUrl = safeURL(linkInput);
+
+    if (!title || !message) throw new Error("Enter a title and message.");
+    if (imageInput && !imageUrl) throw new Error("Image URL must use HTTP or HTTPS.");
+    if (linkInput && !clickUrl) throw new Error("Click URL must use HTTP or HTTPS.");
+
+    $("save-notification-btn").disabled = true;
+    $("save-notification-btn").textContent = "SAVING...";
+
+    await addDoc(collection(db, "marketingNotifications"), {
+      title,
+      message,
+      imageUrl,
+      clickUrl,
+      status: "draft",
+      createdAt: serverTimestamp()
+    });
+
+    $("notification-form").reset();
+    showResult(
+      "notification-result",
+      "Notification record saved as draft. No push notification was sent.",
+      true
+    );
+
+    await loadNotifications();
+  } catch (error) {
+    console.error(error);
+    showResult(
+      "notification-result",
+      error.code === "permission-denied"
+        ? "Firebase denied access. Check secure admin-only Firestore rules."
+        : error.message || "Could not save notification."
+    );
+  } finally {
+    $("save-notification-btn").disabled = false;
+    $("save-notification-btn").textContent = "SAVE NOTIFICATION RECORD";
+  }
+});
+
+async function loadNotifications() {
+  if (!unlocked) return;
+
+  $("notification-list").innerHTML =
+    '<p class="muted">Loading notification records...</p>';
+
+  try {
+    const snapshot = await getDocs(collection(db, "marketingNotifications"));
+    notificationsCache = snapshot.docs.map(d => ({id:d.id,...d.data()}));
+
+    notificationsCache.sort((a,b) =>
+      (asDate(b.createdAt)?.getTime() || 0) -
+      (asDate(a.createdAt)?.getTime() || 0)
+    );
+
+    if (!notificationsCache.length) {
+      $("notification-list").innerHTML =
+        '<p class="muted">No notification records yet.</p>';
+      return;
+    }
+
+    $("notification-list").innerHTML = notificationsCache.map(item => `
+      <article class="saved-item">
+        <div style="width:40px;height:40px;border-radius:10px;background:#fff2e9;display:grid;place-items:center;color:#ff5e00;flex-shrink:0">
+          <i class="fa-regular fa-bell"></i>
+        </div>
+        <div class="saved-copy">
+          <h3>${escapeHTML(item.title || "Untitled notification")}</h3>
+          <p>${escapeHTML(item.message || "")}</p>
+          <p>Created: ${escapeHTML(dateText(item.createdAt))}</p>
+          <span class="status off">${escapeHTML(item.status || "draft").toUpperCase()}</span>
+          <div class="actions">
+            <button class="danger" data-delete-notification="${escapeHTML(item.id)}">
+              Delete record
+            </button>
+          </div>
+        </div>
+      </article>
+    `).join("");
+
+    $("notification-list").querySelectorAll("[data-delete-notification]").forEach(button => {
+      button.addEventListener("click", async () => {
+        if (!confirm("Delete this notification record?")) return;
+
+        try {
+          await deleteDoc(doc(db, "marketingNotifications", button.dataset.deleteNotification));
+          await loadNotifications();
+        } catch (error) {
+          console.error(error);
+          alert("Could not delete notification. Check Firestore permissions.");
+        }
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    $("notification-list").innerHTML =
+      '<p class="result error">Could not load notifications. Check Firebase access and Firestore rules.</p>';
+  }
+}
+
+$("refresh-notifications").addEventListener("click", loadNotifications);
+
+updatePreview();
+</script>
+</body>
+</html>
