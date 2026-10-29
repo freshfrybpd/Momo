@@ -1,1 +1,486 @@
-ff
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#101827">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Reports Admin</title>
+<style>
+:root{
+  --bg:#0b1120;--panel:#121c2d;--panel2:#172337;--border:#29374b;
+  --text:#f4f7fb;--muted:#9eacc0;--orange:#ff5e00;
+  --green:#24c78b;--red:#ff626e;--yellow:#ffc857;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1400px;margin:auto;padding:22px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--orange);display:grid;place-items:center;font-size:23px;font-weight:900}
+h1{font-size:23px;margin:0}
+.subtitle{color:var(--muted);font-size:13px;margin-top:5px}
+.actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);background:var(--panel2)}
+.btn.primary{background:var(--orange);border-color:var(--orange);font-weight:700}
+.nav{display:flex;gap:8px;overflow-x:auto;padding-bottom:16px;margin-bottom:8px}
+.nav a{flex-shrink:0;text-decoration:none;color:var(--muted);padding:10px 13px;border:1px solid var(--border);border-radius:10px;font-size:13px}
+.nav a.active{color:white;background:#422513;border-color:#88431b}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 14px}
+.head h2{font-size:19px;margin:0}
+.muted{color:var(--muted)}
+.panel,.stat{background:var(--panel);border:1px solid var(--border);border-radius:16px}
+.filters{padding:15px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.field{width:100%;min-width:0;background:#0b1423;border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px;outline:none}
+.field:focus{border-color:var(--orange)}
+.label{font-size:12px;color:var(--muted);display:block;margin-bottom:7px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stat{padding:18px;min-width:0}
+.stat-label{color:var(--muted);font-size:13px}
+.stat-value{font-size:26px;font-weight:800;margin-top:12px;overflow-wrap:anywhere}
+.stat-foot{font-size:12px;color:var(--muted);margin-top:7px}
+.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:15px}
+.panel-title{padding:17px 18px;border-bottom:1px solid var(--border);font-weight:750}
+.panel-body{padding:18px}
+.chart{display:flex;align-items:flex-end;gap:9px;height:230px;padding:20px 2px 0;border-bottom:1px solid var(--border)}
+.bar-item{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}
+.bar{width:100%;max-width:48px;min-height:3px;background:var(--orange);border-radius:7px 7px 2px 2px;position:relative}
+.bar-value{font-size:10px;color:var(--muted);text-align:center;overflow-wrap:anywhere}
+.bar-label{font-size:10px;color:var(--muted);text-align:center;white-space:nowrap}
+.legend{display:flex;gap:15px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:14px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:0}
+.row-label{color:var(--muted);font-size:13px}
+.row-value{font-weight:750;text-align:right;overflow-wrap:anywhere}
+.badge{display:inline-block;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:750}
+.badge.green{background:#103c31;color:#6ef0ba}
+.badge.yellow{background:#493819;color:#ffd77b}
+.badge.red{background:#48232c;color:#ff9aa2}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:13px 15px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+th{color:var(--muted);font-weight:600;background:#101a2a}
+td.money{font-weight:750;white-space:nowrap}
+.empty,.loading{padding:25px;text-align:center;color:var(--muted)}
+.footer{font-size:12px;line-height:1.7;color:var(--muted);margin-top:18px}
+.error{color:#ff9aa2}
+@media(max-width:950px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}}
+@media(max-width:600px){.app{padding:14px}h1{font-size:20px}.filters{grid-template-columns:1fr}.stat{padding:14px}.stat-value{font-size:22px}.chart{gap:5px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">↗</div>
+      <div>
+        <h1>Reports & Analytics</h1>
+        <div class="subtitle">FreshFry Momo · Business performance</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="refreshBtn" type="button">↻ Refresh</button>
+      <button class="btn primary" id="exportBtn" type="button">Export CSV</button>
+    </div>
+  </header>
+
+  <nav class="nav" aria-label="Admin navigation">
+    <a href="admin.html">Dashboard</a>
+    <a href="orders-admin.html">Orders</a>
+    <a href="menu-admin.html">Menu</a>
+    <a href="delivery-admin.html">Delivery</a>
+    <a href="customers-admin.html">Customers</a>
+    <a href="marketing-admin.html">Marketing</a>
+    <a href="payments-admin.html">Payments</a>
+    <a class="active" href="reports-admin.html">Reports</a>
+    <a href="settings-admin.html">Settings</a>
+  </nav>
+
+  <div class="head">
+    <h2>Business overview</h2>
+    <span class="muted" id="updatedAt">Connecting…</span>
+  </div>
+
+  <section class="panel filters">
+    <div>
+      <label class="label" for="startDate">From date</label>
+      <input class="field" type="date" id="startDate">
+    </div>
+    <div>
+      <label class="label" for="endDate">To date</label>
+      <input class="field" type="date" id="endDate">
+    </div>
+    <div>
+      <label class="label" for="statusFilter">Order status</label>
+      <select class="field" id="statusFilter">
+        <option value="all">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="payment_pending">Payment pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready">Ready</option>
+        <option value="out_for_delivery">Out for delivery</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+  </section>
+
+  <div class="head">
+    <h2>Key metrics</h2>
+    <span class="muted" id="periodLabel">Selected period</span>
+  </div>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-label">Total orders</div>
+      <div class="stat-value" id="ordersCount">0</div>
+      <div class="stat-foot">Orders in selected period</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Order value</div>
+      <div class="stat-value" id="salesValue">₹0</div>
+      <div class="stat-foot">Sum of stored order totals</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Delivered orders</div>
+      <div class="stat-value" id="deliveredCount">0</div>
+      <div class="stat-foot">Status marked delivered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Average order value</div>
+      <div class="stat-value" id="averageValue">₹0</div>
+      <div class="stat-foot">Order value ÷ order count</div>
+    </div>
+  </section>
+
+  <div class="head"><h2>Sales trends</h2></div>
+  <section class="grid">
+    <div class="panel">
+      <div class="panel-title">Daily order value</div>
+      <div class="panel-body">
+        <div id="salesChart" class="chart"><div class="loading">Waiting for data…</div></div>
+        <div class="legend"><span><i class="dot" style="background:#ff5e00"></i>Order value</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Payment breakdown</div>
+      <div class="panel-body" id="paymentBreakdown">
+        <div class="loading">Waiting for data…</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="head">
+    <h2>Daily report</h2>
+    <span class="muted" id="dailyCount">0 days</span>
+  </div>
+  <section class="panel">
+    <div id="tableStatus" class="loading">Loading reports…</div>
+    <div class="table-wrap">
+      <table id="dailyTable" hidden>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Orders</th>
+            <th>Order value</th>
+            <th>Delivered</th>
+            <th>Cancelled</th>
+            <th>Paid-marked value</th>
+          </tr>
+        </thead>
+        <tbody id="dailyBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="footer">
+    Reports are calculated from the existing Firestore <code>orders</code> collection.
+    Order value is not the same as verified revenue, profit, or money received.
+    The “Paid-marked value” uses the saved paymentStatus field and does not verify
+    transactions. Cancelled orders remain included in total order value, so interpret
+    figures with the status breakdown. This page is read-only.
+  </p>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain:"freshfry-39a10.firebaseapp.com",
+  projectId:"freshfry-39a10",
+  storageBucket:"freshfry-39a10.firebasestorage.app",
+  messagingSenderId:"928483976893",
+  appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+let allOrders=[];
+let unsubscribe=null;
+let snapshotReceived=false;
+
+function money(value){
+  const n=Number(value);
+  return "₹"+(Number.isFinite(n)?n:0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+function safeText(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+function getDate(value){
+  if(!value)return null;
+  if(typeof value.toDate==="function")return value.toDate();
+  if(value instanceof Date)return value;
+  if(typeof value==="number"){
+    const d=new Date(value);return Number.isNaN(d.getTime())?null:d;
+  }
+  if(typeof value==="string"){
+    const d=new Date(value);return Number.isNaN(d.getTime())?null:d;
+  }
+  if(typeof value.seconds==="number")return new Date(value.seconds*1000);
+  return null;
+}
+function dayKey(date){
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,"0");
+  const d=String(date.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+function dateLabel(key){
+  const d=new Date(key+"T12:00:00");
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+}
+function amount(order){
+  const n=Number(order.total);
+  return Number.isFinite(n)?n:0;
+}
+function normalizedStatus(order){
+  return String(order.status||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
+}
+function isPaid(order){
+  return ["paid","success","successful","completed","captured"].includes(
+    String(order.paymentStatus||"").toLowerCase().trim()
+  );
+}
+function isFailed(order){
+  return ["failed","failure","cancelled","canceled","declined"].includes(
+    String(order.paymentStatus||"").toLowerCase().trim()
+  );
+}
+function isCancelled(order){
+  return ["cancelled","canceled"].includes(normalizedStatus(order));
+}
+function method(order){
+  const m=String(order.paymentMethod||"").toLowerCase();
+  if(m.includes("upi"))return "UPI";
+  if(m.includes("cash")||m==="cod"||m.includes("delivery"))return "Cash on Delivery";
+  return order.paymentMethod||"Not specified";
+}
+
+function getFilteredOrders(){
+  const start=$("startDate").value;
+  const end=$("endDate").value;
+  const status=$("statusFilter").value;
+
+  if(start&&end&&start>end){
+    $("tableStatus").hidden=false;
+    $("tableStatus").textContent="The start date must be on or before the end date.";
+    return [];
+  }
+
+  return allOrders.filter(order=>{
+    const d=getDate(order.createdAt);
+    if(!d)return false;
+    const key=dayKey(d);
+    if(start&&key<start)return false;
+    if(end&&key>end)return false;
+    if(status!=="all"&&normalizedStatus(order)!==status)return false;
+    return true;
+  });
+}
+
+function buildDaily(orders){
+  const map=new Map();
+  for(const order of orders){
+    const d=getDate(order.createdAt);
+    if(!d)continue;
+    const key=dayKey(d);
+    if(!map.has(key)){
+      map.set(key,{date:key,count:0,total:0,delivered:0,cancelled:0,paid:0});
+    }
+    const item=map.get(key);
+    item.count++;
+    item.total+=amount(order);
+    if(normalizedStatus(order)==="delivered")item.delivered++;
+    if(isCancelled(order))item.cancelled++;
+    if(isPaid(order))item.paid+=amount(order);
+  }
+  return [...map.values()].sort((a,b)=>b.date.localeCompare(a.date));
+}
+
+function renderChart(daily){
+  const chart=$("salesChart");
+  const ascending=[...daily].sort((a,b)=>a.date.localeCompare(b.date)).slice(-7);
+  if(!ascending.length){
+    chart.innerHTML='<div class="loading">No orders for this period.</div>';
+    return;
+  }
+  const max=Math.max(...ascending.map(x=>x.total),1);
+  chart.innerHTML=ascending.map(item=>{
+    const height=Math.max(3,(item.total/max)*100);
+    const label=new Date(item.date+"T12:00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"short"});
+    return `<div class="bar-item">
+      <div class="bar-value">${safeText(money(item.total))}</div>
+      <div class="bar" title="${safeText(item.date)}: ${safeText(money(item.total))}" style="height:${height}%"></div>
+      <div class="bar-label">${safeText(label)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderPaymentBreakdown(orders){
+  let paid=0,pending=0,failed=0,other=0;
+  let upi=0,cod=0;
+  for(const order of orders){
+    if(isPaid(order))paid+=amount(order);
+    else if(isFailed(order))failed+=amount(order);
+    else if(["pending","payment_pending","initiated","processing","unpaid"].includes(
+      String(order.paymentStatus||"").toLowerCase().trim()
+    ))pending+=amount(order);
+    else other+=amount(order);
+
+    const m=method(order);
+    if(m==="UPI")upi+=amount(order);
+    if(m==="Cash on Delivery")cod+=amount(order);
+  }
+
+  const row=(label,value)=>`<div class="row">
+    <span class="row-label">${safeText(label)}</span>
+    <span class="row-value">${safeText(money(value))}</span>
+  </div>`;
+
+  $("paymentBreakdown").innerHTML=
+    row("Paid-marked amount",paid)+
+    row("Pending / unpaid amount",pending)+
+    row("Failed / cancelled payment amount",failed)+
+    row("Other / unspecified amount",other)+
+    '<div style="height:1px;background:var(--border);margin:9px 0"></div>'+
+    row("UPI order value",upi)+
+    row("Cash on Delivery order value",cod);
+}
+
+function render(){
+  const orders=getFilteredOrders();
+  const daily=buildDaily(orders);
+  const total=orders.reduce((s,o)=>s+amount(o),0);
+  const delivered=orders.filter(o=>normalizedStatus(o)==="delivered").length;
+  const average=orders.length?total/orders.length:0;
+
+  $("ordersCount").textContent=orders.length.toLocaleString("en-IN");
+  $("salesValue").textContent=money(total);
+  $("deliveredCount").textContent=delivered.toLocaleString("en-IN");
+  $("averageValue").textContent=money(average);
+
+  const start=$("startDate").value;
+  const end=$("endDate").value;
+  $("periodLabel").textContent=(start||"Earliest")+" → "+(end||"Latest");
+
+  renderChart(daily);
+  renderPaymentBreakdown(orders);
+
+  $("dailyCount").textContent=daily.length+" days";
+  $("tableStatus").hidden=daily.length>0;
+  $("tableStatus").textContent=snapshotReceived
+    ?(daily.length?"":"No orders found for the selected period.")
+    :"Loading reports…";
+  $("dailyTable").hidden=daily.length===0;
+
+  $("dailyBody").innerHTML=daily.map(day=>`
+    <tr>
+      <td>${safeText(dateLabel(day.date))}</td>
+      <td>${day.count}</td>
+      <td class="money">${safeText(money(day.total))}</td>
+      <td>${day.delivered}</td>
+      <td>${day.cancelled}</td>
+      <td class="money">${safeText(money(day.paid))}</td>
+    </tr>
+  `).join("");
+}
+
+function exportCsv(){
+  const orders=getFilteredOrders();
+  if(!orders.length){
+    alert("Export karne ke liye koi orders nahi hain.");
+    return;
+  }
+
+  const daily=buildDaily(orders);
+  const rows=[
+    ["Date","Orders","Order Value","Delivered","Cancelled","Paid-Marked Value"],
+    ...daily.map(d=>[d.date,d.count,d.total,d.delivered,d.cancelled,d.paid])
+  ];
+
+  const csv=rows.map(row=>row.map(value=>{
+    let s=String(value??"");
+    if(/^[=+\-@\t\r]/.test(s))s="'"+s;
+    return '"'+s.replace(/"/g,'""')+'"';
+  }).join(",")).join("\r\n");
+
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="freshfry-daily-report.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function listenOrders(){
+  if(unsubscribe)unsubscribe();
+  $("tableStatus").hidden=false;
+  $("tableStatus").textContent="Loading reports…";
+
+  unsubscribe=onSnapshot(collection(db,"orders"),snapshot=>{
+    allOrders=snapshot.docs.map(doc=>({id:doc.id,...doc.data()}));
+    snapshotReceived=true;
+    $("updatedAt").textContent="Updated "+new Date().toLocaleTimeString("en-IN");
+    render();
+  },error=>{
+    console.error("Reports error:",error);
+    $("updatedAt").textContent="Connection error";
+    $("tableStatus").hidden=false;
+    $("tableStatus").innerHTML='<span class="error">Unable to load orders. Check Firestore access and security rules.</span>';
+    $("dailyTable").hidden=true;
+  });
+}
+
+function setDefaultDates(){
+  const today=new Date();
+  const start=new Date(today);
+  start.setDate(start.getDate()-6);
+  $("startDate").value=dayKey(start);
+  $("endDate").value=dayKey(today);
+}
+
+setDefaultDates();
+$("startDate").addEventListener("change",render);
+$("endDate").addEventListener("change",render);
+$("statusFilter").addEventListener("change",render);
+$("refreshBtn").addEventListener("click",listenOrders);
+$("exportBtn").addEventListener("click",exportCsv);
+
+listenOrders();
+</script>
+</body>
+</html>
