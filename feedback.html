@@ -1,1 +1,716 @@
-fg
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="description" content="Share your FreshFry Momo food and delivery experience.">
+<title>Feedback & Reviews | FreshFry Momo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --orange: #ff5e00;
+  --bg: #101010;
+  --card: #191919;
+  --line: #2b2b2b;
+  --muted: #999;
+  --white: #fff;
+  --green: #45d483;
+  --gold: #ffc15c;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--white);
+  font-family: Inter, sans-serif;
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+button:focus-visible, a:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(16,16,16,.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 17px;
+}
+.header-inner {
+  max-width: 700px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.back {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: #202020;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.brand { flex: 1; }
+.brand-name { font-size: 19px; font-weight: 900; letter-spacing: -.6px; }
+.brand-name span { color: var(--orange); }
+.brand-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.header-icon {
+  height: 42px;
+  width: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--orange);
+  background: #2b190f;
+  border-radius: 14px;
+}
+main { max-width: 700px; padding: 22px 16px; margin: auto; }
+.hero {
+  border: 1px solid #512b16;
+  background: linear-gradient(130deg,#321b0d,#1b1715 68%);
+  border-radius: 24px;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero:after {
+  content: "★";
+  position: absolute;
+  right: 15px;
+  top: 4px;
+  font-size: 100px;
+  line-height: 1;
+  color: rgba(255,150,60,.08);
+  transform: rotate(12deg);
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffab79;
+  font-weight: 800;
+}
+.hero h1 {
+  font-size: 29px;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin: 12px 0 9px;
+}
+.hero h1 span { color: var(--orange); }
+.hero p { font-size: 12px; line-height: 1.8; color: #c4c4c4; margin: 0; max-width: 390px; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 17px;
+  padding: 9px 12px;
+  border: 1px solid #52321e;
+  background: #24170f;
+  border-radius: 10px;
+  font-size: 10px;
+  color: #ffd0a8;
+  font-weight: 700;
+}
+.hero-badge i { color: var(--gold); }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 26px 0 14px;
+}
+.section-head h2 { margin: 0; font-size: 16px; font-weight: 800; }
+.muted { color: var(--muted); font-size: 10px; }
+.panel {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 21px;
+  padding: 18px;
+}
+.rating-block {
+  background: #141414;
+  border: 1px solid #303030;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.rating-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rating-title { font-size: 12px; font-weight: 800; }
+.rating-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 14px;
+}
+.star-btn {
+  border: 0;
+  background: transparent;
+  color: #484848;
+  font-size: 27px;
+  padding: 2px;
+  line-height: 1.2;
+  transition: transform .15s, color .15s;
+}
+.star-btn.active { color: var(--gold); }
+.star-btn:active { transform: scale(.88); }
+.rating-label {
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-top: 8px;
+  min-height: 14px;
+}
+.field { margin-bottom: 15px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.field input, .field textarea, .field select {
+  width: 100%;
+  border: 1px solid #373737;
+  background: #111;
+  color: white;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 12px;
+}
+.field textarea { min-height: 115px; resize: vertical; line-height: 1.7; }
+.field input::placeholder, .field textarea::placeholder { color: #707070; }
+.field select { color-scheme: dark; }
+.hint { color: #777; font-size: 10px; line-height: 1.7; margin-top: 7px; }
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0 18px;
+  font-size: 10px;
+  line-height: 1.7;
+  color: #bbb;
+}
+.check-row input { width: 16px; height: 16px; accent-color: var(--orange); flex-shrink: 0; margin-top: 1px; }
+.submit-btn {
+  width: 100%;
+  border: 0;
+  background: var(--orange);
+  color: white;
+  padding: 15px;
+  border-radius: 13px;
+  font-size: 12px;
+  font-weight: 900;
+}
+.submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+.review-list { display: grid; gap: 11px; }
+.review-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 15px;
+}
+.review-top { display: flex; gap: 11px; align-items: center; }
+.avatar {
+  width: 39px;
+  height: 39px;
+  display: grid;
+  place-items: center;
+  background: #302015;
+  color: #ff9a59;
+  border-radius: 13px;
+  font-weight: 900;
+  font-size: 14px;
+}
+.review-person { flex: 1; min-width: 0; }
+.review-person strong { font-size: 11px; display: block; }
+.review-date { color: #777; font-size: 9px; margin-top: 5px; }
+.review-stars { color: var(--gold); font-size: 11px; letter-spacing: 1px; }
+.review-message { color: #bbb; font-size: 11px; line-height: 1.8; margin: 12px 0 0; overflow-wrap: anywhere; }
+.review-tag {
+  display: inline-block;
+  margin-top: 10px;
+  border: 1px solid #333;
+  border-radius: 7px;
+  padding: 5px 8px;
+  color: #aaa;
+  font-size: 9px;
+}
+.empty {
+  padding: 30px 18px;
+  border: 1px dashed #363636;
+  border-radius: 18px;
+  text-align: center;
+}
+.empty i { color: var(--orange); font-size: 24px; margin-bottom: 12px; }
+.empty h3 { font-size: 13px; margin: 0 0 7px; }
+.empty p { font-size: 10px; line-height: 1.8; color: var(--muted); margin: 0; }
+.notice {
+  border: 1px solid #3a2b1c;
+  background: #211910;
+  border-radius: 14px;
+  padding: 13px;
+  color: #d5c1aa;
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 17px;
+}
+.notice i { color: var(--gold); margin-right: 5px; }
+.footer { text-align: center; padding: 20px 10px 5px; color: #777; font-size: 10px; line-height: 1.8; }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(95px + env(safe-area-inset-bottom));
+  transform: translate(-50%,12px);
+  background: #292929;
+  border: 1px solid #444;
+  color: white;
+  padding: 12px 17px;
+  border-radius: 13px;
+  font-size: 11px;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+  z-index: 50;
+  width: max-content;
+  max-width: calc(100% - 30px);
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%,0); }
+.bottom-nav {
+  position: fixed;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(18,18,18,.97);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
+  padding: 11px 8px calc(11px + env(safe-area-inset-bottom));
+}
+.bottom-inner {
+  max-width: 600px;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #777;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 54px;
+}
+.nav-item i { font-size: 18px; }
+.nav-item.active { color: var(--orange); }
+@media (min-width: 560px) {
+  main { padding: 28px 22px; }
+  .hero { padding: 30px; }
+  .hero h1 { font-size: 34px; }
+}
+@media (max-width: 360px) {
+  .star-btn { font-size: 24px; }
+  .panel { padding: 13px; }
+}
+</style>
+</head>
+
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="back" href="profile.html" aria-label="Back to profile">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="brand">
+      <div class="brand-name">Fresh<span>Fry</span></div>
+      <div class="brand-sub">Ratings & feedback</div>
+    </div>
+    <div class="header-icon"><i class="fa-solid fa-star"></i></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Your voice matters</div>
+    <h1>How did we do<span>?</span></h1>
+    <p>Your feedback helps us improve our food, delivery and overall experience. Tell us what you think.</p>
+    <div class="hero-badge"><i class="fa-solid fa-heart"></i> Made better with your feedback</div>
+  </section>
+
+  <div class="section-head">
+    <h2>Rate your experience</h2>
+    <span class="muted">Required ratings</span>
+  </div>
+
+  <section class="panel">
+    <form id="feedbackForm">
+      <div class="rating-block">
+        <div class="rating-top">
+          <div>
+            <div class="rating-title">Food quality</div>
+            <div class="rating-sub">Taste, freshness and quality</div>
+          </div>
+          <i class="fa-solid fa-utensils" style="color:var(--orange)"></i>
+        </div>
+        <div class="stars" role="group" aria-label="Food quality rating" data-rating="food">
+          <button class="star-btn" type="button" data-value="1" aria-label="1 star">★</button>
+          <button class="star-btn" type="button" data-value="2" aria-label="2 stars">★</button>
+          <button class="star-btn" type="button" data-value="3" aria-label="3 stars">★</button>
+          <button class="star-btn" type="button" data-value="4" aria-label="4 stars">★</button>
+          <button class="star-btn" type="button" data-value="5" aria-label="5 stars">★</button>
+        </div>
+        <div class="rating-label" id="foodLabel">Select a rating</div>
+      </div>
+
+      <div class="rating-block">
+        <div class="rating-top">
+          <div>
+            <div class="rating-title">Delivery experience</div>
+            <div class="rating-sub">Speed, packaging and service</div>
+          </div>
+          <i class="fa-solid fa-motorcycle" style="color:var(--orange)"></i>
+        </div>
+        <div class="stars" role="group" aria-label="Delivery rating" data-rating="delivery">
+          <button class="star-btn" type="button" data-value="1" aria-label="1 star">★</button>
+          <button class="star-btn" type="button" data-value="2" aria-label="2 stars">★</button>
+          <button class="star-btn" type="button" data-value="3" aria-label="3 stars">★</button>
+          <button class="star-btn" type="button" data-value="4" aria-label="4 stars">★</button>
+          <button class="star-btn" type="button" data-value="5" aria-label="5 stars">★</button>
+        </div>
+        <div class="rating-label" id="deliveryLabel">Select a rating</div>
+      </div>
+
+      <div class="rating-block">
+        <div class="rating-top">
+          <div>
+            <div class="rating-title">Overall experience</div>
+            <div class="rating-sub">How was your FreshFry experience?</div>
+          </div>
+          <i class="fa-solid fa-heart" style="color:var(--orange)"></i>
+        </div>
+        <div class="stars" role="group" aria-label="Overall rating" data-rating="overall">
+          <button class="star-btn" type="button" data-value="1" aria-label="1 star">★</button>
+          <button class="star-btn" type="button" data-value="2" aria-label="2 stars">★</button>
+          <button class="star-btn" type="button" data-value="3" aria-label="3 stars">★</button>
+          <button class="star-btn" type="button" data-value="4" aria-label="4 stars">★</button>
+          <button class="star-btn" type="button" data-value="5" aria-label="5 stars">★</button>
+        </div>
+        <div class="rating-label" id="overallLabel">Select a rating</div>
+      </div>
+
+      <div class="field" style="margin-top:20px">
+        <label for="customerName">Your name</label>
+        <input id="customerName" name="customerName" type="text" maxlength="80" placeholder="Enter your name" autocomplete="name" required>
+      </div>
+
+      <div class="field">
+        <label for="orderId">Order ID (optional)</label>
+        <input id="orderId" name="orderId" type="text" maxlength="100" placeholder="Enter your order ID">
+      </div>
+
+      <div class="field">
+        <label for="feedbackType">Feedback category</label>
+        <select id="feedbackType" name="feedbackType" required>
+          <option value="General feedback">General feedback</option>
+          <option value="Food quality">Food quality</option>
+          <option value="Delivery">Delivery</option>
+          <option value="Packaging">Packaging</option>
+          <option value="Customer service">Customer service</option>
+          <option value="Suggestion">Suggestion</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="feedbackMessage">Tell us more</label>
+        <textarea id="feedbackMessage" name="feedbackMessage" maxlength="1500" placeholder="What did you like? What can we improve?" required></textarea>
+        <div class="hint"><span id="charCount">0</span>/1500 characters</div>
+      </div>
+
+      <label class="check-row">
+        <input type="checkbox" id="allowDisplay">
+        <span>I allow FreshFry to display my review publicly without revealing my order details.</span>
+      </label>
+
+      <button class="submit-btn" type="submit">
+        <i class="fa-solid fa-paper-plane"></i> SUBMIT FEEDBACK
+      </button>
+
+      <p class="hint" style="text-align:center;margin-top:12px">
+        Your feedback is saved locally on this device in this demo version.
+      </p>
+    </form>
+  </section>
+
+  <div class="section-head">
+    <h2>My saved feedback</h2>
+    <span class="muted" id="reviewCount">0 reviews</span>
+  </div>
+
+  <div class="review-list" id="reviewList"></div>
+
+  <div class="empty" id="emptyReviews" hidden>
+    <i class="fa-regular fa-comment-dots"></i>
+    <h3>No feedback submitted yet</h3>
+    <p>After you submit your first review, it will appear here on this device.</p>
+  </div>
+
+  <div class="notice">
+    <i class="fa-solid fa-shield-halved"></i>
+    <strong>Your privacy matters.</strong> Do not include passwords, OTPs, payment PINs or other sensitive details in your review.
+  </div>
+
+  <div class="footer">
+    <strong>FreshFry Momo</strong><br>
+    Thank you for helping us serve you better.
+  </div>
+</main>
+
+<nav class="bottom-nav" aria-label="Main navigation">
+  <div class="bottom-inner">
+    <a class="nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>HOME</span></a>
+    <a class="nav-item" href="index.html#menu-section"><i class="fa-solid fa-utensils"></i><span>MENU</span></a>
+    <a class="nav-item" href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span>CART</span></a>
+    <a class="nav-item" href="my-orders.html"><i class="fa-solid fa-receipt"></i><span>ORDERS</span></a>
+    <a class="nav-item active" href="feedback.html"><i class="fa-solid fa-star"></i><span>REVIEW</span></a>
+  </div>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "ff_feedback_v1";
+  const ratings = { food: 0, delivery: 0, overall: 0 };
+  const ratingLabels = {
+    1: "Poor",
+    2: "Needs improvement",
+    3: "Good",
+    4: "Very good",
+    5: "Excellent!"
+  };
+
+  const byId = id => document.getElementById(id);
+  const reviewList = byId("reviewList");
+  const emptyReviews = byId("emptyReviews");
+  const toast = byId("toast");
+  let toastTimer;
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
+
+  function loadReviews() {
+    try {
+      const value = localStorage.getItem(STORAGE_KEY);
+      if (value === null) return [];
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.filter(item =>
+        item && typeof item.id === "string"
+      ) : [];
+    } catch (error) {
+      console.warn("Could not load feedback.", error);
+      return [];
+    }
+  }
+
+  let reviews = loadReviews();
+
+  function saveReviews() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+      return true;
+    } catch (error) {
+      console.error("Could not save feedback.", error);
+      showToast("Could not save feedback on this device.");
+      return false;
+    }
+  }
+
+  document.querySelectorAll(".stars").forEach(group => {
+    const key = group.dataset.rating;
+    const buttons = [...group.querySelectorAll(".star-btn")];
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        ratings[key] = Number(button.dataset.value);
+
+        buttons.forEach(item => {
+          const active = Number(item.dataset.value) <= ratings[key];
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-pressed", String(
+            Number(item.dataset.value) === ratings[key]
+          ));
+        });
+
+        byId(key + "Label").textContent = ratingLabels[ratings[key]];
+      });
+    });
+  });
+
+  byId("feedbackMessage").addEventListener("input", event => {
+    byId("charCount").textContent = event.target.value.length;
+  });
+
+  // Prefill the name if it was saved previously on this device.
+  try {
+    byId("customerName").value = localStorage.getItem("ff_customer_name") || "";
+  } catch (error) {
+    // Manual entry remains available.
+  }
+
+  function renderReviews() {
+    reviewList.replaceChildren();
+    byId("reviewCount").textContent =
+      reviews.length + (reviews.length === 1 ? " review" : " reviews");
+    emptyReviews.hidden = reviews.length > 0;
+
+    [...reviews].sort((a, b) => b.createdAt - a.createdAt).forEach(review => {
+      const card = document.createElement("article");
+      card.className = "review-card";
+
+      const stars = "★".repeat(Math.max(0, Math.min(5, Number(review.overall) || 0))) +
+        "☆".repeat(5 - Math.max(0, Math.min(5, Number(review.overall) || 0)));
+
+      const date = new Date(review.createdAt);
+      const dateText = Number.isNaN(date.getTime())
+        ? "Saved feedback"
+        : date.toLocaleDateString("en-IN", {
+            day: "numeric", month: "short", year: "numeric"
+          });
+
+      card.innerHTML = `
+        <div class="review-top">
+          <div class="avatar">${escapeHTML((review.name || "C").trim().charAt(0).toUpperCase())}</div>
+          <div class="review-person">
+            <strong>${escapeHTML(review.name || "Customer")}</strong>
+            <div class="review-date">${escapeHTML(dateText)}</div>
+          </div>
+          <div class="review-stars" aria-label="${Number(review.overall)} out of 5 stars">${stars}</div>
+        </div>
+        <p class="review-message">${escapeHTML(review.message)}</p>
+        <span class="review-tag">${escapeHTML(review.category || "General feedback")}</span>
+        <button type="button" class="hint" data-delete-id="${escapeHTML(review.id)}" style="display:block;background:none;border:0;padding:12px 0 0;color:#ff8585">Delete my saved feedback</button>
+      `;
+      reviewList.appendChild(card);
+    });
+  }
+
+  byId("feedbackForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    if (!event.currentTarget.reportValidity()) return;
+
+    const missingRating = Object.keys(ratings).find(key => ratings[key] < 1);
+    if (missingRating) {
+      showToast("Please rate food, delivery and overall experience.");
+      const group = document.querySelector('[data-rating="' + missingRating + '"]');
+      group.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const name = byId("customerName").value.trim();
+    const message = byId("feedbackMessage").value.trim();
+
+    if (!name || !message) {
+      showToast("Please fill in your name and feedback.");
+      return;
+    }
+
+    const record = {
+      id: window.crypto && crypto.randomUUID
+        ? crypto.randomUUID()
+        : "review-" + Date.now(),
+      name,
+      orderId: byId("orderId").value.trim(),
+      category: byId("feedbackType").value,
+      message,
+      food: ratings.food,
+      delivery: ratings.delivery,
+      overall: ratings.overall,
+      allowDisplay: byId("allowDisplay").checked,
+      createdAt: Date.now()
+    };
+
+    reviews.push(record);
+    if (!saveReviews()) {
+      reviews.pop();
+      return;
+    }
+
+    renderReviews();
+    event.currentTarget.reset();
+    Object.keys(ratings).forEach(key => {
+      ratings[key] = 0;
+      document.querySelectorAll('[data-rating="' + key + '"] .star-btn').forEach(button => {
+        button.classList.remove("active");
+        button.setAttribute("aria-pressed", "false");
+      });
+      byId(key + "Label").textContent = "Select a rating";
+    });
+    byId("charCount").textContent = "0";
+
+    showToast("Thank you! Your feedback is saved on this device.");
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  });
+
+  reviewList.addEventListener("click", event => {
+    const button = event.target.closest("[data-delete-id]");
+    if (!button) return;
+
+    const id = button.dataset.deleteId;
+    if (!window.confirm("Delete this saved feedback from this device?")) return;
+
+    const oldReviews = reviews;
+    reviews = reviews.filter(review => review.id !== id);
+
+    if (!saveReviews()) {
+      reviews = oldReviews;
+      return;
+    }
+
+    renderReviews();
+    showToast("Saved feedback deleted.");
+  });
+
+  renderReviews();
+})();
+</script>
+</body>
+</html>
