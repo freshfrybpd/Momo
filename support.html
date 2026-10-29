@@ -1,1 +1,493 @@
-e
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="description" content="FreshFry Momo customer support. Get help with orders, delivery, payments and feedback.">
+<title>Customer Support | FreshFry Momo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --orange: #ff5e00;
+  --orange2: #ff7a29;
+  --bg: #101010;
+  --card: #191919;
+  --line: #2b2b2b;
+  --muted: #999;
+  --white: #fff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--white);
+  font-family: Inter, sans-serif;
+  padding-bottom: 35px;
+}
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(16,16,16,.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 17px;
+}
+.header-inner {
+  max-width: 700px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.back {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: #202020;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.brand { flex: 1; }
+.brand-name { font-size: 19px; font-weight: 900; letter-spacing: -.6px; }
+.brand-name span { color: var(--orange); }
+.brand-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.header-icon {
+  height: 42px;
+  width: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--orange);
+  background: #2b190f;
+  border-radius: 14px;
+}
+main { max-width: 700px; margin: auto; padding: 22px 16px; }
+.hero {
+  border: 1px solid #512b16;
+  background: linear-gradient(130deg,#321b0d,#1b1715 68%);
+  border-radius: 24px;
+  padding: 23px 20px;
+  overflow: hidden;
+  position: relative;
+}
+.hero:after {
+  content: "";
+  position: absolute;
+  right: -32px;
+  top: -38px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(255,94,0,.11);
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffab79;
+  font-weight: 800;
+}
+.hero h1 {
+  font-size: 29px;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin: 12px 0 9px;
+}
+.hero h1 span { color: var(--orange); }
+.hero p { font-size: 12px; line-height: 1.8; color: #c4c4c4; margin: 0; max-width: 390px; }
+.online {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 9px 12px;
+  background: #18271b;
+  border: 1px solid #294631;
+  border-radius: 11px;
+  font-size: 10px;
+  color: #a8edb7;
+  font-weight: 700;
+}
+.online-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+.section-title { font-size: 16px; font-weight: 800; margin: 27px 0 14px; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.contact-card {
+  padding: 17px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  min-width: 0;
+}
+.contact-icon {
+  width: 43px; height: 43px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  margin-bottom: 13px;
+  font-size: 17px;
+}
+.orange { color: var(--orange); background: #321b0f; }
+.green { color: #4ade80; background: #14281b; }
+.blue { color: #93b4ff; background: #19233a; }
+.yellow { color: #ffce6a; background: #302718; }
+.contact-card h3 { margin: 0 0 7px; font-size: 12px; font-weight: 800; }
+.contact-card p { margin: 0; font-size: 10px; line-height: 1.7; color: var(--muted); }
+.small-link {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  margin-top: 13px;
+  color: #ff8d4e;
+  font-size: 10px;
+  font-weight: 800;
+}
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 21px;
+  padding: 18px;
+}
+.field { margin-bottom: 15px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #e8e8e8;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  border: 1px solid #363636;
+  background: #111;
+  color: white;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 12px;
+}
+.field input::placeholder, .field textarea::placeholder { color: #707070; }
+.field textarea { min-height: 115px; resize: vertical; line-height: 1.6; }
+.field select { color-scheme: dark; }
+.hint { color: #777; font-size: 10px; line-height: 1.6; margin-top: 7px; }
+.primary-btn, .whatsapp-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 13px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.primary-btn { background: var(--orange); color: white; }
+.primary-btn:active { background: #e94d00; }
+.whatsapp-btn { background: #20b65a; color: white; }
+.faq-list { display: grid; gap: 9px; }
+.faq-item { background: var(--card); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; }
+.faq-item summary {
+  padding: 16px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:after { content: "+"; color: var(--orange); font-size: 18px; }
+.faq-item[open] summary:after { content: "−"; }
+.faq-answer { padding: 0 16px 16px; color: var(--muted); font-size: 11px; line-height: 1.8; }
+.notice {
+  border: 1px solid #3a2b1c;
+  background: #211910;
+  border-radius: 14px;
+  padding: 13px;
+  color: #d5c1aa;
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 13px;
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, 12px);
+  background: #292929;
+  border: 1px solid #444;
+  color: white;
+  padding: 12px 17px;
+  border-radius: 13px;
+  font-size: 11px;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+  z-index: 30;
+  width: max-content;
+  max-width: calc(100% - 30px);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.footer { text-align: center; padding: 20px 10px 5px; color: #777; font-size: 10px; line-height: 1.8; }
+@media (min-width: 560px) {
+  main { padding: 28px 22px; }
+  .hero { padding: 30px; }
+  .hero h1 { font-size: 34px; }
+  .contact-grid { grid-template-columns: repeat(4,1fr); }
+}
+@media (max-width: 360px) {
+  .contact-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="back" aria-label="Back to home">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="brand">
+      <div class="brand-name">Fresh<span>Fry</span></div>
+      <div class="brand-sub">Customer care</div>
+    </div>
+    <div class="header-icon"><i class="fa-solid fa-headset"></i></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">We're here to help</div>
+    <h1>How can we help<span>?</span></h1>
+    <p>Need help with an order, payment or delivery? Find an answer or contact our team.</p>
+    <div class="online"><span class="online-dot"></span> FreshFry Support</div>
+  </section>
+
+  <h2 class="section-title">Contact options</h2>
+  <div class="contact-grid">
+    <article class="contact-card">
+      <div class="contact-icon green"><i class="fa-brands fa-whatsapp"></i></div>
+      <h3>WhatsApp support</h3>
+      <p>Message us about an order or problem.</p>
+      <a href="#" class="small-link" id="whatsappCardLink">Chat now <i class="fa-solid fa-arrow-right"></i></a>
+    </article>
+    <article class="contact-card">
+      <div class="contact-icon orange"><i class="fa-solid fa-box"></i></div>
+      <h3>Order status</h3>
+      <p>Check your order history and updates.</p>
+      <a href="my-orders.html" class="small-link">My orders <i class="fa-solid fa-arrow-right"></i></a>
+    </article>
+    <article class="contact-card">
+      <div class="contact-icon blue"><i class="fa-solid fa-location-dot"></i></div>
+      <h3>Delivery issue</h3>
+      <p>Tell us about a delayed or missing order.</p>
+      <a href="#contactForm" class="small-link" data-issue="Delivery issue">Get help <i class="fa-solid fa-arrow-right"></i></a>
+    </article>
+    <article class="contact-card">
+      <div class="contact-icon yellow"><i class="fa-solid fa-credit-card"></i></div>
+      <h3>Payment issue</h3>
+      <p>Report a payment or refund concern.</p>
+      <a href="#contactForm" class="small-link" data-issue="Payment or refund issue">Get help <i class="fa-solid fa-arrow-right"></i></a>
+    </article>
+  </div>
+
+  <h2 class="section-title">Send us a message</h2>
+  <section class="panel" id="contactForm">
+    <form id="supportForm">
+      <div class="field">
+        <label for="customerName">Your name</label>
+        <input id="customerName" name="customerName" type="text" maxlength="80" placeholder="Enter your name" autocomplete="name" required>
+      </div>
+
+      <div class="field">
+        <label for="customerPhone">Phone number</label>
+        <input id="customerPhone" name="customerPhone" type="tel" inputmode="tel" maxlength="16" placeholder="Enter your contact number" autocomplete="tel" required>
+      </div>
+
+      <div class="field">
+        <label for="orderId">Order ID (optional)</label>
+        <input id="orderId" name="orderId" type="text" maxlength="100" placeholder="Enter your order ID">
+        <div class="hint">You can find your order ID in My Orders.</div>
+      </div>
+
+      <div class="field">
+        <label for="issueType">What do you need help with?</label>
+        <select id="issueType" name="issueType" required>
+          <option value="">Choose an issue</option>
+          <option>Order status</option>
+          <option>Late delivery</option>
+          <option>Missing or incorrect items</option>
+          <option>Food quality</option>
+          <option>Payment or refund issue</option>
+          <option>Cancel an order</option>
+          <option>Website problem</option>
+          <option>Feedback or suggestion</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="message">Describe your issue</label>
+        <textarea id="message" name="message" maxlength="1500" placeholder="Please explain how we can help..." required></textarea>
+        <div class="hint">Do not enter your UPI PIN, password, OTP or full card details.</div>
+      </div>
+
+      <button type="submit" class="primary-btn">
+        <i class="fa-brands fa-whatsapp"></i> CONTINUE ON WHATSAPP
+      </button>
+      <div class="hint" style="text-align:center;margin-top:12px">
+        WhatsApp will open with your message prepared. Review it and tap Send yourself.
+      </div>
+    </form>
+  </section>
+
+  <h2 class="section-title">Frequently asked questions</h2>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>How can I check my order status?</summary>
+      <div class="faq-answer">Open the My Orders page to see orders linked to your saved phone number. If an order is missing, contact support with your order ID.</div>
+    </details>
+    <details class="faq-item">
+      <summary>What if my order is delayed?</summary>
+      <div class="faq-answer">Check your latest order status first. If the delay continues, contact support and share your order ID and contact number.</div>
+    </details>
+    <details class="faq-item">
+      <summary>I paid, but my order is not confirmed. What should I do?</summary>
+      <div class="faq-answer">Keep your payment reference and order details available, then contact support. Never share your UPI PIN or OTP.</div>
+    </details>
+    <details class="faq-item">
+      <summary>How do I report a missing or incorrect item?</summary>
+      <div class="faq-answer">Use the support form and select “Missing or incorrect items.” Include the order ID and describe the item that is missing or incorrect.</div>
+    </details>
+    <details class="faq-item">
+      <summary>Can I cancel an order?</summary>
+      <div class="faq-answer">Contact support as soon as possible with your order ID. Cancellation depends on the current order status and the applicable store policy.</div>
+    </details>
+  </div>
+
+  <div class="notice">
+    <strong><i class="fa-solid fa-shield-halved"></i> Your safety matters</strong><br>
+    Never share passwords, OTPs, UPI PINs or full payment card details with anyone claiming to be support.
+  </div>
+
+  <div class="footer">
+    <strong>FreshFry Momo</strong><br>
+    Fresh flavours. Happy moments.<br>
+    Support requests are sent only when you choose to open WhatsApp and send the message.
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  /*
+    IMPORTANT:
+    Replace this placeholder with FreshFry's official WhatsApp number.
+    Use country code + number, digits only, without + or spaces.
+    Example format for India: 91XXXXXXXXXX
+  */
+  const SUPPORT_WHATSAPP_NUMBER = "91XXXXXXXXXX";
+
+  const form = document.getElementById("supportForm");
+  const issueSelect = document.getElementById("issueType");
+  const orderIdInput = document.getElementById("orderId");
+  const toast = document.getElementById("toast");
+  let toastTimer;
+
+  // Prefill only values already saved on this device.
+  try {
+    document.getElementById("customerPhone").value =
+      localStorage.getItem("ff_phone") || "";
+    document.getElementById("customerName").value =
+      localStorage.getItem("ff_customer_name") || "";
+  } catch (error) {
+    console.warn("Could not prefill customer details.", error);
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+  }
+
+  function whatsappConfigured() {
+    return /^91\d{10}$/.test(SUPPORT_WHATSAPP_NUMBER);
+  }
+
+  function openWhatsApp(message) {
+    if (!whatsappConfigured()) {
+      showToast("Admin: Add the official WhatsApp number in support.html first.");
+      return;
+    }
+    const url = "https://wa.me/" + SUPPORT_WHATSAPP_NUMBER +
+      "?text=" + encodeURIComponent(message);
+    window.location.href = url;
+  }
+
+  document.getElementById("whatsappCardLink").addEventListener("click", event => {
+    event.preventDefault();
+    openWhatsApp("Hello FreshFry Support, I need help with my order.");
+  });
+
+  document.querySelectorAll("[data-issue]").forEach(link => {
+    link.addEventListener("click", () => {
+      const value = link.dataset.issue;
+      const option = [...issueSelect.options].find(item =>
+        item.text.toLowerCase().includes(value.toLowerCase())
+      );
+      if (option) issueSelect.value = option.value;
+    });
+  });
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const orderId = orderIdInput.value.trim();
+    const issue = issueSelect.value;
+    const message = document.getElementById("message").value.trim();
+
+    if (!name || !phone || !issue || !message) {
+      showToast("Please complete all required fields.");
+      return;
+    }
+
+    const supportMessage = [
+      "Hello FreshFry Support, I need assistance.",
+      "",
+      "Name: " + name,
+      "Phone: " + phone,
+      "Order ID: " + (orderId || "Not provided"),
+      "Issue: " + issue,
+      "Details: " + message
+    ].join("\n");
+
+    openWhatsApp(supportMessage);
+  });
+})();
+</script>
+</body>
+</html>
