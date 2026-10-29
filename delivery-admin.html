@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Delivery Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root{--orange:#ff5e00;--bg:#101010;--sidebar:#151515;--card:#191919;--line:#303030;--muted:#929292;--green:#48d994;--red:#ff7777}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:white;font-family:Outfit,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+.sidebar{width:245px;position:fixed;inset:0 auto 0 0;z-index:30;background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .25s}
+.brand{padding:22px 19px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.brand-icon{width:43px;height:43px;background:var(--orange);border-radius:14px;display:grid;place-items:center;font-size:19px}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:-.8px}
+.brand-name span{color:var(--orange)}
+.brand-sub{font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.nav-label{padding:22px 20px 9px;color:#666;font-size:9px;font-weight:900;letter-spacing:1.5px}
+.sidebar-nav{padding:0 11px;overflow:auto;flex:1}
+.nav-link{display:flex;align-items:center;gap:12px;padding:12px;border-radius:11px;color:#aaa;font-size:12px;font-weight:700;margin-bottom:4px}
+.nav-link i{width:19px;text-align:center}
+.nav-link:hover{background:#242424;color:white}
+.nav-link.active{background:#302015;color:#ff9559}
+.nav-link.active i{color:var(--orange)}
+.sidebar-bottom{padding:13px;border-top:1px solid var(--line)}
+.sidebar-note{padding:12px;background:#21170f;border:1px solid #3b281b;border-radius:12px;color:#c9b3a3;font-size:10px;line-height:1.7}
+.sidebar-note i{color:var(--orange)}
+.main{margin-left:245px;min-width:0}
+.topbar{height:68px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 26px;background:#101010ed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-left,.top-actions{display:flex;align-items:center;gap:12px}
+.breadcrumb{color:var(--muted);font-size:11px}
+.breadcrumb strong{color:white}
+.menu-toggle{display:none;width:39px;height:39px;background:#202020;color:white;border:1px solid var(--line);border-radius:11px}
+.action-btn,.primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:#202020;color:#ddd;padding:10px 13px;border-radius:10px;font-size:10px;font-weight:800}
+.action-btn i{color:var(--orange)}
+.primary-btn{background:var(--orange);border-color:var(--orange);color:white}
+.primary-btn i{color:white}
+.content{max-width:1600px;margin:auto;padding:27px 26px 45px}
+.eyebrow{color:var(--orange);font-size:9px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:23px}
+h1{font-size:30px;letter-spacing:-1px;margin:8px 0 6px}
+.page-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.refresh-note{font-size:10px;color:var(--muted);margin-top:9px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;min-width:0}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stat-label{font-size:10px;font-weight:700;color:var(--muted)}
+.stat-icon{width:34px;height:34px;border-radius:11px;background:#2b1b12;color:var(--orange);display:grid;place-items:center}
+.stat-value{font-size:26px;font-weight:900;margin-top:12px;letter-spacing:-.8px}
+.stat-foot{font-size:9px;color:var(--muted);margin-top:4px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.panel-head{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{font-size:14px;margin:0;font-weight:900}
+.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}
+.filters{padding:15px 17px;display:grid;grid-template-columns:minmax(180px,1fr) minmax(145px,200px) minmax(135px,180px);gap:10px;border-bottom:1px solid var(--line)}
+.search-box{position:relative}
+.search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#777;font-size:12px}
+.control{width:100%;padding:11px 12px;background:#111;color:#eee;border:1px solid #353535;border-radius:10px;font-size:11px;outline:none}
+.control:focus{border-color:var(--orange)}
+.search-box .control{padding-left:34px}
+select.control{color-scheme:dark}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;text-align:left;min-width:900px}
+th{padding:13px 14px;color:#777;font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap}
+td{padding:14px;border-top:1px solid #292929;font-size:10px;color:#ddd;vertical-align:middle}
+.order-id{color:var(--orange);font-weight:900;font-size:11px;overflow-wrap:anywhere}
+.muted{color:var(--muted);font-size:9px;margin-top:5px;line-height:1.5}
+.customer-name{font-size:11px;font-weight:800;color:white}
+.badge{display:inline-flex;padding:6px 8px;border-radius:7px;font-size:8px;font-weight:900;white-space:nowrap;text-transform:capitalize;background:#292929;color:#ccc}
+.badge.pending,.badge.payment_pending{background:#302815;color:#ffd166}
+.badge.accepted,.badge.preparing{background:#302117;color:#ffb878}
+.badge.ready{background:#18283a;color:#91bdff}
+.badge.out_for_delivery{background:#18283a;color:#91bdff}
+.badge.delivered{background:#152c20;color:#6be3a2}
+.badge.cancelled,.badge.rejected{background:#341b1b;color:#ff8585}
+.small-btn{border:1px solid #383838;background:#222;color:#eee;padding:8px 9px;border-radius:8px;font-size:9px;font-weight:800;display:inline-flex;align-items:center;gap:6px}
+.small-btn i{color:var(--orange)}
+.small-btn:disabled{opacity:.5;cursor:not-allowed}
+.empty-state{padding:40px 15px;text-align:center;color:var(--muted);font-size:11px;line-height:1.8}
+.empty-state i{display:block;font-size:27px;color:#555;margin-bottom:12px}
+.error-banner{padding:12px 14px;margin-bottom:15px;border-radius:10px;background:#351b1b;border:1px solid #603030;color:#ffb3b3;font-size:11px;line-height:1.7}
+.pagination{padding:14px 17px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px}
+.modal{position:fixed;inset:0;z-index:60;background:#000b;padding:16px;display:none;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.modal-panel{width:100%;max-width:560px;max-height:90dvh;overflow-y:auto;background:#191919;border:1px solid #393939;border-radius:19px;padding:20px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.modal-head h2{margin:0;font-size:17px}
+.close-btn{width:34px;height:34px;background:#262626;color:white;border:1px solid #393939;border-radius:10px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.detail-box{padding:12px;border:1px solid #303030;border-radius:11px;min-width:0}
+.detail-wide{grid-column:1/-1}
+.detail-label{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.5px}
+.detail-value{font-size:11px;line-height:1.7;margin-top:6px;overflow-wrap:anywhere}
+.map-btn{display:inline-flex;margin-top:10px;padding:9px 11px;background:#1c2a20;border:1px solid #2e513a;border-radius:9px;color:#8de0a9;font-size:10px;font-weight:800}
+.scrim{display:none;position:fixed;inset:0;background:#0009;z-index:25}
+.toast{position:fixed;z-index:100;bottom:24px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#282828;border:1px solid #444;border-radius:12px;padding:12px 17px;color:white;font-size:11px;max-width:calc(100% - 30px);transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.show{transform:translateX(0)}
+.scrim.show{display:block}
+.main{margin-left:0}
+.menu-toggle{display:grid;place-items:center}
+.topbar{height:62px;padding:0 13px}
+.content{padding:20px 12px 35px}
+.page-head{flex-direction:column}
+h1{font-size:27px}
+.filters{grid-template-columns:1fr 1fr}
+.search-box{grid-column:1/-1}
+.top-actions .action-btn{padding:10px}
+.top-actions .action-btn span{display:none}
+}
+@media(max-width:390px){.filters{grid-template-columns:1fr}.search-box{grid-column:auto}.detail-grid{grid-template-columns:1fr}.detail-wide{grid-column:auto}}
+</style>
+</head>
+
+<body>
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="admin.html">
+    <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+    <div><div class="brand-name">Fresh<span>Fry</span></div><div class="brand-sub">RESTAURANT CONTROL</div></div>
+  </a>
+  <div class="nav-label">MAIN MENU</div>
+  <nav class="sidebar-nav">
+    <a class="nav-link" href="admin.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+    <a class="nav-link" href="orders-admin.html"><i class="fa-solid fa-receipt"></i> Orders</a>
+    <a class="nav-link" href="menu-admin.html"><i class="fa-solid fa-burger"></i> Menu Management</a>
+    <a class="nav-link active" href="delivery-admin.html"><i class="fa-solid fa-motorcycle"></i> Delivery</a>
+    <a class="nav-link" href="customers-admin.html"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="nav-label">BUSINESS</div>
+    <a class="nav-link" href="marketing-admin.html"><i class="fa-solid fa-bullhorn"></i> Marketing & Offers</a>
+    <a class="nav-link" href="payments-admin.html"><i class="fa-solid fa-wallet"></i> Payments</a>
+    <a class="nav-link" href="reports-admin.html"><i class="fa-solid fa-chart-column"></i> Reports</a>
+    <a class="nav-link" href="settings-admin.html"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="nav-label">WEBSITE</div>
+    <a class="nav-link" href="index.html" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Customer Website</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="sidebar-note"><i class="fa-solid fa-shield-halved"></i> Use authenticated admin access and secure Firestore rules.</div></div>
+</aside>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+<header class="topbar">
+  <div class="top-left">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+    <div class="breadcrumb">FreshFry / <strong>Delivery</strong></div>
+  </div>
+  <div class="top-actions">
+    <button class="action-btn" id="refreshBtn" type="button"><i class="fa-solid fa-rotate"></i><span>Refresh</span></button>
+  </div>
+</header>
+
+<main class="content">
+  <div id="errorBanner" class="error-banner" hidden></div>
+
+  <div class="eyebrow">Last-mile operations</div>
+  <section class="page-head">
+    <div>
+      <h1>Delivery Management</h1>
+      <p>Track orders, view customer delivery details and assign available riders.</p>
+      <div class="refresh-note" id="refreshNote">Connecting to Firebase...</div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Awaiting Dispatch</span><span class="stat-icon"><i class="fa-solid fa-clock"></i></span></div>
+      <div class="stat-value" id="awaitingCount">—</div>
+      <div class="stat-foot">Accepted or ready orders</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Out for Delivery</span><span class="stat-icon"><i class="fa-solid fa-motorcycle"></i></span></div>
+      <div class="stat-value" id="outCount">—</div>
+      <div class="stat-foot">Currently on the road</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Delivered Today</span><span class="stat-icon"><i class="fa-solid fa-circle-check"></i></span></div>
+      <div class="stat-value" id="deliveredCount">—</div>
+      <div class="stat-foot">Based on order creation date</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Available Riders</span><span class="stat-icon"><i class="fa-solid fa-user-check"></i></span></div>
+      <div class="stat-value" id="riderCount">—</div>
+      <div class="stat-foot">Rider records marked available</div>
+    </article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>Delivery Orders</h2><p id="resultCount">Loading orders...</p></div>
+    </div>
+    <div class="filters">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="control" id="searchInput" type="search" placeholder="Search order, customer, phone..." autocomplete="off">
+      </div>
+      <select class="control" id="statusFilter" aria-label="Filter delivery status">
+        <option value="all">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="accepted">Accepted</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready">Ready</option>
+        <option value="out_for_delivery">Out for delivery</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+        <option value="payment_pending">Payment pending</option>
+      </select>
+      <select class="control" id="riderFilter" aria-label="Filter by rider">
+        <option value="all">All rider assignments</option>
+        <option value="assigned">Assigned</option>
+        <option value="unassigned">Unassigned</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Order</th><th>Customer</th><th>Delivery address</th><th>Total</th>
+          <th>Status</th><th>Rider</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="ordersBody">
+          <tr><td colspan="7" class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Loading delivery orders...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span id="paginationLabel">0 orders</span><span>Order and rider data update live.</span></div>
+  </section>
+</main>
+</div>
+
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h2 id="detailTitle">Delivery details</h2>
+      <button class="close-btn" id="closeModal" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, onSnapshot, doc, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Existing FreshFry Firebase configuration preserved. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let orders = [];
+let riders = [];
+let unsubOrders = null;
+let unsubRiders = null;
+let busyIds = new Set();
+let toastTimer;
+
+const STATUS_OPTIONS = [
+  ["pending","Pending"],
+  ["accepted","Accepted"],
+  ["preparing","Preparing"],
+  ["ready","Ready"],
+  ["out_for_delivery","Out for delivery"],
+  ["delivered","Delivered"],
+  ["cancelled","Cancelled"],
+  ["payment_pending","Payment pending"],
+  ["rejected","Rejected"]
+];
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+function statusOf(order) {
+  return String(order.status || "pending").toLowerCase().replace(/[\s-]+/g,"_");
+}
+function dateOf(value) {
+  if (!value) return null;
+  if (typeof value.toDate === "function") return value.toDate();
+  if (typeof value.seconds === "number") return new Date(value.seconds*1000);
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+function dateLabel(value) {
+  const d = dateOf(value);
+  return d ? d.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "Date unavailable";
+}
+function statusClass(status) {
+  return STATUS_OPTIONS.some(([value])=>value===status) ? status : "pending";
+}
+function toast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>$("toast").classList.remove("show"),2800);
+}
+function showError(message) {
+  $("errorBanner").textContent = message;
+  $("errorBanner").hidden = false;
+}
+function clearError() {
+  $("errorBanner").hidden = true;
+  $("errorBanner").textContent = "";
+}
+function riderName(rider) {
+  return String(rider.name || rider.fullName || rider.displayName || rider.phone || rider.id || "Rider");
+}
+function riderIsAvailable(rider) {
+  return rider.available === true || rider.isAvailable === true ||
+    rider.online === true || rider.isOnline === true || rider.status === "available";
+}
+function assignedRider(order) {
+  const id = order.riderId || order.assignedRiderId || "";
+  const name = order.riderName || order.assignedRiderName || "";
+  const rider = riders.find(r => r.id === id);
+  return name || (rider ? riderName(rider) : "");
+}
+function addressOf(order) {
+  return String(order.deliveryAddress || order.customerLocation || "Address not provided");
+}
+
+function renderStats() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  $("awaitingCount").textContent = orders.filter(o =>
+    ["accepted","ready"].includes(statusOf(o))
+  ).length;
+  $("outCount").textContent = orders.filter(o => statusOf(o)==="out_for_delivery").length;
+  $("deliveredCount").textContent = orders.filter(o => {
+    if (statusOf(o)!=="delivered") return false;
+    const d = dateOf(o.createdAt);
+    return d && d >= today;
+  }).length;
+  $("riderCount").textContent = riders.filter(riderIsAvailable).length;
+}
+
+function filteredOrders() {
+  const query = $("searchInput").value.trim().toLowerCase();
+  const status = $("statusFilter").value;
+  const riderFilter = $("riderFilter").value;
+
+  return [...orders].filter(order => {
+    const blob = [
+      order.id,order.customerName,order.customerPhone,
+      order.deliveryAddress,order.customerLocation,
+      order.riderName,order.assignedRiderName
+    ].join(" ").toLowerCase();
+
+    const assigned = Boolean(order.riderId || order.assignedRiderId ||
+      order.riderName || order.assignedRiderName);
+
+    return (!query || blob.includes(query)) &&
+      (status==="all" || statusOf(order)===status) &&
+      (riderFilter==="all" ||
+       (riderFilter==="assigned" && assigned) ||
+       (riderFilter==="unassigned" && !assigned));
+  }).sort((a,b)=>(dateOf(b.createdAt)?.getTime()||0)-(dateOf(a.createdAt)?.getTime()||0));
+}
+
+function renderOrders() {
+  const filtered = filteredOrders();
+  $("resultCount").textContent = `${filtered.length} matching order(s) · ${orders.length} total`;
+  $("paginationLabel").textContent = `${filtered.length} order(s) shown`;
+
+  if (!filtered.length) {
+    $("ordersBody").innerHTML = `<tr><td colspan="7" class="empty-state">
+      <i class="fa-solid fa-motorcycle"></i>No matching delivery orders found.
+    </td></tr>`;
+    return;
+  }
+
+  $("ordersBody").innerHTML = filtered.map(order => {
+    const status = statusOf(order);
+    const rider = assignedRider(order);
+    const id = order.id;
+    const statusOptions = STATUS_OPTIONS.map(([value,label]) =>
+      `<option value="${value}" ${status===value?"selected":""}>${label}</option>`
+    ).join("");
+
+    return `<tr>
+      <td><div class="order-id">#${esc(id)}</div><div class="muted">${esc(dateLabel(order.createdAt))}</div></td>
+      <td><div class="customer-name">${esc(order.customerName||"Customer")}</div>
+        <div class="muted">${esc(order.customerPhone||"No phone")}</div></td>
+      <td><div style="max-width:190px;line-height:1.6">${esc(addressOf(order))}</div></td>
+      <td><strong>${money(order.total)}</strong></td>
+      <td><span class="badge ${statusClass(status)}">${esc(status.replace(/_/g," "))}</span></td>
+      <td>${rider ? esc(rider) : '<span class="muted">Not assigned</span>'}</td>
+      <td><div style="display:flex;gap:6px;align-items:center">
+        <button class="small-btn" data-action="view" data-id="${esc(id)}" type="button" title="View delivery details"><i class="fa-solid fa-eye"></i></button>
+        <select class="control" style="min-width:142px;padding:8px;font-size:10px" data-action="status" data-id="${esc(id)}" aria-label="Update order status" ${busyIds.has(id)?"disabled":""}>
+          ${statusOptions}
+        </select>
+      </div></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderDetails(order) {
+  const mapUrl = typeof order.deliveryMapUrl === "string" &&
+    /^https:\/\/www\.google\.com\/maps\//.test(order.deliveryMapUrl)
+    ? order.deliveryMapUrl : "";
+
+  const riderOptions = [
+    `<option value="">Unassigned</option>`,
+    ...riders.map(r => {
+      const current = order.riderId || order.assignedRiderId || "";
+      const value = r.id;
+      return `<option value="${esc(value)}" ${current===value?"selected":""}>${esc(riderName(r))}${riderIsAvailable(r)?" · Available":" · Status unknown/offline"}</option>`;
+    })
+  ].join("");
+
+  $("detailTitle").textContent = "Delivery #" + order.id;
+  $("detailContent").innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-box"><div class="detail-label">Customer</div><div class="detail-value">${esc(order.customerName||"Not provided")}</div></div>
+      <div class="detail-box"><div class="detail-label">Phone</div><div class="detail-value">${esc(order.customerPhone||"Not provided")}</div>
+        ${order.customerPhone ? `<a class="map-btn" href="tel:${esc(String(order.customerPhone).replace(/[^\d+]/g,""))}"><i class="fa-solid fa-phone"></i> Call customer</a>` : ""}
+      </div>
+      <div class="detail-box detail-wide"><div class="detail-label">Delivery address</div><div class="detail-value">${esc(addressOf(order))}</div>
+        ${mapUrl ? `<a class="map-btn" href="${esc(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> Open delivery map</a>` : ""}
+      </div>
+      <div class="detail-box"><div class="detail-label">Order status</div><div class="detail-value"><span class="badge ${statusClass(statusOf(order))}">${esc(statusOf(order).replace(/_/g," "))}</span></div></div>
+      <div class="detail-box"><div class="detail-label">Order total</div><div class="detail-value" style="font-size:16px;font-weight:900;color:var(--orange)">${money(order.total)}</div></div>
+      <div class="detail-box"><div class="detail-label">Payment method</div><div class="detail-value">${esc(order.paymentMethod||"Not specified")}</div></div>
+      <div class="detail-box"><div class="detail-label">Payment status</div><div class="detail-value">${esc(String(order.paymentStatus||"Not specified").replace(/_/g," "))}</div></div>
+      <div class="detail-box detail-wide"><div class="detail-label">Order items</div><div class="detail-value">${
+        Array.isArray(order.items) && order.items.length
+          ? order.items.map(item=>`${esc(item.name||"Item")} × ${Number(item.qty||0)}`).join("<br>")
+          : "No item details"
+      }</div></div>
+      <div class="detail-box detail-wide">
+        <div class="detail-label">Assign rider</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <select class="control" id="riderSelect">${riderOptions}</select>
+          <button class="primary-btn" id="assignRiderBtn" type="button">Assign</button>
+        </div>
+        <div class="muted">This saves riderId and riderName on the order document.</div>
+      </div>
+    </div>`;
+
+  $("detailModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+
+  $("assignRiderBtn").addEventListener("click", () => assignRider(order));
+}
+
+function closeModal() {
+  $("detailModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+async function assignRider(order) {
+  const select = $("riderSelect");
+  const button = $("assignRiderBtn");
+  if (!select || !button) return;
+
+  const riderId = select.value;
+  const rider = riders.find(r => r.id === riderId);
+
+  if (riderId && !rider) {
+    toast("Selected rider could not be found.");
+    return;
+  }
+
+  const riderNameValue = rider ? riderName(rider) : "";
+  if (!confirm(rider ? `Assign ${riderNameValue} to order #${order.id}?` : `Remove rider assignment from order #${order.id}?`)) return;
+
+  button.disabled = true;
+  button.textContent = "Saving...";
+
+  try {
+    /*
+     * Only order rider assignment fields are changed.
+     * No rider collection records or payment fields are modified.
+     */
+    await updateDoc(doc(db,"orders",order.id),{
+      riderId: rider ? rider.id : "",
+      riderName: riderNameValue
+    });
+
+    toast(rider ? "Rider assigned." : "Rider assignment removed.");
+    closeModal();
+  } catch (error) {
+    console.error("Rider assignment failed:",error);
+    showError("Could not assign rider. Check Firestore write permissions. " + (error.code||error.message||""));
+    button.disabled = false;
+    button.textContent = "Assign";
+  }
+}
+
+async function changeStatus(id,nextStatus) {
+  const order = orders.find(o=>o.id===id);
+  if (!order || busyIds.has(id)) return;
+  const previous = statusOf(order);
+  if (previous===nextStatus) return;
+
+  if (!confirm(`Change order #${id} status from "${previous.replace(/_/g," ")}" to "${nextStatus.replace(/_/g," ")}"?`)) {
+    renderOrders();
+    return;
+  }
+
+  busyIds.add(id);
+  renderOrders();
+
+  try {
+    // Only the existing order status field is updated.
+    await updateDoc(doc(db,"orders",id),{status:nextStatus});
+    toast("Order status updated.");
+    clearError();
+  } catch (error) {
+    console.error("Order status update failed:",error);
+    showError("Could not update order status. Check Firestore write permissions. " + (error.code||error.message||""));
+  } finally {
+    busyIds.delete(id);
+    renderStats();
+    renderOrders();
+  }
+}
+
+function startListeners() {
+  if (unsubOrders) unsubOrders();
+  if (unsubRiders) unsubRiders();
+
+  $("refreshBtn").disabled = true;
+  $("refreshNote").textContent = "Connecting to live order and rider data...";
+
+  unsubOrders = onSnapshot(collection(db,"orders"),snapshot=>{
+    orders = snapshot.docs.map(d=>({id:d.id,...d.data()}));
+    renderStats();
+    renderOrders();
+    $("refreshNote").textContent = "Live order updates · " + new Date().toLocaleTimeString("en-IN");
+    clearError();
+    $("refreshBtn").disabled = false;
+  },error=>{
+    console.error("Orders read failed:",error);
+    showError("Unable to read the orders collection. Check Firestore permissions. " + (error.code||error.message||""));
+    $("refreshBtn").disabled = false;
+  });
+
+  unsubRiders = onSnapshot(collection(db,"riders"),snapshot=>{
+    riders = snapshot.docs.map(d=>({id:d.id,...d.data()}));
+    renderStats();
+    renderOrders();
+  },error=>{
+    console.error("Riders read failed:",error);
+    riders = [];
+    renderStats();
+    renderOrders();
+    showError("Rider list unavailable. Order tracking remains available, but assignment requires read access to the riders collection. " + (error.code||error.message||""));
+  });
+}
+
+$("ordersBody").addEventListener("click",event=>{
+  const button = event.target.closest('button[data-action="view"]');
+  if (!button) return;
+  const order = orders.find(o=>o.id===button.dataset.id);
+  if (order) renderDetails(order);
+});
+
+$("ordersBody").addEventListener("change",event=>{
+  const select = event.target.closest('select[data-action="status"]');
+  if (select) changeStatus(select.dataset.id,select.value);
+});
+
+$("searchInput").addEventListener("input",renderOrders);
+$("statusFilter").addEventListener("change",renderOrders);
+$("riderFilter").addEventListener("change",renderOrders);
+$("refreshBtn").addEventListener("click",()=>{
+  startListeners();
+  toast("Refreshing delivery data...");
+});
+$("closeModal").addEventListener("click",closeModal);
+$("detailModal").addEventListener("click",event=>{
+  if(event.target===$("detailModal"))closeModal();
+});
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeModal();
+});
+
+const sidebar=$("sidebar"),scrim=$("scrim");
+$("menuToggle").addEventListener("click",()=>{
+  sidebar.classList.add("show");
+  scrim.classList.add("show");
+});
+scrim.addEventListener("click",()=>{
+  sidebar.classList.remove("show");
+  scrim.classList.remove("show");
+});
+document.querySelectorAll(".sidebar-nav a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    sidebar.classList.remove("show");
+    scrim.classList.remove("show");
+  });
+});
+
+startListeners();
+window.addEventListener("beforeunload",()=>{
+  if(unsubOrders)unsubOrders();
+  if(unsubRiders)unsubRiders();
+  clearTimeout(toastTimer);
+});
+</script>
+</body>
+</html>
