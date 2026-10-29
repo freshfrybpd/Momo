@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101010">
-<meta name="description" content="FreshFry Momo loyalty rewards and points.">
+<meta name="description" content="FreshFry Momo loyalty points and food rewards.">
 <title>My Rewards | FreshFry Momo</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,640 +13,345 @@
 
 <style>
 :root {
-  --orange: #ff5e00;
-  --bg: #101010;
-  --card: #191919;
-  --line: #2b2b2b;
-  --muted: #999;
-  --white: #fff;
-  --gold: #ffc15c;
-  --green: #45d483;
+ --orange:#ff5e00;--bg:#101010;--card:#191919;--line:#303030;
+ --muted:#999;--white:#fff;--gold:#ffc15c;--green:#45d483;--red:#ff7777;
 }
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--white);
-  font-family: Inter, sans-serif;
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
-}
-button, input { font: inherit; }
-button, a { -webkit-tap-highlight-color: transparent; }
-button { cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-button:focus-visible, a:focus-visible, input:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 3px;
-}
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(16,16,16,.95);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--line);
-  padding: 14px 17px;
-}
-.header-inner {
-  max-width: 720px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
-.back {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  background: #202020;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-}
-.brand { flex: 1; }
-.brand-name { font-size: 19px; font-weight: 900; letter-spacing: -.6px; }
-.brand-name span { color: var(--orange); }
-.brand-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
-.header-icon {
-  height: 42px;
-  width: 42px;
-  display: grid;
-  place-items: center;
-  color: var(--gold);
-  background: #302415;
-  border-radius: 14px;
-}
-main { max-width: 720px; margin: auto; padding: 22px 16px; }
-.hero {
-  border: 1px solid #65401e;
-  background: linear-gradient(135deg,#40230d,#21180f 60%,#171717);
-  border-radius: 24px;
-  padding: 23px 20px;
-  position: relative;
-  overflow: hidden;
-}
-.hero:after {
-  content: "★";
-  position: absolute;
-  right: 9px;
-  top: -13px;
-  font-size: 130px;
-  color: rgba(255,193,92,.08);
-  transform: rotate(12deg);
-}
-.eyebrow {
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #ffbf8c;
-  font-weight: 800;
-}
-.hero h1 { font-size: 28px; letter-spacing: -1px; margin: 12px 0 8px; }
-.hero h1 span { color: var(--orange); }
-.hero p { font-size: 12px; line-height: 1.8; color: #c8b9ab; margin: 0; max-width: 370px; }
-.points-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 22px;
-  position: relative;
-  z-index: 1;
-}
-.points-label { color: #c9b5a3; font-size: 10px; font-weight: 700; }
-.points-number { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-top: 4px; }
-.points-number small { font-size: 12px; letter-spacing: 0; color: #d7b48f; }
-.tier-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: #332416;
-  border: 1px solid #68421f;
-  color: var(--gold);
-  padding: 9px 11px;
-  border-radius: 11px;
-  font-size: 10px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-.demo-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  padding: 12px;
-  background: #211b12;
-  border: 1px solid #45351f;
-  border-radius: 13px;
-  color: #d4c5a7;
-  font-size: 10px;
-  line-height: 1.8;
-  margin-top: 14px;
-}
-.demo-note i { color: var(--gold); margin-top: 2px; }
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 26px 0 14px;
-}
-.section-head h2 { margin: 0; font-size: 16px; font-weight: 800; }
-.muted { color: var(--muted); font-size: 10px; }
-.panel {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 17px;
-}
-.tier-top { display: flex; align-items: center; gap: 12px; }
-.tier-icon {
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-items: center;
-  border-radius: 15px;
-  background: #302416;
-  color: var(--gold);
-  font-size: 19px;
-}
-.tier-copy { flex: 1; }
-.tier-copy h3 { margin: 0 0 5px; font-size: 13px; }
-.tier-copy p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
-.progress-labels {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 10px;
-  color: #aaa;
-  margin-top: 20px;
-}
-.progress-track { height: 8px; background: #333; border-radius: 20px; overflow: hidden; margin-top: 9px; }
-.progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,#ff5e00,#ffc15c);
-  border-radius: 20px;
-  transition: width .3s ease;
-}
-.tier-hint { color: #888; font-size: 10px; line-height: 1.8; margin-top: 12px; }
-.reward-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
-.reward-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 15px 13px;
-  min-width: 0;
-}
-.reward-art {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: #302015;
-  color: var(--orange);
-  font-size: 18px;
-  margin-bottom: 13px;
-}
-.reward-card h3 { margin: 0 0 7px; font-size: 12px; line-height: 1.5; }
-.reward-card p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.7; flex: 1; }
-.cost {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--gold);
-  font-size: 11px;
-  font-weight: 800;
-  margin-top: 14px;
-}
-.redeem-btn {
-  width: 100%;
-  border: 1px solid #64351d;
-  background: #2a190f;
-  color: #ff9a5e;
-  border-radius: 11px;
-  padding: 11px 8px;
-  margin-top: 13px;
-  font-size: 10px;
-  font-weight: 800;
-}
-.redeem-btn:disabled { opacity: .45; cursor: not-allowed; }
-.activity-list { display: grid; gap: 0; }
-.activity {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 0;
-  border-bottom: 1px solid #303030;
-}
-.activity:last-child { border-bottom: 0; padding-bottom: 0; }
-.activity-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: #292015;
-  color: var(--gold);
-  flex-shrink: 0;
-}
-.activity-copy { flex: 1; min-width: 0; }
-.activity-copy strong { display: block; font-size: 11px; }
-.activity-copy span { display: block; color: #777; font-size: 9px; margin-top: 5px; }
-.activity-points { font-size: 11px; font-weight: 900; color: var(--green); white-space: nowrap; }
-.empty {
-  text-align: center;
-  padding: 24px 15px;
-  border: 1px dashed #363636;
-  border-radius: 15px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.8;
-}
-.empty i { color: var(--orange); font-size: 22px; margin-bottom: 10px; }
-.reset-btn {
-  border: 1px solid #393939;
-  background: #202020;
-  color: #999;
-  border-radius: 10px;
-  padding: 9px 12px;
-  font-size: 10px;
-  font-weight: 700;
-}
-.footer { text-align: center; padding: 23px 10px 5px; color: #777; font-size: 10px; line-height: 1.8; }
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: calc(95px + env(safe-area-inset-bottom));
-  transform: translate(-50%,12px);
-  background: #292929;
-  border: 1px solid #444;
-  color: white;
-  padding: 12px 17px;
-  border-radius: 13px;
-  font-size: 11px;
-  opacity: 0;
-  pointer-events: none;
-  transition: .25s;
-  z-index: 50;
-  width: max-content;
-  max-width: calc(100% - 30px);
-  text-align: center;
-}
-.toast.show { opacity: 1; transform: translate(-50%,0); }
-.bottom-nav {
-  position: fixed;
-  z-index: 20;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(18,18,18,.97);
-  backdrop-filter: blur(18px);
-  border-top: 1px solid var(--line);
-  padding: 11px 8px calc(11px + env(safe-area-inset-bottom));
-}
-.bottom-inner {
-  max-width: 600px;
-  margin: auto;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: #777;
-  font-size: 9px;
-  font-weight: 700;
-  min-width: 54px;
-}
-.nav-item i { font-size: 18px; }
-.nav-item.active { color: var(--orange); }
-@media (min-width: 560px) {
-  main { padding: 28px 22px; }
-  .hero { padding: 30px; }
-  .hero h1 { font-size: 34px; }
-  .reward-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 360px) {
-  .reward-grid { grid-template-columns: 1fr; }
-  .points-number { font-size: 35px; }
-}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,Arial,sans-serif;padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:disabled{opacity:.45;cursor:not-allowed}
+a{color:inherit;text-decoration:none}
+.header{position:sticky;top:0;z-index:10;background:#101010f5;backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 17px}
+.header-inner{max-width:720px;margin:auto;display:flex;align-items:center;gap:13px}
+.back,.header-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;flex-shrink:0}
+.back{background:#202020;border:1px solid var(--line)}
+.brand{flex:1}.brand-name{font-size:19px;font-weight:900;letter-spacing:-.6px}.brand-name span{color:var(--orange)}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.header-icon{color:var(--gold);background:#302415}
+main{max-width:720px;margin:auto;padding:22px 16px}
+.hero{border:1px solid #65401e;background:linear-gradient(135deg,#40230d,#21180f 60%,#171717);border-radius:24px;padding:23px 20px;position:relative;overflow:hidden}
+.hero:after{content:"★";position:absolute;right:9px;top:-13px;font-size:130px;color:#ffc15c14;transform:rotate(12deg);pointer-events:none}
+.eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ffbf8c;font-weight:800}
+.hero h1{font-size:28px;letter-spacing:-1px;margin:12px 0 8px}.hero h1 span{color:var(--orange)}
+.hero p{font-size:12px;line-height:1.8;color:#c8b9ab;margin:0;max-width:400px}
+.points-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:22px;position:relative;z-index:1}
+.points-label{color:#c9b5a3;font-size:10px;font-weight:700}
+.points-number{font-size:42px;font-weight:900;letter-spacing:-2px;margin-top:4px}
+.points-number small{font-size:12px;letter-spacing:0;color:#d7b48f}
+.tier-badge{display:inline-flex;align-items:center;gap:7px;background:#332416;border:1px solid #68421f;color:var(--gold);padding:9px 11px;border-radius:11px;font-size:10px;font-weight:800;white-space:nowrap}
+.notice{display:flex;align-items:flex-start;gap:9px;padding:12px;background:#211b12;border:1px solid #45351f;border-radius:13px;color:#d4c5a7;font-size:11px;line-height:1.8;margin-top:14px}
+.notice i{color:var(--gold);margin-top:3px}
+.notice.error{background:#301b1b;border-color:#633232;color:#ffc1c1}.notice.error i{color:var(--red)}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 14px}
+.section-head h2{margin:0;font-size:16px;font-weight:800}
+.muted{color:var(--muted);font-size:10px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:17px}
+.tier-top{display:flex;align-items:center;gap:12px}
+.tier-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:#302416;color:var(--gold);font-size:19px}
+.tier-copy{flex:1}.tier-copy h3{margin:0 0 5px;font-size:13px}.tier-copy p{margin:0;color:var(--muted);font-size:10px;line-height:1.6}
+.progress-labels{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:#aaa;margin-top:20px}
+.progress-track{height:8px;background:#333;border-radius:20px;overflow:hidden;margin-top:9px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#ff5e00,#ffc15c);border-radius:20px;transition:width .3s}
+.tier-hint{color:#888;font-size:10px;line-height:1.8;margin-top:12px}
+.reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.reward-card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px 13px;min-width:0}
+.reward-art{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:#302015;color:var(--orange);font-size:18px;margin-bottom:13px}
+.reward-card h3{margin:0 0 7px;font-size:12px;line-height:1.5}
+.reward-card p{margin:0;color:var(--muted);font-size:10px;line-height:1.7;flex:1}
+.cost{display:flex;align-items:center;gap:6px;color:var(--gold);font-size:11px;font-weight:800;margin-top:14px}
+.redeem-btn{width:100%;border:1px solid #64351d;background:#2a190f;color:#ff9a5e;border-radius:11px;padding:11px 8px;margin-top:13px;font-size:10px;font-weight:800}
+.activity{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #303030}
+.activity:last-child{border-bottom:0}
+.activity-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#292015;color:var(--gold);flex-shrink:0}
+.activity-copy{flex:1;min-width:0}.activity-copy strong{display:block;font-size:11px}.activity-copy span{display:block;color:#777;font-size:9px;margin-top:5px;line-height:1.6}
+.activity-points{font-size:11px;font-weight:900;white-space:nowrap}.positive{color:var(--green)}.negative{color:var(--red)}
+.empty{text-align:center;padding:24px 15px;border:1px dashed #363636;border-radius:15px;color:var(--muted);font-size:11px;line-height:1.8}
+.empty i{color:var(--orange);font-size:22px;margin-bottom:10px}
+.footer{text-align:center;padding:23px 10px 5px;color:#777;font-size:10px;line-height:1.8}
+.toast{position:fixed;left:50%;bottom:calc(95px + env(safe-area-inset-bottom));transform:translate(-50%,12px);background:#292929;border:1px solid #444;color:#fff;padding:12px 17px;border-radius:13px;font-size:11px;opacity:0;pointer-events:none;transition:.25s;z-index:50;width:max-content;max-width:calc(100% - 30px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.bottom-nav{position:fixed;z-index:20;bottom:0;left:0;right:0;background:#121212f7;backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:11px 8px calc(11px + env(safe-area-inset-bottom))}
+.bottom-inner{max-width:600px;margin:auto;display:flex;justify-content:space-around;align-items:center}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:6px;color:#777;font-size:9px;font-weight:700;min-width:54px}
+.nav-item i{font-size:18px}.nav-item.active{color:var(--orange)}
+@media(min-width:560px){main{padding:28px 22px}.hero{padding:30px}.hero h1{font-size:34px}.reward-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:360px){.reward-grid{grid-template-columns:1fr}.points-number{font-size:35px}}
 </style>
 </head>
-
 <body>
 <header class="header">
-  <div class="header-inner">
-    <a class="back" href="profile.html" aria-label="Back to profile">
-      <i class="fa-solid fa-arrow-left"></i>
-    </a>
-    <div class="brand">
-      <div class="brand-name">Fresh<span>Fry</span></div>
-      <div class="brand-sub">Rewards club</div>
-    </div>
-    <div class="header-icon"><i class="fa-solid fa-crown"></i></div>
-  </div>
+ <div class="header-inner">
+  <a class="back" href="index.html" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></a>
+  <div class="brand"><div class="brand-name">Fresh<span>Fry</span></div><div class="brand-sub">Rewards club</div></div>
+  <div class="header-icon"><i class="fa-solid fa-crown"></i></div>
+ </div>
 </header>
 
 <main>
-  <section class="hero">
-    <div class="eyebrow">FreshFry loyalty club</div>
-    <h1>Good food. Great <span>rewards.</span></h1>
-    <p>Discover rewards, track your points and enjoy more with every visit.</p>
-    <div class="points-row">
-      <div>
-        <div class="points-label">YOUR DEMO BALANCE</div>
-        <div class="points-number"><span id="pointsBalance">120</span> <small>PTS</small></div>
-      </div>
-      <div class="tier-badge"><i class="fa-solid fa-medal"></i> <span id="tierName">BRONZE</span></div>
-    </div>
-  </section>
-
-  <div class="demo-note">
-    <i class="fa-solid fa-circle-info"></i>
-    <div><strong>Demo rewards:</strong> Points and redemptions on this page are stored on this device only. They do not apply discounts to real orders.</div>
+ <section class="hero">
+  <div class="eyebrow">FreshFry loyalty club</div>
+  <h1>Good food. Great <span>rewards.</span></h1>
+  <p>Earn points on delivered orders and redeem them for food rewards.</p>
+  <div class="points-row">
+   <div><div class="points-label">YOUR AVAILABLE POINTS</div><div class="points-number"><span id="pointsBalance">—</span> <small>PTS</small></div></div>
+   <div class="tier-badge"><i class="fa-solid fa-medal"></i><span id="tierName">LOADING</span></div>
   </div>
+ </section>
 
-  <div class="section-head">
-    <h2>Your loyalty level</h2>
-    <span class="muted">Demo progress</span>
+ <div class="notice" id="accountNotice"><i class="fa-solid fa-circle-info"></i><div>Loading your rewards account…</div></div>
+
+ <div class="section-head"><h2>Your loyalty level</h2><span class="muted">Based on earned points</span></div>
+ <section class="panel">
+  <div class="tier-top"><div class="tier-icon"><i class="fa-solid fa-medal" id="tierIcon"></i></div>
+   <div class="tier-copy"><h3 id="tierHeading">Loading…</h3><p id="tierDescription">Calculating your rewards.</p></div>
   </div>
+  <div class="progress-labels"><span id="progressText">— points</span><span id="nextTierText">—</span></div>
+  <div class="progress-track"><div class="progress-fill" id="tierProgress"></div></div>
+  <div class="tier-hint" id="tierHint">Points are calculated from your delivered orders.</div>
+ </section>
 
-  <section class="panel">
-    <div class="tier-top">
-      <div class="tier-icon"><i class="fa-solid fa-medal" id="tierIcon"></i></div>
-      <div class="tier-copy">
-        <h3 id="tierHeading">Bronze Member</h3>
-        <p id="tierDescription">Your FreshFry rewards journey starts here.</p>
-      </div>
-    </div>
-    <div class="progress-labels">
-      <span id="progressText">120 points</span>
-      <span id="nextTierText">500 points to Silver</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="tierProgress"></div>
-    </div>
-    <div class="tier-hint" id="tierHint">Collect points to reach the next level. Real earning rules are not configured yet.</div>
-  </section>
+ <div class="section-head"><h2>Free food rewards</h2><span class="muted">Redeem points</span></div>
+ <div class="reward-grid" id="rewardGrid"></div>
 
-  <div class="section-head">
-    <h2>Redeem your points</h2>
-    <span class="muted">Demo rewards</span>
-  </div>
-
-  <div class="reward-grid" id="rewardGrid">
-    <article class="reward-card">
-      <div class="reward-art"><i class="fa-solid fa-cookie-bite"></i></div>
-      <h3>Snack Reward</h3>
-      <p>A sample reward for your next craving.</p>
-      <div class="cost"><i class="fa-solid fa-coins"></i> 50 points</div>
-      <button class="redeem-btn" type="button" data-reward="Snack Reward" data-cost="50">REDEEM</button>
-    </article>
-    <article class="reward-card">
-      <div class="reward-art"><i class="fa-solid fa-tags"></i></div>
-      <h3>₹25 Demo Voucher</h3>
-      <p>Sample voucher display. Not valid at checkout.</p>
-      <div class="cost"><i class="fa-solid fa-coins"></i> 100 points</div>
-      <button class="redeem-btn" type="button" data-reward="₹25 Demo Voucher" data-cost="100">REDEEM</button>
-    </article>
-    <article class="reward-card">
-      <div class="reward-art"><i class="fa-solid fa-gift"></i></div>
-      <h3>Special Treat</h3>
-      <p>A sample loyalty reward for members.</p>
-      <div class="cost"><i class="fa-solid fa-coins"></i> 200 points</div>
-      <button class="redeem-btn" type="button" data-reward="Special Treat" data-cost="200">REDEEM</button>
-    </article>
-  </div>
-
-  <div class="section-head">
-    <h2>Points activity</h2>
-    <button type="button" class="reset-btn" id="resetDemoBtn">Reset demo</button>
-  </div>
-
-  <section class="panel">
-    <div class="activity-list" id="activityList"></div>
-    <div class="empty" id="emptyActivity" hidden>
-      <i class="fa-regular fa-clock"></i><br>
-      No points activity yet.
-    </div>
-  </section>
-
-  <div class="footer">
-    <strong>FreshFry Momo</strong><br>
-    Thank you for being part of our journey.
-  </div>
+ <div class="section-head"><h2>Points activity</h2><span class="muted">Your account history</span></div>
+ <section class="panel">
+  <div id="activityList"></div>
+  <div class="empty" id="emptyActivity" hidden><i class="fa-regular fa-clock"></i><br>No rewards activity yet.</div>
+ </section>
+ <div class="footer"><strong>FreshFry Momo</strong><br>Points are earned on delivered orders only.</div>
 </main>
 
 <nav class="bottom-nav" aria-label="Main navigation">
-  <div class="bottom-inner">
-    <a class="nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>HOME</span></a>
-    <a class="nav-item" href="index.html#menu-section"><i class="fa-solid fa-utensils"></i><span>MENU</span></a>
-    <a class="nav-item" href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span>CART</span></a>
-    <a class="nav-item" href="my-orders.html"><i class="fa-solid fa-receipt"></i><span>ORDERS</span></a>
-    <a class="nav-item active" href="rewards.html"><i class="fa-solid fa-crown"></i><span>REWARDS</span></a>
-  </div>
+ <div class="bottom-inner">
+  <a class="nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>HOME</span></a>
+  <a class="nav-item" href="index.html#menu-section"><i class="fa-solid fa-utensils"></i><span>MENU</span></a>
+  <a class="nav-item" href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span>CART</span></a>
+  <a class="nav-item" href="my-orders.html"><i class="fa-solid fa-receipt"></i><span>ORDERS</span></a>
+  <a class="nav-item active" href="rewards.html"><i class="fa-solid fa-crown"></i><span>REWARDS</span></a>
+ </div>
 </nav>
-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script>
-(() => {
-  "use strict";
+<script type="module">
+import {initializeApp,getApps,getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+ getFirestore,collection,query,where,onSnapshot,addDoc,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const STORAGE_KEY = "ff_rewards_demo_v1";
-  const INITIAL_POINTS = 120;
-  const byId = id => document.getElementById(id);
-  const toast = byId("toast");
-  let toastTimer;
+/* Existing FreshFry Firebase config preserved. */
+const firebaseConfig={
+ apiKey:"AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+ authDomain:"freshfry-39a10.firebaseapp.com",
+ projectId:"freshfry-39a10",
+ storageBucket:"freshfry-39a10.firebasestorage.app",
+ messagingSenderId:"928483976893",
+ appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+};
 
-  const defaultState = () => ({
-    points: INITIAL_POINTS,
-    activity: [{
-      id: "welcome-demo",
-      title: "Welcome bonus (demo)",
-      detail: "Sample starting balance",
-      points: INITIAL_POINTS,
-      time: Date.now()
-    }]
+const app=getApps().length?getApp():initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+/*
+ * Reward catalogue: sample names and point costs.
+ * Edit these entries to match your actual free food offers.
+ * These are not menu prices or checkout discounts.
+ */
+const REWARDS=[
+ {id:"veg-momo",name:"Free Veg Momo",description:"Redeem points for a free Veg Momo reward.",points:100,icon:"fa-bowl-food"},
+ {id:"chicken-fry-half",name:"Free Chicken Fry (Half)",description:"A free food reward, subject to admin confirmation.",points:200,icon:"fa-drumstick-bite"},
+ {id:"special-treat",name:"FreshFry Special Treat",description:"Redeem points for a special food reward.",points:300,icon:"fa-gift"}
+];
+
+/*
+ * Point rule:
+ * 1 point per complete ₹10 of each delivered order's total.
+ * Example: ₹260 => 26 points.
+ *
+ * Existing fields used: orders.customerPhone, orders.status, orders.total.
+ * New collection: rewardRedemptions.
+ */
+const REDEMPTIONS_COLLECTION="rewardRedemptions";
+let customerPhone="";
+let orders=[];
+let redemptions=[];
+let stopOrders=null,stopRedemptions=null;
+let toastTimer=null;
+const pendingClicks=new Set();
+
+function normalizePhone(value){return String(value??"").replace(/\D/g,"").slice(-10);}
+function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function toast(message){$("toast").textContent=message;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),3200);}
+function delivered(order){return String(order.status||"").trim().toLowerCase().replace(/[\s-]+/g,"_")==="delivered";}
+function orderPoints(order){const total=Number(order.total);return Number.isFinite(total)&&total>0?Math.floor(total/10):0;}
+function earnedPoints(){return orders.filter(delivered).reduce((sum,o)=>sum+orderPoints(o),0);}
+function redemptionStatus(r){return String(r.status||"requested").toLowerCase();}
+function heldPoints(){
+ return redemptions.filter(r=>["requested","pending","approved"].includes(redemptionStatus(r)))
+  .reduce((sum,r)=>sum+Math.max(0,Number(r.pointsCost)||0),0);
+}
+function availablePoints(){return Math.max(0,earnedPoints()-heldPoints());}
+
+function tierFor(points){
+ if(points>=1500)return {name:"GOLD",heading:"Gold Member",desc:"You have reached Gold level.",floor:1500,next:null,icon:"fa-crown"};
+ if(points>=500)return {name:"SILVER",heading:"Silver Member",desc:"You are progressing through the FreshFry rewards club.",floor:500,next:1500,icon:"fa-medal"};
+ return {name:"BRONZE",heading:"Bronze Member",desc:"Your FreshFry rewards journey starts here.",floor:0,next:500,icon:"fa-medal"};
+}
+function renderRewards(){
+ const points=availablePoints(),earned=earnedPoints(),tier=tierFor(earned);
+ $("pointsBalance").textContent=points.toLocaleString("en-IN");
+ $("tierName").textContent=tier.name;
+ $("tierHeading").textContent=tier.heading;
+ $("tierDescription").textContent=tier.desc;
+ $("tierIcon").className="fa-solid "+tier.icon;
+ $("progressText").textContent=earned.toLocaleString("en-IN")+" earned points";
+
+ if(tier.next===null){
+  $("nextTierText").textContent="Top level reached";
+  $("tierProgress").style.width="100%";
+ }else{
+  $("nextTierText").textContent=Math.max(0,tier.next-earned)+" points to "+(tier.name==="BRONZE"?"Silver":"Gold");
+  $("tierProgress").style.width=Math.min(100,Math.max(0,((earned-tier.floor)/(tier.next-tier.floor))*100))+"%";
+ }
+ $("tierHint").textContent="Points are calculated from delivered orders. Pending and approved redemption requests reserve points until the request is processed.";
+
+ $("rewardGrid").innerHTML=REWARDS.map(r=>{
+  const disabled=points<r.points||pendingClicks.has(r.id);
+  return `<article class="reward-card">
+   <div class="reward-art"><i class="fa-solid ${esc(r.icon)}"></i></div>
+   <h3>${esc(r.name)}</h3><p>${esc(r.description)}</p>
+   <div class="cost"><i class="fa-solid fa-coins"></i>${r.points} points</div>
+   <button class="redeem-btn" type="button" data-reward="${esc(r.id)}" ${disabled?"disabled":""}>${pendingClicks.has(r.id)?"PLEASE WAIT":points<r.points?"NOT ENOUGH POINTS":"REQUEST REWARD"}</button>
+  </article>`;
+ }).join("");
+ renderActivity();
+}
+function dateText(value){
+ let d;
+ if(value?.toDate)d=value.toDate();
+ else if(value?.seconds)d=new Date(value.seconds*1000);
+ else d=value?new Date(value):null;
+ return d&&!Number.isNaN(d.getTime())?d.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"Date unavailable";
+}
+function renderActivity(){
+ const list=[];
+ for(const o of orders.filter(delivered)){
+  const points=orderPoints(o);
+  if(points>0)list.push({
+   title:"Delivered order bonus",
+   detail:"Order #"+String(o.id).slice(-7),
+   points,time:o.deliveredAt||o.createdAt
   });
-
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return defaultState();
-      const state = JSON.parse(raw);
-      if (!state || !Number.isFinite(state.points) || !Array.isArray(state.activity)) {
-        return defaultState();
-      }
-      return {
-        points: Math.max(0, Math.floor(state.points)),
-        activity: state.activity.filter(item => item && typeof item.title === "string")
-      };
-    } catch (error) {
-      console.warn("Could not load demo rewards.", error);
-      return defaultState();
-    }
-  }
-
-  let state = loadState();
-
-  function saveState() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      return true;
-    } catch (error) {
-      console.error("Could not save demo rewards.", error);
-      showToast("Unable to save rewards on this device.");
-      return false;
-    }
-  }
-
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
-  }
-
-  function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[char]);
-  }
-
-  function getTier(points) {
-    if (points >= 1500) return {
-      name: "GOLD", heading: "Gold Member",
-      description: "You've reached the highest demo loyalty tier.",
-      floor: 1500, next: null, icon: "fa-crown"
-    };
-    if (points >= 500) return {
-      name: "SILVER", heading: "Silver Member",
-      description: "You're making progress in the demo rewards club.",
-      floor: 500, next: 1500, icon: "fa-medal"
-    };
-    return {
-      name: "BRONZE", heading: "Bronze Member",
-      description: "Your FreshFry rewards journey starts here.",
-      floor: 0, next: 500, icon: "fa-medal"
-    };
-  }
-
-  function render() {
-    const points = state.points;
-    const tier = getTier(points);
-
-    byId("pointsBalance").textContent = points.toLocaleString("en-IN");
-    byId("tierName").textContent = tier.name;
-    byId("tierHeading").textContent = tier.heading;
-    byId("tierDescription").textContent = tier.description;
-    byId("tierIcon").className = "fa-solid " + tier.icon;
-    byId("progressText").textContent = points.toLocaleString("en-IN") + " points";
-
-    let percent;
-    if (tier.next === null) {
-      percent = 100;
-      byId("nextTierText").textContent = "Top demo tier reached";
-      byId("tierHint").textContent = "Gold is the highest demo tier. Real loyalty benefits are not configured yet.";
-    } else {
-      percent = Math.min(100, Math.max(0, ((points - tier.floor) / (tier.next - tier.floor)) * 100));
-      const remaining = Math.max(0, tier.next - points);
-      const nextName = tier.name === "BRONZE" ? "Silver" : "Gold";
-      byId("nextTierText").textContent = remaining + " points to " + nextName;
-      byId("tierHint").textContent = "Keep exploring FreshFry. Actual points earning and tier benefits will need to be configured.";
-    }
-    byId("tierProgress").style.width = percent + "%";
-
-    document.querySelectorAll("[data-reward]").forEach(button => {
-      const cost = Number(button.dataset.cost);
-      button.disabled = points < cost;
-      button.textContent = points < cost ? "NOT ENOUGH POINTS" : "REDEEM";
-    });
-
-    const activityList = byId("activityList");
-    activityList.replaceChildren();
-    const activity = [...state.activity].sort((a, b) => b.time - a.time);
-    byId("emptyActivity").hidden = activity.length > 0;
-
-    activity.forEach(item => {
-      const row = document.createElement("div");
-      row.className = "activity";
-      const date = new Date(item.time);
-      const dateText = Number.isNaN(date.getTime())
-        ? "Saved activity"
-        : date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
-
-      row.innerHTML = `
-        <div class="activity-icon"><i class="fa-solid ${item.points < 0 ? "fa-gift" : "fa-coins"}"></i></div>
-        <div class="activity-copy">
-          <strong>${escapeHTML(item.title)}</strong>
-          <span>${escapeHTML(item.detail || "")} · ${escapeHTML(dateText)}</span>
-        </div>
-        <div class="activity-points">${item.points > 0 ? "+" : ""}${Number(item.points).toLocaleString("en-IN")} pts</div>
-      `;
-      activityList.appendChild(row);
-    });
-  }
-
-  document.querySelectorAll("[data-reward]").forEach(button => {
-    button.addEventListener("click", () => {
-      const cost = Number(button.dataset.cost);
-      const reward = button.dataset.reward;
-
-      if (!Number.isFinite(cost) || cost <= 0 || state.points < cost) {
-        showToast("Not enough demo points for this reward.");
-        return;
-      }
-
-      const confirmed = window.confirm(
-        "Redeem " + reward + " for " + cost + " demo points?\n\nThis will not apply a real checkout discount."
-      );
-      if (!confirmed) return;
-
-      const oldState = JSON.parse(JSON.stringify(state));
-      state.points -= cost;
-      state.activity.push({
-        id: "redeem-" + Date.now(),
-        title: "Redeemed: " + reward,
-        detail: "Demo redemption only",
-        points: -cost,
-        time: Date.now()
-      });
-
-      if (!saveState()) {
-        state = oldState;
-        return;
-      }
-
-      render();
-      showToast("Demo reward redeemed.");
-    });
+ }
+ for(const r of redemptions){
+  const status=redemptionStatus(r);
+  const isRejected=["rejected","cancelled"].includes(status);
+  list.push({
+   title:(isRejected?"Redemption "+status:"Reward: "+(r.rewardName||"Food reward")),
+   detail:"Request "+String(r.id).slice(-7)+" · "+status,
+   points:-Math.max(0,Number(r.pointsCost)||0),
+   time:r.createdAt
   });
+ }
+ list.sort((a,b)=>{
+  const time=v=>v?.toMillis?v.toMillis():v?.seconds?v.seconds*1000:Date.parse(v||0)||0;
+  return time(b.time)-time(a.time);
+ });
+ $("activityList").innerHTML=list.map(item=>`<div class="activity">
+  <div class="activity-icon"><i class="fa-solid ${item.points<0?"fa-gift":"fa-coins"}"></i></div>
+  <div class="activity-copy"><strong>${esc(item.title)}</strong><span>${esc(item.detail)} · ${esc(dateText(item.time))}</span></div>
+  <div class="activity-points ${item.points<0?"negative":"positive"}">${item.points>0?"+":""}${item.points.toLocaleString("en-IN")} pts</div>
+ </div>`).join("");
+ $("emptyActivity").hidden=list.length>0;
+}
 
-  byId("resetDemoBtn").addEventListener("click", () => {
-    if (!window.confirm("Reset demo points and activity to the starting balance?")) return;
-    const oldState = state;
-    state = defaultState();
-    if (!saveState()) {
-      state = oldState;
-      return;
-    }
-    render();
-    showToast("Demo rewards reset.");
+function showAccountNotice(message,isError=false){
+ $("accountNotice").classList.toggle("error",isError);
+ $("accountNotice").innerHTML=`<i class="fa-solid ${isError?"fa-triangle-exclamation":"fa-circle-info"}"></i><div>${esc(message)}</div>`;
+}
+function startListeners(){
+ if(stopOrders)stopOrders();
+ if(stopRedemptions)stopRedemptions();
+
+ /*
+  * Exact customerPhone match. Ensure checkout stores the same 10-digit
+  * phone format in orders.customerPhone.
+  */
+ stopOrders=onSnapshot(query(collection(db,"orders"),where("customerPhone","==",customerPhone)),snapshot=>{
+  orders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+  renderRewards();
+  const count=orders.filter(delivered).length;
+  showAccountNotice(`Connected. ${count} delivered order(s) found. Earned points are calculated from their totals.`);
+ },error=>{
+  console.error("Rewards orders read failed:",error);
+  showAccountNotice("Could not read your orders. Check Firestore read permissions and customerPhone format. "+(error.code||""),true);
+ });
+
+ stopRedemptions=onSnapshot(query(collection(db,REDEMPTIONS_COLLECTION),where("customerPhone","==",customerPhone)),snapshot=>{
+  redemptions=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+  renderRewards();
+ },error=>{
+  console.error("Rewards redemption read failed:",error);
+  showAccountNotice("Orders may be available, but redemption history cannot load. Check rewardRedemptions Firestore rules. "+(error.code||""),true);
+ });
+}
+
+async function requestReward(rewardId,button){
+ const reward=REWARDS.find(r=>r.id===rewardId);
+ if(!reward||pendingClicks.has(rewardId))return;
+ if(!customerPhone)return toast("Customer phone not found. Please sign in again.");
+ if(availablePoints()<reward.points)return toast("Not enough available points.");
+
+ const confirmed=confirm(`Request ${reward.name} for ${reward.points} points?\n\nThis submits a reward request. It is not a checkout coupon.`);
+ if(!confirmed)return;
+
+ pendingClicks.add(rewardId);button.disabled=true;button.textContent="PLEASE WAIT...";
+ try{
+  /*
+   * New collection document schema:
+   * customerPhone, rewardId, rewardName, pointsCost, status, createdAt.
+   * status starts as "requested"; fulfilment requires admin processing.
+   */
+  await addDoc(collection(db,REDEMPTIONS_COLLECTION),{
+   customerPhone,
+   rewardId:reward.id,
+   rewardName:reward.name,
+   pointsCost:reward.points,
+   status:"requested",
+   createdAt:serverTimestamp()
   });
+  toast("Reward request submitted. Wait for FreshFry confirmation.");
+ }catch(error){
+  console.error("Reward request failed:",error);
+  toast("Request failed. Check Firestore rules and try again.");
+ }finally{
+  pendingClicks.delete(rewardId);
+  renderRewards();
+ }
+}
+$("rewardGrid").addEventListener("click",event=>{
+ const button=event.target.closest("[data-reward]");
+ if(button)requestReward(button.dataset.reward,button);
+});
 
-  render();
-})();
+function init(){
+ const storedPhone=localStorage.getItem("ff_phone");
+ customerPhone=normalizePhone(storedPhone);
+ if(!/^\d{10}$/.test(customerPhone)){
+  $("pointsBalance").textContent="—";
+  $("rewardGrid").innerHTML='<div class="empty" style="grid-column:1/-1">Please sign in to your FreshFry customer account first.</div>';
+  showAccountNotice("Customer phone is missing from localStorage ff_phone. Open the customer app and sign in.",true);
+  return;
+ }
+ startListeners();
+}
+init();
+
+window.addEventListener("beforeunload",()=>{
+ if(stopOrders)stopOrders();
+ if(stopRedemptions)stopRedemptions();
+ clearTimeout(toastTimer);
+});
 </script>
 </body>
 </html>
