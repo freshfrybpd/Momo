@@ -1,90 +1,549 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | Freshfry</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #0d0d0d; color: #fff; }
-        .profile-card { background: #1c1c1c; border-radius: 1.5rem; border: 1px solid #2d2d2d; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Manage your FreshFry Momo profile and delivery details.">
+<title>My Profile | FreshFry Momo</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#faf9f7;
+  --line:#eee9e5;
+  --green:#15803d;
+}
+* { box-sizing:border-box }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--dark);
+  font-family:'Outfit',sans-serif;
+}
+button,input,textarea { font:inherit }
+a,button { -webkit-tap-highlight-color:transparent }
+a { color:inherit;text-decoration:none }
+button { cursor:pointer }
+.wrap { width:min(760px,calc(100% - 28px));margin:auto }
+
+header {
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#ffffffed;
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner {
+  min-height:65px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.back {
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.brand {
+  font-size:24px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:-1px;
+}
+.brand span { color:var(--orange) }
+.header-icon {
+  margin-left:auto;
+  color:var(--orange);
+  font-size:19px;
+}
+.hero { padding:28px 0 20px }
+.eyebrow {
+  color:var(--orange);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+.hero h1 {
+  font-size:32px;
+  letter-spacing:-1px;
+  line-height:1.15;
+  margin:8px 0;
+}
+.hero p {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin:0;
+}
+.profile-card {
+  background:var(--dark);
+  color:#fff;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:17px;
+  position:relative;
+  overflow:hidden;
+}
+.profile-card:after {
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-65px;
+  top:-75px;
+  border-radius:50%;
+  background:#ff5e0025;
+}
+.profile-top {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  position:relative;
+  z-index:1;
+}
+.avatar {
+  width:66px;
+  height:66px;
+  flex-shrink:0;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  background:var(--orange);
+  color:#fff;
+  font-size:27px;
+}
+.profile-name {
+  font-size:21px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+.profile-phone {
+  color:#c7c7c7;
+  font-size:12px;
+  margin-top:5px;
+}
+.account-label {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:#fed7aa;
+  font-size:10px;
+  font-weight:800;
+  margin-top:9px;
+}
+.card {
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
+.card-title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:15px;
+  font-weight:900;
+  margin:0 0 16px;
+}
+.card-title i { color:var(--orange) }
+.field { margin-bottom:14px }
+.field:last-child { margin-bottom:0 }
+.field label {
+  display:block;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:7px;
+}
+.input {
+  display:block;
+  width:100%;
+  min-width:0;
+  padding:13px;
+  border:1px solid #e5e5e8;
+  border-radius:11px;
+  background:#fff;
+  color:var(--dark);
+  outline:none;
+  font-size:13px;
+}
+.input:focus {
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px #ff5e0014;
+}
+.input:disabled {
+  background:#f6f6f6;
+  color:#777;
+}
+textarea.input {
+  resize:vertical;
+  min-height:88px;
+}
+.primary,.secondary {
+  width:100%;
+  min-height:46px;
+  border-radius:12px;
+  padding:12px 16px;
+  font-size:12px;
+  font-weight:900;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+}
+.primary {
+  background:var(--orange);
+  border:0;
+  color:#fff;
+}
+.secondary {
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--dark);
+}
+.primary:disabled { opacity:.6;cursor:not-allowed }
+.quick-links {
+  display:grid;
+  gap:10px;
+}
+.quick-link {
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+}
+.quick-icon {
+  width:43px;
+  height:43px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:#fff0e6;
+  color:var(--orange);
+  font-size:17px;
+}
+.quick-content { flex:1;min-width:0 }
+.quick-title {
+  font-size:12px;
+  font-weight:900;
+}
+.quick-desc {
+  font-size:10px;
+  line-height:1.6;
+  color:var(--muted);
+  margin-top:4px;
+}
+.quick-arrow { color:#aaa;font-size:12px }
+.message {
+  display:none;
+  padding:13px;
+  border-radius:11px;
+  font-size:11px;
+  line-height:1.7;
+  margin-bottom:13px;
+  overflow-wrap:anywhere;
+}
+.message.show { display:block }
+.message.success {
+  background:#effcf4;
+  color:#166534;
+  border:1px solid #bbf7d0;
+}
+.message.error {
+  background:#fef2f2;
+  color:#991b1b;
+  border:1px solid #fecaca;
+}
+.message.info {
+  background:#eff6ff;
+  color:#1d4ed8;
+  border:1px solid #bfdbfe;
+}
+.notice {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+  margin:12px 0 0;
+}
+footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+  padding:25px 12px;
+}
+@media(max-width:520px) {
+  .hero h1 { font-size:28px }
+  .card { padding:15px }
+  .profile-card { padding:18px }
+}
+</style>
 </head>
+
 <body>
-    <header class="p-5 flex items-center gap-4">
-        <button onclick="location.href='index.html'"><i class="fa-solid fa-arrow-left text-xl"></i></button>
-        <h1 class="font-900 uppercase italic">My Account</h1>
-    </header>
+<header>
+  <div class="wrap header-inner">
+    <a class="back" href="index.html" aria-label="Back to home">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
+    <i class="fa-solid fa-user header-icon"></i>
+  </div>
+</header>
 
-    <main class="px-5">
-        <div class="profile-card p-6 mb-6">
-            <div class="flex items-center gap-4">
-                <div class="relative cursor-pointer" onclick="document.getElementById('imgInput').click()">
-                    <img id="profile-pic" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Fresh" class="w-16 h-16 rounded-full border-2 border-orange-500 object-cover">
-                    <div class="absolute -bottom-1 -right-1 bg-orange-500 h-6 w-6 rounded-full border-2 border-black flex items-center justify-center text-[10px]">
-                        <i class="fa-solid fa-camera"></i>
-                    </div>
-                    <input type="file" id="imgInput" class="hidden" accept="image/*" onchange="previewImg(this)">
-                </div>
-                <div>
-                    <h2 id="u-name" class="text-2xl font-900 italic uppercase">User</h2>
-                    <p id="u-phone" class="text-xs text-gray-400 font-bold">+91-0000000000</p>
-                </div>
-            </div>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Your FreshFry account</div>
+    <h1>My Profile <span>🧡</span></h1>
+    <p>Manage your contact information and delivery address.</p>
+  </section>
+
+  <div id="message" class="message" role="status" aria-live="polite"></div>
+
+  <section class="profile-card">
+    <div class="profile-top">
+      <div class="avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div>
+        <div class="profile-name" id="display-name">FreshFry Customer</div>
+        <div class="profile-phone" id="display-phone">Mobile number not saved</div>
+        <div class="account-label">
+          <i class="fa-solid fa-circle-check"></i>
+          CUSTOMER PROFILE
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="profile-card px-5 py-4 flex justify-between items-center mb-6">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-leaf text-green-500"></i>
-                <span class="font-bold">Pure Veg Mode</span>
-            </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="vegSwitch" class="sr-only peer" onchange="updateVegMode()">
-                <div class="w-11 h-6 bg-zinc-700 rounded-full peer peer-checked:bg-green-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
-            </label>
+  <section class="card">
+    <h2 class="card-title">
+      <i class="fa-solid fa-address-card"></i>
+      Personal details
+    </h2>
+
+    <form id="profile-form">
+      <div class="field">
+        <label for="customer-name">Full name</label>
+        <input
+          class="input"
+          id="customer-name"
+          type="text"
+          maxlength="80"
+          autocomplete="name"
+          placeholder="Enter your full name"
+        >
+      </div>
+
+      <div class="field">
+        <label for="customer-phone">Mobile number</label>
+        <input
+          class="input"
+          id="customer-phone"
+          type="tel"
+          inputmode="numeric"
+          maxlength="10"
+          autocomplete="tel"
+          placeholder="10-digit mobile number"
+        >
+        <p class="notice">
+          This profile currently stores details on this device. Changing the number here does not verify ownership of that number.
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="customer-address">Delivery address</label>
+        <textarea
+          class="input"
+          id="customer-address"
+          maxlength="500"
+          autocomplete="street-address"
+          placeholder="House number, street, area and landmark"
+        ></textarea>
+      </div>
+
+      <button class="primary" id="save-btn" type="submit">
+        <i class="fa-solid fa-floppy-disk"></i>
+        SAVE PROFILE
+      </button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2 class="card-title">
+      <i class="fa-solid fa-bolt"></i>
+      Quick access
+    </h2>
+
+    <div class="quick-links">
+      <a class="quick-link" href="my-orders.html">
+        <div class="quick-icon">
+          <i class="fa-solid fa-receipt"></i>
         </div>
+        <div class="quick-content">
+          <div class="quick-title">My Orders</div>
+          <div class="quick-desc">View your previous orders and delivery progress.</div>
+        </div>
+        <i class="fa-solid fa-chevron-right quick-arrow"></i>
+      </a>
 
-        <button onclick="logout()" class="w-full p-4 text-red-500 font-black uppercase profile-card">Log Out</button>
-    </main>
+      <a class="quick-link" href="track-order.html">
+        <div class="quick-icon">
+          <i class="fa-solid fa-truck-fast"></i>
+        </div>
+        <div class="quick-content">
+          <div class="quick-title">Track an Order</div>
+          <div class="quick-desc">Open the order tracking page.</div>
+        </div>
+        <i class="fa-solid fa-chevron-right quick-arrow"></i>
+      </a>
 
-    <script>
-        // 1. Photo Preview & Local Save
-        function previewImg(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profile-pic').src = e.target.result;
-                    localStorage.setItem('user_photo', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+      <a class="quick-link" href="index.html">
+        <div class="quick-icon">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="quick-content">
+          <div class="quick-title">Explore Menu</div>
+          <div class="quick-desc">Browse food and place a new order.</div>
+        </div>
+        <i class="fa-solid fa-chevron-right quick-arrow"></i>
+      </a>
+    </div>
+  </section>
 
-        // 2. Veg Mode Save
-        function updateVegMode() {
-            const val = document.getElementById('vegSwitch').checked;
-            localStorage.setItem('ff_veg_only', val);
-        }
+  <section class="card">
+    <h2 class="card-title">
+      <i class="fa-solid fa-shield-halved"></i>
+      Device information
+    </h2>
+    <p class="notice">
+      Your saved profile details are stored in this browser's local storage. They are not a verified login, and may not appear on another device. Avoid using this page on a shared device.
+    </p>
+    <button class="secondary" id="clear-profile" type="button" style="margin-top:15px">
+      <i class="fa-solid fa-rotate-left"></i>
+      CLEAR SAVED PROFILE
+    </button>
+  </section>
+</main>
 
-        // 3. Load Data
-        window.onload = () => {
-            document.getElementById('u-name').innerText = localStorage.getItem('ff_user') || "Guest";
-            document.getElementById('u-phone').innerText = "+91-" + (localStorage.getItem('ff_phone') || "0000000000");
-            
-            // Load saved photo
-            const pic = localStorage.getItem('user_photo');
-            if(pic) document.getElementById('profile-pic').src = pic;
+<footer>
+  FreshFry Momo · Baripada, Odisha<br>
+  Fresh food, made with love.
+</footer>
 
-            // Load saved veg status
-            document.getElementById('vegSwitch').checked = localStorage.getItem('ff_veg_only') === 'true';
-        };
+<script>
+const $ = id => document.getElementById(id);
 
-        function logout() {
-            localStorage.clear();
-            location.href = 'index.html';
-        }
-    </script>
+const KEYS = {
+  phone:"ff_phone",
+  name:"ff_customer_name",
+  address:"ff_customer_address"
+};
+
+function cleanPhone(value) {
+  return String(value || "").replace(/\D/g,"").slice(-10);
+}
+
+function showMessage(text,type="info") {
+  const el = $("message");
+  el.textContent = text;
+  el.className = "message show " + type;
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function loadProfile() {
+  const name = localStorage.getItem(KEYS.name) || "";
+  const phone = cleanPhone(localStorage.getItem(KEYS.phone) || "");
+  const address = localStorage.getItem(KEYS.address) || "";
+
+  $("customer-name").value = name;
+  $("customer-phone").value = phone;
+  $("customer-address").value = address;
+
+  $("display-name").textContent = name.trim() || "FreshFry Customer";
+  $("display-phone").textContent = phone || "Mobile number not saved";
+}
+
+$("profile-form").addEventListener("submit",function(event) {
+  event.preventDefault();
+
+  const name = $("customer-name").value.trim();
+  const phone = cleanPhone($("customer-phone").value);
+  const address = $("customer-address").value.trim();
+
+  if (name.length > 80) {
+    showMessage("Name must be 80 characters or fewer.","error");
+    return;
+  }
+
+  if (phone && !/^[6-9]\d{9}$/.test(phone)) {
+    showMessage("Enter a valid 10-digit Indian mobile number, or leave it blank.","error");
+    $("customer-phone").focus();
+    return;
+  }
+
+  try {
+    if (name) {
+      localStorage.setItem(KEYS.name,name);
+    } else {
+      localStorage.removeItem(KEYS.name);
+    }
+
+    if (phone) {
+      localStorage.setItem(KEYS.phone,phone);
+    } else {
+      localStorage.removeItem(KEYS.phone);
+    }
+
+    if (address) {
+      localStorage.setItem(KEYS.address,address);
+    } else {
+      localStorage.removeItem(KEYS.address);
+    }
+
+    loadProfile();
+    showMessage("Profile saved on this device successfully.","success");
+  } catch (error) {
+    console.error("Profile save error:",error);
+    showMessage("Unable to save profile. Check your browser storage settings.","error");
+  }
+});
+
+$("clear-profile").addEventListener("click",function() {
+  const confirmed = window.confirm(
+    "Clear the saved name, mobile number and address from this device? This will not delete any orders."
+  );
+
+  if (!confirmed) return;
+
+  try {
+    Object.values(KEYS).forEach(key => localStorage.removeItem(key));
+    loadProfile();
+    showMessage("Saved profile details cleared from this device. Your existing orders have not been deleted.","success");
+  } catch (error) {
+    console.error("Profile clear error:",error);
+    showMessage("Unable to clear saved profile details.","error");
+  }
+});
+
+loadProfile();
+</script>
 </body>
 </html>
