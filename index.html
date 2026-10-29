@@ -1109,10 +1109,7 @@ function updateOrderTicker(){
 
 /* NAVIGATION */
 function showOrdersPage(){
-  $("menu-section").hidden=true;
-  $("orders-section").hidden=false;
-  document.querySelectorAll(".nav-item[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page==="orders-section"));
-  $("orders-section").scrollIntoView({behavior:"smooth",block:"start"});
+  window.location.href="/my-orders.html";
 }
 function showHome(){
   $("menu-section").hidden=false;
