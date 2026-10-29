@@ -1,1 +1,801 @@
-aa
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="FreshFry Momo order management dashboard">
+<title>FreshFry | Order Management</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --bg:#101010;
+  --sidebar:#151515;
+  --card:#191919;
+  --line:#2c2c2c;
+  --muted:#929292;
+  --white:#fff;
+  --green:#43d98b;
+  --red:#ff7373;
+  --yellow:#ffd166;
+}
+* { box-sizing:border-box }
+body { margin:0;background:var(--bg);color:var(--white);font-family:'Outfit',sans-serif }
+button,input,select,textarea { font:inherit }
+button,a { -webkit-tap-highlight-color:transparent }
+button { cursor:pointer }
+a { color:inherit;text-decoration:none }
+[hidden] { display:none!important }
+
+.app { min-height:100vh }
+.sidebar {
+  width:245px;position:fixed;inset:0 auto 0 0;z-index:30;
+  background:var(--sidebar);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;transition:transform .25s;
+}
+.brand { padding:23px 19px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line) }
+.brand-icon {
+  width:43px;height:43px;border-radius:14px;background:var(--orange);
+  display:grid;place-items:center;font-size:19px;
+}
+.brand-name { font-size:20px;font-weight:900;letter-spacing:-.8px }
+.brand-name span { color:var(--orange) }
+.brand-sub { font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:1px }
+.nav-label { padding:22px 20px 9px;color:#666;font-size:9px;font-weight:900;letter-spacing:1.6px }
+.sidebar-nav { padding:0 11px;overflow:auto;flex:1 }
+.nav-link {
+  display:flex;align-items:center;gap:12px;padding:12px;
+  border-radius:11px;color:#aaa;font-size:12px;font-weight:700;margin-bottom:4px;
+}
+.nav-link i { width:19px;text-align:center }
+.nav-link:hover { background:#242424;color:white }
+.nav-link.active { background:#302015;color:#ff9559 }
+.nav-link.active i { color:var(--orange) }
+.sidebar-bottom { padding:13px;border-top:1px solid var(--line) }
+.sidebar-note { padding:12px;background:#21170f;border:1px solid #3b281b;border-radius:12px;color:#c9b3a3;font-size:10px;line-height:1.7 }
+.sidebar-note i { color:var(--orange);margin-right:5px }
+
+.main { margin-left:245px;min-width:0 }
+.topbar {
+  height:68px;position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:0 26px;background:#101010ed;backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.top-left,.top-actions { display:flex;align-items:center;gap:12px }
+.breadcrumb { color:var(--muted);font-size:11px }
+.breadcrumb strong { color:white }
+.menu-toggle {
+  display:none;width:39px;height:39px;background:#202020;color:white;
+  border:1px solid var(--line);border-radius:11px;
+}
+.action-btn {
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:#202020;color:#ddd;
+  padding:10px 13px;border-radius:10px;font-size:10px;font-weight:800;
+}
+.action-btn i { color:var(--orange) }
+.action-btn:disabled { opacity:.5;cursor:not-allowed }
+.content { max-width:1600px;margin:auto;padding:27px 26px 45px }
+.eyebrow { color:var(--orange);font-size:9px;font-weight:900;letter-spacing:2px;text-transform:uppercase }
+.page-head { display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:25px }
+h1 { font-size:30px;letter-spacing:-1px;margin:8px 0 6px }
+.page-head p { margin:0;color:var(--muted);font-size:12px;line-height:1.7 }
+.last-refresh { color:var(--muted);font-size:10px;margin-top:9px }
+
+.stats { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:23px }
+.stat {
+  background:var(--card);border:1px solid var(--line);border-radius:15px;
+  padding:16px;min-width:0;
+}
+.stat-top { display:flex;justify-content:space-between;align-items:center;gap:8px }
+.stat-label { color:var(--muted);font-size:10px;font-weight:700 }
+.stat-icon { width:34px;height:34px;border-radius:11px;background:#2b1b12;color:var(--orange);display:grid;place-items:center }
+.stat-value { font-size:27px;font-weight:900;letter-spacing:-.8px;margin-top:13px;overflow-wrap:anywhere }
+.stat-foot { font-size:9px;color:var(--muted);margin-top:5px }
+
+.panel { background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden }
+.panel-head { padding:17px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px }
+.panel-head h2 { font-size:14px;margin:0;font-weight:900 }
+.panel-head p { color:var(--muted);font-size:10px;margin:5px 0 0 }
+.filters { padding:15px 17px;display:grid;grid-template-columns:minmax(180px,1fr) minmax(145px,200px) minmax(135px,180px);gap:10px;border-bottom:1px solid var(--line) }
+.search-box { position:relative }
+.search-box i { position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#777;font-size:12px }
+.control {
+  width:100%;padding:11px 12px;background:#111;color:#eee;
+  border:1px solid #353535;border-radius:10px;font-size:11px;outline:none;
+}
+.search-box .control { padding-left:34px }
+.control:focus { border-color:var(--orange) }
+select.control { color-scheme:dark }
+.table-wrap { overflow-x:auto }
+table { width:100%;border-collapse:collapse;text-align:left;min-width:850px }
+th { padding:13px 15px;color:#777;font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap }
+td { padding:14px 15px;border-top:1px solid #292929;font-size:10px;color:#ddd;vertical-align:middle }
+.order-id { color:var(--orange);font-weight:900;font-size:11px;overflow-wrap:anywhere }
+.order-date { color:var(--muted);font-size:9px;margin-top:5px }
+.customer-name { font-size:11px;font-weight:800;color:#fff }
+.customer-phone { color:var(--muted);font-size:10px;margin-top:5px }
+.amount { font-size:11px;font-weight:900;white-space:nowrap }
+.badge {
+  display:inline-flex;padding:6px 8px;border-radius:7px;
+  font-size:8px;font-weight:900;white-space:nowrap;
+  background:#292929;color:#ccc;text-transform:capitalize;
+}
+.badge.pending,.badge.payment_pending { background:#302815;color:#ffd166 }
+.badge.accepted,.badge.preparing { background:#302117;color:#ffb878 }
+.badge.ready,.badge.out_for_delivery { background:#18283a;color:#91bdff }
+.badge.delivered,.badge.completed { background:#152c20;color:#6be3a2 }
+.badge.cancelled,.badge.rejected { background:#341b1b;color:#ff8585 }
+.row-actions { display:flex;gap:6px;align-items:center }
+.icon-btn {
+  width:32px;height:32px;border-radius:9px;border:1px solid #383838;
+  background:#222;color:#ddd;display:grid;place-items:center;
+}
+.icon-btn:hover { border-color:var(--orange);color:var(--orange) }
+.status-select { min-width:135px;max-width:160px;padding:8px;font-size:10px }
+.empty-state { padding:40px 15px;text-align:center;color:var(--muted);font-size:11px;line-height:1.8 }
+.empty-state i { display:block;font-size:27px;color:#555;margin-bottom:12px }
+.pagination { padding:14px 17px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:10px }
+
+.scrim { display:none;position:fixed;inset:0;background:#0009;z-index:25 }
+.toast {
+  position:fixed;z-index:100;bottom:24px;left:50%;
+  transform:translate(-50%,12px);opacity:0;pointer-events:none;
+  background:#282828;border:1px solid #444;border-radius:12px;
+  padding:12px 17px;color:white;font-size:11px;
+  max-width:calc(100% - 30px);transition:.2s;
+}
+.toast.show { opacity:1;transform:translate(-50%,0) }
+.error-banner {
+  padding:12px 14px;margin-bottom:15px;border-radius:10px;
+  background:#351b1b;border:1px solid #603030;color:#ffb3b3;
+  font-size:11px;line-height:1.7;
+}
+
+.modal {
+  position:fixed;inset:0;z-index:60;background:#000b;padding:16px;
+  display:none;align-items:center;justify-content:center;
+}
+.modal.show { display:flex }
+.modal-panel {
+  width:100%;max-width:590px;max-height:90dvh;overflow-y:auto;
+  background:#191919;border:1px solid #393939;border-radius:19px;padding:20px;
+}
+.modal-head { display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px }
+.modal-head h2 { margin:0;font-size:17px }
+.close-btn { width:34px;height:34px;background:#262626;color:white;border:1px solid #393939;border-radius:10px }
+.detail-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px }
+.detail-box { padding:12px;border:1px solid #303030;border-radius:11px;min-width:0 }
+.detail-label { color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.5px }
+.detail-value { font-size:11px;line-height:1.7;margin-top:6px;overflow-wrap:anywhere }
+.detail-wide { grid-column:1/-1 }
+.detail-items { border:1px solid #303030;border-radius:11px;padding:12px;margin-top:13px }
+.detail-items h3 { font-size:11px;margin:0 0 10px }
+.detail-item { display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #303030;font-size:10px }
+.map-btn { display:inline-flex;margin-top:10px;padding:9px 11px;background:#1c2a20;border:1px solid #2e513a;border-radius:9px;color:#8de0a9;font-size:10px;font-weight:800 }
+
+@media(max-width:1100px) {
+  .stats { grid-template-columns:repeat(2,minmax(0,1fr)) }
+}
+@media(max-width:760px) {
+  .sidebar { transform:translateX(-100%) }
+  .sidebar.show { transform:translateX(0) }
+  .scrim.show { display:block }
+  .main { margin-left:0 }
+  .menu-toggle { display:grid;place-items:center }
+  .topbar { height:62px;padding:0 13px }
+  .content { padding:20px 12px 35px }
+  .page-head { flex-direction:column }
+  h1 { font-size:27px }
+  .filters { grid-template-columns:1fr 1fr }
+  .search-box { grid-column:1/-1 }
+  .panel-head { padding:14px }
+  .stat { padding:13px }
+  .stat-value { font-size:23px }
+  .top-actions .action-btn { padding:10px }
+  .top-actions .action-btn span { display:none }
+}
+@media(max-width:390px) {
+  .stats { gap:8px }
+  .stat-value { font-size:21px }
+  .filters { grid-template-columns:1fr }
+  .search-box { grid-column:auto }
+  .detail-grid { grid-template-columns:1fr }
+  .detail-wide { grid-column:auto }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="admin.html">
+    <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+    <div>
+      <div class="brand-name">Fresh<span>Fry</span></div>
+      <div class="brand-sub">RESTAURANT CONTROL</div>
+    </div>
+  </a>
+
+  <div class="nav-label">MAIN MENU</div>
+  <nav class="sidebar-nav">
+    <a class="nav-link" href="admin.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+    <a class="nav-link active" href="orders-admin.html"><i class="fa-solid fa-receipt"></i> Orders</a>
+    <a class="nav-link" href="menu-admin.html"><i class="fa-solid fa-burger"></i> Menu Management</a>
+    <a class="nav-link" href="delivery-admin.html"><i class="fa-solid fa-motorcycle"></i> Delivery</a>
+    <a class="nav-link" href="customers-admin.html"><i class="fa-solid fa-users"></i> Customers</a>
+
+    <div class="nav-label">BUSINESS</div>
+    <a class="nav-link" href="marketing-admin.html"><i class="fa-solid fa-bullhorn"></i> Marketing & Offers</a>
+    <a class="nav-link" href="payments-admin.html"><i class="fa-solid fa-wallet"></i> Payments</a>
+    <a class="nav-link" href="reports-admin.html"><i class="fa-solid fa-chart-column"></i> Reports</a>
+    <a class="nav-link" href="settings-admin.html"><i class="fa-solid fa-gear"></i> Settings</a>
+
+    <div class="nav-label">WEBSITE</div>
+    <a class="nav-link" href="index.html" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Customer Website</a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-note"><i class="fa-solid fa-shield-halved"></i> Protect admin access with Firebase Authentication and Firestore Security Rules.</div>
+  </div>
+</aside>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+  <header class="topbar">
+    <div class="top-left">
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="breadcrumb">FreshFry / <strong>Orders</strong></div>
+    </div>
+    <div class="top-actions">
+      <button class="action-btn" id="refreshBtn" type="button"><i class="fa-solid fa-rotate"></i><span>Refresh</span></button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div id="errorBanner" class="error-banner" hidden></div>
+
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Order operations</div>
+        <h1>Order Management</h1>
+        <p>Review customer orders, check delivery details and update order progress.</p>
+        <div class="last-refresh" id="lastRefresh">Loading orders...</div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <article class="stat">
+        <div class="stat-top"><span class="stat-label">Total Orders</span><span class="stat-icon"><i class="fa-solid fa-receipt"></i></span></div>
+        <div class="stat-value" id="totalCount">—</div>
+        <div class="stat-foot">All loaded orders</div>
+      </article>
+      <article class="stat">
+        <div class="stat-top"><span class="stat-label">Pending</span><span class="stat-icon"><i class="fa-solid fa-clock"></i></span></div>
+        <div class="stat-value" id="pendingCount">—</div>
+        <div class="stat-foot">Orders requiring attention</div>
+      </article>
+      <article class="stat">
+        <div class="stat-top"><span class="stat-label">Preparing</span><span class="stat-icon"><i class="fa-solid fa-fire-burner"></i></span></div>
+        <div class="stat-value" id="preparingCount">—</div>
+        <div class="stat-foot">Currently being prepared</div>
+      </article>
+      <article class="stat">
+        <div class="stat-top"><span class="stat-label">Out for Delivery</span><span class="stat-icon"><i class="fa-solid fa-motorcycle"></i></span></div>
+        <div class="stat-value" id="deliveryCount">—</div>
+        <div class="stat-foot">Orders with the delivery rider</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>All Orders</h2>
+          <p id="resultCount">Loading order records...</p>
+        </div>
+        <button class="action-btn" id="clearFilters" type="button"><i class="fa-solid fa-filter-circle-xmark"></i><span>Clear filters</span></button>
+      </div>
+
+      <div class="filters">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="searchInput" class="control" type="search" placeholder="Search order ID, name or phone..." autocomplete="off">
+        </div>
+        <select id="statusFilter" class="control" aria-label="Filter by order status">
+          <option value="all">All order statuses</option>
+          <option value="pending">Pending</option>
+          <option value="accepted">Accepted</option>
+          <option value="preparing">Preparing</option>
+          <option value="ready">Ready</option>
+          <option value="out_for_delivery">Out for delivery</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="payment_pending">Payment pending</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <select id="paymentFilter" class="control" aria-label="Filter by payment method">
+          <option value="all">All payment methods</option>
+          <option value="COD">Cash on delivery</option>
+          <option value="UPI">UPI</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order details</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr><td colspan="7" class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Loading orders from Firebase...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <span id="paginationLabel">0 orders</span>
+        <span>Use search and filters to find an order.</span>
+      </div>
+    </section>
+  </main>
+</div>
+</div>
+
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h2 id="detailTitle">Order details</h2>
+      <button class="close-btn" id="closeModal" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, doc, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Existing FreshFry Firebase configuration preserved. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let orders = [];
+let busyIds = new Set();
+let toastTimer;
+
+const STATUS_OPTIONS = [
+  ["pending", "Pending"],
+  ["accepted", "Accepted"],
+  ["preparing", "Preparing"],
+  ["ready", "Ready"],
+  ["out_for_delivery", "Out for delivery"],
+  ["delivered", "Delivered"],
+  ["cancelled", "Cancelled"],
+  ["payment_pending", "Payment pending"],
+  ["rejected", "Rejected"]
+];
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    maximumFractionDigits: 2
+  });
+}
+
+function getStatus(order) {
+  return String(order.status || "pending").toLowerCase().replace(/[\s-]+/g, "_");
+}
+
+function getDate(value) {
+  if (!value) return null;
+  if (typeof value.toDate === "function") return value.toDate();
+  if (value instanceof Date) return value;
+  if (typeof value.seconds === "number") return new Date(value.seconds * 1000);
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function dateLabel(value) {
+  const date = getDate(value);
+  if (!date) return "Date unavailable";
+  return date.toLocaleString("en-IN", {
+    day:"2-digit", month:"short", year:"numeric",
+    hour:"2-digit", minute:"2-digit"
+  });
+}
+
+function statusClass(status) {
+  const allowed = STATUS_OPTIONS.map(item => item[0]);
+  return allowed.includes(status) ? status : "pending";
+}
+
+function showToast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2800);
+}
+
+function showError(message) {
+  $("errorBanner").textContent = message;
+  $("errorBanner").hidden = false;
+}
+
+function clearError() {
+  $("errorBanner").hidden = true;
+  $("errorBanner").textContent = "";
+}
+
+function itemCount(order) {
+  if (!Array.isArray(order.items)) return 0;
+  return order.items.reduce((sum, item) => sum + Math.max(0, Number(item.qty) || 0), 0);
+}
+
+function renderStats() {
+  $("totalCount").textContent = orders.length.toLocaleString("en-IN");
+  $("pendingCount").textContent = orders.filter(order =>
+    ["pending", "payment_pending"].includes(getStatus(order))
+  ).length.toLocaleString("en-IN");
+  $("preparingCount").textContent = orders.filter(order =>
+    getStatus(order) === "preparing"
+  ).length.toLocaleString("en-IN");
+  $("deliveryCount").textContent = orders.filter(order =>
+    getStatus(order) === "out_for_delivery"
+  ).length.toLocaleString("en-IN");
+}
+
+function getFilteredOrders() {
+  const query = $("searchInput").value.trim().toLowerCase();
+  const status = $("statusFilter").value;
+  const payment = $("paymentFilter").value;
+
+  return [...orders].filter(order => {
+    const searchBlob = [
+      order.id,
+      order.customerName,
+      order.customerPhone,
+      order.deliveryAddress
+    ].join(" ").toLowerCase();
+
+    const matchesSearch = !query || searchBlob.includes(query);
+    const matchesStatus = status === "all" || getStatus(order) === status;
+    const matchesPayment = payment === "all" ||
+      String(order.paymentMethod || "").toUpperCase() === payment;
+
+    return matchesSearch && matchesStatus && matchesPayment;
+  }).sort((a, b) => {
+    const da = getDate(a.createdAt)?.getTime() || 0;
+    const dbb = getDate(b.createdAt)?.getTime() || 0;
+    return dbb - da;
+  });
+}
+
+function renderOrders() {
+  const body = $("ordersBody");
+  const filtered = getFilteredOrders();
+
+  $("resultCount").textContent =
+    `${filtered.length} matching order(s) · ${orders.length} total`;
+  $("paginationLabel").textContent = `${filtered.length} order(s) shown`;
+
+  if (!filtered.length) {
+    body.innerHTML = `
+      <tr><td colspan="7" class="empty-state">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        No matching orders found.<br>Try changing your search or filters.
+      </td></tr>`;
+    return;
+  }
+
+  body.innerHTML = filtered.map(order => {
+    const status = getStatus(order);
+    const payment = String(order.paymentMethod || "—").toUpperCase();
+    const paymentStatus = String(order.paymentStatus || "not specified").replace(/_/g, " ");
+    const name = order.customerName || "Customer";
+    const phone = order.customerPhone || "No phone";
+    const id = order.id || "";
+    const shortId = id.length > 12 ? id.slice(0, 12) + "…" : id;
+
+    const statusOptions = STATUS_OPTIONS.map(([value, label]) => `
+      <option value="${value}" ${status === value ? "selected" : ""}>${label}</option>
+    `).join("");
+
+    return `
+      <tr>
+        <td>
+          <div class="order-id">#${esc(shortId)}</div>
+          <div class="order-date">${esc(dateLabel(order.createdAt))}</div>
+        </td>
+        <td>
+          <div class="customer-name">${esc(name)}</div>
+          <div class="customer-phone">${esc(phone)}</div>
+        </td>
+        <td>${itemCount(order)} item(s)</td>
+        <td><div class="amount">${money(order.total)}</div></td>
+        <td>
+          <div style="font-weight:800">${esc(payment)}</div>
+          <div class="order-date">${esc(paymentStatus)}</div>
+        </td>
+        <td>
+          <span class="badge ${statusClass(status)}">${esc(status.replace(/_/g, " "))}</span>
+        </td>
+        <td>
+          <div class="row-actions">
+            <button type="button" class="icon-btn" data-action="view" data-id="${esc(id)}" title="View order details" aria-label="View order details">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <select class="control status-select" data-action="status" data-id="${esc(id)}" aria-label="Update order status" ${busyIds.has(id) ? "disabled" : ""}>
+              ${statusOptions}
+            </select>
+          </div>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+function fullAddress(order) {
+  return String(order.deliveryAddress || order.customerLocation || "No address supplied");
+}
+
+function renderDetails(order) {
+  const items = Array.isArray(order.items) ? order.items : [];
+  const status = getStatus(order);
+  const mapUrl = typeof order.deliveryMapUrl === "string" &&
+    /^https:\/\/www\.google\.com\/maps\//.test(order.deliveryMapUrl)
+      ? order.deliveryMapUrl
+      : "";
+
+  $("detailTitle").textContent = "Order #" + order.id;
+
+  $("detailContent").innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-box">
+        <div class="detail-label">Customer name</div>
+        <div class="detail-value">${esc(order.customerName || "Not provided")}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Phone number</div>
+        <div class="detail-value">${esc(order.customerPhone || "Not provided")}</div>
+      </div>
+      <div class="detail-box detail-wide">
+        <div class="detail-label">Delivery address</div>
+        <div class="detail-value">${esc(fullAddress(order))}</div>
+        ${mapUrl ? `<a class="map-btn" href="${esc(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> Open delivery map</a>` : ""}
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Order status</div>
+        <div class="detail-value"><span class="badge ${statusClass(status)}">${esc(status.replace(/_/g, " "))}</span></div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Created at</div>
+        <div class="detail-value">${esc(dateLabel(order.createdAt))}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Payment method</div>
+        <div class="detail-value">${esc(order.paymentMethod || "Not specified")}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Payment status</div>
+        <div class="detail-value">${esc(String(order.paymentStatus || "Not specified").replace(/_/g, " "))}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Food subtotal</div>
+        <div class="detail-value">${money(order.subtotal)}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Delivery fee</div>
+        <div class="detail-value">${money(order.deliveryFee)}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Order total</div>
+        <div class="detail-value" style="color:var(--orange);font-size:16px;font-weight:900">${money(order.total)}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">Delivery PIN</div>
+        <div class="detail-value">${esc(order.deliveryPin || "Not available")}</div>
+      </div>
+      <div class="detail-box detail-wide">
+        <div class="detail-label">Customer note</div>
+        <div class="detail-value">${esc(order.note || "No special instructions")}</div>
+      </div>
+    </div>
+
+    <div class="detail-items">
+      <h3><i class="fa-solid fa-basket-shopping" style="color:var(--orange)"></i> Ordered items</h3>
+      ${items.length ? items.map(item => `
+        <div class="detail-item">
+          <span>${esc(item.name || "Item")} × ${Number(item.qty || 0)}</span>
+          <strong>${money(Number(item.price || 0) * Number(item.qty || 0))}</strong>
+        </div>
+      `).join("") : '<div class="detail-value">No item details found.</div>'}
+    </div>
+  `;
+
+  $("detailModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  $("detailModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+async function loadOrders() {
+  $("refreshBtn").disabled = true;
+  $("refreshBtn").innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading</span>';
+  clearError();
+
+  try {
+    const snapshot = await getDocs(collection(db, "orders"));
+
+    orders = snapshot.docs.map(itemDoc => ({
+      id: itemDoc.id,
+      ...itemDoc.data()
+    }));
+
+    renderStats();
+    renderOrders();
+
+    $("lastRefresh").textContent =
+      "Last refreshed: " + new Date().toLocaleString("en-IN");
+
+    showToast("Orders refreshed.");
+  } catch (error) {
+    console.error("Failed to load orders:", error);
+
+    showError(
+      "Unable to read the orders collection. Check Firebase connection and Firestore read permissions. " +
+      (error.code || error.message || "")
+    );
+
+    $("ordersBody").innerHTML = `
+      <tr><td colspan="7" class="empty-state">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Could not load orders.<br>Check Firebase access, then refresh.
+      </td></tr>`;
+
+    $("lastRefresh").textContent = "Order load failed";
+  } finally {
+    $("refreshBtn").disabled = false;
+    $("refreshBtn").innerHTML = '<i class="fa-solid fa-rotate"></i><span>Refresh</span>';
+  }
+}
+
+async function changeStatus(id, nextStatus, select) {
+  const order = orders.find(item => item.id === id);
+  if (!order || busyIds.has(id)) return;
+
+  const previousStatus = getStatus(order);
+  if (previousStatus === nextStatus) return;
+
+  const confirmation = `Change order #${id} status from "${previousStatus.replace(/_/g, " ")}" to "${nextStatus.replace(/_/g, " ")}"?`;
+  if (!window.confirm(confirmation)) {
+    renderOrders();
+    return;
+  }
+
+  busyIds.add(id);
+  renderOrders();
+
+  try {
+    // Update only the existing status field in this order document.
+    await updateDoc(doc(db, "orders", id), {
+      status: nextStatus
+    });
+
+    order.status = nextStatus;
+    showToast("Order status updated.");
+    clearError();
+  } catch (error) {
+    console.error("Status update failed:", error);
+
+    showError(
+      "Status update failed. Firestore may deny this write. Configure secure admin-only update permissions. " +
+      (error.code || error.message || "")
+    );
+
+    showToast("Could not update order status.");
+  } finally {
+    busyIds.delete(id);
+    renderStats();
+    renderOrders();
+  }
+}
+
+$("ordersBody").addEventListener("click", event => {
+  const button = event.target.closest('button[data-action="view"]');
+  if (!button) return;
+
+  const order = orders.find(item => item.id === button.dataset.id);
+  if (order) renderDetails(order);
+});
+
+$("ordersBody").addEventListener("change", event => {
+  const select = event.target.closest('select[data-action="status"]');
+  if (!select) return;
+
+  changeStatus(select.dataset.id, select.value, select);
+});
+
+$("searchInput").addEventListener("input", renderOrders);
+$("statusFilter").addEventListener("change", renderOrders);
+$("paymentFilter").addEventListener("change", renderOrders);
+
+$("clearFilters").addEventListener("click", () => {
+  $("searchInput").value = "";
+  $("statusFilter").value = "all";
+  $("paymentFilter").value = "all";
+  renderOrders();
+});
+
+$("refreshBtn").addEventListener("click", loadOrders);
+$("closeModal").addEventListener("click", closeModal);
+
+$("detailModal").addEventListener("click", event => {
+  if (event.target === $("detailModal")) closeModal();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeModal();
+});
+
+const sidebar = $("sidebar");
+const scrim = $("scrim");
+
+$("menuToggle").addEventListener("click", () => {
+  sidebar.classList.add("show");
+  scrim.classList.add("show");
+});
+
+scrim.addEventListener("click", () => {
+  sidebar.classList.remove("show");
+  scrim.classList.remove("show");
+});
+
+document.querySelectorAll(".sidebar-nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    sidebar.classList.remove("show");
+    scrim.classList.remove("show");
+  });
+});
+
+loadOrders();
+</script>
+</body>
+</html>
