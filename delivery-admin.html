@@ -334,8 +334,15 @@ function riderName(rider) {
   return String(rider.name || rider.fullName || rider.displayName || rider.phone || rider.id || "Rider");
 }
 function riderIsAvailable(rider) {
-  return rider.available === true || rider.isAvailable === true ||
-    rider.online === true || rider.isOnline === true || rider.status === "available";
+  const status = String(rider.status || "").trim().toLowerCase();
+
+  return (
+    rider.available === true ||
+    rider.isAvailable === true ||
+    rider.online === true ||
+    rider.isOnline === true ||
+    ["online", "available", "active"].includes(status)
+  );
 }
 function assignedRider(order) {
   const id = order.riderId || order.assignedRiderId || "";
