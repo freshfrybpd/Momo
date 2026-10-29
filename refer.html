@@ -3,378 +3,722 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101010">
-<meta name="description" content="Invite your friends to FreshFry Momo and earn referral rewards.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="description" content="Invite friends to FreshFry and view your referral activity.">
 <title>FreshFry | Refer & Earn</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 <style>
-:root{--orange:#ff5e00;--orange-light:#ff853d;--bg:#101010;--card:#1b1b1b;--card2:#242424;--text:#fff;--muted:#a5a5a5;--border:#333;--green:#35c979}
+:root{
+  --orange:#ff5e00;
+  --orange-dark:#e84d00;
+  --black:#151515;
+  --bg:#f5f5f7;
+  --muted:#777;
+  --border:#ececec;
+  --green:#16834a;
+}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:30px}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--black);
+}
 button,input{font:inherit}
-button,a{-webkit-tap-highlight-color:transparent}
 button{cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-a{color:inherit;text-decoration:none}
-.app{max-width:540px;min-height:100vh;margin:auto;padding:0 16px 30px}
-.topbar{display:flex;align-items:center;gap:13px;padding:19px 0}
-.back-btn{width:42px;height:42px;border:1px solid var(--border);background:var(--card);color:white;border-radius:14px;display:grid;place-items:center;font-size:23px}
-.brand{flex:1;min-width:0}
-.brand-name{font-size:19px;font-weight:900;letter-spacing:-.5px}
-.brand-name span{color:var(--orange)}
-.brand-sub{font-size:11px;color:var(--muted);margin-top:3px}
-.top-tag{background:#2c1b11;color:#ff9c62;padding:7px 10px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap}
-.hero{position:relative;overflow:hidden;border-radius:25px;padding:27px 22px 24px;background:linear-gradient(140deg,#ff751e,#ff4d00 65%,#d83b00);min-height:280px;isolation:isolate}
-.hero:before{content:"🎁";position:absolute;right:-3px;top:14px;font-size:105px;opacity:.18;transform:rotate(12deg);z-index:-1}
-.hero:after{content:"";position:absolute;width:175px;height:175px;right:-75px;bottom:-85px;border:25px solid #ffffff1a;border-radius:50%;z-index:-1}
-.hero-label{display:inline-block;background:#0003;border:1px solid #ffffff33;border-radius:20px;padding:7px 11px;font-size:11px;font-weight:800;letter-spacing:.5px}
-.hero h1{max-width:360px;font-size:clamp(30px,8vw,39px);line-height:1.08;letter-spacing:-1.3px;margin:19px 0 10px}
-.hero p{max-width:360px;font-size:13px;line-height:1.7;color:#fff2e9;margin:0}
-.hero-note{margin-top:18px;font-size:10px;line-height:1.7;color:#fff0e7}
-.code-card,.progress-card{margin-top:17px;padding:20px;border-radius:22px;background:var(--card);border:1px solid var(--border)}
-.section-label{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:1px;text-transform:uppercase}
-.code-row{display:flex;gap:9px;margin-top:13px}
-.code-display{flex:1;min-width:0;display:grid;place-items:center;padding:15px 8px;background:#101010;border:1px dashed #ff6a1a;border-radius:13px;color:#ff8b4a;font-size:clamp(17px,5vw,24px);font-weight:900;letter-spacing:2px;text-align:center;overflow-wrap:anywhere}
-.copy-btn{border:0;background:var(--orange);color:white;padding:0 17px;border-radius:13px;font-size:12px;font-weight:800}
-.code-hint{font-size:11px;line-height:1.6;color:var(--muted);margin-top:12px;overflow-wrap:anywhere}
-.primary-btn{width:100%;border:0;border-radius:15px;padding:16px;color:white;background:var(--orange);font-weight:850;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s,opacity .15s}
-.primary-btn:active{transform:scale(.98)}
-.secondary-btn{width:100%;border:1px solid var(--border);border-radius:14px;padding:14px;color:white;background:var(--card2);font-weight:750;font-size:13px}
-.share-section{margin-top:17px}
-.share-title{font-size:13px;font-weight:800;margin:23px 0 12px}
-.share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.share-option{border:1px solid var(--border);background:var(--card);color:white;border-radius:16px;padding:15px 6px;text-align:center}
-.share-icon{display:grid;place-items:center;margin:0 auto 9px;width:43px;height:43px;background:#282828;border-radius:14px;font-size:23px}
-.share-option strong{font-size:11px}
-.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.section-heading h2{margin:0;font-size:17px;letter-spacing:-.3px}
-.state-pill{color:#ffb079;background:#382316;border-radius:20px;padding:6px 9px;font-size:9px;font-weight:900;white-space:nowrap}
-.state-pill.good{color:#78edb2;background:#153c2c}
-.state-pill.bad{color:#ffb0a5;background:#48211e}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:19px}
-.stat{padding:15px 6px;background:#242424;border-radius:14px;text-align:center;min-width:0}
-.stat-number{font-size:24px;font-weight:900;color:var(--orange-light);overflow-wrap:anywhere}
-.stat-label{margin-top:5px;font-size:10px;line-height:1.5;color:var(--muted)}
-.progress-track{margin-top:20px;background:#333;height:7px;border-radius:20px;overflow:hidden}
-.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,#ff4d00,#ffad65);border-radius:20px;transition:width .4s}
-.progress-caption{display:flex;justify-content:space-between;gap:10px;font-size:11px;margin-top:10px;color:var(--muted)}
-.progress-caption strong{color:white}
-.status-message{font-size:11px;line-height:1.7;margin:14px 0 0;color:var(--muted);overflow-wrap:anywhere}
-.rewards{margin-top:23px}
-.rewards h2,.how-section h2{font-size:18px;margin:0 0 13px}
-.reward-list{display:grid;gap:10px}
-.reward-item{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--border);border-radius:17px;padding:15px}
-.reward-emoji{flex:0 0 46px;height:46px;display:grid;place-items:center;background:#2b211b;border-radius:14px;font-size:23px}
-.reward-info{flex:1;min-width:0}
-.reward-info strong{display:block;font-size:13px}
-.reward-info p{color:var(--muted);font-size:11px;line-height:1.5;margin:5px 0 0}
-.reward-value{color:var(--orange-light);font-size:12px;font-weight:900;white-space:nowrap}
-.how-section{margin-top:24px}
-.step{display:flex;gap:13px;margin:16px 0}
-.step-num{flex:0 0 35px;height:35px;display:grid;place-items:center;background:#332014;border:1px solid #5a3119;color:#ff985d;border-radius:12px;font-size:13px;font-weight:900}
-.step-text strong{font-size:13px}
-.step-text p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.6}
-.disclaimer{margin-top:24px;padding:14px;background:#201c18;border:1px solid #443125;color:#d4b9a6;border-radius:14px;font-size:11px;line-height:1.7}
-.footer{text-align:center;padding:25px 0 5px;color:#777;font-size:10px}
-.toast{position:fixed;z-index:100;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f7f7f7;color:#111;padding:13px 18px;border-radius:12px;font-size:12px;font-weight:800;box-shadow:0 8px 30px #0006;transition:.25s;max-width:calc(100% - 30px);text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(min-width:600px){body{padding-top:20px}.app{padding-bottom:45px}}
-@media(max-width:360px){.app{padding-left:12px;padding-right:12px}.hero{padding:23px 18px}.code-card,.progress-card{padding:16px}.copy-btn{padding:0 12px}.stat-number{font-size:21px}.reward-value{font-size:10px}}
+.topbar{
+  background:var(--black);
+  color:#fff;
+  padding:18px 16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+.back{
+  border:0;
+  background:#ffffff18;
+  color:#fff;
+  border-radius:12px;
+  width:40px;
+  height:40px;
+  font-size:22px;
+}
+.brand{font-weight:800;font-size:19px}
+.brand span{color:var(--orange)}
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:18px 14px 40px;
+}
+.hero{
+  background:linear-gradient(135deg,#ff6b16,#ff3d00);
+  border-radius:24px;
+  padding:24px 21px;
+  color:#fff;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 10px 25px #ff5e0026;
+}
+.hero:after{
+  content:"🎁";
+  position:absolute;
+  right:15px;
+  top:20px;
+  font-size:66px;
+  opacity:.95;
+}
+.eyebrow{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1.4px;
+  opacity:.9;
+}
+.hero h1{
+  font-size:29px;
+  line-height:1.12;
+  max-width:75%;
+  margin:12px 0;
+}
+.hero p{
+  font-size:14px;
+  line-height:1.55;
+  max-width:78%;
+  margin:0;
+  color:#fff1e9;
+}
+.card{
+  background:#fff;
+  border-radius:19px;
+  padding:19px;
+  margin-top:16px;
+  box-shadow:0 3px 15px #00000005;
+}
+.card h2{font-size:17px;margin:0 0 7px}
+.muted{font-size:13px;line-height:1.55;color:var(--muted)}
+.codebox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+}
+.code{
+  min-width:0;
+  flex:1;
+  background:#fff4ed;
+  border:1px dashed #ff9a67;
+  color:#bd3e00;
+  padding:15px 10px;
+  text-align:center;
+  border-radius:12px;
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:2px;
+  overflow-wrap:anywhere;
+}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:13px 15px;
+  background:var(--orange);
+  color:#fff;
+  font-weight:800;
+}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.secondary{
+  background:#fff;
+  color:var(--black);
+  border:1px solid var(--border);
+}
+.btn.full{width:100%;margin-top:12px}
+.btnrow{display:flex;gap:9px;margin-top:12px}
+.btnrow .btn{flex:1}
+.section-title{
+  font-size:18px;
+  font-weight:800;
+  margin:25px 3px 12px;
+}
+.steps{display:grid;gap:10px}
+.step{
+  display:flex;
+  gap:13px;
+  align-items:flex-start;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.step:last-child{border-bottom:0;padding-bottom:0}
+.step-icon{
+  flex:0 0 42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:#fff0e7;
+  font-size:20px;
+}
+.step strong{display:block;font-size:14px;margin:2px 0 5px}
+.step p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.stat{
+  background:#fafafa;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:13px 8px;
+  text-align:center;
+}
+.stat strong{display:block;font-size:23px;margin-bottom:6px}
+.stat span{font-size:11px;color:var(--muted)}
+.list{display:grid;gap:10px;margin-top:15px}
+.item{
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:13px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.item-main{min-width:0}
+.item-title{font-size:13px;font-weight:800;overflow-wrap:anywhere}
+.item-sub{font-size:12px;color:var(--muted);margin-top:5px}
+.status{
+  border-radius:20px;
+  background:#fff2df;
+  color:#9a5b00;
+  font-size:11px;
+  font-weight:800;
+  padding:7px 9px;
+  white-space:nowrap;
+}
+.status.success{background:#e7f7ed;color:var(--green)}
+.status.neutral{background:#eee;color:#555}
+.notice{
+  background:#fff8e9;
+  border:1px solid #f4dfad;
+  color:#79561b;
+  border-radius:13px;
+  padding:12px;
+  font-size:12px;
+  line-height:1.55;
+  margin-top:14px;
+}
+.message{
+  display:none;
+  margin-top:12px;
+  border-radius:11px;
+  padding:11px;
+  font-size:13px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.message.show{display:block}
+.message.error{background:#fff0f0;color:#a32121}
+.message.info{background:#eef7ff;color:#15558a}
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:22px 8px;
+  font-size:13px;
+  line-height:1.6;
+}
+.footer{
+  text-align:center;
+  color:#888;
+  font-size:11px;
+  padding:24px 10px;
+}
+@media(max-width:380px){
+  .hero h1{font-size:25px}
+  .hero:after{font-size:48px;right:10px}
+  .codebox{flex-wrap:wrap}
+  .codebox .btn{width:100%}
+  .stats{gap:5px}
+  .stat strong{font-size:20px}
+}
 </style>
 </head>
 
 <body>
-<div class="app">
-  <header class="topbar">
-    <button class="back-btn" id="backBtn" type="button" aria-label="Go back">‹</button>
-    <div class="brand">
-      <div class="brand-name">FreshFry <span>Momo</span></div>
-      <div class="brand-sub">Share the love. Spread the flavour.</div>
-    </div>
-    <div class="top-tag">REFER &amp; EARN</div>
-  </header>
+<header class="topbar">
+  <button class="back" id="backBtn" aria-label="Go back">‹</button>
+  <div class="brand">Fresh<span>Fry</span> <small style="font-weight:400">| Refer & Earn</small></div>
+</header>
 
+<main class="container">
   <section class="hero">
-    <div class="hero-label">🎉 FRIENDS + FOOD = FUN</div>
-    <h1>Good food tastes better together!</h1>
-    <p>Invite your friends to discover FreshFry Momo. Share your referral code and spread the happiness.</p>
-    <div class="hero-note">Rewards are issued only after the friend's first qualifying delivered order.</div>
+    <div class="eyebrow">SHARE THE LOVE</div>
+    <h1>Good food is better with friends!</h1>
+    <p>Share your referral code and check your referral activity here.</p>
   </section>
 
-  <section class="code-card">
-    <div class="section-label">Your referral code</div>
-    <div class="code-row">
-      <div class="code-display" id="referralCode">LOADING...</div>
-      <button class="copy-btn" id="copyCodeBtn" type="button">COPY</button>
-    </div>
-    <div class="code-hint" id="codeHint">Connecting to FreshFry referral service...</div>
+  <section class="card">
+    <h2>Your referral code</h2>
+    <div class="muted">Your code is linked to the phone number currently saved in this browser.</div>
 
-    <div class="share-section">
-      <button class="primary-btn" id="whatsappBtn" type="button"><i class="fa-brands fa-whatsapp"></i> Invite Friends on WhatsApp</button>
+    <div class="codebox">
+      <div class="code" id="refCode">Loading…</div>
+      <button class="btn secondary" id="copyBtn" disabled>Copy</button>
     </div>
-    <div class="share-title">Share using</div>
-    <div class="share-grid">
-      <button class="share-option" id="shareNativeBtn" type="button"><span class="share-icon">📲</span><strong>Share</strong></button>
-      <button class="share-option" id="copyInviteBtn" type="button"><span class="share-icon">📋</span><strong>Copy Invite</strong></button>
-      <button class="share-option" id="smsBtn" type="button"><span class="share-icon">💬</span><strong>SMS</strong></button>
+
+    <button class="btn full" id="shareBtn" disabled>Share on WhatsApp</button>
+    <div id="profileMessage" class="message"></div>
+
+    <div class="notice">
+      Referral codes and activity shown here come from Firestore. A displayed referral or reward is not independently verified by this page.
     </div>
   </section>
 
-  <section class="progress-card">
-    <div class="section-heading">
-      <h2>Your referral activity</h2>
-      <span class="state-pill" id="accountState">CHECKING...</span>
+  <div class="section-title">How it works</div>
+  <section class="card steps">
+    <div class="step">
+      <div class="step-icon">🔗</div>
+      <div>
+        <strong>1. Share your code</strong>
+        <p>Send your referral link to a friend using WhatsApp or another app.</p>
+      </div>
     </div>
+    <div class="step">
+      <div class="step-icon">🛍️</div>
+      <div>
+        <strong>2. Your friend orders</strong>
+        <p>Your referral activity will appear when the corresponding referral record is available in Firestore.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-icon">🎁</div>
+      <div>
+        <strong>3. Check referral status</strong>
+        <p>Any reward shown depends on the records available in Firestore. This page does not issue or validate rewards.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-title">Referral overview</div>
+  <section class="card">
     <div class="stats">
-      <div class="stat"><div class="stat-number" id="invitesCount">—</div><div class="stat-label">Invites shared</div></div>
-      <div class="stat"><div class="stat-number" id="friendsCount">—</div><div class="stat-label">Friends qualified</div></div>
-      <div class="stat"><div class="stat-number" id="rewardsCount">—</div><div class="stat-label">Rewards earned</div></div>
+      <div class="stat">
+        <strong id="totalCount">—</strong>
+        <span>Total referrals</span>
+      </div>
+      <div class="stat">
+        <strong id="pendingCount">—</strong>
+        <span>Pending</span>
+      </div>
+      <div class="stat">
+        <strong id="successfulCount">—</strong>
+        <span>Successful*</span>
+      </div>
     </div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-caption"><span id="progressLeft">Referral progress</span><strong id="progressRight">Awaiting account</strong></div>
-    <p class="status-message" id="activityMessage">Your verified referral activity will appear here.</p>
-    <button class="secondary-btn" id="retryBtn" type="button" style="margin-top:15px">Refresh referral status</button>
-  </section>
-
-  <section class="rewards">
-    <h2>Referral reward ideas 🎁</h2>
-    <div class="reward-list">
-      <div class="reward-item"><div class="reward-emoji">🥉</div><div class="reward-info"><strong>First verified friend</strong><p>Referral becomes qualified after the friend's first delivered order.</p></div><div class="reward-value">Milestone 1</div></div>
-      <div class="reward-item"><div class="reward-emoji">🥈</div><div class="reward-info"><strong>5 verified friends</strong><p>Referral programme reward, subject to your configured terms.</p></div><div class="reward-value">Milestone 5</div></div>
-      <div class="reward-item"><div class="reward-emoji">🥇</div><div class="reward-info"><strong>10 verified friends</strong><p>Referral programme reward, subject to your configured terms.</p></div><div class="reward-value">Milestone 10</div></div>
+    <div class="muted" style="margin-top:12px">
+      *Counts reflect Firestore status fields only; they are not proof of a delivered order.
     </div>
   </section>
 
-  <section class="how-section">
-    <h2>How it works</h2>
-    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Share your code</strong><p>Send your unique referral code or invite link to a friend.</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Your friend places an order</strong><p>The friend must use the referral code when joining or placing their first order.</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>First order is delivered</strong><p>The trusted backend verifies the first delivered order before awarding either customer.</p></div></div>
+  <div class="section-title">Your referral activity</div>
+  <section class="card">
+    <div id="activityList" class="empty">Waiting for Firestore data…</div>
+    <button class="btn secondary full" id="refreshBtn">Refresh activity</button>
+    <div id="activityMessage" class="message"></div>
   </section>
 
-  <div class="disclaimer"><strong>Security note:</strong> This page reads the existing <code>localStorage.ff_phone</code> value, but browser storage alone does not verify a customer's identity. Real rewards must be granted by a trusted backend, not by this page. Do not store reward balances or qualification decisions in localStorage.</div>
-  <footer class="footer">© <span id="year"></span> FreshFry Momo · Made with ❤️</footer>
-</div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="section-title">Rewards recorded for you</div>
+  <section class="card">
+    <div id="rewardList" class="empty">Waiting for Firestore data…</div>
+    <div class="notice">
+      Rewards are read-only on this page. Do not use frontend-written records as proof that a customer earned a reward.
+    </div>
+  </section>
 
-<script type="module">
-import {initializeApp,getApps,getApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getFirestore,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {getFunctions,httpsCallable} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+  <div class="footer">FreshFry · Referral activity</div>
+</main>
 
-/* Existing FreshFry Firebase configuration */
-const firebaseConfig={
-  apiKey:"AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
-  authDomain:"freshfry-39a10.firebaseapp.com",
-  projectId:"freshfry-39a10",
-  storageBucket:"freshfry-39a10.firebasestorage.app",
-  messagingSenderId:"928483976893",
-  appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+"use strict";
+
+/* Existing FreshFry Firebase configuration — preserved */
+const firebaseConfig = {
+  apiKey: "AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
 };
 
-const CUSTOMER_WEBSITE_URL="https://freshfrymomo.food/";
-const app=getApps().length?getApp():initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const functions=getFunctions(app); // Change region only if your functions use a different region.
-
-const $=id=>document.getElementById(id);
-let toastTimer=null;
-let referralCode="";
-let currentPhone="";
-let inviteCount=0;
-
 /*
- * Expected callable Cloud Functions:
- * 1) getMyReferralData: returns { referralCode, invitesShared, qualifiedFriends, rewardsEarned }
- * 2) recordReferralInvite: records a share action for the authenticated customer
- *
- * These functions must verify Firebase Authentication and derive the customer
- * identity server-side. Do not trust a phone number sent by this page.
- *
- * Until Phone Authentication is enabled, this page will not pretend that
- * localStorage.ff_phone proves identity.
- */
-const getMyReferralData=httpsCallable(functions,"getMyReferralData");
-const recordReferralInvite=httpsCallable(functions,"recordReferralInvite");
+  Expected Firestore collections:
+  referralProfiles: document ID = normalized phone digits
+                    fields: phone, referralCode, createdAt
+  referrals: fields: referrerPhone, referredPhone, status, createdAt
+  referralRewards: fields: phone, referralCode, status, rewardName,
+                   amount, createdAt
 
-function showToast(message){
-  const el=$("toast");
-  el.textContent=message;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove("show"),2600);
+  This frontend only creates/reads a referral profile and reads activity.
+  It does not create referral-success or reward records.
+  Your Firestore Security Rules must authorize these operations.
+*/
+
+const $ = id => document.getElementById(id);
+
+let db = null;
+let currentPhone = "";
+let currentProfile = null;
+let loading = false;
+
+function showMessage(id, message, type = "info") {
+  const el = $(id);
+  el.textContent = message;
+  el.className = "message show " + type;
 }
-function normalizePhone(value){return String(value??"").replace(/\D/g,"").slice(-10);}
-function setAccountState(text,kind=""){
-  const el=$("accountState");
-  el.textContent=text;
-  el.className="state-pill"+(kind?" "+kind:"");
+
+function clearMessage(id) {
+  const el = $(id);
+  el.textContent = "";
+  el.className = "message";
 }
-function setActivityUnavailable(message){
-  setAccountState("UNAVAILABLE","bad");
-  $("invitesCount").textContent="—";
-  $("friendsCount").textContent="—";
-  $("rewardsCount").textContent="—";
-  $("progressFill").style.width="0%";
-  $("progressLeft").textContent="Referral progress";
-  $("progressRight").textContent="Not connected";
-  $("activityMessage").textContent=message;
+
+function normalizePhone(value) {
+  return String(value || "").replace(/\D/g, "");
 }
-function buildInviteMessage(){
-  const code=referralCode;
-  if(!code)throw new Error("Your referral code is not available yet.");
-  const url=new URL(CUSTOMER_WEBSITE_URL);
-  url.searchParams.set("ref",code);
-  return "Hey! 👋 Try FreshFry Momo for delicious food!\n\nExplore the menu: "+url.toString()+"\n\nMy referral code: "+code+"\n\nReferral rewards apply only when the official programme terms are met.";
+
+function maskPhone(value) {
+  const digits = normalizePhone(value);
+  if (digits.length < 5) return "Customer";
+  return "******" + digits.slice(-4);
 }
-async function copyText(value,successMessage){
-  try{
-    if(navigator.clipboard&&window.isSecureContext){
-      await navigator.clipboard.writeText(value);
-    }else{
-      const input=document.createElement("textarea");
-      input.value=value;
-      input.style.position="fixed";
-      input.style.opacity="0";
-      document.body.appendChild(input);
-      input.select();
-      const copied=document.execCommand("copy");
-      input.remove();
-      if(!copied)throw new Error("Copy failed");
-    }
-    showToast(successMessage);
-  }catch(error){
-    showToast("Copy failed. Please try again.");
+
+function safeText(value, fallback = "—") {
+  if (value === null || value === undefined || value === "") return fallback;
+  return String(value);
+}
+
+function formatDate(value) {
+  if (!value) return "Date unavailable";
+  try {
+    const date = value.toDate ? value.toDate() : new Date(value);
+    if (Number.isNaN(date.getTime())) return "Date unavailable";
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric", month: "short", year: "numeric"
+    });
+  } catch (_) {
+    return "Date unavailable";
   }
 }
-async function recordShareAttempt(channel){
+
+function statusLabel(value) {
+  const s = String(value || "pending").toLowerCase().replace(/[_-]+/g, " ");
+  return s.replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function statusClass(value) {
+  const s = String(value || "").toLowerCase();
+  if (["successful", "completed", "rewarded", "delivered"].includes(s)) {
+    return "success";
+  }
+  if (["pending", "processing", "in_progress"].includes(s)) {
+    return "";
+  }
+  return "neutral";
+}
+
+function makeItem(title, subtitle, status) {
+  const item = document.createElement("div");
+  item.className = "item";
+
+  const main = document.createElement("div");
+  main.className = "item-main";
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "item-title";
+  titleEl.textContent = title;
+
+  const subEl = document.createElement("div");
+  subEl.className = "item-sub";
+  subEl.textContent = subtitle;
+
+  const badge = document.createElement("span");
+  badge.className = "status " + statusClass(status);
+  badge.textContent = statusLabel(status);
+
+  main.append(titleEl, subEl);
+  item.append(main, badge);
+  return item;
+}
+
+function showEmpty(containerId, message) {
+  const el = $(containerId);
+  el.replaceChildren();
+  const empty = document.createElement("div");
+  empty.className = "empty";
+  empty.textContent = message;
+  el.appendChild(empty);
+}
+
+function makeReferralCode(phone) {
   /*
-   * This records a share attempt only if the secure callable exists and
-   * the user is authenticated. It cannot prove a message was delivered.
-   */
-  try{
-    await recordReferralInvite({channel});
-    inviteCount++;
-    $("invitesCount").textContent=String(inviteCount);
-  }catch(error){
-    console.warn("Share tracking unavailable:",error);
+    Stable code based on phone digits.
+    This is an identifier, NOT a secret or authentication token.
+    Never use this code alone to authorize rewards.
+  */
+  const digits = normalizePhone(phone);
+  return "FF" + digits.slice(-6).padStart(6, "0");
+}
+
+function getShareUrl(code) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("ref", code);
+  return url.toString();
+}
+
+async function copyReferralCode() {
+  if (!currentProfile?.referralCode) return;
+  try {
+    await navigator.clipboard.writeText(currentProfile.referralCode);
+    showMessage("profileMessage", "Referral code copied.", "info");
+  } catch (_) {
+    showMessage("profileMessage",
+      "Copy failed. Please select and copy the code manually.", "error");
   }
 }
-async function loadReferralData(){
-  const storedPhone=normalizePhone(localStorage.getItem("ff_phone"));
-  currentPhone=storedPhone;
 
-  if(!storedPhone){
-    referralCode="";
-    $("referralCode").textContent="SIGN IN";
-    $("codeHint").textContent="Please sign in to your FreshFry customer account before accessing referral rewards.";
-    setActivityUnavailable("No customer phone was found in localStorage.ff_phone. Sign in through the existing customer app and return here.");
-    return;
+async function shareReferral() {
+  const code = currentProfile?.referralCode;
+  if (!code) return;
+
+  const link = getShareUrl(code);
+  const message =
+    "Order with FreshFry! Use my referral code " + code +
+    ". Referral link: " + link;
+
+  const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+}
+
+async function loadProfile() {
+  const phone = normalizePhone(localStorage.getItem("ff_phone"));
+
+  if (!phone) {
+    $("refCode").textContent = "Not available";
+    $("copyBtn").disabled = true;
+    $("shareBtn").disabled = true;
+    showMessage(
+      "profileMessage",
+      "Customer phone number was not found. Please open FreshFry and sign in using your existing customer flow first.",
+      "error"
+    );
+    return false;
   }
 
-  /*
-   * Do not query or write referral records using the phone alone.
-   * Phone Authentication must be enabled and the Cloud Function must
-   * verify request.auth before returning a customer's referral data.
-   */
-  $("codeHint").textContent="Loading your verified referral code...";
-  setAccountState("CONNECTING");
+  currentPhone = phone;
+  const profileRef = db.collection("referralProfiles").doc(phone);
 
-  try{
-    const result=await getMyReferralData({});
-    const data=result.data||{};
+  try {
+    const snap = await profileRef.get();
 
-    if(typeof data.referralCode!=="string"||!data.referralCode.trim()){
-      throw new Error("Referral code is not configured for this account.");
+    if (snap.exists) {
+      currentProfile = snap.data();
+
+      if (!currentProfile.referralCode) {
+        showMessage(
+          "profileMessage",
+          "Your Firestore referral profile has no referralCode field. Please correct the existing profile record.",
+          "error"
+        );
+        $("refCode").textContent = "Unavailable";
+        return false;
+      }
+
+      $("refCode").textContent = currentProfile.referralCode;
+    } else {
+      /*
+        Firestore-only profile creation.
+        This write will fail if your current Security Rules do not allow it.
+        The phone is read from localStorage and is NOT verified.
+      */
+      const code = makeReferralCode(phone);
+      const profile = {
+        phone: phone,
+        referralCode: code,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await profileRef.set(profile);
+      currentProfile = profile;
+      $("refCode").textContent = code;
     }
 
-    referralCode=data.referralCode.trim().toUpperCase();
-    $("referralCode").textContent=referralCode;
-    $("codeHint").textContent="Share your unique code. Rewards are confirmed after a friend's first qualifying delivered order.";
+    $("copyBtn").disabled = false;
+    $("shareBtn").disabled = false;
+    clearMessage("profileMessage");
+    return true;
+  } catch (error) {
+    console.error("Referral profile error:", error);
+    $("refCode").textContent = "Unavailable";
 
-    const invites=Number(data.invitesShared);
-    const friends=Number(data.qualifiedFriends);
-    const rewards=Number(data.rewardsEarned);
-
-    if(!Number.isFinite(invites)||!Number.isFinite(friends)||!Number.isFinite(rewards)){
-      throw new Error("Referral service returned incomplete activity data.");
+    let message = "Could not load referral profile from Firestore.";
+    if (error.code === "permission-denied") {
+      message += " Firestore Security Rules denied access.";
+    } else if (error.code === "unavailable") {
+      message += " Check your internet connection.";
+    } else {
+      message += " Check the referralProfiles collection and Firebase setup.";
     }
 
-    inviteCount=Math.max(0,Math.floor(invites));
-    $("invitesCount").textContent=String(inviteCount);
-    $("friendsCount").textContent=String(Math.max(0,Math.floor(friends)));
-    $("rewardsCount").textContent=String(Math.max(0,Math.floor(rewards)));
+    showMessage("profileMessage", message, "error");
+    return false;
+  }
+}
 
-    const nextMilestone=(Math.floor(friends/5)+1)*5;
-    $("progressFill").style.width=((friends%5)/5*100)+"%";
-    $("progressLeft").textContent=friends+" qualified friend"+(friends===1?"":"s");
-    $("progressRight").textContent="Next milestone: "+nextMilestone;
-    $("activityMessage").textContent="Your referral activity was loaded from the verified referral service.";
-    setAccountState("CONNECTED","good");
-  }catch(error){
-    console.error("Referral data error:",error);
-    referralCode="";
-    $("referralCode").textContent="UNAVAILABLE";
-    $("codeHint").textContent="Your referral code could not be loaded.";
-    setActivityUnavailable(
-      "Referral backend is not configured, or this customer is not authenticated. Configure Firebase Phone Authentication and the getMyReferralData Cloud Function. Error: "+(error.message||"Unknown error")
+async function loadReferrals() {
+  if (!currentPhone) return;
+
+  $("activityList").textContent = "Loading referral records…";
+  clearMessage("activityMessage");
+
+  try {
+    const snapshot = await db.collection("referrals")
+      .where("referrerPhone", "==", currentPhone)
+      .limit(100)
+      .get();
+
+    const container = $("activityList");
+    container.replaceChildren();
+
+    let pending = 0;
+    let successful = 0;
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const status = String(data.status || "pending").toLowerCase();
+
+      if (status === "pending" || status === "processing") pending++;
+      if (["successful", "completed", "delivered", "rewarded"].includes(status)) {
+        successful++;
+      }
+
+      const title = maskPhone(data.referredPhone);
+      const subtitle = "Added: " + formatDate(data.createdAt);
+      container.appendChild(makeItem(title, subtitle, data.status));
+    });
+
+    $("totalCount").textContent = String(snapshot.size);
+    $("pendingCount").textContent = String(pending);
+    $("successfulCount").textContent = String(successful);
+
+    if (snapshot.empty) {
+      showEmpty("activityList", "No referral records found in Firestore yet.");
+    }
+  } catch (error) {
+    console.error("Referral activity error:", error);
+    showEmpty("activityList", "Referral activity could not be loaded.");
+    $("totalCount").textContent = "—";
+    $("pendingCount").textContent = "—";
+    $("successfulCount").textContent = "—";
+
+    showMessage(
+      "activityMessage",
+      error.code === "permission-denied"
+        ? "Firestore Security Rules denied access to the referrals collection."
+        : "Check your referrals collection, field names, and internet connection.",
+      "error"
     );
   }
 }
 
-function shareWhatsApp(){
-  try{
-    const message=buildInviteMessage();
-    window.open("https://wa.me/?text="+encodeURIComponent(message),"_blank","noopener,noreferrer");
-    recordShareAttempt("whatsapp");
-  }catch(error){showToast(error.message);}
-}
-function shareSMS(){
-  try{
-    window.location.href="sms:?body="+encodeURIComponent(buildInviteMessage());
-    recordShareAttempt("sms");
-  }catch(error){showToast(error.message);}
+async function loadRewards() {
+  if (!currentPhone) return;
+
+  showEmpty("rewardList", "Loading reward records…");
+
+  try {
+    const snapshot = await db.collection("referralRewards")
+      .where("phone", "==", currentPhone)
+      .limit(100)
+      .get();
+
+    const container = $("rewardList");
+    container.replaceChildren();
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const rewardName = safeText(data.rewardName, "Referral reward");
+      const amount = data.amount === undefined
+        ? ""
+        : " · " + safeText(data.amount);
+      const subtitle = "Recorded: " + formatDate(data.createdAt) + amount;
+
+      container.appendChild(
+        makeItem(rewardName, subtitle, data.status || "recorded")
+      );
+    });
+
+    if (snapshot.empty) {
+      showEmpty("rewardList", "No reward records found in Firestore.");
+    }
+  } catch (error) {
+    console.error("Referral rewards error:", error);
+    showEmpty(
+      "rewardList",
+      error.code === "permission-denied"
+        ? "Firestore Security Rules denied access to reward records."
+        : "Reward records could not be loaded. Check Firestore configuration."
+    );
+  }
 }
 
-$("copyCodeBtn").addEventListener("click",()=>{
-  if(!referralCode)return showToast("Referral code unavailable. Refresh or sign in again.");
-  copyText(referralCode,"Referral code copied!");
-});
-$("copyInviteBtn").addEventListener("click",()=>{
-  try{
-    copyText(buildInviteMessage(),"Invite message copied!");
-    recordShareAttempt("copy");
-  }catch(error){showToast(error.message);}
-});
-$("whatsappBtn").addEventListener("click",shareWhatsApp);
-$("smsBtn").addEventListener("click",shareSMS);
-$("shareNativeBtn").addEventListener("click",async()=>{
-  try{
-    const message=buildInviteMessage();
-    if(navigator.share){
-      await navigator.share({title:"FreshFry Momo",text:message,url:CUSTOMER_WEBSITE_URL});
-      recordShareAttempt("native");
-    }else{
-      await copyText(message,"Invite copied. Share it with your friends!");
-      recordShareAttempt("copy");
+async function refreshData() {
+  if (loading) return;
+  loading = true;
+  $("refreshBtn").disabled = true;
+  $("refreshBtn").textContent = "Refreshing…";
+
+  try {
+    const ok = await loadProfile();
+    if (ok) {
+      await Promise.all([loadReferrals(), loadRewards()]);
     }
-  }catch(error){
-    if(error.name!=="AbortError")showToast(error.message||"Sharing could not be completed.");
+  } finally {
+    loading = false;
+    $("refreshBtn").disabled = false;
+    $("refreshBtn").textContent = "Refresh activity";
   }
+}
+
+$("copyBtn").addEventListener("click", copyReferralCode);
+$("shareBtn").addEventListener("click", shareReferral);
+$("refreshBtn").addEventListener("click", refreshData);
+
+$("backBtn").addEventListener("click", () => {
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = "index.html";
 });
-$("retryBtn").addEventListener("click",loadReferralData);
-$("backBtn").addEventListener("click",()=>{
-  if(history.length>1)history.back();
-  else location.href="index.html";
-});
-$("year").textContent=String(new Date().getFullYear());
-loadReferralData();
+
+(async function init() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    await refreshData();
+  } catch (error) {
+    console.error("Firebase initialization error:", error);
+    showMessage(
+      "profileMessage",
+      "Firebase could not initialize. Check the Firebase configuration and network.",
+      "error"
+    );
+    showEmpty("activityList", "Firebase connection is unavailable.");
+    showEmpty("rewardList", "Firebase connection is unavailable.");
+  }
+})();
 </script>
 </body>
 </html>
