@@ -5,768 +5,513 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101827">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Freshfry Partner">
-<link rel="manifest" href="/partner-manifest.json">
-<link rel="apple-touch-icon" href="/logo.png">
-<title>Freshfry Partner | Delivery App</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Delivery Rider</title>
 <style>
-:root{--bg:#f3f5f9;--card:#fff;--ink:#101827;--muted:#758096;--orange:#ff6b27;--green:#159b64;--line:#e8ebf1;--shadow:0 8px 28px #121c2d12}
+:root{
+  --bg:#0b1120;--panel:#121c2d;--panel2:#172337;--border:#29374b;
+  --text:#f4f7fb;--muted:#9eacc0;--orange:#ff5e00;
+  --green:#24c78b;--red:#ff626e;--yellow:#ffc857;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
-button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.6;cursor:wait}
-.topbar{background:#101827;color:#fff;padding:20px 18px 24px;border-radius:0 0 26px 26px}
-.topline,.profile-row,.order-top,.amount-row,.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px}
-.brand-icon{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--orange)}
-.brand small{display:block;font-size:10px;letter-spacing:2px;color:#abb4c4;margin-top:3px}
-.online-pill{background:#183e34;color:#71edb8;border:1px solid #28664e;border-radius:30px;padding:8px 11px;font-size:11px;font-weight:800}
-.welcome{margin-top:24px}.welcome .eyebrow{color:#a9b4c7;font-size:11px;font-weight:700;letter-spacing:1.5px}
-.welcome h1{margin:7px 0 5px;font-size:26px;line-height:1.2}.welcome p{margin:0;color:#abb4c4;font-size:13px}
-.container{max-width:680px;margin:auto;padding:18px 15px 40px}
-.card,.order-card,.stat{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
-.card{border-radius:20px;padding:18px;margin-bottom:15px}.login-card{margin-top:20px}
-.section-title{font-size:16px;font-weight:900;margin:0 0 5px}
-.section-sub{color:var(--muted);font-size:12px;line-height:1.6;margin:0 0 18px}
-.field{margin:14px 0}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:8px}
-.field input{width:100%;padding:15px;border:1px solid #dfe4ed;border-radius:13px;outline:none;background:#fafbfe;font-size:15px}
-.field input:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff6b271c}
-.primary{width:100%;border:0;background:var(--orange);color:white;padding:15px;border-radius:13px;font-size:13px;font-weight:900;box-shadow:0 7px 16px #ff6b2728}
-.secondary{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:11px 13px;font-size:12px;font-weight:800}
-.full-btn{width:100%;margin-top:9px}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
-.stat{border-radius:17px;padding:15px 11px}.stat .icon{color:var(--orange);font-size:17px}
-.stat strong{display:block;font-size:23px;margin:9px 0 4px;overflow-wrap:anywhere}
-.stat span{color:var(--muted);font-size:10px;font-weight:800}
-.section-head{margin:22px 2px 12px}.section-head h2{font-size:17px;margin:0;font-weight:900}
-.count{background:#fff0e8;color:#d94c0c;padding:6px 10px;border-radius:30px;font-size:11px;font-weight:900;white-space:nowrap}
-.order-card{border-radius:19px;padding:16px;margin-bottom:13px}
-.order-number{font-size:13px;font-weight:900;overflow-wrap:anywhere}.order-date{color:var(--muted);font-size:11px;margin-top:5px}
-.status{border-radius:30px;background:#fff0e8;color:#d94c0c;padding:7px 9px;font-size:9px;font-weight:900;white-space:nowrap}
-.status.done{background:#e7f8ef;color:#138351}
-.order-divider{border-top:1px dashed #e4e8ef;margin:14px 0}
-.info-row{display:flex;gap:11px;align-items:flex-start;margin:13px 0}
-.info-icon{flex:0 0 34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#fff2eb;color:var(--orange)}
-.info-text{min-width:0;flex:1}.info-text label{display:block;color:var(--muted);font-size:10px;font-weight:800;margin-bottom:5px}
-.info-text div{font-size:13px;font-weight:700;line-height:1.55;overflow-wrap:anywhere}
-.items-text{color:#5c6678;font-size:12px;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere}
-.amount-row{margin-top:12px}.amount-row span{color:var(--muted);font-size:12px;font-weight:700}.amount-row strong{font-size:22px}
-.actions{display:flex;gap:9px;margin-top:14px}.actions button,.actions a{flex:1;display:flex;justify-content:center;align-items:center;gap:7px;text-decoration:none;border:0;border-radius:11px;padding:12px 8px;font-size:11px;font-weight:900;min-width:0}
-.call-btn{background:#edf8f2;color:#138351}.map-btn{background:#edf3ff;color:#315fd2}
-.pin-area{margin-top:13px;padding:13px;background:#f7f8fb;border-radius:13px}
-.pin-area label{display:block;font-size:11px;font-weight:900;margin-bottom:8px}
-.pin-row{display:flex;gap:8px}.pin-row input{min-width:0;width:100%;border:1px solid #dfe4ed;border-radius:10px;padding:12px;outline:none}
-.pin-row button{border:0;border-radius:10px;background:var(--green);color:white;padding:0 14px;font-size:11px;font-weight:900}
-.empty{text-align:center;padding:30px 15px;color:var(--muted)}
-.empty i{font-size:28px;color:#c2cad7;margin-bottom:12px}.empty strong{display:block;color:var(--ink);font-size:14px;margin-bottom:6px}
-.empty p{font-size:12px;line-height:1.6;margin:0}
-.profile{display:flex;align-items:center;gap:12px;min-width:0}
-.avatar{width:44px;height:44px;border-radius:15px;background:#fff0e8;color:var(--orange);display:grid;place-items:center;font-weight:900;font-size:18px;flex-shrink:0}
-.profile strong{display:block;font-size:14px;overflow-wrap:anywhere}.profile small{display:block;color:var(--muted);font-size:11px;margin-top:5px}
-.note{color:var(--muted);font-size:11px;line-height:1.7;margin-top:12px}
-.hidden{display:none!important}.footer{text-align:center;color:#99a2b2;font-size:10px;padding:15px 0 5px}
-.sound-status{background:#f6f8fc;border:1px solid var(--line);border-radius:13px;padding:13px;margin-top:10px}
-.sound-status strong{display:block;font-size:12px;margin-bottom:5px}.sound-status p{font-size:11px;color:var(--muted);line-height:1.6;margin:0}
-.sound-enabled{color:var(--green)!important}
-.notification-banner{position:fixed;top:12px;left:12px;right:12px;z-index:9999;max-width:620px;margin:auto;background:#101827;color:#fff;border:1px solid #344156;border-radius:18px;padding:15px;box-shadow:0 12px 35px #0003;display:none;animation:slideDown .25s ease-out}
-.notification-banner.show{display:block}.notification-row{display:flex;align-items:flex-start;gap:12px}
-.notification-icon{flex:0 0 40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--orange)}
-.notification-content{flex:1;min-width:0}.notification-content strong{display:block;font-size:13px;margin:2px 0 5px}
-.notification-content p{font-size:12px;color:#cbd2df;line-height:1.5;margin:0;overflow-wrap:anywhere}
-.notification-actions{display:flex;gap:8px;margin-top:12px}.notification-actions button{border:0;border-radius:10px;padding:10px;font-size:11px;font-weight:900;flex:1}
-.notification-open{background:var(--orange);color:white}.notification-close{background:#263348;color:white}
-@keyframes slideDown{from{transform:translateY(-15px);opacity:0}to{transform:translateY(0);opacity:1}}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#101827;color:white;padding:13px 17px;border-radius:12px;font-size:12px;font-weight:700;box-shadow:var(--shadow);z-index:10000;width:max-content;max-width:90%;display:none}
-@media(max-width:370px){.stats{gap:6px}.stat{padding:12px 8px}.stat strong{font-size:19px}.actions{flex-wrap:wrap}.notification-banner{left:7px;right:7px;top:7px}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Arial,sans-serif}
+button,input,select{font:inherit}
+button,a{touch-action:manipulation}
+button{cursor:pointer}
+.app{max-width:1050px;margin:auto;padding:18px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:45px;height:45px;display:grid;place-items:center;border-radius:14px;background:var(--orange);font-size:24px}
+h1{font-size:21px;margin:0}
+.subtitle{font-size:12px;color:var(--muted);margin-top:5px}
+.btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:11px 14px;border-radius:11px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px}
+.btn.primary{background:var(--orange);border-color:var(--orange);font-weight:800}
+.btn.success{background:#103c31;border-color:#21634f;color:#7af0bf}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.panel,.stat,.order-card{background:var(--panel);border:1px solid var(--border);border-radius:16px}
+.panel{padding:18px;margin-bottom:16px}
+.panel h2{font-size:17px;margin:0 0 8px}
+.muted{color:var(--muted);font-size:13px;line-height:1.6}
+.field{width:100%;background:#0b1423;border:1px solid var(--border);border-radius:10px;color:var(--text);padding:13px;outline:none}
+.field:focus{border-color:var(--orange)}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
+.field-group{margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.stat{padding:16px;min-width:0}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-value{font-size:26px;font-weight:850;margin-top:9px;overflow-wrap:anywhere}
+.stat-foot{font-size:11px;color:var(--muted);margin-top:5px}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
+.filters .field{width:auto;flex:1;min-width:140px}
+.order-list{display:grid;gap:14px}
+.order-card{padding:17px;min-width:0}
+.order-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.order-number{font-size:17px;font-weight:850}
+.badge{display:inline-block;padding:6px 9px;border-radius:99px;font-size:11px;font-weight:800;background:#29374b;color:#dbe4ef}
+.badge.green{background:#103c31;color:#7af0bf}
+.badge.yellow{background:#493819;color:#ffd77b}
+.badge.red{background:#48232c;color:#ff9aa2}
+.customer{font-size:15px;font-weight:750;margin-top:16px}
+.address{font-size:13px;line-height:1.6;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}
+.order-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.info-box{background:#0b1423;border:1px solid var(--border);padding:12px;border-radius:11px;min-width:0}
+.info-label{font-size:11px;color:var(--muted);margin-bottom:6px}
+.info-value{font-size:14px;font-weight:750;overflow-wrap:anywhere}
+.items{font-size:12px;line-height:1.8;color:#d5deeb;margin-top:10px}
+.order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.order-actions .btn{flex:1;min-width:120px}
+.message{display:none;padding:12px;border-radius:10px;font-size:13px;line-height:1.6;margin-bottom:15px;overflow-wrap:anywhere}
+.message.show{display:block}
+.message.error{background:#48232c;color:#ffadb3;border:1px solid #77303b}
+.message.success{background:#103c31;color:#7af0bf;border:1px solid #21634f}
+.message.info{background:#13283d;color:#b6dcff;border:1px solid #264c6c}
+.empty{text-align:center;padding:30px 15px;color:var(--muted);background:var(--panel);border:1px dashed var(--border);border-radius:15px;line-height:1.7}
+.hidden{display:none!important}
+.small{font-size:11px;color:var(--muted);line-height:1.6}
+.footer{text-align:center;font-size:11px;color:var(--muted);line-height:1.7;margin:22px 0}
+@media(max-width:520px){
+  .app{padding:13px}
+  .stats{gap:8px}
+  .stat{padding:12px}
+  .stat-value{font-size:21px}
+  .order-card{padding:14px}
+  .order-actions .btn{min-width:calc(50% - 8px)}
+}
 </style>
 </head>
-
 <body>
-<header class="topbar">
-  <div class="topline">
+<div class="app">
+  <header class="topbar">
     <div class="brand">
-      <div class="brand-icon"><i class="fa-solid fa-motorcycle"></i></div>
-      <div>freshfry<small>DELIVERY PARTNER</small></div>
+      <div class="logo">🛵</div>
+      <div>
+        <h1>FreshFry Delivery</h1>
+        <div class="subtitle">Rider dashboard</div>
+      </div>
     </div>
-    <div class="online-pill"><i class="fa-solid fa-circle"></i> PARTNER APP</div>
-  </div>
-  <div class="welcome">
-    <div class="eyebrow">DELIVERY DASHBOARD</div>
-    <h1 id="welcome-title">Welcome, Partner 👋</h1>
-    <p>Manage your deliveries in one place.</p>
-  </div>
-</header>
+    <button class="btn hidden" id="logoutBtn" type="button">Sign out</button>
+  </header>
 
-<div id="notification-banner" class="notification-banner" role="alert" aria-live="assertive">
-  <div class="notification-row">
-    <div class="notification-icon"><i class="fa-solid fa-bell"></i></div>
-    <div class="notification-content">
-      <strong id="notification-title">New Freshfry order!</strong>
-      <p id="notification-message">A new delivery has been assigned to you.</p>
+  <div id="message" class="message" role="status" aria-live="polite"></div>
+
+  <section id="loginPanel" class="panel">
+    <h2>Rider sign in</h2>
+    <p class="muted">Sign in using the Firebase Authentication account registered for your rider profile.</p>
+    <form id="loginForm">
+      <div class="field-group">
+        <label for="email">Email address</label>
+        <input class="field" id="email" type="email" autocomplete="username" required maxlength="254" placeholder="rider@example.com">
+      </div>
+      <div class="field-group">
+        <label for="password">Password</label>
+        <input class="field" id="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Enter password">
+      </div>
+      <button class="btn primary" id="loginBtn" type="submit" style="width:100%">Sign in</button>
+    </form>
+    <p class="small" style="margin-bottom:0;margin-top:14px">Rider accounts must be created by an authorized administrator.</p>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <section class="panel">
+      <h2 id="welcomeTitle">Your delivery dashboard</h2>
+      <div class="muted" id="riderInfo">Loading rider profile…</div>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-label">Active deliveries</div>
+        <div class="stat-value" id="activeCount">0</div>
+        <div class="stat-foot">Assigned / in progress</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Delivered</div>
+        <div class="stat-value" id="deliveredCount">0</div>
+        <div class="stat-foot">Loaded records</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">COD to collect</div>
+        <div class="stat-value" id="codAmount">₹0</div>
+        <div class="stat-foot">Uncollected COD totals</div>
+      </div>
+    </section>
+
+    <div class="filters">
+      <input class="field" id="searchInput" placeholder="Search order or customer…" aria-label="Search orders">
+      <select class="field" id="statusFilter" aria-label="Filter delivery status">
+        <option value="active">Active deliveries</option>
+        <option value="all">All assigned orders</option>
+        <option value="pending">Pending</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready">Ready for pickup</option>
+        <option value="out_for_delivery">Out for delivery</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
     </div>
-  </div>
-  <div class="notification-actions">
-    <button id="notification-open" class="notification-open">VIEW ORDER</button>
-    <button id="notification-close" class="notification-close">DISMISS</button>
-  </div>
+
+    <div id="orderList" class="order-list">
+      <div class="empty">Loading assigned orders…</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    FreshFry Momo · Delivery Rider<br>
+    If an order is missing, ask the admin to check the rider assignment.
+  </footer>
 </div>
 
-<main class="container">
-  <section id="login-section" class="card login-card">
-    <h2 class="section-title">Start your duty</h2>
-    <p class="section-sub">Enter your registered name and 10-digit mobile number.</p>
-    <form id="login-form">
-      <div class="field">
-        <label for="riderNameInput">FULL NAME</label>
-        <input id="riderNameInput" type="text" placeholder="Enter your full name" autocomplete="name" minlength="3" maxlength="80" required>
-      </div>
-      <div class="field">
-        <label for="riderPhoneInput">10-DIGIT MOBILE NUMBER</label>
-        <input id="riderPhoneInput" type="tel" inputmode="numeric" placeholder="Enter mobile number" maxlength="10" autocomplete="tel-national" required>
-      </div>
-      <button id="login-button" class="primary" type="submit">START DUTY <i class="fa-solid fa-arrow-right"></i></button>
-    </form>
-    <p class="note">Use the name and number registered for your rider account. Name and phone alone are not secure identity verification; production access should use Firebase Authentication.</p>
-  </section>
-
-  <section id="dashboard-section" class="hidden">
-    <div class="card">
-      <div class="profile-row">
-        <div class="profile">
-          <div class="avatar" id="profile-avatar">R</div>
-          <div><strong id="profile-name">Delivery Partner</strong><small id="profile-phone"></small></div>
-        </div>
-        <button id="logout-button" class="secondary" type="button"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-      </div>
-      <div class="sound-status">
-        <strong><i class="fa-solid fa-volume-high"></i> New Order Sound</strong>
-        <p id="sound-description">Enable sound once. The browser requires a user tap before it can play audio.</p>
-        <button id="sound-button" class="primary full-btn" type="button"><i class="fa-solid fa-bell"></i> ENABLE ORDER SOUND</button>
-        <button id="browser-notification-button" class="secondary full-btn" type="button"><i class="fa-solid fa-mobile-screen"></i> ENABLE DEVICE NOTIFICATIONS</button>
-      </div>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><i class="fa-solid fa-box-open icon"></i><strong id="active-count">0</strong><span>ACTIVE ORDERS</span></div>
-      <div class="stat"><i class="fa-solid fa-circle-check icon"></i><strong id="delivered-count">0</strong><span>DELIVERED</span></div>
-      <div class="stat"><i class="fa-solid fa-indian-rupee-sign icon"></i><strong id="earnings">₹0</strong><span>DELIVERED TOTAL*</span></div>
-    </div>
-
-    <button id="refresh-button" class="secondary full-btn" type="button"><i class="fa-solid fa-rotate"></i> REFRESH ORDERS</button>
-
-    <div class="section-head"><h2><i class="fa-solid fa-motorcycle"></i> Active deliveries</h2><span class="count" id="active-badge">0 ORDERS</span></div>
-    <div id="active-orders"><div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading orders...</strong></div></div>
-
-    <div class="section-head"><h2><i class="fa-solid fa-clock-rotate-left"></i> Delivery history</h2></div>
-    <div id="history-orders"><div class="card empty"><i class="fa-solid fa-spinner fa-spin"></i><strong>Loading history...</strong></div></div>
-    <p class="note">*Delivered order total is not rider commission or confirmed earnings.</p>
-  </section>
-  <div class="footer">FRESHFRY PARTNER APP</div>
-</main>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-
 <script type="module">
-import {initializeApp,getApps,getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
- getFirestore,doc,setDoc,updateDoc,collection,query,where,
- onSnapshot,getDoc,serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,doc,getDoc,collection,query,where,onSnapshot,updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig={
- apiKey:"AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
- authDomain:"freshfry-39a10.firebaseapp.com",
- projectId:"freshfry-39a10",
- storageBucket:"freshfry-39a10.firebasestorage.app",
- messagingSenderId:"928483976893",
- appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+  apiKey:"AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain:"freshfry-39a10.firebaseapp.com",
+  projectId:"freshfry-39a10",
+  storageBucket:"freshfry-39a10.firebasestorage.app",
+  messagingSenderId:"928483976893",
+  appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
 };
 
-const app=getApps().length?getApp():initializeApp(firebaseConfig);
+const DELIVERY_PIN="7788";
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
 const db=getFirestore(app);
 const $=id=>document.getElementById(id);
 
-let rider=null,stopActive=null,stopHistory=null;
-let activeOrders=[],historyOrders=[],knownActiveIds=new Set();
-let initialActiveSnapshotReceived=false,soundEnabled=false,audioContext=null;
-let notificationOrderId=null,toastTimer=null,bannerTimer=null;
+let riderRecord=null;
+let allOrders=[];
+let unsubscribeOrders=null;
+const actionBusy=new Set();
 
-function showToast(message){
- const el=$("toast");el.textContent=message;el.style.display="block";
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display="none",3500);
-}
-function escapeHTML(value){
- return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-function formatMoney(value){
- const amount=Number(value);
- return "₹"+(Number.isFinite(amount)?amount.toLocaleString("en-IN"):"0");
-}
-function formatDate(value){
- if(!value)return "Date not available";
- let date;
- if(typeof value.toDate==="function")date=value.toDate();
- else if(value instanceof Date)date=value;
- else date=new Date(value);
- if(Number.isNaN(date.getTime()))return "Date not available";
- return date.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
-}
-function normalizePhone(value){return String(value??"").replace(/\D/g,"").slice(-10);}
-function normalizeName(value){return String(value??"").trim().replace(/\s+/g," ").toUpperCase();}
+const STATUS_LABELS={
+  pending:"Pending",
+  payment_pending:"Payment pending",
+  confirmed:"Confirmed",
+  preparing:"Preparing",
+  ready:"Ready for pickup",
+  out_for_delivery:"Out for delivery",
+  delivered:"Delivered",
+  cancelled:"Cancelled",
+  canceled:"Cancelled"
+};
 
-function getAddress(order){
- const candidates=[
-  order.deliveryAddress,order.customerAddress,order.address,
-  typeof order.customerLocation==="string"?order.customerLocation:null,
-  order.delivery?.address,order.customer?.address
- ];
- for(const value of candidates){
-  if(typeof value==="string"&&value.trim())return value.trim();
- }
- return "Address not provided";
+function showMessage(text,type="info"){
+  $("message").textContent=text;
+  $("message").className="message show "+type;
 }
-function getPhone(order){
- return String(order.customerPhone||order.phone||order.mobile||order.customer?.phone||"").replace(/[^\d+]/g,"");
+function clearMessage(){
+  $("message").textContent="";
+  $("message").className="message";
 }
-function getCustomer(order){return order.customerName||order.name||order.customer?.name||"Customer";}
-function getItemsText(order){
- if(!Array.isArray(order.items))return "Items not listed";
- return order.items.map(item=>{
-  if(typeof item==="string")return item;
-  return (item.name||item.title||item.foodName||"Item")+" × "+(item.quantity||item.qty||1);
- }).join("\n")||"Items not listed";
+function safeText(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
 }
-function getTotal(order){return order.total??order.grandTotal??order.amount??order.totalAmount??0;}
-
-/* ---------------- ORDER SOUND ---------------- */
-async function prepareSound(){
- const AudioContextClass=window.AudioContext||window.webkitAudioContext;
- if(!AudioContextClass)throw new Error("Audio is not supported.");
- if(!audioContext)audioContext=new AudioContextClass();
- if(audioContext.state==="suspended")await audioContext.resume();
- soundEnabled=true;
- $("sound-description").textContent="Sound enabled. New assigned orders can play an alert while this page is active.";
- $("sound-description").classList.add("sound-enabled");
- $("sound-button").innerHTML='<i class="fa-solid fa-volume-high"></i> SOUND ENABLED';
- playOrderSound();
+function money(value){
+  const n=Number(value);
+  return "₹"+(Number.isFinite(n)?n:0).toLocaleString("en-IN",{maximumFractionDigits:2});
 }
-function playOrderSound(){
- if(!soundEnabled||!audioContext)return;
- try{
-  if(audioContext.state==="suspended")audioContext.resume().catch(()=>{});
-  const now=audioContext.currentTime;
-  [0,.45,.9,1.35].forEach((delay,index)=>{
-   const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
-   oscillator.type="sine";oscillator.frequency.value=index%2===0?880:660;
-   gain.gain.setValueAtTime(.0001,now+delay);
-   gain.gain.exponentialRampToValueAtTime(.25,now+delay+.03);
-   gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.32);
-   oscillator.connect(gain);gain.connect(audioContext.destination);
-   oscillator.start(now+delay);oscillator.stop(now+delay+.34);
-  });
- }catch(error){console.warn("Sound error:",error);}
+function normalizeStatus(value){
+  return String(value||"pending").toLowerCase().trim().replace(/[\s-]+/g,"_");
 }
-$("sound-button").addEventListener("click",async()=>{
- try{await prepareSound();showToast("New order sound enabled.");}
- catch(error){console.error(error);showToast("Could not enable sound. Check device settings.");}
-});
-
-/* ---------------- ORDER NOTIFICATIONS ---------------- */
-function showNewOrderNotification(order){
- notificationOrderId=order.id;
- $("notification-title").textContent="🔔 New Freshfry Order!";
- $("notification-message").textContent=`Order #${order.id.slice(-7)} assigned. Customer: ${getCustomer(order)}.`;
- $("notification-banner").classList.add("show");
- clearTimeout(bannerTimer);
- bannerTimer=setTimeout(()=>$("notification-banner").classList.remove("show"),15000);
-
- if("Notification" in window&&Notification.permission==="granted"){
-  try{
-   const notification=new Notification("Freshfry: New Delivery!",{
-    body:`Order #${order.id.slice(-7)} — ${getCustomer(order)}`,
-    tag:"freshfry-order-"+order.id,icon:"/logo.png"
-   });
-   notification.onclick=()=>{
-    window.focus();openOrderInView(order.id);notification.close();
-   };
-  }catch(error){console.warn("System notification unavailable:",error);}
- }
+function dateLabel(value){
+  if(!value)return "—";
+  let date=null;
+  if(typeof value.toDate==="function")date=value.toDate();
+  else if(typeof value.seconds==="number")date=new Date(value.seconds*1000);
+  else if(typeof value==="string"||typeof value==="number")date=new Date(value);
+  if(!date||Number.isNaN(date.getTime()))return "—";
+  return date.toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
 }
-$("notification-close").addEventListener("click",()=>{
- $("notification-banner").classList.remove("show");clearTimeout(bannerTimer);
-});
-$("notification-open").addEventListener("click",()=>{
- $("notification-banner").classList.remove("show");
- if(notificationOrderId)openOrderInView(notificationOrderId);
-});
-function openOrderInView(id){
- const element=document.getElementById("order-card-"+id);
- if(element){
-  element.scrollIntoView({behavior:"smooth",block:"center"});
-  element.style.outline="3px solid #ff6b27";
-  setTimeout(()=>element.style.outline="",3000);
- }else showToast("Order may have been completed or removed. Refresh orders.");
+function isCOD(order){
+  const m=String(order.paymentMethod||"").toLowerCase();
+  return m==="cod"||m.includes("cash")||m.includes("delivery");
 }
-$("browser-notification-button").addEventListener("click",async()=>{
- if(!("Notification" in window)){showToast("Notifications are not supported.");return;}
- try{
-  const permission=await Notification.requestPermission();
-  if(permission==="granted"){
-   showToast("Notifications allowed. Background alerts require Firebase Cloud Messaging.");
-   new Notification("Freshfry Partner",{body:"Notifications are enabled.",icon:"/logo.png"});
-  }else showToast("Notification permission was not granted.");
- }catch(error){console.error(error);showToast("Could not request notification permission.");}
-});
+function isCODCollected(order){
+  return order.codCollected===true||order.cashCollected===true;
+}
+function getOrderId(order){
+  return order.orderNumber||order.orderId||order.id;
+}
+function statusBadge(status){
+  if(status==="delivered")return "green";
+  if(status==="cancelled"||status==="canceled")return "red";
+  return "yellow";
+}
+function isActive(order){
+  return !["delivered","cancelled","canceled"].includes(normalizeStatus(order.status));
+}
+function displayStatus(status){
+  const key=normalizeStatus(status);
+  return STATUS_LABELS[key]||String(status||"Pending");
+}
 
-/* ---------------- CUSTOMER GPS FIX ---------------- */
+function showLogin(){
+  $("loginPanel").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+  $("logoutBtn").classList.add("hidden");
+}
+function showDashboard(){
+  $("loginPanel").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
+}
 
-/*
- Supported location fields include:
- latitude/longitude, lat/lng, customerLatitude/customerLongitude,
- customerLocation, deliveryLocation, coordinates, GeoPoint and
- GeoJSON coordinates [longitude, latitude].
-
- IMPORTANT: 0,0 is rejected as a placeholder. This does not create
- customer GPS data; the customer checkout must save real coordinates.
-*/
-function getCoordinates(order){
- const candidates=[
-  order.customerLocation,order.deliveryLocation,order.location,
-  order.coordinates,order.geoPoint,order.customerCoordinates,
-  order.customerGPS,order.deliveryCoordinates,order.gpsLocation,
-  order.customer?.location,order.customer?.coordinates,
-  order.delivery?.location,order.delivery?.coordinates
- ];
- let lat=order.customerLatitude??order.deliveryLatitude??order.latitude??order.lat;
- let lng=order.customerLongitude??order.deliveryLongitude??order.longitude??order.lng??order.lon;
-
- for(const value of candidates){
-  if(!value||typeof value!=="object")continue;
-  lat??=value.latitude??value.lat??value._lat;
-  lng??=value.longitude??value.lng??value.lon??value._long;
-
-  if(Array.isArray(value.coordinates)){
-   lng??=value.coordinates[0];
-   lat??=value.coordinates[1];
+async function setupRider(user){
+  clearMessage();
+  if(unsubscribeOrders){
+    unsubscribeOrders();
+    unsubscribeOrders=null;
   }
-  if(Array.isArray(value)){
-   // Coordinate arrays are treated as GeoJSON [longitude, latitude].
-   lng??=value[0];lat??=value[1];
-  }
- }
- if(lat===null||lat===undefined||lng===null||lng===undefined)return null;
- if(typeof lat==="string"&&!lat.trim())return null;
- if(typeof lng==="string"&&!lng.trim())return null;
- lat=Number(lat);lng=Number(lng);
+  allOrders=[];
+  riderRecord=null;
+  showLogin();
 
- if(!Number.isFinite(lat)||!Number.isFinite(lng))return null;
- if(lat < -90||lat > 90||lng < -180||lng > 180)return null;
- if(lat===0&&lng===0){
-  console.warn("Customer GPS is placeholder 0,0. Falling back to saved map/address.");
-  return null;
- }
- return {lat,lng};
-}
-
-function getMapDestination(order){
- const coordinates=getCoordinates(order);
- if(coordinates){
-  return {destination:`${coordinates.lat},${coordinates.lng}`,source:"customer-gps"};
- }
-
- const savedUrl=order.mapUrl||order.googleMapsUrl||order.mapsLink||
-  order.customerMapUrl||order.locationUrl||order.customer?.mapUrl||"";
-
- if(typeof savedUrl==="string"&&savedUrl.trim()){
   try{
-   const url=new URL(savedUrl.trim());
-   const allowedHosts=["maps.app.goo.gl","goo.gl","google.com","www.google.com","maps.google.com"];
-   const allowed=allowedHosts.includes(url.hostname)||url.hostname.endsWith(".google.com");
-
-   if(url.protocol==="https:"&&allowed){
-    // Read coordinates from common Google Maps URL formats.
-    const patterns=[
-     /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
-     /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/,
-     /[?&](?:q|query|destination)=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/
-    ];
-    for(const pattern of patterns){
-     const match=url.href.match(pattern);
-     if(!match)continue;
-     const lat=Number(match[1]),lng=Number(match[2]);
-     if(Number.isFinite(lat)&&Number.isFinite(lng)&&
-        lat>=-90&&lat<=90&&lng>=-180&&lng<=180&&!(lat===0&&lng===0)){
-      return {destination:`${lat},${lng}`,source:"customer-map-coordinates"};
-     }
+    // Expected: riders document ID equals the Firebase Authentication UID.
+    const riderSnap=await getDoc(doc(db,"riders",user.uid));
+    if(!riderSnap.exists()){
+      await signOut(auth);
+      showMessage("Rider profile not found. Ask admin to create a riders document whose ID matches your Firebase Authentication UID.","error");
+      return;
     }
-    return {destination:url.href,source:"customer-map-link"};
-   }
-  }catch(error){console.warn("Invalid saved Maps URL:",error);}
- }
 
- const address=getAddress(order);
- if(address&&address!=="Address not provided"){
-  return {destination:address,source:"customer-address"};
- }
- return null;
+    riderRecord={id:riderSnap.id,...riderSnap.data()};
+    if(riderRecord.active===false||riderRecord.isActive===false){
+      await signOut(auth);
+      showMessage("Your rider account is inactive. Contact the administrator.","error");
+      return;
+    }
+
+    showDashboard();
+    $("welcomeTitle").textContent="Hello, "+(riderRecord.name||riderRecord.riderName||"Rider")+" 👋";
+    $("riderInfo").textContent="Assigned rider ID: "+riderRecord.id;
+
+    const ordersQuery=query(collection(db,"orders"),where("riderId","==",riderRecord.id));
+    unsubscribeOrders=onSnapshot(ordersQuery,snapshot=>{
+      allOrders=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+      renderOrders();
+    },error=>{
+      console.error("Rider orders listener:",error);
+      showMessage("Could not load assigned orders. Check Firestore Security Rules and rider assignment fields.","error");
+      $("orderList").innerHTML='<div class="empty">Unable to load orders. Please contact admin.</div>';
+    });
+  }catch(error){
+    console.error(error);
+    showMessage(error.code==="permission-denied"
+      ?"Access denied. Check rider authentication and Firestore Security Rules."
+      :"Could not load rider profile. Check connection and Firebase setup.","error");
+  }
 }
 
-async function navigateToCustomer(orderId,button){
- const order=activeOrders.find(item=>item.id===orderId);
- if(!order){showToast("Order not found. Refresh orders.");return;}
+function getFilteredOrders(){
+  const search=$("searchInput").value.trim().toLowerCase();
+  const filter=$("statusFilter").value;
+  return allOrders.filter(order=>{
+    const status=normalizeStatus(order.status);
+    const text=[
+      order.id,getOrderId(order),order.customerName,order.customerPhone,
+      order.deliveryAddress,order.status
+    ].join(" ").toLowerCase();
 
- const target=getMapDestination(order);
- if(!target){
-  showToast("Customer GPS, Maps link and address are missing.");
-  return;
- }
-
- const fallbackURL="https://www.google.com/maps/dir/?api=1&destination="+
-  encodeURIComponent(target.destination)+"&travelmode=driving";
-
- if(!navigator.geolocation){
-  if(confirm("GPS is not supported by this browser. Open Maps using customer destination?")){
-   window.location.href=fallbackURL;
-  }
-  return;
- }
-
- const originalHTML=button?button.innerHTML:"";
- if(button){
-  button.disabled=true;
-  button.innerHTML='<i class="fa-solid fa-location-crosshairs fa-spin"></i> FETCHING GPS...';
- }
-
- try{
-  const position=await new Promise((resolve,reject)=>{
-   navigator.geolocation.getCurrentPosition(resolve,reject,{
-    enableHighAccuracy:true,timeout:20000,maximumAge:0
-   });
+    if(search&&!text.includes(search))return false;
+    if(filter==="active"&&!isActive(order))return false;
+    if(filter!=="all"&&filter!=="active"&&status!==filter)return false;
+    return true;
+  }).sort((a,b)=>{
+    const time=o=>{
+      const d=o.createdAt;
+      if(d&&typeof d.toMillis==="function")return d.toMillis();
+      if(d&&typeof d.seconds==="number")return d.seconds*1000;
+      if(typeof d==="string"||typeof d==="number")return new Date(d).getTime()||0;
+      return 0;
+    };
+    return time(b)-time(a);
   });
+}
 
-  const latitude=position.coords.latitude;
-  const longitude=position.coords.longitude;
-  if(!Number.isFinite(latitude)||!Number.isFinite(longitude)||
-     latitude < -90||latitude > 90||longitude < -180||longitude > 180){
-   throw new Error("Invalid rider GPS coordinates.");
+function renderOrders(){
+  const active=allOrders.filter(isActive);
+  const delivered=allOrders.filter(o=>normalizeStatus(o.status)==="delivered");
+  const cod=active.filter(o=>isCOD(o)&&!isCODCollected(o))
+    .reduce((sum,o)=>sum+(Number(o.total)||0),0);
+
+  $("activeCount").textContent=active.length;
+  $("deliveredCount").textContent=delivered.length;
+  $("codAmount").textContent=money(cod);
+
+  const orders=getFilteredOrders();
+  if(!orders.length){
+    $("orderList").innerHTML='<div class="empty">No matching orders found.<br><span class="small">When admin assigns an order to you, it will appear here.</span></div>';
+    return;
   }
 
-  const mapsURL=new URL("https://www.google.com/maps/dir/");
-  mapsURL.searchParams.set("api","1");
-  mapsURL.searchParams.set("origin",`${latitude},${longitude}`);
-  mapsURL.searchParams.set("destination",target.destination);
-  mapsURL.searchParams.set("travelmode","driving");
+  $("orderList").innerHTML=orders.map(order=>{
+    const status=normalizeStatus(order.status);
+    const address=order.deliveryAddress||"Address not provided";
+    const phone=String(order.customerPhone||"").replace(/[^\d+]/g,"");
+    const mapUrl=order.deliveryMapUrl||
+      (order.deliveryLatitude!=null&&order.deliveryLongitude!=null
+        ?`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(order.deliveryLatitude+","+order.deliveryLongitude)}`
+        :`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`);
 
-  showToast("Rider GPS found. Opening Google Maps...");
-  window.location.href=mapsURL.href;
- }catch(error){
-  console.error("Rider GPS error:",error);
-  let message="Could not fetch your current location.";
-  if(error.code===1)message="Location permission denied. Allow location access in phone/browser settings.";
-  else if(error.code===2)message="Current location unavailable. Turn on Location Services/GPS.";
-  else if(error.code===3)message="GPS request timed out. Move to an open area and try again.";
-  else if(error.message)message=error.message;
+    const items=Array.isArray(order.items)?order.items.map(item=>
+      `${safeText(item.name||"Item")} × ${Number(item.qty)||1}`
+    ).join("<br>"):"";
 
-  if(confirm(message+"\n\nOpen Maps using the saved customer destination instead?")){
-   window.location.href=fallbackURL;
-   return;
+    const nextActions=[];
+    if(status==="pending"||status==="confirmed")nextActions.push({status:"preparing",label:"Start preparing"});
+    if(status==="preparing")nextActions.push({status:"ready",label:"Ready for pickup"});
+    if(status==="ready")nextActions.push({status:"out_for_delivery",label:"Start delivery"});
+    if(status==="out_for_delivery")nextActions.push({status:"delivered",label:"Complete delivery",pin:true});
+
+    const codSection=isCOD(order)?`
+      <div class="info-box">
+        <div class="info-label">Cash on delivery</div>
+        <div class="info-value">${money(order.total)}</div>
+        <div class="small">${isCODCollected(order)?"Marked collected":"Collect from customer if due"}</div>
+      </div>`:"";
+
+    return `<article class="order-card">
+      <div class="order-head">
+        <div>
+          <div class="order-number">Order #${safeText(getOrderId(order))}</div>
+          <div class="small">${safeText(dateLabel(order.createdAt))}</div>
+        </div>
+        <span class="badge ${statusBadge(status)}">${safeText(displayStatus(status))}</span>
+      </div>
+
+      <div class="customer">${safeText(order.customerName||"Customer")}</div>
+      <div class="address">${safeText(address)}</div>
+
+      <div class="order-info">
+        <div class="info-box">
+          <div class="info-label">Order total</div>
+          <div class="info-value">${money(order.total)}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Payment method</div>
+          <div class="info-value">${safeText(order.paymentMethod||"Not specified")}</div>
+        </div>
+        ${codSection}
+        <div class="info-box">
+          <div class="info-label">Payment status</div>
+          <div class="info-value">${safeText(order.paymentStatus||"Not specified")}</div>
+        </div>
+      </div>
+
+      ${items?`<div class="items"><strong>Items</strong><br>${items}</div>`:""}
+      ${order.note?`<div class="items"><strong>Customer note:</strong> ${safeText(order.note)}</div>`:""}
+
+      <div class="order-actions">
+        ${phone?`<a class="btn" href="tel:${safeText(phone)}">☎ Call customer</a>`:""}
+        <a class="btn" href="${safeText(mapUrl)}" target="_blank" rel="noopener noreferrer">📍 Open Maps</a>
+        ${nextActions.map(action=>`
+          <button class="btn ${action.status==="delivered"?"success":"primary"}"
+            data-order="${safeText(order.id)}"
+            data-status="${safeText(action.status)}"
+            data-pin="${action.pin?"1":"0"}"
+            ${actionBusy.has(order.id)?"disabled":""}>
+            ${safeText(action.label)}
+          </button>`).join("")}
+      </div>
+    </article>`;
+  }).join("");
+}
+
+async function changeStatus(orderId,status,requiresPin){
+  if(!riderRecord||actionBusy.has(orderId))return;
+  const order=allOrders.find(o=>o.id===orderId);
+  if(!order)return;
+
+  if(status==="delivered"&&requiresPin){
+    const entered=prompt("Enter delivery PIN:");
+    if(entered===null)return;
+    if(String(entered).trim()!==DELIVERY_PIN){
+      showMessage("Incorrect PIN. Delivery status was not changed.","error");
+      return;
+    }
+    if(!confirm("Confirm the order has been handed to the customer?"))return;
+  }else{
+    if(!confirm("Change order #"+getOrderId(order)+" to "+displayStatus(status)+"?"))return;
   }
-  if(button){button.disabled=false;button.innerHTML=originalHTML;}
- }
-}
 
-/* ---------------- ORDER DISPLAY ---------------- */
-function renderActiveOrders(){
- $("active-count").textContent=activeOrders.length;
- $("active-badge").textContent=`${activeOrders.length} ORDER${activeOrders.length===1?"":"S"}`;
-
- if(!activeOrders.length){
-  $("active-orders").innerHTML=`<div class="card empty"><i class="fa-solid fa-box-open"></i><strong>No active deliveries</strong><p>New assigned orders will appear here.</p></div>`;
-  return;
- }
-
- $("active-orders").innerHTML=activeOrders.map(order=>{
-  const id=String(order.id),safeId=escapeHTML(id);
-  const customer=escapeHTML(getCustomer(order));
-  const address=getAddress(order),phone=getPhone(order);
-  const destination=getMapDestination(order),total=getTotal(order);
-
-  return `<article class="order-card" id="order-card-${safeId}">
-   <div class="order-top">
-    <div><div class="order-number">ORDER #${safeId.slice(-7)}</div>
-    <div class="order-date">${escapeHTML(formatDate(order.createdAt||order.orderDate))}</div></div>
-    <span class="status">OUT FOR DELIVERY</span>
-   </div>
-   <div class="order-divider"></div>
-   <div class="info-row"><div class="info-icon"><i class="fa-solid fa-user"></i></div>
-    <div class="info-text"><label>CUSTOMER</label><div>${customer}</div></div></div>
-   <div class="info-row"><div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
-    <div class="info-text"><label>DELIVERY ADDRESS</label><div>${escapeHTML(address)}</div></div></div>
-   <div class="info-row"><div class="info-icon"><i class="fa-solid fa-basket-shopping"></i></div>
-    <div class="info-text"><label>ORDER ITEMS</label><div class="items-text">${escapeHTML(getItemsText(order))}</div></div></div>
-   <div class="amount-row"><span>Order total</span><strong>${formatMoney(total)}</strong></div>
-   <div class="actions">
-    ${phone?`<a class="call-btn" href="tel:${escapeHTML(phone)}"><i class="fa-solid fa-phone"></i> CALL CUSTOMER</a>`:`<button type="button" disabled>NO PHONE</button>`}
-    ${destination?`<button type="button" class="map-btn" data-navigate="${safeId}"><i class="fa-solid fa-location-arrow"></i> NAVIGATE</button>`:`<button type="button" disabled>NO LOCATION</button>`}
-   </div>
-   <div class="pin-area">
-    <label for="pin-${safeId}"><i class="fa-solid fa-shield-halved"></i> CUSTOMER DELIVERY PIN</label>
-    <div class="pin-row">
-     <input id="pin-${safeId}" type="password" inputmode="numeric" maxlength="8" placeholder="Enter PIN" autocomplete="off">
-     <button type="button" data-deliver="${safeId}">VERIFY & DELIVER</button>
-    </div>
-   </div>
-  </article>`;
- }).join("");
-
- $("active-orders").querySelectorAll("[data-deliver]").forEach(button=>{
-  button.addEventListener("click",()=>markDelivered(button.dataset.deliver,button));
- });
- $("active-orders").querySelectorAll("[data-navigate]").forEach(button=>{
-  button.addEventListener("click",()=>navigateToCustomer(button.dataset.navigate,button));
- });
-}
-
-function renderHistory(){
- $("delivered-count").textContent=historyOrders.length;
- const total=historyOrders.reduce((sum,order)=>{
-  const n=Number(getTotal(order));return sum+(Number.isFinite(n)?n:0);
- },0);
- $("earnings").textContent=formatMoney(total);
-
- if(!historyOrders.length){
-  $("history-orders").innerHTML=`<div class="card empty"><i class="fa-solid fa-clock-rotate-left"></i><strong>No completed deliveries yet</strong><p>Your delivered orders will appear here.</p></div>`;
-  return;
- }
-
- $("history-orders").innerHTML=historyOrders.map(order=>`
-  <article class="order-card">
-   <div class="order-top">
-    <div><div class="order-number">ORDER #${escapeHTML(order.id.slice(-7))}</div>
-    <div class="order-date">${escapeHTML(formatDate(order.deliveredAt||order.createdAt))}</div></div>
-    <span class="status done"><i class="fa-solid fa-check"></i> DELIVERED</span>
-   </div>
-   <div class="order-divider"></div>
-   <div class="info-row"><div class="info-icon"><i class="fa-solid fa-user-check"></i></div>
-    <div class="info-text"><label>CUSTOMER</label><div>${escapeHTML(getCustomer(order))}</div></div></div>
-   <div class="info-row"><div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
-    <div class="info-text"><label>DELIVERY ADDRESS</label><div>${escapeHTML(getAddress(order))}</div></div></div>
-   <div class="amount-row"><span>Order total</span><strong>${formatMoney(getTotal(order))}</strong></div>
-  </article>`).join("");
-}
-
-/* ---------------- FIRESTORE LISTENERS ---------------- */
-function stopListeners(){
- if(stopActive)stopActive();
- if(stopHistory)stopHistory();
- stopActive=null;stopHistory=null;
-}
-function startListeners(){
- if(!rider)return;
- stopListeners();knownActiveIds=new Set();initialActiveSnapshotReceived=false;
-
- const activeQuery=query(collection(db,"orders"),
-  where("status","==","out_for_delivery"),
-  where("riderName","==",rider.name));
-
- stopActive=onSnapshot(activeQuery,snapshot=>{
-  const newOrders=[];
-  if(initialActiveSnapshotReceived){
-   for(const orderDoc of snapshot.docs){
-    if(!knownActiveIds.has(orderDoc.id))newOrders.push({id:orderDoc.id,...orderDoc.data()});
-   }
+  actionBusy.add(orderId);
+  renderOrders();
+  try{
+    // Only the order status is updated. Payment fields are unchanged.
+    await updateDoc(doc(db,"orders",orderId),{status});
+    showMessage("Order status updated to "+displayStatus(status)+".","success");
+  }catch(error){
+    console.error(error);
+    showMessage(error.code==="permission-denied"
+      ?"Update denied. Check Firestore Security Rules for rider status updates."
+      :"Could not update order status. Please retry or contact admin.","error");
+  }finally{
+    actionBusy.delete(orderId);
+    renderOrders();
   }
-  knownActiveIds=new Set(snapshot.docs.map(item=>item.id));
-  initialActiveSnapshotReceived=true;
+}
 
-  activeOrders=snapshot.docs.map(item=>({id:item.id,...item.data()}));
-  activeOrders.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
-  renderActiveOrders();
-
-  if(newOrders.length){
-   playOrderSound();
-   const newest=newOrders[newOrders.length-1];
-   showNewOrderNotification(newest);
-   if(newOrders.length>1){
-    $("notification-message").textContent=`${newOrders.length} new deliveries assigned. Latest: #${newest.id.slice(-7)}.`;
-   }
+$("loginForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  clearMessage();
+  $("loginBtn").disabled=true;
+  $("loginBtn").textContent="Signing in…";
+  try{
+    await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);
+  }catch(error){
+    console.error(error);
+    showMessage(error.code==="auth/invalid-credential"||
+      error.code==="auth/user-not-found"||
+      error.code==="auth/wrong-password"
+      ?"Email or password is incorrect."
+      :error.code==="auth/operation-not-allowed"
+      ?"Enable Email/Password in Firebase Authentication."
+      :"Sign-in failed. Check Firebase Authentication setup and internet connection.","error");
+  }finally{
+    $("loginBtn").disabled=false;
+    $("loginBtn").textContent="Sign in";
   }
- },error=>{
-  console.error("Active order listener:",error);
-  showToast("Unable to load active orders. Check internet and Firestore permissions.");
-  $("active-orders").innerHTML=`<div class="card empty"><strong>Could not load active orders</strong><p>Check Firestore rules and the riderName field.</p></div>`;
- });
-
- const historyQuery=query(collection(db,"orders"),
-  where("status","==","delivered"),
-  where("riderName","==",rider.name));
-
- stopHistory=onSnapshot(historyQuery,snapshot=>{
-  historyOrders=snapshot.docs.map(item=>({id:item.id,...item.data()}));
-  historyOrders.sort((a,b)=>(b.deliveredAt?.toMillis?.()||0)-(a.deliveredAt?.toMillis?.()||0));
-  renderHistory();
- },error=>{
-  console.error("History listener:",error);
-  $("history-orders").innerHTML=`<div class="card empty"><strong>Could not load history</strong><p>Check internet and Firestore permissions.</p></div>`;
- });
-}
-
-/* ---------------- VERIFY DELIVERY PIN ---------------- */
-async function markDelivered(orderId,button){
- if(!rider)return showToast("Please log in again.");
- const input=document.getElementById("pin-"+orderId);
- const enteredPin=String(input?.value||"").trim();
- if(!enteredPin)return showToast("Enter the customer's delivery PIN.");
-
- const order=activeOrders.find(item=>item.id===orderId);
- if(!order)return showToast("Order is no longer active. Refresh orders.");
-
- const expectedPin=String(order.orderPin??order.deliveryPin??"").trim();
- if(!expectedPin)return showToast("No delivery PIN found. Contact admin.");
- if(enteredPin!==expectedPin){input.value="";input.focus();return showToast("Incorrect delivery PIN.");}
- if(!confirm(`Confirm order #${orderId.slice(-7)} has been delivered?`))return;
-
- button.disabled=true;button.textContent="UPDATING...";
- try{
-  const orderRef=doc(db,"orders",orderId);
-  const latest=await getDoc(orderRef);
-  if(!latest.exists())throw new Error("Order not found.");
-  const data=latest.data();
-  if(data.status!=="out_for_delivery")throw new Error("This order is no longer out for delivery.");
-  if(String(data.riderName||"")!==rider.name)throw new Error("This order is not assigned to this rider.");
-  const latestPin=String(data.orderPin??data.deliveryPin??"").trim();
-  if(enteredPin!==latestPin)throw new Error("Delivery PIN did not match.");
-
-  await updateDoc(orderRef,{status:"delivered",deliveredAt:serverTimestamp()});
-  showToast("Delivery completed successfully.");
- }catch(error){
-  console.error("Delivery update failed:",error);
-  showToast(error.message||"Could not update order. Check Firebase permissions.");
-  button.disabled=false;button.textContent="VERIFY & DELIVER";
- }
-}
-
-/* ---------------- RIDER LOGIN ---------------- */
-function showDashboard(visible){
- $("login-section").classList.toggle("hidden",visible);
- $("dashboard-section").classList.toggle("hidden",!visible);
-}
-async function loginRider(nameInput,phoneInput){
- const name=normalizeName(nameInput),phone=normalizePhone(phoneInput);
- if(name.length<3)throw new Error("Enter your full name.");
- if(!/^[6-9]\d{9}$/.test(phone))throw new Error("Enter a valid 10-digit Indian mobile number.");
-
- const riderRef=doc(db,"riders",name);
- const riderSnap=await getDoc(riderRef);
-
- if(riderSnap.exists()){
-  const data=riderSnap.data();
-  const storedPhone=normalizePhone(data.riderPhone||data.phone||data.mobile||"");
-  if(storedPhone&&storedPhone!==phone)throw new Error("This name is registered with a different phone number.");
-  if(!storedPhone)throw new Error("Rider record has no registered phone. Ask admin to update it.");
- }else{
-  // First-login account creation retained from the supplied version.
-  // For production, create riders using an authenticated admin process.
-  await setDoc(riderRef,{riderName:name,riderPhone:phone,status:"Online",lastLogin:serverTimestamp()},{merge:true});
- }
-
- await updateDoc(riderRef,{status:"Online",lastLogin:serverTimestamp()});
- rider={name,phone};
- localStorage.setItem("ff_rider_name",name);
- localStorage.setItem("ff_rider_phone",phone);
-
- $("welcome-title").textContent=`Welcome, ${name.split(" ")[0]} 👋`;
- $("profile-name").textContent=name;
- $("profile-phone").textContent=phone;
- $("profile-avatar").textContent=name.charAt(0);
- showDashboard(true);startListeners();
-}
-
-$("riderPhoneInput").addEventListener("input",event=>{
- event.target.value=event.target.value.replace(/\D/g,"").slice(0,10);
-});
-$("login-form").addEventListener("submit",async event=>{
- event.preventDefault();
- const button=$("login-button");
- button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> PLEASE WAIT...';
- try{
-  await loginRider($("riderNameInput").value,$("riderPhoneInput").value);
-  showToast("Welcome to Freshfry Partner.");
- }catch(error){
-  console.error("Login error:",error);
-  showToast(error.message||"Login failed. Check internet and Firebase permissions.");
- }finally{
-  button.disabled=false;button.innerHTML='START DUTY <i class="fa-solid fa-arrow-right"></i>';
- }
 });
 
-$("refresh-button").addEventListener("click",()=>{
- if(!rider)return showToast("Please log in first.");
- startListeners();showToast("Refreshing deliveries...");
+$("logoutBtn").addEventListener("click",async()=>{
+  if(unsubscribeOrders){unsubscribeOrders();unsubscribeOrders=null;}
+  try{
+    await signOut(auth);
+    allOrders=[];
+    riderRecord=null;
+    showLogin();
+    clearMessage();
+  }catch(error){
+    showMessage("Could not sign out. Please try again.","error");
+  }
 });
 
-$("logout-button").addEventListener("click",async()=>{
- if(!confirm("Log out from this device?"))return;
- stopListeners();
- try{
-  if(rider)await updateDoc(doc(db,"riders",rider.name),{status:"Offline",lastLogout:serverTimestamp()});
- }catch(error){console.warn("Could not update rider status:",error);}
-
- localStorage.removeItem("ff_rider_name");
- localStorage.removeItem("ff_rider_phone");
- rider=null;activeOrders=[];historyOrders=[];knownActiveIds.clear();
- initialActiveSnapshotReceived=false;
- $("notification-banner").classList.remove("show");
- showDashboard(false);$("riderNameInput").value="";$("riderPhoneInput").value="";
- showToast("Logged out.");
+$("searchInput").addEventListener("input",renderOrders);
+$("statusFilter").addEventListener("change",renderOrders);
+$("orderList").addEventListener("click",event=>{
+  const button=event.target.closest("[data-order]");
+  if(!button)return;
+  changeStatus(button.dataset.order,button.dataset.status,button.dataset.pin==="1");
 });
 
-async function restoreSession(){
- const name=localStorage.getItem("ff_rider_name");
- const phone=localStorage.getItem("ff_rider_phone");
- if(!name||!phone||!/^[6-9]\d{9}$/.test(phone)){showDashboard(false);return;}
-
- try{
-  const riderSnap=await getDoc(doc(db,"riders",name));
-  if(!riderSnap.exists()){
-   localStorage.removeItem("ff_rider_name");localStorage.removeItem("ff_rider_phone");
-   showDashboard(false);return;
+onAuthStateChanged(auth,user=>{
+  if(user)setupRider(user);
+  else{
+    if(unsubscribeOrders){unsubscribeOrders();unsubscribeOrders=null;}
+    allOrders=[];
+    riderRecord=null;
+    showLogin();
   }
-  const data=riderSnap.data();
-  const storedPhone=normalizePhone(data.riderPhone||data.phone||data.mobile||"");
-  if(!storedPhone||storedPhone!==phone){
-   localStorage.removeItem("ff_rider_name");localStorage.removeItem("ff_rider_phone");
-   showDashboard(false);return;
-  }
-
-  rider={name,phone};
-  $("riderNameInput").value=name;$("riderPhoneInput").value=phone;
-  $("welcome-title").textContent=`Welcome, ${name.split(" ")[0]} 👋`;
-  $("profile-name").textContent=name;$("profile-phone").textContent=phone;
-  $("profile-avatar").textContent=name.charAt(0);
-  showDashboard(true);startListeners();
- }catch(error){
-  console.error("Session restore failed:",error);
-  showDashboard(false);
-  showToast("Could not reconnect. Check internet and try again.");
- }
-}
-restoreSession();
-</script>
-
-<script>
-if("serviceWorker" in navigator){
- window.addEventListener("load",()=>{
-  navigator.serviceWorker.register("/sw.js")
-   .then(registration=>console.log("Freshfry Partner service worker registered:",registration.scope))
-   .catch(error=>console.error("Service worker registration failed:",error));
- });
-}
+});
 </script>
 </body>
 </html>
