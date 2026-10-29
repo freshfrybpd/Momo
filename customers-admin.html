@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Customers</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root{--orange:#ff5e00;--bg:#101010;--sidebar:#151515;--card:#191919;--line:#303030;--muted:#929292;--green:#48d994}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:white;font-family:Outfit,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+.sidebar{width:245px;position:fixed;inset:0 auto 0 0;z-index:30;background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .25s}
+.brand{padding:22px 19px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.brand-icon{width:43px;height:43px;background:var(--orange);border-radius:14px;display:grid;place-items:center;font-size:19px}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:-.8px}
+.brand-name span{color:var(--orange)}
+.brand-sub{font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.nav-label{padding:22px 20px 9px;color:#666;font-size:9px;font-weight:900;letter-spacing:1.5px}
+.sidebar-nav{padding:0 11px;overflow:auto;flex:1}
+.nav-link{display:flex;align-items:center;gap:12px;padding:12px;border-radius:11px;color:#aaa;font-size:12px;font-weight:700;margin-bottom:4px}
+.nav-link i{width:19px;text-align:center}
+.nav-link:hover{background:#242424;color:white}
+.nav-link.active{background:#302015;color:#ff9559}
+.nav-link.active i{color:var(--orange)}
+.sidebar-bottom{padding:13px;border-top:1px solid var(--line)}
+.sidebar-note{padding:12px;background:#21170f;border:1px solid #3b281b;border-radius:12px;color:#c9b3a3;font-size:10px;line-height:1.7}
+.sidebar-note i{color:var(--orange)}
+.main{margin-left:245px;min-width:0}
+.topbar{height:68px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 26px;background:#101010ed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-left,.top-actions{display:flex;align-items:center;gap:12px}
+.breadcrumb{color:var(--muted);font-size:11px}
+.breadcrumb strong{color:white}
+.menu-toggle{display:none;width:39px;height:39px;background:#202020;color:white;border:1px solid var(--line);border-radius:11px}
+.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:#202020;color:#ddd;padding:10px 13px;border-radius:10px;font-size:10px;font-weight:800}
+.action-btn i{color:var(--orange)}
+.content{max-width:1600px;margin:auto;padding:27px 26px 45px}
+.eyebrow{color:var(--orange);font-size:9px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:23px}
+h1{font-size:30px;letter-spacing:-1px;margin:8px 0 6px}
+.page-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.refresh-note{font-size:10px;color:var(--muted);margin-top:9px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;min-width:0}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stat-label{font-size:10px;font-weight:700;color:var(--muted)}
+.stat-icon{width:34px;height:34px;border-radius:11px;background:#2b1b12;color:var(--orange);display:grid;place-items:center}
+.stat-value{font-size:26px;font-weight:900;margin-top:12px;letter-spacing:-.8px;overflow-wrap:anywhere}
+.stat-foot{font-size:9px;color:var(--muted);margin-top:4px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.panel-head{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{font-size:14px;margin:0;font-weight:900}
+.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}
+.filters{padding:15px 17px;display:grid;grid-template-columns:minmax(180px,1fr) minmax(140px,190px);gap:10px;border-bottom:1px solid var(--line)}
+.search-box{position:relative}
+.search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#777;font-size:12px}
+.control{width:100%;padding:11px 12px;background:#111;color:#eee;border:1px solid #353535;border-radius:10px;font-size:11px;outline:none}
+.control:focus{border-color:var(--orange)}
+.search-box .control{padding-left:34px}
+select.control{color-scheme:dark}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;text-align:left;min-width:800px}
+th{padding:13px 15px;color:#777;font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap}
+td{padding:14px 15px;border-top:1px solid #292929;font-size:10px;color:#ddd;vertical-align:middle}
+.customer-cell{display:flex;align-items:center;gap:10px;min-width:180px}
+.avatar{width:37px;height:37px;flex:0 0 37px;border-radius:12px;background:#302015;color:#ff9559;display:grid;place-items:center;font-size:14px;font-weight:900}
+.customer-name{font-size:11px;font-weight:800;color:white;overflow-wrap:anywhere}
+.muted{color:var(--muted);font-size:9px;margin-top:5px;line-height:1.5}
+.amount{font-size:11px;font-weight:900;white-space:nowrap}
+.badge{display:inline-flex;padding:6px 8px;border-radius:7px;font-size:8px;font-weight:900;white-space:nowrap;background:#292929;color:#ccc}
+.small-btn{border:1px solid #383838;background:#222;color:#eee;padding:8px 10px;border-radius:8px;font-size:9px;font-weight:800;display:inline-flex;align-items:center;gap:6px}
+.small-btn i{color:var(--orange)}
+.empty-state{padding:40px 15px;text-align:center;color:var(--muted);font-size:11px;line-height:1.8}
+.empty-state i{display:block;font-size:27px;color:#555;margin-bottom:12px}
+.error-banner{padding:12px 14px;margin-bottom:15px;border-radius:10px;background:#351b1b;border:1px solid #603030;color:#ffb3b3;font-size:11px;line-height:1.7}
+.pagination{padding:14px 17px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px}
+.modal{position:fixed;inset:0;z-index:60;background:#000b;padding:16px;display:none;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.modal-panel{width:100%;max-width:600px;max-height:90dvh;overflow-y:auto;background:#191919;border:1px solid #393939;border-radius:19px;padding:20px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.modal-head h2{margin:0;font-size:17px}
+.close-btn{width:34px;height:34px;background:#262626;color:white;border:1px solid #393939;border-radius:10px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.detail-box{padding:12px;border:1px solid #303030;border-radius:11px;min-width:0}
+.detail-wide{grid-column:1/-1}
+.detail-label{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.5px}
+.detail-value{font-size:11px;line-height:1.7;margin-top:6px;overflow-wrap:anywhere}
+.order-item{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #303030;font-size:10px}
+.scrim{display:none;position:fixed;inset:0;background:#0009;z-index:25}
+.toast{position:fixed;z-index:100;bottom:24px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#282828;border:1px solid #444;border-radius:12px;padding:12px 17px;color:white;font-size:11px;max-width:calc(100% - 30px);transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.show{transform:translateX(0)}
+.scrim.show{display:block}
+.main{margin-left:0}
+.menu-toggle{display:grid;place-items:center}
+.topbar{height:62px;padding:0 13px}
+.content{padding:20px 12px 35px}
+.page-head{flex-direction:column}
+h1{font-size:27px}
+.filters{grid-template-columns:1fr}
+.top-actions .action-btn{padding:10px}
+.top-actions .action-btn span{display:none}
+}
+@media(max-width:390px){.stats{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.detail-wide{grid-column:auto}}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="admin.html">
+    <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+    <div><div class="brand-name">Fresh<span>Fry</span></div><div class="brand-sub">RESTAURANT CONTROL</div></div>
+  </a>
+  <div class="nav-label">MAIN MENU</div>
+  <nav class="sidebar-nav">
+    <a class="nav-link" href="admin.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+    <a class="nav-link" href="orders-admin.html"><i class="fa-solid fa-receipt"></i> Orders</a>
+    <a class="nav-link" href="menu-admin.html"><i class="fa-solid fa-burger"></i> Menu Management</a>
+    <a class="nav-link" href="delivery-admin.html"><i class="fa-solid fa-motorcycle"></i> Delivery</a>
+    <a class="nav-link active" href="customers-admin.html"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="nav-label">BUSINESS</div>
+    <a class="nav-link" href="marketing-admin.html"><i class="fa-solid fa-bullhorn"></i> Marketing & Offers</a>
+    <a class="nav-link" href="payments-admin.html"><i class="fa-solid fa-wallet"></i> Payments</a>
+    <a class="nav-link" href="reports-admin.html"><i class="fa-solid fa-chart-column"></i> Reports</a>
+    <a class="nav-link" href="settings-admin.html"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="nav-label">WEBSITE</div>
+    <a class="nav-link" href="index.html" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Customer Website</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="sidebar-note"><i class="fa-solid fa-shield-halved"></i> Customer data is private. Restrict access to authorized admins only.</div></div>
+</aside>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+<header class="topbar">
+  <div class="top-left">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+    <div class="breadcrumb">FreshFry / <strong>Customers</strong></div>
+  </div>
+  <div class="top-actions">
+    <button class="action-btn" id="refreshBtn" type="button"><i class="fa-solid fa-rotate"></i><span>Refresh</span></button>
+  </div>
+</header>
+
+<main class="content">
+  <div id="errorBanner" class="error-banner" hidden></div>
+  <div class="eyebrow">Customer relationships</div>
+  <section class="page-head">
+    <div>
+      <h1>Customers</h1>
+      <p>View customer contact information and order history from existing Firestore records.</p>
+      <div class="refresh-note" id="refreshNote">Connecting to Firebase...</div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Unique Customers</span><span class="stat-icon"><i class="fa-solid fa-users"></i></span></div>
+      <div class="stat-value" id="totalCustomers">—</div>
+      <div class="stat-foot">Merged using phone number where available</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Customers with Orders</span><span class="stat-icon"><i class="fa-solid fa-bag-shopping"></i></span></div>
+      <div class="stat-value" id="orderingCustomers">—</div>
+      <div class="stat-foot">At least one recorded order</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Total Order Value</span><span class="stat-icon"><i class="fa-solid fa-indian-rupee-sign"></i></span></div>
+      <div class="stat-value" id="totalRevenue">—</div>
+      <div class="stat-foot">Sum of recorded order totals, not net profit</div>
+    </article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>Customer Directory</h2><p id="resultCount">Loading customer records...</p></div>
+    </div>
+    <div class="filters">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="control" id="searchInput" type="search" placeholder="Search name or phone number..." autocomplete="off">
+      </div>
+      <select class="control" id="customerFilter" aria-label="Filter customers">
+        <option value="all">All customers</option>
+        <option value="ordered">Has orders</option>
+        <option value="no-orders">No recorded orders</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Customer</th><th>Phone</th><th>Orders</th><th>Total order value</th><th>Last order</th><th>Details</th>
+        </tr></thead>
+        <tbody id="customersBody">
+          <tr><td colspan="6" class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Loading customer records...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span id="paginationLabel">0 customers</span><span>Customer records are read-only on this page.</span></div>
+  </section>
+</main>
+</div>
+
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h2 id="detailTitle">Customer details</h2>
+      <button class="close-btn" id="closeModal" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Existing FreshFry Firebase configuration preserved. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+
+let orders = [];
+let users = [];
+let customerRecords = [];
+let unsubscribers = [];
+let toastTimer;
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+function money(value) {
+  return "₹"+Number(value||0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+function dateOf(value) {
+  if(!value)return null;
+  if(typeof value.toDate==="function")return value.toDate();
+  if(typeof value.seconds==="number")return new Date(value.seconds*1000);
+  const d=new Date(value);
+  return Number.isNaN(d.getTime())?null:d;
+}
+function dateLabel(value) {
+  const d=dateOf(value);
+  return d?d.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
+}
+function digits(value) {
+  return String(value||"").replace(/\D/g,"");
+}
+function normalizedPhone(value) {
+  const d=digits(value);
+  if(d.length===12&&d.startsWith("91"))return d.slice(2);
+  return d;
+}
+function toast(message) {
+  $("toast").textContent=message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800);
+}
+function showError(message) {
+  $("errorBanner").textContent=message;
+  $("errorBanner").hidden=false;
+}
+function clearError() {
+  $("errorBanner").hidden=true;
+  $("errorBanner").textContent="";
+}
+
+function buildCustomers() {
+  const byPhone=new Map();
+  const noPhone=[];
+
+  function getRecord(phone,id,name) {
+    const key=phone ? "phone:"+phone : "id:"+id;
+    let record=byPhone.get(key);
+    if(!record) {
+      record={
+        key,phone:phone||"",name:name||"Customer",
+        addresses:new Set(),orderList:[],sourceIds:new Set()
+      };
+      byPhone.set(key,record);
+    } else if((!record.name||record.name==="Customer")&&name) {
+      record.name=name;
+    }
+    return record;
+  }
+
+  users.forEach(user=>{
+    const phone=normalizedPhone(user.phone||user.customerPhone||user.mobile||user.phoneNumber);
+    const name=String(user.name||user.customerName||user.fullName||user.displayName||"Customer");
+    const record=getRecord(phone,user.id,name);
+    record.sourceIds.add(user.id);
+    const address=user.address||user.deliveryAddress||"";
+    if(address)record.addresses.add(String(address));
+  });
+
+  orders.forEach(order=>{
+    const phone=normalizedPhone(order.customerPhone||order.phone||order.phoneNumber);
+    const name=String(order.customerName||order.name||"Customer");
+    const record=getRecord(phone,order.id,name);
+    record.orderList.push(order);
+    const address=order.deliveryAddress||order.customerLocation||"";
+    if(address)record.addresses.add(String(address));
+  });
+
+  customerRecords=[...byPhone.values()].map(record=>{
+    const sorted=[...record.orderList].sort((a,b)=>
+      (dateOf(b.createdAt)?.getTime()||0)-(dateOf(a.createdAt)?.getTime()||0)
+    );
+    const total=record.orderList.reduce((sum,order)=>sum+Number(order.total||0),0);
+    return {
+      ...record,
+      orderList:sorted,
+      orderCount:record.orderList.length,
+      totalSpent:total,
+      lastOrder:sorted[0]?.createdAt||null
+    };
+  }).sort((a,b)=>b.totalSpent-a.totalSpent);
+
+  renderStats();
+  renderCustomers();
+}
+
+function renderStats() {
+  $("totalCustomers").textContent=customerRecords.length.toLocaleString("en-IN");
+  $("orderingCustomers").textContent=customerRecords.filter(c=>c.orderCount>0).length.toLocaleString("en-IN");
+  $("totalRevenue").textContent=money(orders.reduce((sum,o)=>sum+Number(o.total||0),0));
+}
+
+function filteredCustomers() {
+  const q=$("searchInput").value.trim().toLowerCase();
+  const filter=$("customerFilter").value;
+
+  return customerRecords.filter(c=>{
+    const matchesText=(c.name+" "+c.phone).toLowerCase().includes(q);
+    const matchesFilter=filter==="all"||
+      (filter==="ordered"&&c.orderCount>0)||
+      (filter==="no-orders"&&c.orderCount===0);
+    return matchesText&&matchesFilter;
+  });
+}
+
+function renderCustomers() {
+  const filtered=filteredCustomers();
+  $("resultCount").textContent=`${filtered.length} matching customer(s) · ${customerRecords.length} total`;
+  $("paginationLabel").textContent=`${filtered.length} customer(s) shown`;
+
+  if(!filtered.length) {
+    $("customersBody").innerHTML=`<tr><td colspan="6" class="empty-state">
+      <i class="fa-solid fa-users"></i>No customer records found.
+    </td></tr>`;
+    return;
+  }
+
+  $("customersBody").innerHTML=filtered.map(c=>{
+    const initial=(c.name.trim()[0]||"C").toUpperCase();
+    return `<tr>
+      <td><div class="customer-cell">
+        <div class="avatar">${esc(initial)}</div>
+        <div><div class="customer-name">${esc(c.name)}</div>
+        <div class="muted">${c.orderCount?"Customer with orders":"No orders recorded"}</div></div>
+      </div></td>
+      <td>${c.phone?esc(c.phone):'<span class="muted">Not available</span>'}</td>
+      <td><span class="badge">${c.orderCount}</span></td>
+      <td><div class="amount">${money(c.totalSpent)}</div></td>
+      <td>${esc(dateLabel(c.lastOrder))}</td>
+      <td><button class="small-btn" type="button" data-action="view" data-key="${esc(c.key)}">
+        <i class="fa-solid fa-eye"></i> View
+      </button></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderCustomerDetails(customer) {
+  const addresses=[...customer.addresses];
+  $("detailTitle").textContent=customer.name;
+
+  $("detailContent").innerHTML=`
+    <div class="detail-grid">
+      <div class="detail-box"><div class="detail-label">Customer name</div><div class="detail-value">${esc(customer.name)}</div></div>
+      <div class="detail-box"><div class="detail-label">Phone number</div><div class="detail-value">${esc(customer.phone||"Not available")}</div>
+        ${customer.phone?`<a class="small-btn" style="margin-top:8px" href="tel:${esc(customer.phone)}"><i class="fa-solid fa-phone"></i> Call</a>`:""}
+      </div>
+      <div class="detail-box"><div class="detail-label">Total orders</div><div class="detail-value">${customer.orderCount}</div></div>
+      <div class="detail-box"><div class="detail-label">Total order value</div><div class="detail-value" style="color:var(--orange);font-weight:900;font-size:16px">${money(customer.totalSpent)}</div></div>
+      <div class="detail-box detail-wide"><div class="detail-label">Saved / recorded addresses</div><div class="detail-value">${
+        addresses.length?addresses.map(esc).join("<br><br>"):"No addresses recorded"
+      }</div></div>
+      <div class="detail-box detail-wide">
+        <div class="detail-label">Order history</div>
+        <div style="margin-top:8px">${
+          customer.orderList.length
+          ? customer.orderList.map(order=>`
+            <div class="order-item">
+              <div><strong>#${esc(order.id)}</strong><div class="muted">${esc(dateLabel(order.createdAt))} · ${esc(String(order.status||"pending").replace(/_/g," "))}</div></div>
+              <strong>${money(order.total)}</strong>
+            </div>`).join("")
+          : '<div class="detail-value">No orders found for this customer.</div>'
+        }</div>
+      </div>
+    </div>`;
+
+  $("detailModal").classList.add("show");
+  document.body.style.overflow="hidden";
+}
+
+function closeModal() {
+  $("detailModal").classList.remove("show");
+  document.body.style.overflow="";
+}
+
+function listenCollection(name,onData) {
+  const unsubscribe=onSnapshot(collection(db,name),snapshot=>{
+    onData(snapshot.docs.map(d=>({id:d.id,...d.data()})));
+    clearError();
+    $("refreshNote").textContent="Live Firestore data · "+new Date().toLocaleTimeString("en-IN");
+  },error=>{
+    console.error("Collection read failed:",name,error);
+    showError(`Could not read "${name}". Check Firestore permissions. ${error.code||error.message||""}`);
+  });
+  unsubscribers.push(unsubscribe);
+}
+
+function startListeners() {
+  unsubscribers.forEach(fn=>{try{fn()}catch{}});
+  unsubscribers=[];
+
+  $("refreshBtn").disabled=true;
+  $("refreshNote").textContent="Connecting to customer records...";
+
+  // These are existing collections referenced by the FreshFry admin.
+  listenCollection("orders",rows=>{
+    orders=rows;
+    buildCustomers();
+    $("refreshBtn").disabled=false;
+  });
+
+  listenCollection("users",rows=>{
+    users=rows;
+    buildCustomers();
+    $("refreshBtn").disabled=false;
+  });
+
+  listenCollection("customers",rows=>{
+    // Merge this source with the existing users and orders records.
+    // Preserve customer collection data by combining its records into users.
+    const fromUsers=users.filter(u=>!u.__customerCollection);
+    users=[
+      ...fromUsers,
+      ...rows.map(row=>({...row,__customerCollection:true}))
+    ];
+    buildCustomers();
+    $("refreshBtn").disabled=false;
+  });
+}
+
+$("customersBody").addEventListener("click",event=>{
+  const button=event.target.closest('button[data-action="view"]');
+  if(!button)return;
+  const customer=customerRecords.find(c=>c.key===button.dataset.key);
+  if(customer)renderCustomerDetails(customer);
+});
+
+$("searchInput").addEventListener("input",renderCustomers);
+$("customerFilter").addEventListener("change",renderCustomers);
+$("refreshBtn").addEventListener("click",()=>{
+  startListeners();
+  toast("Refreshing customer data...");
+});
+$("closeModal").addEventListener("click",closeModal);
+$("detailModal").addEventListener("click",event=>{
+  if(event.target===$("detailModal"))closeModal();
+});
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeModal();
+});
+
+const sidebar=$("sidebar"),scrim=$("scrim");
+$("menuToggle").addEventListener("click",()=>{
+  sidebar.classList.add("show");
+  scrim.classList.add("show");
+});
+scrim.addEventListener("click",()=>{
+  sidebar.classList.remove("show");
+  scrim.classList.remove("show");
+});
+document.querySelectorAll(".sidebar-nav a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    sidebar.classList.remove("show");
+    scrim.classList.remove("show");
+  });
+});
+
+startListeners();
+window.addEventListener("beforeunload",()=>{
+  unsubscribers.forEach(fn=>{try{fn()}catch{}});
+  clearTimeout(toastTimer);
+});
+</script>
+</body>
+</html>
