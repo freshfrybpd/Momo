@@ -1,1 +1,1008 @@
-fd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="description" content="Invite your friends to FreshFry Momo and explore referral rewards.">
+<title>FreshFry | Refer & Earn</title>
+
+<style>
+:root {
+  --orange: #ff5e00;
+  --orange-light: #ff853d;
+  --bg: #101010;
+  --card: #1b1b1b;
+  --card2: #242424;
+  --text: #ffffff;
+  --muted: #a5a5a5;
+  --border: #333333;
+  --green: #35c979;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding-bottom: 35px;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app {
+  max-width: 540px;
+  min-height: 100vh;
+  margin: auto;
+  padding: 0 16px 30px;
+}
+
+/* Header */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 19px 0;
+}
+
+.back-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: white;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 23px;
+}
+
+.brand {
+  flex: 1;
+}
+
+.brand-name {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -.5px;
+}
+
+.brand-name span {
+  color: var(--orange);
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.top-tag {
+  background: #2c1b11;
+  color: #ff9c62;
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Hero */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 25px;
+  padding: 27px 22px 24px;
+  background: linear-gradient(140deg, #ff751e, #ff4d00 65%, #d83b00);
+  min-height: 280px;
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "🎁";
+  position: absolute;
+  right: -3px;
+  top: 14px;
+  font-size: 105px;
+  opacity: .18;
+  transform: rotate(12deg);
+  z-index: -1;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 175px;
+  height: 175px;
+  right: -75px;
+  bottom: -85px;
+  border: 25px solid rgba(255,255,255,.10);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.hero-label {
+  display: inline-block;
+  background: rgba(0,0,0,.19);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 20px;
+  padding: 7px 11px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.hero h1 {
+  max-width: 330px;
+  font-size: clamp(30px, 8vw, 39px);
+  line-height: 1.08;
+  letter-spacing: -1.3px;
+  margin: 19px 0 10px;
+}
+
+.hero p {
+  max-width: 280px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #fff2e9;
+  margin: 0;
+}
+
+.hero-note {
+  margin-top: 18px;
+  font-size: 10px;
+  color: #fff0e7;
+}
+
+/* Referral code */
+
+.code-card {
+  margin-top: 17px;
+  padding: 20px;
+  border-radius: 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.section-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.code-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 13px;
+}
+
+.code-display {
+  flex: 1;
+  min-width: 0;
+  padding: 15px 12px;
+  background: #101010;
+  border: 1px dashed #ff6a1a;
+  border-radius: 13px;
+  color: #ff8b4a;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.copy-btn {
+  border: none;
+  background: var(--orange);
+  color: white;
+  padding: 0 17px;
+  border-radius: 13px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.code-hint {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+/* Buttons */
+
+.primary-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 15px;
+  padding: 16px;
+  color: white;
+  background: var(--orange);
+  font-weight: 850;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform .15s, opacity .15s;
+}
+
+.primary-btn:active {
+  transform: scale(.98);
+}
+
+.secondary-btn {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  color: white;
+  background: var(--card2);
+  font-weight: 750;
+  font-size: 13px;
+}
+
+.share-section {
+  margin-top: 14px;
+}
+
+.share-title {
+  font-size: 13px;
+  font-weight: 800;
+  margin: 23px 0 12px;
+}
+
+.share-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.share-option {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: white;
+  border-radius: 16px;
+  padding: 15px 6px;
+  text-align: center;
+}
+
+.share-icon {
+  display: grid;
+  place-items: center;
+  margin: 0 auto 9px;
+  width: 43px;
+  height: 43px;
+  background: #282828;
+  border-radius: 14px;
+  font-size: 23px;
+}
+
+.share-option strong {
+  font-size: 11px;
+}
+
+/* Progress */
+
+.progress-card {
+  margin-top: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 20px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: -.3px;
+}
+
+.demo-pill {
+  color: #ffb079;
+  background: #382316;
+  border-radius: 20px;
+  padding: 6px 9px;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-top: 19px;
+}
+
+.stat {
+  padding: 15px 8px;
+  background: #242424;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--orange-light);
+}
+
+.stat-label {
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.progress-track {
+  margin-top: 20px;
+  background: #333;
+  height: 7px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d00, #ffad65);
+  border-radius: 20px;
+  transition: width .4s ease;
+}
+
+.progress-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.progress-caption strong {
+  color: white;
+}
+
+/* Reward tiers */
+
+.rewards {
+  margin-top: 23px;
+}
+
+.rewards h2 {
+  font-size: 18px;
+  margin: 0 0 13px;
+}
+
+.reward-list {
+  display: grid;
+  gap: 10px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 15px;
+}
+
+.reward-emoji {
+  flex: 0 0 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: #2b211b;
+  border-radius: 14px;
+  font-size: 23px;
+}
+
+.reward-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.reward-info strong {
+  display: block;
+  font-size: 13px;
+}
+
+.reward-info p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 5px 0 0;
+}
+
+.reward-value {
+  color: var(--orange-light);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+/* How it works */
+
+.how-section {
+  margin-top: 24px;
+}
+
+.how-section h2 {
+  font-size: 18px;
+  margin: 0 0 15px;
+}
+
+.step {
+  display: flex;
+  gap: 13px;
+  margin: 16px 0;
+}
+
+.step-num {
+  flex: 0 0 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  background: #332014;
+  border: 1px solid #5a3119;
+  color: #ff985d;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.step-text strong {
+  font-size: 13px;
+}
+
+.step-text p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Disclaimer */
+
+.disclaimer {
+  margin-top: 24px;
+  padding: 14px;
+  background: #201c18;
+  border: 1px solid #443125;
+  color: #d4b9a6;
+  border-radius: 14px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.toast {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  background: #f7f7f7;
+  color: #111;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  transition: .25s;
+  max-width: calc(100% - 30px);
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.footer {
+  text-align: center;
+  padding: 25px 0 5px;
+  color: #777;
+  font-size: 10px;
+}
+
+@media (min-width: 600px) {
+  body {
+    padding-top: 20px;
+  }
+
+  .app {
+    padding-bottom: 45px;
+  }
+}
+
+@media (max-width: 360px) {
+  .app {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .hero {
+    padding: 23px 18px;
+  }
+
+  .code-card, .progress-card {
+    padding: 16px;
+  }
+
+  .copy-btn {
+    padding: 0 12px;
+  }
+
+  .stat-number {
+    font-size: 21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <button class="back-btn" id="backBtn" aria-label="Go back">‹</button>
+
+    <div class="brand">
+      <div class="brand-name">FreshFry <span>Momo</span></div>
+      <div class="brand-sub">Share the love. Spread the flavour.</div>
+    </div>
+
+    <div class="top-tag">REFER & EARN</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-label">🎉 FRIENDS + FOOD = FUN</div>
+
+    <h1>Good food tastes better together!</h1>
+
+    <p>
+      Invite your friends to discover FreshFry Momo.
+      Share your referral code and spread the happiness.
+    </p>
+
+    <div class="hero-note">
+      Referral rewards are subject to official programme terms.
+    </div>
+  </section>
+
+  <section class="code-card">
+    <div class="section-label">Your referral code</div>
+
+    <div class="code-row">
+      <div class="code-display" id="referralCode">FFMOMODEMO</div>
+      <button class="copy-btn" id="copyCodeBtn">COPY</button>
+    </div>
+
+    <div class="code-hint">
+      Share this code with your friends. Actual referral tracking is not
+      connected yet.
+    </div>
+
+    <div class="share-section">
+      <button class="primary-btn" id="whatsappBtn">
+        <span>●</span> Invite Friends on WhatsApp
+      </button>
+    </div>
+
+    <div class="share-title">Share using</div>
+
+    <div class="share-grid">
+      <button class="share-option" id="shareNativeBtn">
+        <span class="share-icon">📲</span>
+        <strong>Share</strong>
+      </button>
+
+      <button class="share-option" id="copyInviteBtn">
+        <span class="share-icon">📋</span>
+        <strong>Copy Invite</strong>
+      </button>
+
+      <button class="share-option" id="smsBtn">
+        <span class="share-icon">💬</span>
+        <strong>SMS</strong>
+      </button>
+    </div>
+  </section>
+
+  <section class="progress-card">
+    <div class="section-heading">
+      <h2>Your referral activity</h2>
+      <span class="demo-pill">DEMO PREVIEW</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number" id="invitesCount">0</div>
+        <div class="stat-label">Invites shared</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-number" id="friendsCount">0</div>
+        <div class="stat-label">Friends joined</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-number" id="rewardsCount">0</div>
+        <div class="stat-label">Rewards earned</div>
+      </div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="progress-caption">
+      <span id="progressLeft">0 referrals</span>
+      <strong id="progressRight">Next milestone: 5</strong>
+    </div>
+
+    <p style="font-size:11px;color:#a5a5a5;line-height:1.6;margin:15px 0 0">
+      These figures are stored only on this device and do not represent
+      verified referrals or real rewards.
+    </p>
+
+    <button class="secondary-btn" id="resetDemoBtn" style="margin-top:15px">
+      Reset Demo Activity
+    </button>
+  </section>
+
+  <section class="rewards">
+    <h2>Referral reward ideas 🎁</h2>
+
+    <div class="reward-list">
+
+      <div class="reward-item">
+        <div class="reward-emoji">🥉</div>
+        <div class="reward-info">
+          <strong>First 1–2 friends</strong>
+          <p>Starter milestone for a future referral programme.</p>
+        </div>
+        <div class="reward-value">Starter</div>
+      </div>
+
+      <div class="reward-item">
+        <div class="reward-emoji">🥈</div>
+        <div class="reward-info">
+          <strong>5 verified friends</strong>
+          <p>A possible special offer after programme activation.</p>
+        </div>
+        <div class="reward-value">Milestone 5</div>
+      </div>
+
+      <div class="reward-item">
+        <div class="reward-emoji">🥇</div>
+        <div class="reward-info">
+          <strong>10 verified friends</strong>
+          <p>A possible bonus reward under official terms.</p>
+        </div>
+        <div class="reward-value">Milestone 10</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="how-section">
+    <h2>How it works</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <strong>Share your code</strong>
+        <p>Send your referral code or invite link to friends and family.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <strong>Your friend visits FreshFry</strong>
+        <p>Your friend can explore the menu and place an order normally.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <strong>Rewards after verification</strong>
+        <p>Rewards can be granted only after the official referral system
+        is configured and the referral qualifies under its terms.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    <strong>Important:</strong> This page is currently a visual/demo referral
+    page. Sharing your code does not automatically register a referral,
+    track a friend’s order, or issue a discount. Real tracking and reward
+    redemption require a secure backend and Firebase integration.
+  </div>
+
+  <footer class="footer">
+    © <span id="year"></span> FreshFry Momo · Made with ❤️
+  </footer>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/*
+ * FreshFry Momo referral demo.
+ *
+ * No Firebase writes are performed here.
+ * The demo code and activity are stored in this browser only.
+ */
+
+const REFERRAL_STORAGE_KEY = "ff_referral_demo_v1";
+const REFERRAL_CODE_KEY = "ff_referral_code_v1";
+
+/*
+ * Update this if your live customer website uses a different URL.
+ * This is only an invite destination, not a referral-tracking endpoint.
+ */
+const CUSTOMER_WEBSITE_URL = "https://freshfrymomo.food/";
+
+const $ = (id) => document.getElementById(id);
+
+let toastTimer;
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2400);
+}
+
+function createReferralCode() {
+  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "FF";
+
+  for (let i = 0; i < 6; i++) {
+    code += characters[Math.floor(Math.random() * characters.length)];
+  }
+
+  return code;
+}
+
+function getReferralCode() {
+  try {
+    let code = localStorage.getItem(REFERRAL_CODE_KEY);
+
+    if (!code) {
+      code = createReferralCode();
+      localStorage.setItem(REFERRAL_CODE_KEY, code);
+    }
+
+    return code;
+  } catch (error) {
+    return "FFMOMODEMO";
+  }
+}
+
+function getActivity() {
+  const defaults = {
+    invites: 0,
+    friends: 0,
+    rewards: 0
+  };
+
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(REFERRAL_STORAGE_KEY) || "null"
+    );
+
+    if (!saved || typeof saved !== "object") {
+      return defaults;
+    }
+
+    return {
+      invites: Number.isFinite(saved.invites) ? saved.invites : 0,
+      friends: Number.isFinite(saved.friends) ? saved.friends : 0,
+      rewards: Number.isFinite(saved.rewards) ? saved.rewards : 0
+    };
+  } catch (error) {
+    return defaults;
+  }
+}
+
+function saveActivity(activity) {
+  try {
+    localStorage.setItem(
+      REFERRAL_STORAGE_KEY,
+      JSON.stringify(activity)
+    );
+  } catch (error) {
+    showToast("Browser storage is unavailable.");
+  }
+}
+
+function buildInviteMessage() {
+  const code = getReferralCode();
+
+  return (
+    "Hey! 👋 Check out FreshFry Momo for delicious food!\n\n" +
+    "Explore the menu: " + CUSTOMER_WEBSITE_URL + "\n\n" +
+    "My referral code: " + code + "\n\n" +
+    "Note: Referral rewards are available only if the official " +
+    "referral programme is active and its terms are met."
+  );
+}
+
+async function copyText(text, successMessage) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      const copied = document.execCommand("copy");
+      textarea.remove();
+
+      if (!copied) {
+        throw new Error("Copy failed");
+      }
+    }
+
+    showToast(successMessage);
+  } catch (error) {
+    showToast("Copy failed. Please select and copy the text manually.");
+  }
+}
+
+function recordDemoInvite() {
+  const activity = getActivity();
+  activity.invites += 1;
+  saveActivity(activity);
+  renderActivity();
+}
+
+function shareWhatsApp() {
+  const message = buildInviteMessage();
+
+  recordDemoInvite();
+
+  const url = "https://wa.me/?text=" + encodeURIComponent(message);
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function renderActivity() {
+  const activity = getActivity();
+
+  $("invitesCount").textContent = activity.invites;
+  $("friendsCount").textContent = activity.friends;
+  $("rewardsCount").textContent = activity.rewards;
+
+  const nextMilestone = Math.ceil((activity.friends + 1) / 5) * 5;
+  const previousMilestone = nextMilestone - 5;
+  const progress = Math.min(
+    100,
+    ((activity.friends - previousMilestone) / 5) * 100
+  );
+
+  $("progressFill").style.width = progress + "%";
+  $("progressLeft").textContent = activity.friends + " demo referrals";
+  $("progressRight").textContent = "Next milestone: " + nextMilestone;
+}
+
+function resetDemoActivity() {
+  const confirmed = window.confirm(
+    "Reset the referral demo activity stored on this device?"
+  );
+
+  if (!confirmed) return;
+
+  saveActivity({
+    invites: 0,
+    friends: 0,
+    rewards: 0
+  });
+
+  renderActivity();
+  showToast("Demo activity reset.");
+}
+
+function openSms() {
+  const message = buildInviteMessage();
+  window.location.href = "sms:?body=" + encodeURIComponent(message);
+}
+
+$("referralCode").textContent = getReferralCode();
+$("year").textContent = new Date().getFullYear();
+
+$("copyCodeBtn").addEventListener("click", () => {
+  copyText(getReferralCode(), "Referral code copied!");
+});
+
+$("copyInviteBtn").addEventListener("click", () => {
+  copyText(buildInviteMessage(), "Invite message copied!");
+});
+
+$("whatsappBtn").addEventListener("click", shareWhatsApp);
+
+$("smsBtn").addEventListener("click", openSms);
+
+$("shareNativeBtn").addEventListener("click", async () => {
+  const message = buildInviteMessage();
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "FreshFry Momo",
+        text: message,
+        url: CUSTOMER_WEBSITE_URL
+      });
+
+      recordDemoInvite();
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        showToast("Sharing could not be completed.");
+      }
+    }
+  } else {
+    await copyText(message, "Invite copied. Share it with your friends!");
+  }
+});
+
+$("resetDemoBtn").addEventListener("click", resetDemoActivity);
+
+$("backBtn").addEventListener("click", () => {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = "index.html";
+  }
+});
+
+renderActivity();
+</script>
+
+</body>
+</html>
