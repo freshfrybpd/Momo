@@ -1,1 +1,660 @@
-dx
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="description" content="Manage your FreshFry Momo delivery addresses.">
+<title>My Addresses | FreshFry Momo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --orange: #ff5e00;
+  --orange2: #ff7a29;
+  --bg: #101010;
+  --card: #191919;
+  --line: #2b2b2b;
+  --muted: #999;
+  --white: #fff;
+  --green: #48d681;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--white);
+  font-family: Inter, sans-serif;
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+button:focus-visible, a:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(16,16,16,.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 17px;
+}
+.header-inner {
+  max-width: 720px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.back {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: #202020;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.brand { flex: 1; }
+.brand-name { font-size: 19px; font-weight: 900; letter-spacing: -.6px; }
+.brand-name span { color: var(--orange); }
+.brand-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.header-icon {
+  height: 42px; width: 42px;
+  display: grid; place-items: center;
+  color: var(--orange); background: #2b190f;
+  border-radius: 14px;
+}
+main { max-width: 720px; padding: 22px 16px; margin: auto; }
+.hero {
+  border: 1px solid #512b16;
+  background: linear-gradient(130deg,#321b0d,#1b1715 68%);
+  border-radius: 24px;
+  padding: 23px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero:after {
+  content: "";
+  position: absolute;
+  right: -35px; top: -40px;
+  width: 145px; height: 145px;
+  border-radius: 50%;
+  background: rgba(255,94,0,.12);
+}
+.eyebrow {
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: #ffab79; font-weight: 800;
+}
+.hero h1 { font-size: 28px; letter-spacing: -1px; margin: 11px 0 8px; }
+.hero h1 span { color: var(--orange); }
+.hero p { font-size: 12px; line-height: 1.8; color: #c4c4c4; margin: 0; max-width: 390px; }
+.hero-meta {
+  display: flex; align-items: center; gap: 9px;
+  margin-top: 17px; font-size: 10px; color: #d8c3b4;
+}
+.hero-meta i { color: var(--orange); }
+.section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin: 26px 0 14px;
+}
+.section-head h2 { margin: 0; font-size: 16px; font-weight: 800; }
+.count { color: var(--muted); font-size: 11px; }
+.add-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 15px; border-radius: 15px;
+  border: 1px dashed #8b421b; background: #23170f;
+  color: #ff9559; font-size: 12px; font-weight: 800;
+}
+.add-btn i { font-size: 15px; }
+.address-list { display: grid; gap: 12px; margin-top: 14px; }
+.address-card {
+  border: 1px solid var(--line); background: var(--card);
+  border-radius: 19px; padding: 16px;
+}
+.address-card.default { border-color: #80401e; background: linear-gradient(120deg,#24180f,#191919 70%); }
+.card-top { display: flex; align-items: flex-start; gap: 12px; }
+.address-icon {
+  width: 43px; height: 43px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: #302015; color: var(--orange);
+  border-radius: 14px; font-size: 16px;
+}
+.address-main { flex: 1; min-width: 0; }
+.address-label-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.address-label { font-size: 13px; font-weight: 800; }
+.default-tag {
+  padding: 5px 7px; border-radius: 6px;
+  background: #352013; color: #ff9b5d;
+  font-size: 8px; font-weight: 900; letter-spacing: .5px;
+}
+.address-name { color: #ddd; font-size: 11px; font-weight: 600; margin-top: 9px; }
+.address-text { color: var(--muted); font-size: 11px; line-height: 1.8; margin-top: 6px; overflow-wrap: anywhere; }
+.address-phone { color: #b4b4b4; font-size: 10px; margin-top: 8px; }
+.card-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  border-top: 1px solid #303030; padding-top: 13px; margin-top: 15px;
+}
+.small-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 7px; padding: 9px 11px; border: 1px solid #383838;
+  border-radius: 10px; background: #202020; color: #ddd;
+  font-size: 10px; font-weight: 700;
+}
+.small-btn.primary { color: #ff9559; border-color: #66371f; }
+.small-btn.danger { color: #ff8585; }
+.empty {
+  padding: 38px 18px; border: 1px dashed #363636;
+  border-radius: 20px; text-align: center; margin-top: 14px;
+}
+.empty[hidden] { display: none; }
+.empty-icon {
+  width: 64px; height: 64px; display: grid; place-items: center;
+  background: #28190f; color: var(--orange);
+  border-radius: 21px; font-size: 24px; margin: 0 auto 15px;
+}
+.empty h3 { margin: 0 0 8px; font-size: 15px; }
+.empty p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+.tip {
+  background: #171c19; border: 1px solid #293c30;
+  border-radius: 15px; padding: 14px;
+  color: #b9d9c2; font-size: 10px; line-height: 1.8; margin-top: 20px;
+}
+.tip i { color: var(--green); margin-right: 5px; }
+.modal {
+  display: none; position: fixed; inset: 0; z-index: 30;
+  background: rgba(0,0,0,.76); padding: 16px;
+  align-items: flex-end; justify-content: center;
+}
+.modal.show { display: flex; }
+.modal-panel {
+  width: 100%; max-width: 560px; max-height: 90dvh; overflow-y: auto;
+  background: #181818; border: 1px solid #373737;
+  border-radius: 24px 24px 18px 18px; padding: 20px;
+}
+.modal-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 18px; }
+.modal-head h2 { font-size: 18px; margin: 0; }
+.close-btn {
+  border: 1px solid #383838; background: #252525; color: white;
+  width: 36px; height: 36px; border-radius: 12px;
+}
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+.field input, .field textarea, .field select {
+  width: 100%; border: 1px solid #373737; background: #101010;
+  color: white; border-radius: 12px; padding: 13px; font-size: 12px;
+}
+.field textarea { min-height: 83px; resize: vertical; line-height: 1.6; }
+.field input::placeholder, .field textarea::placeholder { color: #707070; }
+.field select { color-scheme: dark; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.default-check {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; color: #ddd; margin: 12px 0 18px;
+}
+.default-check input { accent-color: var(--orange); width: 17px; height: 17px; }
+.save-btn {
+  width: 100%; border: 0; background: var(--orange); color: white;
+  padding: 15px; border-radius: 13px; font-size: 12px; font-weight: 900;
+}
+.cancel-btn {
+  width: 100%; border: 1px solid #393939; background: #222;
+  color: #ddd; padding: 13px; border-radius: 13px; font-size: 11px; font-weight: 700; margin-top: 9px;
+}
+.toast {
+  position: fixed; left: 50%; bottom: calc(25px + env(safe-area-inset-bottom));
+  transform: translate(-50%,12px); background: #292929;
+  border: 1px solid #444; color: white; padding: 12px 17px;
+  border-radius: 13px; font-size: 11px; opacity: 0;
+  pointer-events: none; transition: .25s; z-index: 50;
+  width: max-content; max-width: calc(100% - 30px);
+}
+.toast.show { opacity: 1; transform: translate(-50%,0); }
+.bottom-nav {
+  position: fixed; z-index: 20; bottom: 0; left: 0; right: 0;
+  background: rgba(18,18,18,.97); backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
+  padding: 11px 8px calc(11px + env(safe-area-inset-bottom));
+}
+.bottom-inner {
+  max-width: 600px; margin: auto;
+  display: flex; justify-content: space-around; align-items: center;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: #777; font-size: 9px; font-weight: 700; min-width: 54px;
+}
+.nav-item i { font-size: 18px; }
+.nav-item.active { color: var(--orange); }
+@media (min-width: 560px) {
+  main { padding: 28px 22px; }
+  .hero { padding: 30px; }
+  .hero h1 { font-size: 34px; }
+  .modal { align-items: center; }
+}
+@media (max-width: 360px) {
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .small-btn { padding: 9px; }
+}
+</style>
+</head>
+
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="back" href="profile.html" aria-label="Back to profile">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="brand">
+      <div class="brand-name">Fresh<span>Fry</span></div>
+      <div class="brand-sub">Your delivery addresses</div>
+    </div>
+    <div class="header-icon"><i class="fa-solid fa-location-dot"></i></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Quick checkout</div>
+    <h1>My addresses<span>.</span></h1>
+    <p>Save your delivery locations for a faster checkout next time.</p>
+    <div class="hero-meta"><i class="fa-solid fa-shield-halved"></i> Addresses are saved on this device</div>
+  </section>
+
+  <div class="section-head">
+    <h2>Saved locations</h2>
+    <span class="count" id="addressCount">0 addresses</span>
+  </div>
+
+  <button type="button" class="add-btn" id="addAddressBtn">
+    <i class="fa-solid fa-plus"></i> ADD NEW ADDRESS
+  </button>
+
+  <div class="address-list" id="addressList"></div>
+
+  <div class="empty" id="emptyState" hidden>
+    <div class="empty-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+    <h3>No saved addresses yet</h3>
+    <p>Add your home or work address to make your next order easier.</p>
+  </div>
+
+  <div class="tip">
+    <i class="fa-solid fa-circle-check"></i>
+    <strong>Helpful tip:</strong> Set one address as your default. You can edit or remove it whenever you need.
+  </div>
+</main>
+
+<nav class="bottom-nav" aria-label="Main navigation">
+  <div class="bottom-inner">
+    <a class="nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>HOME</span></a>
+    <a class="nav-item" href="index.html#menu-section"><i class="fa-solid fa-utensils"></i><span>MENU</span></a>
+    <a class="nav-item" href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span>CART</span></a>
+    <a class="nav-item" href="my-orders.html"><i class="fa-solid fa-receipt"></i><span>ORDERS</span></a>
+    <a class="nav-item active" href="addresses.html"><i class="fa-solid fa-location-dot"></i><span>ADDRESS</span></a>
+  </div>
+</nav>
+
+<div class="modal" id="addressModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h2 id="modalTitle">Add new address</h2>
+      <button type="button" class="close-btn" id="closeModalBtn" aria-label="Close form">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <form id="addressForm">
+      <input type="hidden" id="editId">
+
+      <div class="field">
+        <label for="addressType">Address type</label>
+        <select id="addressType" required>
+          <option value="Home">Home</option>
+          <option value="Work">Work</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="recipientName">Recipient name</label>
+          <input id="recipientName" maxlength="80" autocomplete="name" placeholder="Full name" required>
+        </div>
+        <div class="field">
+          <label for="recipientPhone">Phone number</label>
+          <input id="recipientPhone" type="tel" inputmode="tel" maxlength="16" autocomplete="tel" placeholder="Phone number" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="addressLine">House / Flat / Street</label>
+        <textarea id="addressLine" maxlength="300" autocomplete="street-address" placeholder="House number, street, locality" required></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="landmark">Landmark (optional)</label>
+          <input id="landmark" maxlength="120" placeholder="Near a landmark">
+        </div>
+        <div class="field">
+          <label for="city">City / Town</label>
+          <input id="city" maxlength="100" autocomplete="address-level2" placeholder="City or town" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="state">State</label>
+          <input id="state" maxlength="100" autocomplete="address-level1" placeholder="State" required>
+        </div>
+        <div class="field">
+          <label for="pincode">PIN code</label>
+          <input id="pincode" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="postal-code" placeholder="6-digit PIN" required>
+        </div>
+      </div>
+
+      <label class="default-check">
+        <input id="makeDefault" type="checkbox">
+        Set as my default delivery address
+      </label>
+
+      <button class="save-btn" id="saveAddressBtn" type="submit">
+        <i class="fa-solid fa-floppy-disk"></i> SAVE ADDRESS
+      </button>
+      <button class="cancel-btn" id="cancelModalBtn" type="button">CANCEL</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "ff_saved_addresses_v1";
+  const list = document.getElementById("addressList");
+  const emptyState = document.getElementById("emptyState");
+  const modal = document.getElementById("addressModal");
+  const form = document.getElementById("addressForm");
+  const toast = document.getElementById("toast");
+  const countLabel = document.getElementById("addressCount");
+  let toastTimer;
+
+  const byId = id => document.getElementById(id);
+
+  function readStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw === null) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter(item =>
+        item && typeof item.id === "string"
+      ) : [];
+    } catch (error) {
+      console.warn("Could not read saved addresses.", error);
+      return [];
+    }
+  }
+
+  let addresses = readStorage();
+
+  function persist() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(addresses));
+      return true;
+    } catch (error) {
+      console.error("Could not save addresses.", error);
+      showToast("Unable to save. Check your browser storage.");
+      return false;
+    }
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+
+  function iconFor(type) {
+    if (type === "Work") return "fa-briefcase";
+    if (type === "Other") return "fa-location-dot";
+    return "fa-house";
+  }
+
+  function render() {
+    list.replaceChildren();
+    countLabel.textContent = addresses.length +
+      (addresses.length === 1 ? " address" : " addresses");
+    emptyState.hidden = addresses.length > 0;
+
+    addresses.forEach(address => {
+      const card = document.createElement("article");
+      card.className = "address-card" + (address.isDefault ? " default" : "");
+
+      const formattedAddress = [
+        address.line,
+        address.landmark ? "Landmark: " + address.landmark : "",
+        [address.city, address.state].filter(Boolean).join(", "),
+        address.pincode
+      ].filter(Boolean).join("\n");
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="address-icon"><i class="fa-solid ${iconFor(address.type)}"></i></div>
+          <div class="address-main">
+            <div class="address-label-row">
+              <span class="address-label">${escapeHTML(address.type || "Home")}</span>
+              ${address.isDefault ? '<span class="default-tag">DEFAULT</span>' : ""}
+            </div>
+            <div class="address-name">${escapeHTML(address.name)}</div>
+            <div class="address-text">${escapeHTML(formattedAddress).replace(/\n/g, "<br>")}</div>
+            <div class="address-phone"><i class="fa-solid fa-phone"></i> ${escapeHTML(address.phone)}</div>
+          </div>
+        </div>
+        <div class="card-actions">
+          ${address.isDefault ? "" : `<button type="button" class="small-btn primary" data-action="default" data-id="${escapeHTML(address.id)}"><i class="fa-solid fa-check"></i> Set default</button>`}
+          <button type="button" class="small-btn" data-action="edit" data-id="${escapeHTML(address.id)}"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button type="button" class="small-btn danger" data-action="delete" data-id="${escapeHTML(address.id)}"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function openModal(address = null) {
+    form.reset();
+    byId("editId").value = address ? address.id : "";
+    byId("modalTitle").textContent = address ? "Edit address" : "Add new address";
+    byId("saveAddressBtn").innerHTML = address
+      ? '<i class="fa-solid fa-floppy-disk"></i> UPDATE ADDRESS'
+      : '<i class="fa-solid fa-floppy-disk"></i> SAVE ADDRESS';
+
+    if (address) {
+      byId("addressType").value = address.type || "Home";
+      byId("recipientName").value = address.name || "";
+      byId("recipientPhone").value = address.phone || "";
+      byId("addressLine").value = address.line || "";
+      byId("landmark").value = address.landmark || "";
+      byId("city").value = address.city || "";
+      byId("state").value = address.state || "";
+      byId("pincode").value = address.pincode || "";
+      byId("makeDefault").checked = address.isDefault === true;
+    } else {
+      try {
+        byId("recipientName").value = localStorage.getItem("ff_customer_name") || "";
+        byId("recipientPhone").value = localStorage.getItem("ff_phone") || "";
+        byId("addressLine").value = localStorage.getItem("ff_customer_address") || "";
+      } catch (error) {
+        // Form remains usable when browser storage is unavailable.
+      }
+      byId("makeDefault").checked = addresses.length === 0;
+    }
+
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => byId("addressType").focus(), 50);
+  }
+
+  function closeModal() {
+    modal.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+
+  byId("addAddressBtn").addEventListener("click", () => openModal());
+  byId("closeModalBtn").addEventListener("click", closeModal);
+  byId("cancelModalBtn").addEventListener("click", closeModal);
+
+  modal.addEventListener("click", event => {
+    if (event.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && modal.classList.contains("show")) closeModal();
+  });
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const id = byId("editId").value;
+    const oldAddress = addresses.find(item => item.id === id);
+    const makeDefault = byId("makeDefault").checked;
+    const digits = byId("recipientPhone").value.replace(/\D/g, "");
+
+    if (digits.length < 10 || digits.length > 13) {
+      showToast("Please enter a valid phone number.");
+      byId("recipientPhone").focus();
+      return;
+    }
+
+    const record = {
+      id: id || (window.crypto && crypto.randomUUID
+        ? crypto.randomUUID()
+        : "addr-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8)),
+      type: byId("addressType").value,
+      name: byId("recipientName").value.trim(),
+      phone: byId("recipientPhone").value.trim(),
+      line: byId("addressLine").value.trim(),
+      landmark: byId("landmark").value.trim(),
+      city: byId("city").value.trim(),
+      state: byId("state").value.trim(),
+      pincode: byId("pincode").value.trim(),
+      isDefault: makeDefault || addresses.length === 0,
+      updatedAt: new Date().toISOString()
+    };
+
+    if (record.isDefault) {
+      addresses = addresses.map(item => ({ ...item, isDefault: false }));
+    }
+
+    if (oldAddress) {
+      addresses = addresses.map(item => item.id === id ? record : item);
+    } else {
+      addresses.push(record);
+    }
+
+    // Ensure one default address exists.
+    if (!addresses.some(item => item.isDefault) && addresses.length) {
+      addresses[0].isDefault = true;
+    }
+
+    if (!persist()) return;
+
+    // Keep existing local profile keys available for current pages.
+    // This does not update Firestore or checkout.html automatically.
+    try {
+      if (record.isDefault) {
+        localStorage.setItem("ff_phone", record.phone);
+        localStorage.setItem("ff_customer_name", record.name);
+        localStorage.setItem("ff_customer_address",
+          [record.line, record.landmark, record.city, record.state, record.pincode]
+            .filter(Boolean).join(", "));
+      }
+    } catch (error) {
+      console.warn("Could not update local profile fields.", error);
+    }
+
+    render();
+    closeModal();
+    showToast(oldAddress ? "Address updated successfully." : "Address saved successfully.");
+  });
+
+  list.addEventListener("click", event => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+
+    const id = button.dataset.id;
+    const action = button.dataset.action;
+    const address = addresses.find(item => item.id === id);
+    if (!address) return;
+
+    if (action === "edit") {
+      openModal(address);
+      return;
+    }
+
+    if (action === "default") {
+      addresses = addresses.map(item => ({
+        ...item,
+        isDefault: item.id === id
+      }));
+
+      if (!persist()) return;
+
+      try {
+        const selected = addresses.find(item => item.id === id);
+        if (selected) {
+          localStorage.setItem("ff_phone", selected.phone);
+          localStorage.setItem("ff_customer_name", selected.name);
+          localStorage.setItem("ff_customer_address",
+            [selected.line, selected.landmark, selected.city, selected.state, selected.pincode]
+              .filter(Boolean).join(", "));
+        }
+      } catch (error) {
+        console.warn("Could not update local profile fields.", error);
+      }
+
+      render();
+      showToast("Default address updated.");
+      return;
+    }
+
+    if (action === "delete") {
+      if (!window.confirm("Delete this saved address?")) return;
+      const wasDefault = address.isDefault;
+      addresses = addresses.filter(item => item.id !== id);
+
+      if (wasDefault && addresses.length) {
+        addresses[0].isDefault = true;
+      }
+
+      if (!persist()) return;
+      render();
+      showToast("Address deleted.");
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
