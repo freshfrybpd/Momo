@@ -1,1 +1,490 @@
-ff
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#101827">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Settings Admin</title>
+<style>
+:root{
+  --bg:#0b1120;--panel:#121c2d;--panel2:#172337;--border:#29374b;
+  --text:#f4f7fb;--muted:#9eacc0;--orange:#ff5e00;
+  --green:#24c78b;--red:#ff626e;--yellow:#ffc857
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1200px;margin:auto;padding:22px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--orange);display:grid;place-items:center;font-size:22px;font-weight:900}
+h1{font-size:23px;margin:0}
+.subtitle{font-size:13px;color:var(--muted);margin-top:5px}
+.nav{display:flex;gap:8px;overflow-x:auto;padding-bottom:16px;margin-bottom:8px}
+.nav a{flex-shrink:0;text-decoration:none;color:var(--muted);padding:10px 13px;border:1px solid var(--border);border-radius:10px;font-size:13px}
+.nav a.active{color:white;background:#422513;border-color:#88431b}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px}
+.side,.panel,.stat{background:var(--panel);border:1px solid var(--border);border-radius:16px}
+.side{padding:10px;height:max-content;position:sticky;top:15px}
+.side button{display:block;width:100%;text-align:left;padding:12px;border:0;background:transparent;color:var(--muted);border-radius:9px;margin:2px 0}
+.side button.active{background:#422513;color:white}
+.content{min-width:0}
+.section{display:none}
+.section.active{display:block}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:5px 0 15px}
+.head h2{font-size:19px;margin:0}
+.muted{color:var(--muted);font-size:13px}
+.panel{padding:20px;margin-bottom:15px}
+.panel h3{font-size:16px;margin:0 0 7px}
+.desc{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 18px}
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.field-group{min-width:0}
+.field-group.full{grid-column:1/-1}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+.field{width:100%;min-width:0;background:#0b1423;border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px;outline:none}
+.field:focus{border-color:var(--orange)}
+textarea.field{min-height:95px;resize:vertical}
+.btn{border:1px solid var(--border);border-radius:10px;padding:11px 15px;color:var(--text);background:var(--panel2)}
+.btn.primary{background:var(--orange);border-color:var(--orange);font-weight:750}
+.btn.danger{border-color:#77303b;color:#ff9aa2}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.store-status{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.status-left{display:flex;align-items:center;gap:12px}
+.status-icon{width:45px;height:45px;border-radius:13px;background:#103c31;color:#6ef0ba;display:grid;place-items:center;font-size:22px}
+.status-icon.closed{background:#48232c;color:#ff9aa2}
+.status-title{font-weight:800}
+.status-desc{font-size:12px;color:var(--muted);margin-top:5px}
+.toggle{width:54px;height:30px;position:relative;display:inline-block;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;border-radius:99px;background:#3b485c;transition:.2s}
+.slider:before{content:"";position:absolute;width:22px;height:22px;left:4px;top:4px;background:white;border-radius:50%;transition:.2s}
+.toggle input:checked+.slider{background:var(--green)}
+.toggle input:checked+.slider:before{transform:translateX(24px)}
+.notice{padding:13px;border-radius:11px;font-size:12px;line-height:1.6;margin-bottom:15px}
+.notice.warn{background:#302717;border:1px solid #6b4c19;color:#ffdda0}
+.notice.info{background:#13283d;border:1px solid #264c6c;color:#b6dcff}
+.message{display:none;margin-bottom:15px;padding:12px;border-radius:10px;font-size:13px;line-height:1.5}
+.message.show{display:block}
+.message.ok{background:#103c31;color:#6ef0ba;border:1px solid #21634f}
+.message.err{background:#48232c;color:#ff9aa2;border:1px solid #77303b}
+.message.info{background:#13283d;color:#b6dcff;border:1px solid #264c6c}
+.small{font-size:12px;color:var(--muted);line-height:1.6}
+hr{border:0;border-top:1px solid var(--border);margin:20px 0}
+.footer{font-size:12px;color:var(--muted);line-height:1.7;margin-top:18px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.side{position:static;display:flex;overflow-x:auto;gap:5px}.side button{width:auto;white-space:nowrap}.field-grid{grid-template-columns:1fr}.field-group.full{grid-column:auto}}
+@media(max-width:520px){.app{padding:14px}h1{font-size:20px}.panel{padding:15px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">⚙</div>
+      <div>
+        <h1>Store Settings</h1>
+        <div class="subtitle">FreshFry Momo · Configuration</div>
+      </div>
+    </div>
+    <button class="btn" id="reloadBtn" type="button">↻ Reload settings</button>
+  </header>
+
+  <nav class="nav" aria-label="Admin navigation">
+    <a href="admin.html">Dashboard</a>
+    <a href="orders-admin.html">Orders</a>
+    <a href="menu-admin.html">Menu</a>
+    <a href="delivery-admin.html">Delivery</a>
+    <a href="customers-admin.html">Customers</a>
+    <a href="marketing-admin.html">Marketing</a>
+    <a href="payments-admin.html">Payments</a>
+    <a href="reports-admin.html">Reports</a>
+    <a class="active" href="settings-admin.html">Settings</a>
+  </nav>
+
+  <div id="globalMessage" class="message" role="status"></div>
+
+  <div class="layout">
+    <aside class="side">
+      <button class="active" data-section="store" type="button">Store status</button>
+      <button data-section="business" type="button">Business details</button>
+      <button data-section="delivery" type="button">Delivery settings</button>
+      <button data-section="payment" type="button">Payment display</button>
+      <button data-section="about" type="button">About & safety</button>
+    </aside>
+
+    <main class="content">
+      <section class="section active" id="section-store">
+        <div class="head">
+          <h2>Store status</h2>
+          <span class="muted" id="storeLoadState">Loading…</span>
+        </div>
+        <div class="panel">
+          <div class="store-status">
+            <div class="status-left">
+              <div class="status-icon" id="storeIcon">●</div>
+              <div>
+                <div class="status-title" id="storeStatusTitle">Checking store status…</div>
+                <div class="status-desc" id="storeStatusDesc">Reading settings/storeStatus</div>
+              </div>
+            </div>
+            <label class="toggle" title="Toggle store open/closed">
+              <input type="checkbox" id="storeOpenToggle" disabled>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="saveStoreBtn" type="button" disabled>Save store status</button>
+          </div>
+          <p class="small" style="margin-bottom:0">This updates only the existing Firestore document <code>settings/storeStatus</code> and its <code>isOpen</code> field. Your customer website must already read this field for the status to affect ordering.</p>
+        </div>
+        <div class="notice warn">Store status change se customer ordering tabhi affect hoga jab customer app <code>settings/storeStatus</code> ko read karti ho. Ye page customer website ka code change nahi karta.</div>
+      </section>
+
+      <section class="section" id="section-business">
+        <div class="head"><h2>Business details</h2></div>
+        <div class="panel">
+          <h3>Public business information</h3>
+          <p class="desc">Ye fields alag <code>appSettings/business</code> document mein save honge. Existing customer page par automatically display nahi honge jab tak usmein integration na ho.</p>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="businessName">Business name</label>
+              <input class="field" id="businessName" maxlength="100" placeholder="FreshFry Momo">
+            </div>
+            <div class="field-group">
+              <label for="businessPhone">Contact phone</label>
+              <input class="field" id="businessPhone" maxlength="20" inputmode="tel" placeholder="Business contact number">
+            </div>
+            <div class="field-group full">
+              <label for="businessAddress">Business address</label>
+              <textarea class="field" id="businessAddress" maxlength="500" placeholder="Enter business address"></textarea>
+            </div>
+            <div class="field-group full">
+              <label for="businessHours">Opening hours (display text)</label>
+              <input class="field" id="businessHours" maxlength="150" placeholder="e.g. 11 AM – 10 PM">
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="saveBusinessBtn" type="button">Save business details</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-delivery">
+        <div class="head"><h2>Delivery settings</h2></div>
+        <div class="panel">
+          <h3>Delivery information</h3>
+          <p class="desc">These are display/configuration values stored separately. They do not change checkout charges unless the customer app is explicitly wired to read them.</p>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="deliveryFee">Default delivery fee (₹)</label>
+              <input class="field" id="deliveryFee" type="number" min="0" max="100000" step="1" placeholder="0">
+            </div>
+            <div class="field-group">
+              <label for="freeDeliveryMinimum">Free delivery minimum (₹)</label>
+              <input class="field" id="freeDeliveryMinimum" type="number" min="0" max="1000000" step="1" placeholder="0">
+            </div>
+            <div class="field-group">
+              <label for="deliveryRadius">Delivery radius (km)</label>
+              <input class="field" id="deliveryRadius" type="number" min="0" max="500" step="0.5" placeholder="e.g. 5">
+            </div>
+            <div class="field-group">
+              <label for="deliveryEstimate">Estimated delivery time</label>
+              <input class="field" id="deliveryEstimate" maxlength="100" placeholder="e.g. 30–45 minutes">
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="saveDeliveryBtn" type="button">Save delivery settings</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-payment">
+        <div class="head"><h2>Payment display</h2></div>
+        <div class="panel">
+          <h3>Customer-facing payment information</h3>
+          <p class="desc">This stores display information only. It does not integrate a payment gateway or verify UPI payments.</p>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="upiId">UPI ID (VPA)</label>
+              <input class="field" id="upiId" maxlength="100" placeholder="yourname@upi">
+            </div>
+            <div class="field-group">
+              <label for="payeeName">UPI payee name</label>
+              <input class="field" id="payeeName" maxlength="100" placeholder="Business payee name">
+            </div>
+            <div class="field-group full">
+              <label for="paymentInstructions">Payment instructions</label>
+              <textarea class="field" id="paymentInstructions" maxlength="500" placeholder="Instructions for customers"></textarea>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="savePaymentBtn" type="button">Save payment display</button>
+          </div>
+          <div class="notice warn" style="margin-top:18px;margin-bottom:0">UPI ID yahan save karne se customer app ya QR code automatically update nahi hoga. Customer app integration separately required hai. UPI PIN, passwords, secret keys ya banking credentials kabhi yahan store na karein.</div>
+        </div>
+      </section>
+
+      <section class="section" id="section-about">
+        <div class="head"><h2>About & safety</h2></div>
+        <div class="panel">
+          <h3>Settings storage</h3>
+          <p class="desc">This page reads and writes the following documents:</p>
+          <div class="notice info">
+            <strong>Existing document</strong><br>
+            <code>settings/storeStatus</code> — updates only <code>isOpen</code>.
+          </div>
+          <div class="notice info">
+            <strong>New configuration documents</strong><br>
+            <code>appSettings/business</code><br>
+            <code>appSettings/delivery</code><br>
+            <code>appSettings/payment</code>
+          </div>
+          <hr>
+          <h3>Security requirements</h3>
+          <p class="desc">Use Firebase Authentication and Firestore Security Rules to restrict writes to authorized admins. Hiding this page or its buttons is not security. Do not allow public users to modify settings.</p>
+          <p class="small">This page does not create users, change login credentials, or modify order/payment records.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <p class="footer">FreshFry Admin · Settings are saved to Firestore only when you press the corresponding Save button.</p>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,doc,getDoc,setDoc,updateDoc,onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain:"freshfry-39a10.firebaseapp.com",
+  projectId:"freshfry-39a10",
+  storageBucket:"freshfry-39a10.firebasestorage.app",
+  messagingSenderId:"928483976893",
+  appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const $=id=>document.getElementById(id);
+
+let currentStoreOpen=null;
+let storeUnsubscribe=null;
+
+function showMessage(message,type="info"){
+  const el=$("globalMessage");
+  el.textContent=message;
+  el.className="message show "+type;
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function clearMessage(){
+  $("globalMessage").className="message";
+  $("globalMessage").textContent="";
+}
+function value(id){
+  return $(id).value.trim();
+}
+function numericValue(id){
+  const raw=value(id);
+  if(raw==="")return 0;
+  const n=Number(raw);
+  if(!Number.isFinite(n)||n<0)throw new Error("Please enter a valid non-negative number.");
+  return n;
+}
+function setButtonLoading(id,loading,label){
+  const btn=$(id);
+  if(loading){
+    btn.dataset.originalLabel=btn.textContent;
+    btn.textContent="Saving…";
+    btn.disabled=true;
+  }else{
+    btn.textContent=btn.dataset.originalLabel||label;
+    btn.disabled=false;
+  }
+}
+function safeError(error){
+  console.error(error);
+  if(error?.code==="permission-denied"){
+    return "Permission denied. Firebase Authentication aur Firestore Security Rules check karein.";
+  }
+  if(error?.code==="unavailable"){
+    return "Firebase unavailable. Internet connection check karke retry karein.";
+  }
+  return error?.message||"An unexpected error occurred.";
+}
+
+async function saveDocument(section,buttonId,data){
+  clearMessage();
+  setButtonLoading(buttonId,true);
+  try{
+    await setDoc(doc(db,"appSettings",section),{
+      ...data,
+      updatedAt:new Date().toISOString()
+    },{merge:true});
+    showMessage("Settings saved successfully in appSettings/"+section+". Customer website par effect ke liye separate integration required ho sakta hai.","ok");
+  }catch(error){
+    showMessage(safeError(error),"err");
+  }finally{
+    setButtonLoading(buttonId,false);
+  }
+}
+
+function renderStoreStatus(isOpen){
+  currentStoreOpen=isOpen;
+  $("storeOpenToggle").checked=isOpen;
+  $("storeOpenToggle").disabled=false;
+  $("saveStoreBtn").disabled=false;
+  $("storeStatusTitle").textContent=isOpen?"Store is OPEN":"Store is CLOSED";
+  $("storeStatusDesc").textContent=isOpen
+    ?"Store status is currently enabled."
+    :"Store status is currently disabled.";
+  $("storeIcon").classList.toggle("closed",!isOpen);
+  $("storeIcon").textContent=isOpen?"✓":"×";
+  $("storeLoadState").textContent="Connected";
+}
+
+function listenStoreStatus(){
+  if(storeUnsubscribe)storeUnsubscribe();
+  $("storeLoadState").textContent="Loading…";
+  storeUnsubscribe=onSnapshot(doc(db,"settings","storeStatus"),snapshot=>{
+    if(snapshot.exists()){
+      renderStoreStatus(snapshot.data().isOpen===true);
+    }else{
+      currentStoreOpen=null;
+      $("storeLoadState").textContent="Document not found";
+      $("storeStatusTitle").textContent="Store status document not found";
+      $("storeStatusDesc").textContent="Create settings/storeStatus with isOpen: true or false in Firestore first.";
+      $("storeOpenToggle").disabled=true;
+      $("saveStoreBtn").disabled=true;
+    }
+  },error=>{
+    $("storeLoadState").textContent="Access error";
+    $("storeOpenToggle").disabled=true;
+    $("saveStoreBtn").disabled=true;
+    showMessage("Could not read settings/storeStatus. "+safeError(error),"err");
+  });
+}
+
+async function saveStoreStatus(){
+  clearMessage();
+  if(currentStoreOpen===null){
+    showMessage("Store status document is not available. Please create settings/storeStatus first.","err");
+    return;
+  }
+  const newValue=$("storeOpenToggle").checked;
+  if(newValue===currentStoreOpen){
+    showMessage("Store status is already set to this value.","info");
+    return;
+  }
+  const confirmation=newValue
+    ?"Open the store? Customers may be able to place orders if their app uses this setting."
+    :"Close the store? Customers may be unable to place orders if their app uses this setting.";
+  if(!confirm(confirmation)){
+    $("storeOpenToggle").checked=currentStoreOpen;
+    return;
+  }
+  setButtonLoading("saveStoreBtn",true);
+  $("storeOpenToggle").disabled=true;
+  try{
+    await updateDoc(doc(db,"settings","storeStatus"),{isOpen:newValue});
+    currentStoreOpen=newValue;
+    renderStoreStatus(newValue);
+    showMessage("Store status updated successfully.","ok");
+  }catch(error){
+    $("storeOpenToggle").checked=currentStoreOpen;
+    showMessage(safeError(error),"err");
+  }finally{
+    setButtonLoading("saveStoreBtn",false);
+    $("storeOpenToggle").disabled=false;
+  }
+}
+
+async function loadDocument(section,fields){
+  try{
+    const snap=await getDoc(doc(db,"appSettings",section));
+    if(!snap.exists())return;
+    const data=snap.data();
+    for(const [field,id] of Object.entries(fields)){
+      if(data[field]!==undefined&&data[field]!==null)$(id).value=String(data[field]);
+    }
+  }catch(error){
+    showMessage("Could not load "+section+" settings. "+safeError(error),"err");
+  }
+}
+
+$("saveBusinessBtn").addEventListener("click",()=>saveDocument("business","saveBusinessBtn",{
+  businessName:value("businessName"),
+  phone:value("businessPhone"),
+  address:value("businessAddress"),
+  openingHours:value("businessHours")
+}));
+
+$("saveDeliveryBtn").addEventListener("click",()=>{
+  try{
+    saveDocument("delivery","saveDeliveryBtn",{
+      defaultDeliveryFee:numericValue("deliveryFee"),
+      freeDeliveryMinimum:numericValue("freeDeliveryMinimum"),
+      deliveryRadiusKm:numericValue("deliveryRadius"),
+      estimatedDeliveryTime:value("deliveryEstimate")
+    });
+  }catch(error){
+    showMessage(error.message,"err");
+  }
+});
+
+$("savePaymentBtn").addEventListener("click",()=>saveDocument("payment","savePaymentBtn",{
+  upiId:value("upiId"),
+  payeeName:value("payeeName"),
+  instructions:value("paymentInstructions")
+}));
+
+$("saveStoreBtn").addEventListener("click",saveStoreStatus);
+
+$("storeOpenToggle").addEventListener("change",()=>{
+  if(currentStoreOpen!==null){
+    $("storeStatusTitle").textContent=$("storeOpenToggle").checked
+      ?"Store will be OPEN after saving"
+      :"Store will be CLOSED after saving";
+  }
+});
+
+document.querySelectorAll("[data-section]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("[data-section]").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    button.classList.add("active");
+    $("section-"+button.dataset.section).classList.add("active");
+    clearMessage();
+  });
+});
+
+async function loadAllSettings(){
+  clearMessage();
+  await Promise.all([
+    loadDocument("business",{
+      businessName:"businessName",phone:"businessPhone",
+      address:"businessAddress",openingHours:"businessHours"
+    }),
+    loadDocument("delivery",{
+      defaultDeliveryFee:"deliveryFee",
+      freeDeliveryMinimum:"freeDeliveryMinimum",
+      deliveryRadiusKm:"deliveryRadius",
+      estimatedDeliveryTime:"deliveryEstimate"
+    }),
+    loadDocument("payment",{
+      upiId:"upiId",payeeName:"payeeName",instructions:"paymentInstructions"
+    })
+  ]);
+  listenStoreStatus();
+}
+
+$("reloadBtn").addEventListener("click",loadAllSettings);
+loadAllSettings();
+</script>
+</body>
+</html>
