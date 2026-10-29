@@ -1,1 +1,738 @@
-hdg
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="View your FreshFry Momo order history and status.">
+<title>My Orders | FreshFry Momo</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#faf9f7;
+  --line:#eee9e5;
+  --green:#15803d;
+}
+* { box-sizing:border-box }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--dark);
+  font-family:'Outfit',sans-serif;
+}
+button,input { font:inherit }
+button,a { -webkit-tap-highlight-color:transparent }
+a { color:inherit;text-decoration:none }
+button { cursor:pointer }
+button:disabled { opacity:.55;cursor:not-allowed }
+.wrap { width:min(820px,calc(100% - 28px));margin:auto }
+
+header {
+  position:sticky;top:0;z-index:10;
+  background:#ffffffed;
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner {
+  min-height:65px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.back {
+  width:40px;height:40px;
+  display:grid;place-items:center;
+  background:white;border:1px solid var(--line);
+  border-radius:12px;
+}
+.brand {
+  font-size:24px;font-weight:900;
+  font-style:italic;letter-spacing:-1px;
+}
+.brand span { color:var(--orange) }
+.header-icon {
+  margin-left:auto;color:var(--orange);font-size:19px;
+}
+
+.hero { padding:28px 0 20px }
+.eyebrow {
+  color:var(--orange);
+  font-size:10px;font-weight:900;
+  letter-spacing:1.8px;text-transform:uppercase;
+}
+.hero h1 {
+  font-size:32px;letter-spacing:-1px;
+  line-height:1.15;margin:8px 0;
+}
+.hero p {
+  color:var(--muted);font-size:12px;
+  line-height:1.7;margin:0;
+}
+
+.card {
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
+.card-title {
+  display:flex;align-items:center;gap:10px;
+  font-size:15px;font-weight:900;margin:0 0 15px;
+}
+.card-title i { color:var(--orange) }
+
+.field label {
+  display:block;font-size:11px;
+  font-weight:900;margin-bottom:7px;
+}
+.input-row {
+  display:flex;gap:9px;
+}
+.input {
+  flex:1;min-width:0;
+  padding:13px;
+  border:1px solid #e5e5e8;
+  border-radius:11px;
+  background:#fff;outline:none;
+  font-size:13px;
+}
+.input:focus {
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px #ff5e0014;
+}
+.primary {
+  border:0;border-radius:11px;
+  background:var(--orange);color:#fff;
+  padding:0 17px;font-size:11px;font-weight:900;
+}
+.hint {
+  color:var(--muted);font-size:10px;
+  line-height:1.7;margin:10px 0 0;
+}
+.notice {
+  margin-top:12px;padding:11px;
+  border-radius:10px;
+  background:#fff7ed;color:#9a3412;
+  font-size:10px;line-height:1.7;
+}
+
+.toolbar {
+  display:flex;justify-content:space-between;
+  align-items:center;gap:10px;
+  margin:25px 0 13px;
+}
+.toolbar h2 { margin:0;font-size:18px;font-weight:900 }
+.count {
+  background:#fff0e6;color:#bd4600;
+  padding:6px 10px;border-radius:20px;
+  font-size:10px;font-weight:900;
+}
+
+.order-card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:17px;margin-bottom:13px;
+  overflow:hidden;
+}
+.order-top {
+  display:flex;justify-content:space-between;
+  align-items:flex-start;gap:12px;
+}
+.order-id {
+  font-size:12px;font-weight:900;
+  overflow-wrap:anywhere;
+}
+.order-date {
+  color:var(--muted);font-size:10px;margin-top:5px;
+}
+.status {
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:20px;padding:7px 9px;
+  font-size:9px;font-weight:900;white-space:nowrap;
+  background:#fff7ed;color:#9a3412;
+}
+.status.pending,.status.payment_pending {
+  background:#fff7ed;color:#9a3412;
+}
+.status.preparing {
+  background:#eff6ff;color:#1d4ed8;
+}
+.status.out_for_delivery {
+  background:#f3e8ff;color:#7e22ce;
+}
+.status.delivered {
+  background:#effcf4;color:#166534;
+}
+.status.cancelled {
+  background:#fef2f2;color:#b91c1c;
+}
+.order-divider {
+  height:1px;background:var(--line);margin:15px 0;
+}
+.items-list { display:grid;gap:10px }
+.order-item {
+  display:flex;justify-content:space-between;
+  gap:10px;font-size:11px;
+}
+.order-item-name { font-weight:700;overflow-wrap:anywhere }
+.order-item-price { font-weight:800;white-space:nowrap }
+.order-item small {
+  display:block;color:var(--muted);
+  font-size:10px;margin-top:3px;
+}
+.order-bottom {
+  display:flex;justify-content:space-between;
+  align-items:center;gap:10px;
+}
+.payment-label {
+  color:var(--muted);font-size:10px;line-height:1.7;
+}
+.payment-label strong { color:var(--dark) }
+.total-label { color:var(--muted);font-size:10px }
+.total-amount {
+  color:var(--orange);font-size:21px;
+  font-weight:900;margin-top:2px;text-align:right;
+}
+.track {
+  margin-top:15px;padding-top:13px;
+  border-top:1px solid var(--line);
+}
+.track-title { font-size:10px;font-weight:900;margin-bottom:10px }
+.timeline {
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+.step { text-align:center;position:relative }
+.step-icon {
+  width:29px;height:29px;border-radius:50%;
+  display:grid;place-items:center;margin:0 auto 6px;
+  background:#f1f1f1;color:#999;font-size:10px;
+}
+.step.done .step-icon {
+  background:#dcfce7;color:#15803d;
+}
+.step.current .step-icon {
+  background:#ffeadb;color:var(--orange);
+}
+.step-label { font-size:9px;color:var(--muted);line-height:1.4 }
+.step.done .step-label,.step.current .step-label {
+  color:var(--dark);font-weight:800;
+}
+.pin-box {
+  margin-top:13px;
+  padding:11px;border:1px dashed #fdba74;
+  border-radius:11px;background:#fff7ed;
+  font-size:11px;line-height:1.6;
+}
+.pin-box strong { color:#9a3412 }
+.pin-value { font-size:17px;font-weight:900;letter-spacing:3px }
+
+.empty {
+  text-align:center;padding:35px 18px;
+}
+.empty-icon {
+  width:66px;height:66px;margin:0 auto 15px;
+  display:grid;place-items:center;border-radius:22px;
+  background:#fff0e6;color:var(--orange);font-size:25px;
+}
+.empty h3 { margin:0 0 8px;font-size:17px }
+.empty p {
+  color:var(--muted);font-size:11px;line-height:1.7;
+  margin:0 auto 17px;max-width:310px;
+}
+.menu-link {
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--orange);color:#fff;
+  border-radius:11px;padding:12px 17px;
+  font-size:11px;font-weight:900;
+}
+.message {
+  display:none;padding:13px;
+  border-radius:11px;font-size:11px;line-height:1.7;
+  overflow-wrap:anywhere;margin-bottom:13px;
+}
+.message.show { display:block }
+.message.error { background:#fef2f2;color:#991b1b;border:1px solid #fecaca }
+.message.info { background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe }
+.message.success { background:#effcf4;color:#166534;border:1px solid #bbf7d0 }
+
+footer {
+  text-align:center;color:var(--muted);
+  font-size:10px;line-height:1.8;padding:25px 12px;
+}
+@media(max-width:520px) {
+  .hero h1 { font-size:28px }
+  .card { padding:15px }
+  .input-row { flex-direction:column }
+  .primary { min-height:44px }
+  .order-card { padding:14px }
+  .order-top { gap:7px }
+  .status { font-size:8px;padding:6px 7px }
+  .order-bottom { align-items:flex-end }
+  .total-amount { font-size:19px }
+  .step-label { font-size:8px }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap header-inner">
+    <a class="back" href="index.html" aria-label="Back to menu">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
+    <i class="fa-solid fa-receipt header-icon"></i>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Your FreshFry account</div>
+    <h1>My Orders <span>🧡</span></h1>
+    <p>Check your order details and delivery progress in one place.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="card-title">
+      <i class="fa-solid fa-mobile-screen-button"></i>
+      Find your orders
+    </h2>
+
+    <form id="search-form">
+      <div class="field">
+        <label for="phone">Enter the mobile number used at checkout</label>
+        <div class="input-row">
+          <input
+            class="input"
+            id="phone"
+            type="tel"
+            inputmode="numeric"
+            maxlength="10"
+            autocomplete="tel"
+            placeholder="10-digit mobile number"
+            required
+          >
+          <button class="primary" id="search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i> FIND ORDERS
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <p class="hint">
+      Enter the same mobile number you used when placing your order.
+    </p>
+
+    <div class="notice">
+      For privacy, only use your own number. Order access must also be protected by your Firebase security rules.
+    </div>
+  </section>
+
+  <div id="message" class="message" role="status" aria-live="polite"></div>
+
+  <div class="toolbar">
+    <h2>Your order history</h2>
+    <span class="count" id="order-count">0 ORDERS</span>
+  </div>
+
+  <section id="orders-list" aria-live="polite">
+    <div class="card empty">
+      <div class="empty-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+      <h3>Ready for something delicious?</h3>
+      <p>Enter your checkout mobile number above to look for your orders.</p>
+      <a class="menu-link" href="index.html">
+        <i class="fa-solid fa-utensils"></i> EXPLORE MENU
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  FreshFry Momo · Baripada, Odisha<br>
+  Fresh food, made with love.
+</footer>
+
+<script type="module">
+import { initializeApp, getApps, getApp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getFirestore, collection, query, where, getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Keep the Firebase project consistent with the existing website. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let searching = false;
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    maximumFractionDigits: 2
+  });
+}
+
+function safeText(value, fallback = "—") {
+  if (value === null || value === undefined || value === "") return fallback;
+  return String(value);
+}
+
+function formatDate(timestamp) {
+  try {
+    if (!timestamp) return "Date unavailable";
+
+    const date = typeof timestamp.toDate === "function"
+      ? timestamp.toDate()
+      : new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) return "Date unavailable";
+
+    return date.toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  } catch {
+    return "Date unavailable";
+  }
+}
+
+function normalizeStatus(value) {
+  return String(value || "pending")
+    .toLowerCase()
+    .trim()
+    .replace(/[\s-]+/g, "_");
+}
+
+function statusInfo(value) {
+  const status = normalizeStatus(value);
+
+  const statuses = {
+    pending: { label: "Order Pending", icon: "fa-clock" },
+    payment_pending: { label: "Payment Pending", icon: "fa-credit-card" },
+    confirmed: { label: "Confirmed", icon: "fa-circle-check" },
+    accepted: { label: "Confirmed", icon: "fa-circle-check" },
+    preparing: { label: "Preparing", icon: "fa-fire-burner" },
+    ready: { label: "Ready for Pickup", icon: "fa-bell-concierge" },
+    out_for_delivery: { label: "Out for Delivery", icon: "fa-motorcycle" },
+    delivered: { label: "Delivered", icon: "fa-check-double" },
+    completed: { label: "Delivered", icon: "fa-check-double" },
+    cancelled: { label: "Cancelled", icon: "fa-ban" },
+    rejected: { label: "Rejected", icon: "fa-ban" }
+  };
+
+  return statuses[status] || {
+    label: status.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+    icon: "fa-clock"
+  };
+}
+
+function showMessage(message, type = "info") {
+  const el = $("message");
+  el.textContent = message;
+  el.className = "message show " + type;
+}
+
+function clearMessage() {
+  $("message").textContent = "";
+  $("message").className = "message";
+}
+
+function makeElement(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+
+function renderEmpty(title, description) {
+  const list = $("orders-list");
+  list.replaceChildren();
+
+  const card = makeElement("div", "card empty");
+  const iconBox = makeElement("div", "empty-icon");
+  const icon = makeElement("i", "fa-solid fa-box-open");
+  iconBox.append(icon);
+
+  card.append(
+    iconBox,
+    makeElement("h3", "", title),
+    makeElement("p", "", description)
+  );
+
+  const link = makeElement("a", "menu-link");
+  link.href = "index.html";
+
+  const linkIcon = makeElement("i", "fa-solid fa-utensils");
+  link.append(linkIcon, document.createTextNode(" EXPLORE MENU"));
+
+  card.append(link);
+  list.append(card);
+  $("order-count").textContent = "0 ORDERS";
+}
+
+function createOrderItem(item) {
+  const row = makeElement("div", "order-item");
+  const left = makeElement("div", "");
+  const name = makeElement("div", "order-item-name", safeText(item.name, "Food item"));
+  const qty = makeElement("small", "", `Qty: ${Number(item.qty) || 1}`);
+  left.append(name, qty);
+
+  const price = makeElement(
+    "div",
+    "order-item-price",
+    money((Number(item.price) || 0) * (Number(item.qty) || 1))
+  );
+
+  row.append(left, price);
+  return row;
+}
+
+function createTimeline(statusValue) {
+  const status = normalizeStatus(statusValue);
+
+  const card = makeElement("div", "track");
+  card.append(makeElement("div", "track-title", "ORDER PROGRESS"));
+
+  const timeline = makeElement("div", "timeline");
+
+  const steps = [
+    { label: "Placed", icon: "fa-receipt" },
+    { label: "Preparing", icon: "fa-fire-burner" },
+    { label: "On the way", icon: "fa-motorcycle" },
+    { label: "Delivered", icon: "fa-check" }
+  ];
+
+  const cancelled = ["cancelled", "rejected"].includes(status);
+  const paymentPending = status === "payment_pending";
+
+  let current = 0;
+
+  if (["confirmed", "accepted", "preparing", "ready"].includes(status)) current = 1;
+  if (status === "out_for_delivery") current = 2;
+  if (["delivered", "completed"].includes(status)) current = 3;
+
+  steps.forEach((step, index) => {
+    const stepEl = makeElement("div", "step");
+
+    if (!cancelled && !paymentPending && index < current) {
+      stepEl.classList.add("done");
+    } else if (!cancelled && !paymentPending && index === current) {
+      stepEl.classList.add("current");
+    }
+
+    const iconBox = makeElement("div", "step-icon");
+    iconBox.append(makeElement("i", "fa-solid " + step.icon));
+
+    stepEl.append(
+      iconBox,
+      makeElement("div", "step-label", step.label)
+    );
+
+    timeline.append(stepEl);
+  });
+
+  card.append(timeline);
+
+  if (cancelled) {
+    card.append(makeElement("div", "hint", "This order is cancelled or rejected."));
+  } else if (paymentPending) {
+    card.append(makeElement("div", "hint", "Payment is pending. Contact FreshFry if you need help."));
+  }
+
+  return card;
+}
+
+function createOrderCard(order) {
+  const data = order.data;
+  const card = makeElement("article", "order-card");
+
+  const top = makeElement("div", "order-top");
+  const heading = makeElement("div", "");
+
+  heading.append(
+    makeElement("div", "order-id", "ORDER #" + order.id),
+    makeElement("div", "order-date", formatDate(data.createdAt))
+  );
+
+  const info = statusInfo(data.status);
+  const badge = makeElement("span", "status " + normalizeStatus(data.status));
+  badge.append(
+    makeElement("i", "fa-solid " + info.icon),
+    document.createTextNode(" " + info.label)
+  );
+
+  top.append(heading, badge);
+  card.append(top, makeElement("div", "order-divider"));
+
+  const itemsList = makeElement("div", "items-list");
+  const items = Array.isArray(data.items) ? data.items : [];
+
+  if (items.length) {
+    items.forEach(item => itemsList.append(createOrderItem(item)));
+  } else {
+    itemsList.append(makeElement("div", "hint", "Item details are unavailable."));
+  }
+
+  card.append(itemsList, makeElement("div", "order-divider"));
+
+  const bottom = makeElement("div", "order-bottom");
+  const payment = makeElement("div", "payment-label");
+
+  payment.append(
+    makeElement("div", "", "PAYMENT"),
+    makeElement(
+      "strong",
+      "",
+      safeText(data.paymentMethod, "Not specified")
+    ),
+    document.createElement("br"),
+    makeElement(
+      "span",
+      "",
+      "Status: " + safeText(data.paymentStatus, "Not specified").replace(/_/g, " ")
+    )
+  );
+
+  const totalBox = makeElement("div", "");
+  totalBox.append(
+    makeElement("div", "total-label", "TOTAL AMOUNT"),
+    makeElement("div", "total-amount", money(data.total))
+  );
+
+  bottom.append(payment, totalBox);
+  card.append(bottom, createTimeline(data.status));
+
+  // The delivery PIN is displayed only if the order record contains one.
+  // Do not share it publicly; share it with your rider when the order arrives.
+  if (data.deliveryPin !== undefined && data.deliveryPin !== null && data.deliveryPin !== "") {
+    const pin = makeElement("div", "pin-box");
+    pin.append(
+      makeElement("div", "", "YOUR DELIVERY PIN"),
+      makeElement("div", "pin-value", String(data.deliveryPin)),
+      makeElement("div", "", "Keep this PIN private and share it with the rider when your order arrives.")
+    );
+    card.append(pin);
+  }
+
+  return card;
+}
+
+async function searchOrders(event) {
+  event.preventDefault();
+  if (searching) return;
+
+  clearMessage();
+
+  const phone = $("phone").value.replace(/\D/g, "");
+
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    showMessage("Please enter a valid 10-digit Indian mobile number.", "error");
+    $("phone").focus();
+    return;
+  }
+
+  searching = true;
+  const button = $("search-btn");
+  button.disabled = true;
+  button.textContent = "SEARCHING...";
+  $("orders-list").replaceChildren();
+  $("order-count").textContent = "…";
+
+  try {
+    const ordersQuery = query(
+      collection(db, "orders"),
+      where("customerPhone", "==", phone)
+    );
+
+    const snapshot = await getDocs(ordersQuery);
+
+    const orders = snapshot.docs.map(docSnap => ({
+      id: docSnap.id,
+      data: docSnap.data()
+    }));
+
+    orders.sort((a, b) => {
+      const dateA = a.data.createdAt?.toMillis?.() || 0;
+      const dateB = b.data.createdAt?.toMillis?.() || 0;
+      return dateB - dateA;
+    });
+
+    if (!orders.length) {
+      $("order-count").textContent = "0 ORDERS";
+      renderEmpty(
+        "No orders found",
+        "We could not find orders for this number. Check the mobile number used at checkout and try again."
+      );
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    orders.forEach(order => {
+      fragment.append(createOrderCard(order));
+    });
+
+    $("orders-list").replaceChildren(fragment);
+    $("order-count").textContent = `${orders.length} ${orders.length === 1 ? "ORDER" : "ORDERS"}`;
+
+    showMessage(
+      `Found ${orders.length} order${orders.length === 1 ? "" : "s"} for this mobile number.`,
+      "success"
+    );
+  } catch (error) {
+    console.error("Order history error:", error);
+
+    $("order-count").textContent = "UNAVAILABLE";
+    renderEmpty(
+      "Unable to load orders",
+      "Please try again. If this keeps happening, your Firebase Firestore rules may not allow this query."
+    );
+
+    showMessage(
+      "Could not retrieve order history. Check your internet connection and Firestore read permissions.",
+      "error"
+    );
+  } finally {
+    searching = false;
+    button.disabled = false;
+    button.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> FIND ORDERS';
+  }
+}
+
+$("search-form").addEventListener("submit", searchOrders);
+
+// Prefill the last checkout phone number for convenience.
+// The customer must still tap FIND ORDERS.
+const savedPhone = (localStorage.getItem("ff_phone") || "")
+  .replace(/\D/g, "")
+  .slice(-10);
+
+if (savedPhone) {
+  $("phone").value = savedPhone;
+}
+</script>
+</body>
+</html>
