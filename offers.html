@@ -1,1 +1,711 @@
-fdd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Discover FreshFry Momo food offers, combos and deals in Baripada.">
+<title>Offers & Deals | FreshFry Momo</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#faf9f7;
+  --line:#eee9e5;
+  --green:#15803d;
+}
+* { box-sizing:border-box }
+html { scroll-behavior:smooth }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--dark);
+  font-family:'Outfit',sans-serif;
+}
+a,button { -webkit-tap-highlight-color:transparent }
+a { color:inherit;text-decoration:none }
+button { font:inherit;cursor:pointer }
+.wrap { width:min(900px,calc(100% - 28px));margin:auto }
+
+header {
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#ffffffed;
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner {
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.back {
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.brand {
+  font-size:24px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:-1px;
+}
+.brand span { color:var(--orange) }
+.header-right {
+  margin-left:auto;
+  display:flex;
+  gap:9px;
+}
+.icon-btn {
+  width:41px;
+  height:41px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:13px;
+  color:var(--dark);
+}
+.icon-btn i { font-size:17px }
+
+.hero { padding:25px 0 18px }
+.eyebrow {
+  color:var(--orange);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.hero h1 {
+  margin:8px 0;
+  font-size:clamp(29px,6vw,42px);
+  line-height:1.08;
+  letter-spacing:-1.5px;
+  font-weight:900;
+}
+.hero h1 span { color:var(--orange) }
+.hero p {
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+.hero-banner {
+  margin-top:19px;
+  padding:23px;
+  border-radius:22px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 95% 0%,#ff8a473d 0,transparent 35%),
+    linear-gradient(135deg,#171717,#29221e);
+  position:relative;
+  overflow:hidden;
+}
+.hero-banner:after {
+  content:"%";
+  position:absolute;
+  right:12px;
+  bottom:-39px;
+  font-size:150px;
+  line-height:1;
+  font-weight:900;
+  color:#ffffff0c;
+  pointer-events:none;
+}
+.banner-label {
+  color:#ffb17e;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.7px;
+}
+.hero-banner h2 {
+  margin:10px 0 7px;
+  font-size:27px;
+  line-height:1.15;
+  letter-spacing:-.6px;
+  position:relative;
+  z-index:1;
+}
+.hero-banner p {
+  color:#d2d2d2;
+  font-size:11px;
+  line-height:1.7;
+  max-width:330px;
+  position:relative;
+  z-index:1;
+}
+.banner-button {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--orange);
+  color:white;
+  padding:12px 16px;
+  border-radius:11px;
+  font-size:11px;
+  font-weight:900;
+  margin-top:7px;
+  position:relative;
+  z-index:1;
+}
+.section-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:27px 0 14px;
+}
+.section-heading h2 {
+  margin:0;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.5px;
+}
+.section-heading span {
+  color:var(--muted);
+  font-size:10px;
+}
+.filters {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:2px 0 12px;
+  scrollbar-width:none;
+}
+.filters::-webkit-scrollbar { display:none }
+.filter {
+  flex-shrink:0;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:30px;
+  padding:10px 15px;
+  color:#666;
+  font-size:10px;
+  font-weight:900;
+}
+.filter.active {
+  color:#fff;
+  background:var(--dark);
+  border-color:var(--dark);
+}
+.offer-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+.offer-card {
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  min-width:0;
+}
+.offer-art {
+  min-height:132px;
+  padding:15px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.art-orange {
+  background:linear-gradient(140deg,#ff5e00,#ff9a43);
+  color:#fff;
+}
+.art-dark {
+  background:linear-gradient(140deg,#171717,#3a3029);
+  color:#fff;
+}
+.art-cream {
+  background:linear-gradient(140deg,#fff1e6,#ffd2ae);
+  color:#842d00;
+}
+.art-green {
+  background:linear-gradient(140deg,#166534,#4ade80);
+  color:#fff;
+}
+.art-purple {
+  background:linear-gradient(140deg,#581c87,#c084fc);
+  color:#fff;
+}
+.art-blue {
+  background:linear-gradient(140deg,#1e3a8a,#60a5fa);
+  color:#fff;
+}
+.offer-tag {
+  align-self:flex-start;
+  padding:6px 9px;
+  background:#ffffffeb;
+  color:#171717;
+  border-radius:7px;
+  font-size:9px;
+  font-weight:900;
+}
+.offer-emoji {
+  position:absolute;
+  right:13px;
+  bottom:5px;
+  font-size:58px;
+  filter:drop-shadow(0 5px 6px #0002);
+  transform:rotate(-8deg);
+}
+.offer-art h3 {
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-1px;
+  line-height:1;
+  margin:12px 0 0;
+  max-width:75%;
+  position:relative;
+  z-index:1;
+}
+.offer-body { padding:14px }
+.offer-title {
+  margin:0;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.35;
+}
+.offer-desc {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.65;
+  margin:7px 0 12px;
+  min-height:33px;
+}
+.coupon {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+  padding:9px;
+  border:1px dashed #fdba74;
+  background:#fff7ed;
+  border-radius:10px;
+}
+.coupon-code {
+  font-size:11px;
+  font-weight:900;
+  color:#9a3412;
+  overflow-wrap:anywhere;
+}
+.copy-btn {
+  border:0;
+  background:transparent;
+  color:var(--orange);
+  font-size:10px;
+  font-weight:900;
+  flex-shrink:0;
+}
+.offer-action {
+  width:100%;
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  min-height:42px;
+  background:var(--dark);
+  color:#fff;
+  border:0;
+  border-radius:11px;
+  font-size:10px;
+  font-weight:900;
+}
+.offer-action i { color:#ff9a60 }
+.terms {
+  margin-top:8px;
+  color:#969696;
+  font-size:9px;
+  line-height:1.5;
+}
+.info-card {
+  margin-top:23px;
+  padding:18px;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:17px;
+}
+.info-card h3 {
+  margin:0 0 12px;
+  font-size:15px;
+}
+.info-row {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+  margin-top:10px;
+}
+.info-row i {
+  width:16px;
+  color:var(--orange);
+  margin-top:3px;
+}
+.message {
+  display:none;
+  padding:12px;
+  margin-top:12px;
+  border-radius:11px;
+  font-size:11px;
+  line-height:1.6;
+}
+.message.show { display:block }
+.message.success { background:#effcf4;color:#166534 }
+.message.error { background:#fef2f2;color:#991b1b }
+footer {
+  padding:25px 12px 35px;
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+}
+.bottom-nav {
+  position:sticky;
+  bottom:0;
+  z-index:15;
+  background:#ffffffef;
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+}
+.nav-inner {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  max-width:600px;
+  margin:auto;
+}
+.nav-link {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:7px 2px;
+  color:#8b8b8b;
+  font-size:10px;
+  font-weight:800;
+}
+.nav-link i { font-size:18px }
+.nav-link.active { color:var(--orange) }
+
+@media(min-width:700px) {
+  .offer-grid { grid-template-columns:repeat(3,minmax(0,1fr)) }
+  .offer-art { min-height:155px }
+}
+@media(max-width:420px) {
+  .offer-grid { gap:9px }
+  .offer-art { min-height:115px;padding:11px }
+  .offer-art h3 { font-size:19px }
+  .offer-emoji { font-size:46px;right:8px }
+  .offer-body { padding:11px }
+  .offer-title { font-size:13px }
+  .offer-desc { font-size:10px }
+  .hero-banner { padding:19px }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap header-inner">
+    <a class="back" href="index.html" aria-label="Back to home">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
+    <div class="header-right">
+      <a class="icon-btn" href="cart.html" aria-label="Shopping cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+      </a>
+      <a class="icon-btn" href="profile.html" aria-label="My profile">
+        <i class="fa-regular fa-user"></i>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Fresh deals · Fresh flavour</div>
+    <h1>Offers & <span>Deals 🔥</span></h1>
+    <p>Explore our featured deals and find something delicious for your next order.</p>
+
+    <div class="hero-banner">
+      <div class="banner-label">FRESHFRY SPECIAL</div>
+      <h2>Good food.<br>Better deals.</h2>
+      <p>Explore featured combos and available coupon codes from FreshFry Momo.</p>
+      <a href="#all-offers" class="banner-button">
+        EXPLORE OFFERS <i class="fa-solid fa-arrow-down"></i>
+      </a>
+    </div>
+  </section>
+
+  <div class="section-heading" id="all-offers">
+    <h2>Featured offers</h2>
+    <span id="offer-count">6 DEALS</span>
+  </div>
+
+  <div class="filters" aria-label="Filter offers">
+    <button class="filter active" data-filter="all" type="button">All Deals</button>
+    <button class="filter" data-filter="combo" type="button">Combos</button>
+    <button class="filter" data-filter="coupon" type="button">Coupons</button>
+    <button class="filter" data-filter="delivery" type="button">Delivery</button>
+  </div>
+
+  <div class="offer-grid" id="offer-grid">
+
+    <article class="offer-card" data-category="combo">
+      <div class="offer-art art-orange">
+        <span class="offer-tag">FEATURED</span>
+        <h3>Combo<br>Special</h3>
+        <span class="offer-emoji" aria-hidden="true">🍗</span>
+      </div>
+      <div class="offer-body">
+        <h3 class="offer-title">FreshFry Combo</h3>
+        <p class="offer-desc">Explore a tasty combo for your next meal.</p>
+        <div class="coupon">
+          <span class="coupon-code">COMBO</span>
+          <button class="copy-btn" data-code="COMBO" type="button">COPY</button>
+        </div>
+        <button class="offer-action order-now" type="button">
+          <i class="fa-solid fa-bag-shopping"></i> ORDER NOW
+        </button>
+        <div class="terms">Sample coupon code. Discount is not automatically applied.</div>
+      </div>
+    </article>
+
+    <article class="offer-card" data-category="coupon">
+      <div class="offer-art art-dark">
+        <span class="offer-tag">SPECIAL DEAL</span>
+        <h3>Value<br>Meal</h3>
+        <span class="offer-emoji" aria-hidden="true">🍱</span>
+      </div>
+      <div class="offer-body">
+        <h3 class="offer-title">Value Meal Deal</h3>
+        <p class="offer-desc">Check the menu for delicious options within your budget.</p>
+        <div class="coupon">
+          <span class="coupon-code">VALUE</span>
+          <button class="copy-btn" data-code="VALUE" type="button">COPY</button>
+        </div>
+        <button class="offer-action order-now" type="button">
+          <i class="fa-solid fa-bag-shopping"></i> ORDER NOW
+        </button>
+        <div class="terms">Sample coupon code. Confirm availability with the restaurant.</div>
+      </div>
+    </article>
+
+    <article class="offer-card" data-category="combo">
+      <div class="offer-art art-cream">
+        <span class="offer-tag">FAN FAVOURITE</span>
+        <h3>Snack<br>Time</h3>
+        <span class="offer-emoji" aria-hidden="true">🥟</span>
+      </div>
+      <div class="offer-body">
+        <h3 class="offer-title">Snack Time Combo</h3>
+        <p class="offer-desc">Find a snack for your evening cravings.</p>
+        <div class="coupon">
+          <span class="coupon-code">SNACK</span>
+          <button class="copy-btn" data-code="SNACK" type="button">COPY</button>
+        </div>
+        <button class="offer-action order-now" type="button">
+          <i class="fa-solid fa-bag-shopping"></i> ORDER NOW
+        </button>
+        <div class="terms">Sample coupon code. Discount is not automatically applied.</div>
+      </div>
+    </article>
+
+    <article class="offer-card" data-category="delivery">
+      <div class="offer-art art-green">
+        <span class="offer-tag">DELIVERY</span>
+        <h3>Easy<br>Ordering</h3>
+        <span class="offer-emoji" aria-hidden="true">🛵</span>
+      </div>
+      <div class="offer-body">
+        <h3 class="offer-title">Delivery Deal</h3>
+        <p class="offer-desc">Check your checkout total for applicable delivery charges.</p>
+        <div class="coupon">
+          <span class="coupon-code">DELIVERY</span>
+          <button class="copy-btn" data-code="DELIVERY" type="button">COPY</button>
+        </div>
+        <button class="offer-action order-now" type="button">
+          <i class="fa-solid fa-bag-shopping"></i> ORDER NOW
+        </button>
+        <div class="terms">Sample code only. No free delivery is guaranteed.</div>
+      </div>
+    </article>
+
+    <article class="offer-card" data-category="coupon">
+      <div class="offer-art art-purple">
+        <span class="offer-tag">FOOD LOVERS</span>
+        <h3>Extra<br>Yummy</h3>
+        <span class="offer-emoji" aria-hidden="true">🍜</span>
+      </div>
+      <div class="offer-body">
+        <h3 class="offer-title">Foodie Deal</h3>
+        <p class="offer-desc">Browse the menu and discover your next favourite dish.</p>
+        <div class="coupon">
+          <span class="coupon-code">FOODIE</span>
+          <button class="copy-btn" data-code="FOODIE" type="button">COPY</button>
+        </div>
+        <button class="offer-action order-now" type="button">
+          <i class="fa-solid fa-bag-shopping"></i> ORDER NOW
+        </button>
+        <div class="terms">Sample coupon code. No discount is applied automatically.</div>
+      </div>
+    </article>
+
+    <article class="offer-card" data-category="combo">
+      <div class="offer-art art-blue">
+        <span class="offer-tag">WEEKEND IDEA</span>
+        <h3>Share<br>& Enjoy</h3>
+        <span class="offer-emoji" aria-hidden="true">🍽️</span>
+      </div>
+      <div class="offer-body">
+        <h3 class="offer-title">Sharing Combo</h3>
+        <p class="offer-desc">Explore food choices for friends and family.</p>
+        <div class="coupon">
+          <span class="coupon-code">SHARE</span>
+          <button class="copy-btn" data-code="SHARE" type="button">COPY</button>
+        </div>
+        <button class="offer-action order-now" type="button">
+          <i class="fa-solid fa-bag-shopping"></i> ORDER NOW
+        </button>
+        <div class="terms">Sample coupon code. Ask the restaurant about combo availability.</div>
+      </div>
+    </article>
+
+  </div>
+
+  <div id="message" class="message" role="status" aria-live="polite"></div>
+
+  <section class="info-card">
+    <h3><i class="fa-solid fa-circle-info" style="color:var(--orange)"></i> Offer information</h3>
+    <div class="info-row">
+      <i class="fa-solid fa-tag"></i>
+      <span>The coupon codes shown on this starter page are examples. They will not change the order price unless you configure and validate them in your checkout system.</span>
+    </div>
+    <div class="info-row">
+      <i class="fa-solid fa-receipt"></i>
+      <span>Always check the final amount, delivery charges and order details at checkout before confirming your order.</span>
+    </div>
+    <div class="info-row">
+      <i class="fa-solid fa-headset"></i>
+      <span>For current offer availability, contact FreshFry Momo directly.</span>
+    </div>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a class="nav-link" href="index.html">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a class="nav-link" href="index.html#menu-section">
+      <i class="fa-solid fa-utensils"></i>
+      <span>Menu</span>
+    </a>
+    <a class="nav-link" href="my-orders.html">
+      <i class="fa-solid fa-receipt"></i>
+      <span>Orders</span>
+    </a>
+    <a class="nav-link" href="profile.html">
+      <i class="fa-solid fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </div>
+</nav>
+
+<footer>
+  FreshFry Momo · Baripada, Odisha<br>
+  Fresh food, made with love.
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function showMessage(text,type="success") {
+  const el = $("message");
+  el.textContent = text;
+  el.className = "message show " + type;
+
+  window.clearTimeout(showMessage.timer);
+  showMessage.timer = window.setTimeout(() => {
+    el.className = "message";
+    el.textContent = "";
+  },3500);
+}
+
+/* Filter offers */
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click",() => {
+    const filter = button.dataset.filter;
+
+    document.querySelectorAll(".filter").forEach(item => {
+      item.classList.toggle("active",item === button);
+    });
+
+    let visible = 0;
+
+    document.querySelectorAll(".offer-card").forEach(card => {
+      const show = filter === "all" || card.dataset.category === filter;
+      card.hidden = !show;
+      if (show) visible++;
+    });
+
+    $("offer-count").textContent = visible + (visible === 1 ? " DEAL" : " DEALS");
+  });
+});
+
+/* Copy a coupon code */
+document.querySelectorAll(".copy-btn").forEach(button => {
+  button.addEventListener("click",async () => {
+    const code = button.dataset.code;
+
+    try {
+      await navigator.clipboard.writeText(code);
+      showMessage("Coupon code " + code + " copied. It is an example code and may not be active.");
+    } catch {
+      const field = document.createElement("textarea");
+      field.value = code;
+      field.style.position = "fixed";
+      field.style.opacity = "0";
+      document.body.append(field);
+      field.select();
+
+      try {
+        document.execCommand("copy");
+        showMessage("Coupon code " + code + " copied. It is an example code and may not be active.");
+      } catch {
+        showMessage("Your coupon code is: " + code,"error");
+      }
+
+      field.remove();
+    }
+  });
+});
+
+/* Go to the existing customer menu */
+document.querySelectorAll(".order-now").forEach(button => {
+  button.addEventListener("click",() => {
+    window.location.href = "index.html#menu-section";
+  });
+});
+</script>
+</body>
+</html>
