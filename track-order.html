@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff5e00">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Track your FreshFry Momo order status.">
+<title>Track Order | FreshFry Momo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --orange:#ff5e00;
+  --dark:#171717;
+  --muted:#777b85;
+  --bg:#faf9f7;
+  --line:#eee9e5;
+}
+* { box-sizing:border-box }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--dark);
+  font-family:'Outfit',sans-serif;
+}
+button,input { font:inherit }
+button,a { -webkit-tap-highlight-color:transparent }
+a { color:inherit;text-decoration:none }
+button { cursor:pointer }
+.wrap { width:min(760px,calc(100% - 28px));margin:auto }
+
+header {
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#ffffffed;
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner {
+  min-height:65px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.back {
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.brand {
+  font-size:24px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:-1px;
+}
+.brand span { color:var(--orange) }
+.header-icon {
+  margin-left:auto;
+  color:var(--orange);
+  font-size:19px;
+}
+.hero { padding:28px 0 20px }
+.eyebrow {
+  color:var(--orange);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+.hero h1 {
+  font-size:32px;
+  letter-spacing:-1px;
+  line-height:1.15;
+  margin:8px 0;
+}
+.hero p {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin:0;
+}
+.card,.order-card {
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
+.card-title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:15px;
+  font-weight:900;
+  margin:0 0 15px;
+}
+.card-title i { color:var(--orange) }
+.field label {
+  display:block;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:7px;
+}
+.input-row { display:flex;gap:9px }
+.input {
+  flex:1;
+  min-width:0;
+  padding:13px;
+  border:1px solid #e5e5e8;
+  border-radius:11px;
+  background:#fff;
+  outline:none;
+  font-size:13px;
+}
+.input:focus {
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px #ff5e0014;
+}
+.primary {
+  border:0;
+  border-radius:11px;
+  background:var(--orange);
+  color:#fff;
+  padding:0 17px;
+  font-size:11px;
+  font-weight:900;
+}
+.primary:disabled { opacity:.55;cursor:not-allowed }
+.hint {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+  margin:10px 0 0;
+}
+.notice {
+  margin-top:12px;
+  padding:11px;
+  border-radius:10px;
+  background:#fff7ed;
+  color:#9a3412;
+  font-size:10px;
+  line-height:1.7;
+}
+.message {
+  display:none;
+  padding:13px;
+  border-radius:11px;
+  font-size:11px;
+  line-height:1.7;
+  overflow-wrap:anywhere;
+  margin-bottom:13px;
+}
+.message.show { display:block }
+.message.error {
+  background:#fef2f2;
+  color:#991b1b;
+  border:1px solid #fecaca;
+}
+.message.info {
+  background:#eff6ff;
+  color:#1d4ed8;
+  border:1px solid #bfdbfe;
+}
+.message.success {
+  background:#effcf4;
+  color:#166534;
+  border:1px solid #bbf7d0;
+}
+.order-card { padding:18px;overflow:hidden }
+.order-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.order-id {
+  font-size:12px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+.order-date {
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+}
+.status {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  border-radius:20px;
+  padding:7px 9px;
+  font-size:9px;
+  font-weight:900;
+  white-space:nowrap;
+  background:#fff7ed;
+  color:#9a3412;
+}
+.status.preparing,.status.confirmed,.status.accepted,.status.ready {
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+.status.out_for_delivery {
+  background:#f3e8ff;
+  color:#7e22ce;
+}
+.status.delivered,.status.completed {
+  background:#effcf4;
+  color:#166534;
+}
+.status.cancelled,.status.rejected {
+  background:#fef2f2;
+  color:#b91c1c;
+}
+.order-divider {
+  height:1px;
+  background:var(--line);
+  margin:15px 0;
+}
+.items-list { display:grid;gap:10px }
+.order-item {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:11px;
+}
+.order-item-name {
+  font-weight:700;
+  overflow-wrap:anywhere;
+}
+.order-item-price { font-weight:800;white-space:nowrap }
+.order-item small {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+}
+.order-bottom {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.payment-label {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+.payment-label strong { color:var(--dark) }
+.total-label { color:var(--muted);font-size:10px }
+.total-amount {
+  color:var(--orange);
+  font-size:21px;
+  font-weight:900;
+  margin-top:2px;
+  text-align:right;
+}
+.track {
+  margin-top:15px;
+  padding-top:13px;
+  border-top:1px solid var(--line);
+}
+.track-title {
+  font-size:10px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.timeline {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+.step { text-align:center;position:relative }
+.step-icon {
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  margin:0 auto 6px;
+  background:#f1f1f1;
+  color:#999;
+  font-size:10px;
+}
+.step.done .step-icon {
+  background:#dcfce7;
+  color:#15803d;
+}
+.step.current .step-icon {
+  background:#ffeadb;
+  color:var(--orange);
+}
+.step-label {
+  font-size:9px;
+  color:var(--muted);
+  line-height:1.4;
+}
+.step.done .step-label,.step.current .step-label {
+  color:var(--dark);
+  font-weight:800;
+}
+.pin-box {
+  margin-top:13px;
+  padding:11px;
+  border:1px dashed #fdba74;
+  border-radius:11px;
+  background:#fff7ed;
+  font-size:11px;
+  line-height:1.6;
+}
+.pin-value {
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:3px;
+}
+.empty { text-align:center;padding:35px 18px }
+.empty-icon {
+  width:66px;
+  height:66px;
+  margin:0 auto 15px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  background:#fff0e6;
+  color:var(--orange);
+  font-size:25px;
+}
+.empty h3 { margin:0 0 8px;font-size:17px }
+.empty p {
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+  margin:0 auto 17px;
+  max-width:310px;
+}
+.menu-link {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--orange);
+  color:#fff;
+  border-radius:11px;
+  padding:12px 17px;
+  font-size:11px;
+  font-weight:900;
+}
+footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+  padding:25px 12px;
+}
+@media(max-width:520px) {
+  .hero h1 { font-size:28px }
+  .card,.order-card { padding:14px }
+  .input-row { flex-direction:column }
+  .primary { min-height:44px }
+  .order-top { gap:7px }
+  .status { font-size:8px;padding:6px 7px }
+  .order-bottom { align-items:flex-end }
+  .total-amount { font-size:19px }
+  .step-label { font-size:8px }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap header-inner">
+    <a class="back" href="my-orders.html" aria-label="Back to my orders">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a class="brand" href="index.html">Fresh<span>Fry.</span></a>
+    <i class="fa-solid fa-location-crosshairs header-icon"></i>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Live order details</div>
+    <h1>Track Your Order <span>🧡</span></h1>
+    <p>Enter your order ID to check its latest status and delivery progress.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="card-title">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      Find your order
+    </h2>
+
+    <form id="search-form">
+      <div class="field">
+        <label for="order-id">Order ID</label>
+        <div class="input-row">
+          <input
+            class="input"
+            id="order-id"
+            type="text"
+            autocomplete="off"
+            placeholder="Paste your order ID"
+            maxlength="150"
+            required
+          >
+          <button class="primary" id="search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i> TRACK ORDER
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <p class="hint">
+      You can find the Order ID in your order confirmation or on the My Orders page.
+    </p>
+
+    <div class="notice">
+      For privacy, this page searches by exact Order ID. An Order ID is not a substitute for secure customer authentication; keep it private and protect access with Firebase security rules.
+    </div>
+  </section>
+
+  <div id="message" class="message" role="status" aria-live="polite"></div>
+
+  <section id="result" aria-live="polite">
+    <div class="card empty">
+      <div class="empty-icon">
+        <i class="fa-solid fa-truck-fast"></i>
+      </div>
+      <h3>Your order journey</h3>
+      <p>Enter your order ID above to see order status, items, total and delivery progress.</p>
+      <a class="menu-link" href="my-orders.html">
+        <i class="fa-solid fa-receipt"></i> MY ORDERS
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  FreshFry Momo · Baripada, Odisha<br>
+  Fresh food, made with love.
+</footer>
+
+<script type="module">
+import { initializeApp, getApps, getApp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getFirestore, doc, getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+let searching = false;
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    maximumFractionDigits:2
+  });
+}
+
+function safeText(value, fallback = "—") {
+  return value === null || value === undefined || value === ""
+    ? fallback
+    : String(value);
+}
+
+function formatDate(timestamp) {
+  try {
+    if (!timestamp) return "Date unavailable";
+
+    const date = typeof timestamp.toDate === "function"
+      ? timestamp.toDate()
+      : new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) return "Date unavailable";
+
+    return date.toLocaleString("en-IN", {
+      day:"numeric",
+      month:"short",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+  } catch {
+    return "Date unavailable";
+  }
+}
+
+function normalizeStatus(value) {
+  return String(value || "pending")
+    .toLowerCase()
+    .trim()
+    .replace(/[\s-]+/g, "_");
+}
+
+function statusInfo(value) {
+  const status = normalizeStatus(value);
+
+  const statuses = {
+    pending:{label:"Order Pending",icon:"fa-clock"},
+    payment_pending:{label:"Payment Pending",icon:"fa-credit-card"},
+    confirmed:{label:"Confirmed",icon:"fa-circle-check"},
+    accepted:{label:"Confirmed",icon:"fa-circle-check"},
+    preparing:{label:"Preparing",icon:"fa-fire-burner"},
+    ready:{label:"Ready for Pickup",icon:"fa-bell-concierge"},
+    out_for_delivery:{label:"Out for Delivery",icon:"fa-motorcycle"},
+    delivered:{label:"Delivered",icon:"fa-check-double"},
+    completed:{label:"Delivered",icon:"fa-check-double"},
+    cancelled:{label:"Cancelled",icon:"fa-ban"},
+    rejected:{label:"Rejected",icon:"fa-ban"}
+  };
+
+  return statuses[status] || {
+    label:status.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()),
+    icon:"fa-clock"
+  };
+}
+
+function makeElement(tag,className,text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+
+function showMessage(message,type="info") {
+  const el = $("message");
+  el.textContent = message;
+  el.className = "message show " + type;
+}
+
+function renderEmpty(title,description) {
+  const result = $("result");
+  result.replaceChildren();
+
+  const card = makeElement("div","card empty");
+  const iconBox = makeElement("div","empty-icon");
+  iconBox.append(makeElement("i","fa-solid fa-box-open"));
+
+  card.append(
+    iconBox,
+    makeElement("h3","",title),
+    makeElement("p","",description)
+  );
+
+  const link = makeElement("a","menu-link");
+  link.href = "my-orders.html";
+  link.append(
+    makeElement("i","fa-solid fa-receipt"),
+    document.createTextNode(" MY ORDERS")
+  );
+
+  card.append(link);
+  result.append(card);
+}
+
+function createTimeline(statusValue) {
+  const status = normalizeStatus(statusValue);
+  const box = makeElement("div","track");
+  box.append(makeElement("div","track-title","ORDER PROGRESS"));
+
+  const timeline = makeElement("div","timeline");
+  const steps = [
+    {label:"Placed",icon:"fa-receipt"},
+    {label:"Preparing",icon:"fa-fire-burner"},
+    {label:"On the way",icon:"fa-motorcycle"},
+    {label:"Delivered",icon:"fa-check"}
+  ];
+
+  const cancelled = ["cancelled","rejected"].includes(status);
+  const pendingPayment = status === "payment_pending";
+
+  let current = 0;
+
+  if (["confirmed","accepted","preparing","ready"].includes(status)) current = 1;
+  if (status === "out_for_delivery") current = 2;
+  if (["delivered","completed"].includes(status)) current = 3;
+
+  steps.forEach((step,index) => {
+    const el = makeElement("div","step");
+
+    if (!cancelled && !pendingPayment && index < current) {
+      el.classList.add("done");
+    } else if (!cancelled && !pendingPayment && index === current) {
+      el.classList.add("current");
+    }
+
+    const icon = makeElement("div","step-icon");
+    icon.append(makeElement("i","fa-solid " + step.icon));
+
+    el.append(icon,makeElement("div","step-label",step.label));
+    timeline.append(el);
+  });
+
+  box.append(timeline);
+
+  if (cancelled) {
+    box.append(makeElement("div","hint","This order is cancelled or rejected."));
+  }
+
+  if (pendingPayment) {
+    box.append(makeElement("div","hint","Payment is pending. Contact FreshFry if you need help."));
+  }
+
+  return box;
+}
+
+function createItem(item) {
+  const row = makeElement("div","order-item");
+  const left = makeElement("div","");
+  const qty = Number(item.qty) || 1;
+
+  left.append(
+    makeElement("div","order-item-name",safeText(item.name,"Food item")),
+    makeElement("small","","Qty: " + qty)
+  );
+
+  row.append(
+    left,
+    makeElement("div","order-item-price",money((Number(item.price) || 0) * qty))
+  );
+
+  return row;
+}
+
+function createOrderCard(id,data) {
+  const card = makeElement("article","order-card");
+  const top = makeElement("div","order-top");
+  const heading = makeElement("div","");
+
+  heading.append(
+    makeElement("div","order-id","ORDER #" + id),
+    makeElement("div","order-date",formatDate(data.createdAt))
+  );
+
+  const info = statusInfo(data.status);
+  const badge = makeElement("span","status " + normalizeStatus(data.status));
+
+  badge.append(
+    makeElement("i","fa-solid " + info.icon),
+    document.createTextNode(" " + info.label)
+  );
+
+  top.append(heading,badge);
+  card.append(top,makeElement("div","order-divider"));
+
+  const items = makeElement("div","items-list");
+
+  if (Array.isArray(data.items) && data.items.length) {
+    data.items.forEach(item => items.append(createItem(item)));
+  } else {
+    items.append(makeElement("div","hint","Item details are unavailable."));
+  }
+
+  card.append(items,makeElement("div","order-divider"));
+
+  const bottom = makeElement("div","order-bottom");
+  const payment = makeElement("div","payment-label");
+
+  payment.append(
+    makeElement("div","","PAYMENT"),
+    makeElement("strong","",safeText(data.paymentMethod,"Not specified")),
+    document.createElement("br"),
+    makeElement(
+      "span",
+      "",
+      "Status: " + safeText(data.paymentStatus,"Not specified").replace(/_/g," ")
+    )
+  );
+
+  const total = makeElement("div","");
+  total.append(
+    makeElement("div","total-label","TOTAL AMOUNT"),
+    makeElement("div","total-amount",money(data.total))
+  );
+
+  bottom.append(payment,total);
+  card.append(bottom,createTimeline(data.status));
+
+  if (data.deliveryPin !== undefined && data.deliveryPin !== null && data.deliveryPin !== "") {
+    const pin = makeElement("div","pin-box");
+
+    pin.append(
+      makeElement("div","","YOUR DELIVERY PIN"),
+      makeElement("div","pin-value",String(data.deliveryPin)),
+      makeElement(
+        "div",
+        "",
+        "Keep this PIN private and share it with the rider when your order arrives."
+      )
+    );
+
+    card.append(pin);
+  }
+
+  return card;
+}
+
+async function trackOrder(event) {
+  event.preventDefault();
+  if (searching) return;
+
+  $("message").className = "message";
+  $("message").textContent = "";
+
+  const orderId = $("order-id").value.trim();
+
+  if (!orderId || orderId.length > 150) {
+    showMessage("Please enter a valid Order ID.","error");
+    return;
+  }
+
+  searching = true;
+
+  const button = $("search-btn");
+  button.disabled = true;
+  button.textContent = "SEARCHING...";
+
+  $("result").replaceChildren(
+    makeElement("div","card","Loading order details…")
+  );
+
+  try {
+    const snapshot = await getDoc(doc(db,"orders",orderId));
+
+    if (!snapshot.exists()) {
+      renderEmpty("Order not found","Check the Order ID and try again.");
+      showMessage("No order was found for that exact ID.","error");
+      return;
+    }
+
+    const data = snapshot.data();
+
+    /*
+      IMPORTANT:
+      An exact Order ID is not customer authentication.
+      Protect order reads with Firebase Authentication and
+      Firestore security rules before exposing customer data.
+    */
+    $("result").replaceChildren(createOrderCard(snapshot.id,data));
+
+    showMessage(
+      "Order details loaded. Status shown below reflects the latest data read from Firestore.",
+      "success"
+    );
+  } catch (error) {
+    console.error("Track order error:",error);
+
+    renderEmpty(
+      "Unable to load order",
+      "Please try again. If this continues, check Firestore read permissions."
+    );
+
+    showMessage(
+      "Could not retrieve this order. Check your connection and Firestore security rules.",
+      "error"
+    );
+  } finally {
+    searching = false;
+    button.disabled = false;
+    button.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> TRACK ORDER';
+  }
+}
+
+$("search-form").addEventListener("submit",trackOrder);
+
+const params = new URLSearchParams(window.location.search);
+const initialId = params.get("orderId") || params.get("id") || "";
+
+if (initialId) {
+  $("order-id").value = initialId;
+  $("search-form").requestSubmit();
+}
+</script>
+</body>
+</html>
