@@ -1,1 +1,783 @@
-dd
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Menu Management</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root{--orange:#ff5e00;--bg:#101010;--sidebar:#151515;--card:#191919;--line:#303030;--muted:#929292;--green:#48d994;--red:#ff7777}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#fff;font-family:Outfit,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+.sidebar{width:245px;position:fixed;inset:0 auto 0 0;z-index:30;background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .25s}
+.brand{padding:22px 19px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.brand-icon{width:43px;height:43px;background:var(--orange);border-radius:14px;display:grid;place-items:center;font-size:19px}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:-.8px}
+.brand-name span{color:var(--orange)}
+.brand-sub{font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.nav-label{padding:22px 20px 9px;color:#666;font-size:9px;font-weight:900;letter-spacing:1.5px}
+.sidebar-nav{padding:0 11px;overflow:auto;flex:1}
+.nav-link{display:flex;align-items:center;gap:12px;padding:12px;border-radius:11px;color:#aaa;font-size:12px;font-weight:700;margin-bottom:4px}
+.nav-link i{width:19px;text-align:center}
+.nav-link:hover{background:#242424;color:white}
+.nav-link.active{background:#302015;color:#ff9559}
+.nav-link.active i{color:var(--orange)}
+.sidebar-bottom{padding:13px;border-top:1px solid var(--line)}
+.sidebar-note{padding:12px;background:#21170f;border:1px solid #3b281b;border-radius:12px;color:#c9b3a3;font-size:10px;line-height:1.7}
+.sidebar-note i{color:var(--orange)}
+.main{margin-left:245px;min-width:0}
+.topbar{height:68px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 26px;background:#101010ed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-left,.top-actions{display:flex;align-items:center;gap:12px}
+.breadcrumb{color:var(--muted);font-size:11px}
+.breadcrumb strong{color:white}
+.menu-toggle{display:none;width:39px;height:39px;background:#202020;color:white;border:1px solid var(--line);border-radius:11px}
+.action-btn,.primary-btn,.secondary-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:#202020;color:#ddd;padding:10px 13px;border-radius:10px;font-size:10px;font-weight:800}
+.action-btn i,.secondary-btn i{color:var(--orange)}
+.primary-btn{background:var(--orange);border-color:var(--orange);color:#fff}
+.primary-btn i{color:#fff}
+button:disabled{opacity:.55;cursor:not-allowed}
+.content{max-width:1600px;margin:auto;padding:27px 26px 45px}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:23px}
+.eyebrow{color:var(--orange);font-size:9px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:30px;letter-spacing:-1px;margin:8px 0 6px}
+.page-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.refresh-note{font-size:10px;color:var(--muted);margin-top:9px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;min-width:0}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stat-label{font-size:10px;font-weight:700;color:var(--muted)}
+.stat-icon{width:34px;height:34px;border-radius:11px;background:#2b1b12;color:var(--orange);display:grid;place-items:center}
+.stat-value{font-size:26px;font-weight:900;margin-top:12px;letter-spacing:-.8px}
+.stat-foot{font-size:9px;color:var(--muted);margin-top:4px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.panel-head{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{font-size:14px;margin:0;font-weight:900}
+.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}
+.filters{padding:15px 17px;display:grid;grid-template-columns:minmax(180px,1fr) minmax(140px,190px);gap:10px;border-bottom:1px solid var(--line)}
+.search-box{position:relative}
+.search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#777;font-size:12px}
+.control{width:100%;padding:11px 12px;background:#111;color:#eee;border:1px solid #353535;border-radius:10px;font-size:11px;outline:none}
+.control:focus{border-color:var(--orange)}
+.search-box .control{padding-left:34px}
+select.control{color-scheme:dark}
+.menu-grid{padding:17px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.food-card{border:1px solid #333;background:#141414;border-radius:14px;overflow:hidden;min-width:0}
+.food-image-wrap{height:150px;background:#242424;position:relative;overflow:hidden}
+.food-image{width:100%;height:100%;object-fit:cover;display:block}
+.image-fallback{height:100%;display:grid;place-items:center;color:#555;font-size:30px}
+.availability-pill{position:absolute;top:10px;left:10px;padding:6px 8px;border-radius:7px;font-size:8px;font-weight:900;background:#153323;color:#7de7aa}
+.availability-pill.off{background:#391c1c;color:#ff9999}
+.food-body{padding:13px}
+.food-type{font-size:9px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:.7px}
+.food-name{font-size:14px;font-weight:900;margin:6px 0;overflow-wrap:anywhere}
+.food-description{color:var(--muted);font-size:10px;line-height:1.6;min-height:31px;overflow-wrap:anywhere}
+.price-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:13px 0}
+.price{font-size:10px;color:#bbb}
+.price strong{color:#fff;font-size:12px}
+.food-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.small-btn{border:1px solid #383838;background:#222;color:#eee;padding:9px 7px;border-radius:9px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:6px}
+.small-btn i{color:var(--orange)}
+.small-btn.delete i{color:var(--red)}
+.small-btn:hover{border-color:var(--orange)}
+.empty-state{grid-column:1/-1;padding:42px 15px;text-align:center;color:var(--muted);font-size:11px;line-height:1.8}
+.empty-state i{display:block;font-size:28px;color:#555;margin-bottom:12px}
+.error-banner{padding:12px 14px;margin-bottom:15px;border-radius:10px;background:#351b1b;border:1px solid #603030;color:#ffb3b3;font-size:11px;line-height:1.7}
+.success-banner{padding:12px 14px;margin-bottom:15px;border-radius:10px;background:#152c20;border:1px solid #28553a;color:#8be6ad;font-size:11px;line-height:1.7}
+.scrim{display:none;position:fixed;inset:0;background:#0009;z-index:25}
+.modal{position:fixed;inset:0;z-index:60;background:#000b;padding:16px;display:none;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.modal-panel{width:100%;max-width:570px;max-height:92dvh;overflow-y:auto;background:#191919;border:1px solid #393939;border-radius:19px;padding:20px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.modal-head h2{margin:0;font-size:17px}
+.close-btn{width:34px;height:34px;background:#262626;color:white;border:1px solid #393939;border-radius:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{min-width:0}
+.field.full{grid-column:1/-1}
+.field label{display:block;color:#aaa;font-size:10px;font-weight:700;margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;background:#111;color:#fff;border:1px solid #353535;border-radius:10px;padding:11px;font-size:11px;outline:none}
+.field textarea{resize:vertical;min-height:75px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--orange)}
+.field small{display:block;color:#777;font-size:9px;line-height:1.5;margin-top:5px}
+.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.preview-wrap{height:145px;border:1px dashed #444;border-radius:12px;overflow:hidden;display:grid;place-items:center;color:#777;background:#111;margin-top:8px;font-size:10px}
+.preview-wrap img{width:100%;height:100%;object-fit:contain}
+.toast{position:fixed;z-index:100;bottom:24px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#282828;border:1px solid #444;border-radius:12px;padding:12px 17px;color:white;font-size:11px;max-width:calc(100% - 30px);transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1200px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.show{transform:translateX(0)}
+.scrim.show{display:block}
+.main{margin-left:0}
+.menu-toggle{display:grid;place-items:center}
+.topbar{height:62px;padding:0 13px}
+.content{padding:20px 12px 35px}
+.page-head{flex-direction:column}
+h1{font-size:27px}
+.stats{gap:8px}
+.stat{padding:12px}
+.stat-value{font-size:22px}
+.menu-grid{padding:10px;gap:10px}
+.food-image-wrap{height:125px}
+.food-body{padding:10px}
+.food-name{font-size:12px}
+.filters{padding:12px;grid-template-columns:1fr}
+.panel-head{padding:14px}
+.top-actions .action-btn{padding:10px}
+.top-actions .action-btn span{display:none}
+}
+@media(max-width:390px){
+.menu-grid{grid-template-columns:1fr}
+.food-image-wrap{height:190px}
+.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="admin.html">
+    <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+    <div>
+      <div class="brand-name">Fresh<span>Fry</span></div>
+      <div class="brand-sub">RESTAURANT CONTROL</div>
+    </div>
+  </a>
+
+  <div class="nav-label">MAIN MENU</div>
+  <nav class="sidebar-nav">
+    <a class="nav-link" href="admin.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+    <a class="nav-link" href="orders-admin.html"><i class="fa-solid fa-receipt"></i> Orders</a>
+    <a class="nav-link active" href="menu-admin.html"><i class="fa-solid fa-burger"></i> Menu Management</a>
+    <a class="nav-link" href="delivery-admin.html"><i class="fa-solid fa-motorcycle"></i> Delivery</a>
+    <a class="nav-link" href="customers-admin.html"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="nav-label">BUSINESS</div>
+    <a class="nav-link" href="marketing-admin.html"><i class="fa-solid fa-bullhorn"></i> Marketing & Offers</a>
+    <a class="nav-link" href="payments-admin.html"><i class="fa-solid fa-wallet"></i> Payments</a>
+    <a class="nav-link" href="reports-admin.html"><i class="fa-solid fa-chart-column"></i> Reports</a>
+    <a class="nav-link" href="settings-admin.html"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="nav-label">WEBSITE</div>
+    <a class="nav-link" href="index.html" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Customer Website</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-note"><i class="fa-solid fa-shield-halved"></i> Protect admin access with Firebase Authentication and Firestore Security Rules.</div>
+  </div>
+</aside>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+<header class="topbar">
+  <div class="top-left">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+    <div class="breadcrumb">FreshFry / <strong>Menu Management</strong></div>
+  </div>
+  <div class="top-actions">
+    <button class="action-btn" id="refreshBtn" type="button"><i class="fa-solid fa-rotate"></i><span>Refresh</span></button>
+  </div>
+</header>
+
+<main class="content">
+  <div class="eyebrow">Food catalogue</div>
+  <section class="page-head">
+    <div>
+      <h1>Menu Management</h1>
+      <p>Add food, manage prices and control what customers can order.</p>
+      <div class="refresh-note" id="refreshNote">Connecting to Firebase...</div>
+    </div>
+    <button class="primary-btn" id="addItemBtn" type="button"><i class="fa-solid fa-plus"></i> Add food item</button>
+  </section>
+
+  <div id="errorBanner" class="error-banner" hidden></div>
+  <div id="successBanner" class="success-banner" hidden></div>
+
+  <section class="stats">
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Total Menu Items</span><span class="stat-icon"><i class="fa-solid fa-bowl-food"></i></span></div>
+      <div class="stat-value" id="totalItems">—</div>
+      <div class="stat-foot">Items saved in Firestore</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Available</span><span class="stat-icon"><i class="fa-solid fa-circle-check"></i></span></div>
+      <div class="stat-value" id="availableItems">—</div>
+      <div class="stat-foot">Visible and orderable items</div>
+    </article>
+    <article class="stat">
+      <div class="stat-top"><span class="stat-label">Unavailable</span><span class="stat-icon"><i class="fa-solid fa-circle-pause"></i></span></div>
+      <div class="stat-value" id="unavailableItems">—</div>
+      <div class="stat-foot">Temporarily hidden from ordering</div>
+    </article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>Your Food Menu</h2>
+        <p id="resultCount">Loading menu items...</p>
+      </div>
+      <button class="secondary-btn" id="clearFilters" type="button"><i class="fa-solid fa-filter-circle-xmark"></i> Clear filters</button>
+    </div>
+
+    <div class="filters">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="searchInput" class="control" type="search" placeholder="Search food name, category..." autocomplete="off">
+      </div>
+      <select id="availabilityFilter" class="control" aria-label="Filter availability">
+        <option value="all">All availability</option>
+        <option value="available">Available only</option>
+        <option value="unavailable">Unavailable only</option>
+      </select>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+      <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Connecting to Firebase menu...</div>
+    </div>
+  </section>
+</main>
+</div>
+
+<div class="modal" id="itemModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h2 id="modalTitle">Add food item</h2>
+      <button class="close-btn" id="closeModal" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <form id="itemForm">
+      <input type="hidden" id="itemId">
+      <div class="form-grid">
+        <div class="field full">
+          <label for="itemName">Food name *</label>
+          <input id="itemName" maxlength="100" required placeholder="e.g. Veg Steamed Momos">
+        </div>
+
+        <div class="field">
+          <label for="itemType">Category / Type *</label>
+          <input id="itemType" maxlength="50" required list="categoryOptions" placeholder="e.g. Veg, Non-Veg">
+          <datalist id="categoryOptions">
+            <option value="Veg"></option>
+            <option value="Non-Veg"></option>
+            <option value="Paneer"></option>
+            <option value="Combo"></option>
+            <option value="Drinks"></option>
+          </datalist>
+        </div>
+
+        <div class="field">
+          <label for="itemAvailable">Availability</label>
+          <select id="itemAvailable" class="control">
+            <option value="true">Available</option>
+            <option value="false">Unavailable</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="halfPrice">Half price (₹) *</label>
+          <input id="halfPrice" type="number" min="0" max="100000" step="0.01" required placeholder="50">
+        </div>
+
+        <div class="field">
+          <label for="fullPrice">Full price (₹) *</label>
+          <input id="fullPrice" type="number" min="0" max="100000" step="0.01" required placeholder="90">
+        </div>
+
+        <div class="field full">
+          <label for="itemImage">Food image URL</label>
+          <input id="itemImage" type="url" maxlength="1500" placeholder="https://example.com/food.jpg">
+          <small>Enter a direct image URL starting with https://. Leave blank if no image is available.</small>
+          <div class="preview-wrap" id="imagePreview"><i class="fa-solid fa-image"></i>&nbsp; Image preview</div>
+        </div>
+
+        <div class="field full">
+          <label for="itemDescription">Description</label>
+          <textarea id="itemDescription" maxlength="500" placeholder="Describe the food item..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="secondary-btn" id="cancelBtn" type="button">Cancel</button>
+        <button class="primary-btn" id="saveBtn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save item</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, onSnapshot, addDoc, updateDoc,
+  deleteDoc, doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Existing FreshFry Firebase configuration preserved. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDCbZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+  authDomain: "freshfry-39a10.firebaseapp.com",
+  projectId: "freshfry-39a10",
+  storageBucket: "freshfry-39a10.firebasestorage.app",
+  messagingSenderId: "928483976893",
+  appId: "1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/*
+ * IMPORTANT:
+ * Customer index.html uses collection(db, "menu").
+ * Existing field names: name, image, type, description/details,
+ * halfPrice, fullPrice, available / isAvailable.
+ * Keep these names unchanged for customer menu compatibility.
+ */
+const MENU_COLLECTION = "menu";
+
+const $ = id => document.getElementById(id);
+let menuItems = [];
+let unsubscribeMenu = null;
+let saving = false;
+let toastTimer;
+let refreshRequested = false;
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    maximumFractionDigits: 2
+  });
+}
+
+function safeImageURL(value) {
+  try {
+    const url = new URL(String(value || ""));
+    return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function isAvailable(item) {
+  return item.available !== false && item.isAvailable !== false;
+}
+
+function normalizedItem(id, data) {
+  return {
+    id,
+    name: String(data.name || "Food item"),
+    image: typeof data.image === "string" ? data.image : "",
+    type: String(data.type || "Food"),
+    description: String(data.description || data.details || ""),
+    halfPrice: Number(data.halfPrice),
+    fullPrice: Number(data.fullPrice),
+    available: isAvailable(data)
+  };
+}
+
+function toast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2800);
+}
+
+function showError(message) {
+  $("errorBanner").textContent = message;
+  $("errorBanner").hidden = false;
+  $("successBanner").hidden = true;
+}
+
+function showSuccess(message) {
+  $("successBanner").textContent = message;
+  $("successBanner").hidden = false;
+  $("errorBanner").hidden = true;
+}
+
+function clearMessages() {
+  $("errorBanner").hidden = true;
+  $("successBanner").hidden = true;
+}
+
+function renderStats() {
+  $("totalItems").textContent = menuItems.length;
+  $("availableItems").textContent = menuItems.filter(isAvailable).length;
+  $("unavailableItems").textContent = menuItems.filter(item => !isAvailable(item)).length;
+}
+
+function getFilteredItems() {
+  const query = $("searchInput").value.trim().toLowerCase();
+  const availability = $("availabilityFilter").value;
+
+  return menuItems.filter(item => {
+    const text = `${item.name} ${item.type} ${item.description}`.toLowerCase();
+    const matchesSearch = !query || text.includes(query);
+    const matchesAvailability =
+      availability === "all" ||
+      (availability === "available" && isAvailable(item)) ||
+      (availability === "unavailable" && !isAvailable(item));
+
+    return matchesSearch && matchesAvailability;
+  }).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function renderMenu() {
+  const filtered = getFilteredItems();
+  $("resultCount").textContent = `${filtered.length} item(s) shown · ${menuItems.length} total`;
+
+  if (!filtered.length) {
+    $("menuGrid").innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-bowl-food"></i>
+        No matching menu items found.<br>
+        Try another search or add a food item.
+      </div>`;
+    return;
+  }
+
+  $("menuGrid").innerHTML = filtered.map(item => {
+    const image = safeImageURL(item.image);
+    const available = isAvailable(item);
+    const imageHTML = image
+      ? `<img class="food-image" src="${esc(image)}" alt="${esc(item.name)}" loading="lazy" referrerpolicy="no-referrer">`
+      : `<div class="image-fallback"><i class="fa-solid fa-bowl-food"></i></div>`;
+
+    return `
+      <article class="food-card">
+        <div class="food-image-wrap">
+          ${imageHTML}
+          <span class="availability-pill ${available ? "" : "off"}">
+            ${available ? "AVAILABLE" : "UNAVAILABLE"}
+          </span>
+        </div>
+        <div class="food-body">
+          <div class="food-type">${esc(item.type)}</div>
+          <div class="food-name">${esc(item.name)}</div>
+          <div class="food-description">${esc(item.description || "No description added.")}</div>
+          <div class="price-row">
+            <div class="price">Half <strong>${money(item.halfPrice)}</strong></div>
+            <div class="price">Full <strong>${money(item.fullPrice)}</strong></div>
+          </div>
+          <div class="food-actions">
+            <button class="small-btn" type="button" data-action="edit" data-id="${esc(item.id)}">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
+            <button class="small-btn" type="button" data-action="toggle" data-id="${esc(item.id)}">
+              <i class="fa-solid fa-${available ? "pause" : "play"}"></i>
+              ${available ? "Disable" : "Enable"}
+            </button>
+            <button class="small-btn delete" type="button" data-action="delete" data-id="${esc(item.id)}" style="grid-column:1/-1">
+              <i class="fa-solid fa-trash"></i> Delete item
+            </button>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function startMenuListener() {
+  if (unsubscribeMenu) unsubscribeMenu();
+
+  $("refreshBtn").disabled = true;
+  $("refreshNote").textContent = "Listening for menu updates...";
+
+  unsubscribeMenu = onSnapshot(
+    collection(db, MENU_COLLECTION),
+    snapshot => {
+      menuItems = snapshot.docs
+        .map(itemDoc => normalizedItem(itemDoc.id, itemDoc.data()))
+        .filter(item =>
+          Number.isFinite(item.halfPrice) && item.halfPrice >= 0 &&
+          Number.isFinite(item.fullPrice) && item.fullPrice >= 0
+        );
+
+      renderStats();
+      renderMenu();
+      $("refreshNote").textContent =
+        "Live Firebase connection · " + new Date().toLocaleTimeString("en-IN");
+      $("refreshBtn").disabled = false;
+
+      if (refreshRequested) {
+        refreshRequested = false;
+        toast("Menu refreshed.");
+      }
+    },
+    error => {
+      console.error("Menu listener error:", error);
+      $("refreshBtn").disabled = false;
+      $("refreshNote").textContent = "Unable to load menu";
+      showError(
+        "Unable to read the existing 'menu' collection. Check Firestore read permissions. " +
+        (error.code || error.message || "")
+      );
+      $("menuGrid").innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Could not load the menu.<br>
+          Check Firebase configuration and Firestore rules.
+        </div>`;
+    }
+  );
+}
+
+function openModal(item = null) {
+  clearMessages();
+  $("itemForm").reset();
+  $("itemId").value = item?.id || "";
+  $("modalTitle").textContent = item ? "Edit food item" : "Add food item";
+  $("saveBtn").innerHTML = item
+    ? '<i class="fa-solid fa-floppy-disk"></i> Save changes'
+    : '<i class="fa-solid fa-plus"></i> Add item';
+
+  if (item) {
+    $("itemName").value = item.name;
+    $("itemType").value = item.type;
+    $("halfPrice").value = item.halfPrice;
+    $("fullPrice").value = item.fullPrice;
+    $("itemImage").value = item.image;
+    $("itemDescription").value = item.description;
+    $("itemAvailable").value = String(isAvailable(item));
+  } else {
+    $("itemAvailable").value = "true";
+  }
+
+  updateImagePreview();
+  $("itemModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+  setTimeout(() => $("itemName").focus(), 50);
+}
+
+function closeModal() {
+  if (saving) return;
+  $("itemModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function updateImagePreview() {
+  const url = safeImageURL($("itemImage").value.trim());
+  $("imagePreview").innerHTML = url
+    ? `<img src="${esc(url)}" alt="Food image preview" referrerpolicy="no-referrer">`
+    : '<span><i class="fa-solid fa-image"></i> Image preview</span>';
+
+  const image = $("imagePreview").querySelector("img");
+  if (image) {
+    image.addEventListener("error", () => {
+      $("imagePreview").innerHTML = '<span><i class="fa-solid fa-triangle-exclamation"></i> Image could not load</span>';
+    }, { once: true });
+  }
+}
+
+async function saveItem(event) {
+  event.preventDefault();
+  if (saving) return;
+
+  const id = $("itemId").value.trim();
+  const name = $("itemName").value.trim();
+  const type = $("itemType").value.trim();
+  const imageInput = $("itemImage").value.trim();
+  const description = $("itemDescription").value.trim();
+  const halfPrice = Number($("halfPrice").value);
+  const fullPrice = Number($("fullPrice").value);
+  const available = $("itemAvailable").value === "true";
+
+  if (!name || !type) {
+    showError("Please enter both food name and category.");
+    return;
+  }
+
+  if (
+    $("halfPrice").value === "" || $("fullPrice").value === "" ||
+    !Number.isFinite(halfPrice) || !Number.isFinite(fullPrice) ||
+    halfPrice < 0 || fullPrice < 0 ||
+    halfPrice > 100000 || fullPrice > 100000
+  ) {
+    showError("Enter valid half and full prices between ₹0 and ₹100,000.");
+    return;
+  }
+
+  if (imageInput && !safeImageURL(imageInput)) {
+    showError("Image URL must start with http:// or https://.");
+    return;
+  }
+
+  const data = {
+    name,
+    type,
+    image: imageInput ? safeImageURL(imageInput) : "",
+    description,
+    halfPrice,
+    fullPrice,
+    available
+  };
+
+  saving = true;
+  $("saveBtn").disabled = true;
+  $("cancelBtn").disabled = true;
+  $("saveBtn").innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+  clearMessages();
+
+  try {
+    if (id) {
+      await updateDoc(doc(db, MENU_COLLECTION, id), data);
+      showSuccess("Menu item updated successfully.");
+      toast("Food item updated.");
+    } else {
+      await addDoc(collection(db, MENU_COLLECTION), data);
+      showSuccess("New menu item added successfully.");
+      toast("Food item added.");
+    }
+
+    $("itemModal").classList.remove("show");
+    document.body.style.overflow = "";
+  } catch (error) {
+    console.error("Saving menu item failed:", error);
+    showError(
+      "Could not save the item. Check Firestore write permissions. " +
+      (error.code || error.message || "")
+    );
+  } finally {
+    saving = false;
+    $("saveBtn").disabled = false;
+    $("cancelBtn").disabled = false;
+    $("saveBtn").innerHTML = id
+      ? '<i class="fa-solid fa-floppy-disk"></i> Save changes'
+      : '<i class="fa-solid fa-plus"></i> Add item';
+  }
+}
+
+async function toggleAvailability(id) {
+  const item = menuItems.find(entry => entry.id === id);
+  if (!item) return;
+
+  const nextAvailable = !isAvailable(item);
+  const action = nextAvailable ? "make available" : "mark unavailable";
+
+  if (!confirm(`Do you want to ${action} "${item.name}"?`)) return;
+
+  try {
+    /*
+     * Customer index.html treats available:false OR isAvailable:false
+     * as unavailable. We update the existing "available" field.
+     */
+    await updateDoc(doc(db, MENU_COLLECTION, id), {
+      available: nextAvailable
+    });
+    toast(nextAvailable ? "Item is now available." : "Item is now unavailable.");
+  } catch (error) {
+    console.error("Availability update failed:", error);
+    showError(
+      "Could not update availability. Check Firestore write permissions. " +
+      (error.code || error.message || "")
+    );
+  }
+}
+
+async function deleteItem(id) {
+  const item = menuItems.find(entry => entry.id === id);
+  if (!item) return;
+
+  const confirmed = confirm(
+    `Permanently delete "${item.name}" from the menu?\n\nThis cannot be undone.`
+  );
+  if (!confirmed) return;
+
+  try {
+    await deleteDoc(doc(db, MENU_COLLECTION, id));
+    toast("Menu item deleted.");
+    showSuccess("Menu item deleted. Customer menu will refresh from Firestore.");
+  } catch (error) {
+    console.error("Delete failed:", error);
+    showError(
+      "Could not delete this item. Check Firestore delete permissions. " +
+      (error.code || error.message || "")
+    );
+  }
+}
+
+$("menuGrid").addEventListener("click", event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const item = menuItems.find(entry => entry.id === button.dataset.id);
+  if (!item) return;
+
+  if (button.dataset.action === "edit") openModal(item);
+  if (button.dataset.action === "toggle") toggleAvailability(item.id);
+  if (button.dataset.action === "delete") deleteItem(item.id);
+});
+
+$("addItemBtn").addEventListener("click", () => openModal());
+$("closeModal").addEventListener("click", closeModal);
+$("cancelBtn").addEventListener("click", closeModal);
+$("itemForm").addEventListener("submit", saveItem);
+$("itemImage").addEventListener("input", updateImagePreview);
+$("searchInput").addEventListener("input", renderMenu);
+$("availabilityFilter").addEventListener("change", renderMenu);
+
+$("clearFilters").addEventListener("click", () => {
+  $("searchInput").value = "";
+  $("availabilityFilter").value = "all";
+  renderMenu();
+});
+
+$("refreshBtn").addEventListener("click", () => {
+  if (unsubscribeMenu) {
+    refreshRequested = true;
+    startMenuListener();
+  }
+});
+
+$("itemModal").addEventListener("click", event => {
+  if (event.target === $("itemModal")) closeModal();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeModal();
+});
+
+const sidebar = $("sidebar");
+const scrim = $("scrim");
+
+$("menuToggle").addEventListener("click", () => {
+  sidebar.classList.add("show");
+  scrim.classList.add("show");
+});
+
+scrim.addEventListener("click", () => {
+  sidebar.classList.remove("show");
+  scrim.classList.remove("show");
+});
+
+document.querySelectorAll(".sidebar-nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    sidebar.classList.remove("show");
+    scrim.classList.remove("show");
+  });
+});
+
+startMenuListener();
+
+window.addEventListener("beforeunload", () => {
+  if (unsubscribeMenu) unsubscribeMenu();
+  clearTimeout(toastTimer);
+});
+</script>
+</body>
+</html>
