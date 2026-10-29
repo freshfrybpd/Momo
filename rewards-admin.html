@@ -1,1 +1,320 @@
-dd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="robots" content="noindex,nofollow">
+<title>FreshFry | Rewards Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--orange:#ff5e00;--bg:#101010;--card:#191919;--line:#303030;--muted:#999;--green:#45d483;--red:#ff7474}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#fff;font-family:Inter,Arial,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+header{position:sticky;top:0;z-index:5;background:#101010ed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:16px}
+.header-inner,main{max-width:1000px;margin:auto}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:20px;font-weight:900}.brand span{color:var(--orange)}
+main{padding:24px 15px 50px}
+h1{font-size:27px;letter-spacing:-.8px;margin:8px 0}
+p{color:var(--muted);font-size:12px;line-height:1.7}
+.eyebrow{color:var(--orange);font-size:10px;font-weight:900;letter-spacing:2px}
+.layout{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:16px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:18px;min-width:0}
+.panel h2{font-size:15px;margin:0 0 15px}
+.field{margin-bottom:13px}
+label{display:block;color:#c6c6c6;font-size:11px;font-weight:800;margin-bottom:7px}
+input,textarea{width:100%;padding:12px;background:#111;color:white;border:1px solid #383838;border-radius:10px;outline:none;font-size:13px}
+input:focus,textarea:focus{border-color:var(--orange)}
+textarea{min-height:75px;resize:vertical}
+.check-row{display:flex;align-items:center;gap:9px;margin:13px 0}
+.check-row input{width:18px;height:18px;accent-color:var(--orange)}
+.check-row label{margin:0}
+.btn{border:1px solid #3a3a3a;background:#242424;color:white;border-radius:10px;padding:11px 13px;font-size:11px;font-weight:900}
+.btn-primary{background:var(--orange);border-color:var(--orange)}
+.btn-danger{color:#ff9292}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-row .btn{flex:1}
+.preview{width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid #333;border-radius:12px;background:#111;display:block;margin:8px 0 14px}
+.status{display:inline-block;border-radius:20px;padding:5px 8px;font-size:9px;font-weight:900}
+.status.active{background:#173326;color:#70e7a5}
+.status.inactive{background:#352020;color:#ff9999}
+.list-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}
+.list-head h2{margin:0}
+.reward-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.reward{border:1px solid var(--line);background:#151515;border-radius:14px;overflow:hidden;min-width:0}
+.reward img{width:100%;aspect-ratio:16/10;object-fit:cover;background:#222;display:block}
+.reward-content{padding:12px}
+.reward h3{font-size:13px;margin:0 0 7px;overflow-wrap:anywhere}
+.reward p{margin:0 0 10px;font-size:11px;overflow-wrap:anywhere}
+.reward-meta{font-size:11px;color:#ffc15c;font-weight:900;margin-bottom:10px}
+.reward-actions{display:flex;gap:6px;flex-wrap:wrap}
+.reward-actions .btn{flex:1;padding:9px 7px}
+.notice{padding:12px;border:1px solid #4b351b;background:#251b10;color:#e5c9a2;border-radius:11px;font-size:11px;line-height:1.7;margin-bottom:15px}
+.error{padding:12px;border:1px solid #643131;background:#321a1a;color:#ffbaba;border-radius:10px;font-size:11px;line-height:1.6;margin-bottom:13px}
+.success{padding:12px;border:1px solid #28583b;background:#152a1d;color:#a2f1bd;border-radius:10px;font-size:11px;line-height:1.6;margin-bottom:13px}
+.empty{padding:30px 12px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8;border:1px dashed #393939;border-radius:12px;grid-column:1/-1}
+#message:empty{display:none}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.reward-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.reward-list{grid-template-columns:1fr}h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="header-inner">
+  <div class="brand">Fresh<span>Fry</span> <span style="color:#aaa;font-size:12px">/ Rewards Manager</span></div>
+  <a class="btn" href="admin.html"><i class="fa-solid fa-arrow-left"></i> Admin</a>
+ </div>
+</header>
+
+<main>
+ <div class="eyebrow">CUSTOMER LOYALTY</div>
+ <h1>Rewards Manager</h1>
+ <p>Add free food rewards and control which rewards appear in the customer app.</p>
+ <div class="notice"><i class="fa-solid fa-shield-halved"></i>
+  This page does not provide admin authentication by itself. Secure the Firestore collection with authenticated admin-only rules before publishing it.
+ </div>
+ <div id="message" aria-live="polite"></div>
+
+ <div class="layout">
+  <section class="panel">
+   <h2 id="formTitle"><i class="fa-solid fa-gift" style="color:var(--orange)"></i> Add a reward</h2>
+   <form id="rewardForm">
+    <div class="field">
+     <label for="title">REWARD NAME *</label>
+     <input id="title" maxlength="100" placeholder="Free Veg Momo" required>
+    </div>
+    <div class="field">
+     <label for="description">DESCRIPTION</label>
+     <textarea id="description" maxlength="500" placeholder="Redeem points for a free food reward."></textarea>
+    </div>
+    <div class="field">
+     <label for="imageUrl">FOOD IMAGE URL</label>
+     <input id="imageUrl" type="url" maxlength="1500" placeholder="https://example.com/food.jpg">
+    </div>
+    <img id="imagePreview" class="preview" alt="Reward image preview" hidden>
+    <div class="field">
+     <label for="points">REQUIRED POINTS *</label>
+     <input id="points" type="number" min="1" max="1000000" step="1" value="100" required>
+    </div>
+    <div class="check-row">
+     <input id="active" type="checkbox" checked>
+     <label for="active">Active — show this reward to customers</label>
+    </div>
+    <div class="btn-row">
+     <button class="btn btn-primary" id="saveBtn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save reward</button>
+     <button class="btn" id="cancelEditBtn" type="button" hidden>Cancel edit</button>
+    </div>
+   </form>
+  </section>
+
+  <section class="panel">
+   <div class="list-head">
+    <h2><i class="fa-solid fa-list" style="color:var(--orange)"></i> Rewards catalog</h2>
+    <button class="btn" id="refreshBtn" type="button"><i class="fa-solid fa-rotate"></i> Refresh</button>
+   </div>
+   <p id="listSummary">Connecting to Firebase…</p>
+   <div id="rewardList" class="reward-list">
+    <div class="empty">Loading rewards…</div>
+   </div>
+  </section>
+ </div>
+</main>
+
+<script type="module">
+import {initializeApp,getApps,getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+ getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,
+ onSnapshot,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Existing FreshFry Firebase configuration preserved. */
+const firebaseConfig={
+ apiKey:"AIzaSyDC8bZ8RaDfMc--BzT2S_LllBA4G2d0dfUM",
+ authDomain:"freshfry-39a10.firebaseapp.com",
+ projectId:"freshfry-39a10",
+ storageBucket:"freshfry-39a10.firebasestorage.app",
+ messagingSenderId:"928483976893",
+ appId:"1:928483976893:web:3459478b550ba0e12fb9d4"
+};
+const app=getApps().length?getApp():initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const rewardsRef=collection(db,"rewardsCatalog");
+const $=id=>document.getElementById(id);
+let rewards=[],editingId=null,unsubscribe=null;
+
+function esc(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function message(text,type="success"){
+ $("message").className=type;
+ $("message").textContent=text;
+}
+function clearMessage(){
+ $("message").className="";
+ $("message").textContent="";
+}
+function safeImageUrl(value){
+ try{
+  const u=new URL(String(value||""));
+  return u.protocol==="https:"?u.href:"";
+ }catch{return "";}
+}
+function resetForm(){
+ editingId=null;
+ $("rewardForm").reset();
+ $("points").value=100;
+ $("active").checked=true;
+ $("formTitle").innerHTML='<i class="fa-solid fa-gift" style="color:var(--orange)"></i> Add a reward';
+ $("saveBtn").innerHTML='<i class="fa-solid fa-floppy-disk"></i> Save reward';
+ $("cancelEditBtn").hidden=true;
+ $("imagePreview").hidden=true;
+ $("imagePreview").removeAttribute("src");
+}
+function editReward(id){
+ const r=rewards.find(item=>item.id===id);
+ if(!r)return;
+ editingId=id;
+ $("title").value=r.title||"";
+ $("description").value=r.description||"";
+ $("imageUrl").value=r.imageUrl||"";
+ $("points").value=Number(r.points)||100;
+ $("active").checked=r.active===true;
+ $("formTitle").innerHTML='<i class="fa-solid fa-pen" style="color:var(--orange)"></i> Edit reward';
+ $("saveBtn").innerHTML='<i class="fa-solid fa-floppy-disk"></i> Update reward';
+ $("cancelEditBtn").hidden=false;
+ updatePreview();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function render(){
+ $("listSummary").textContent=`${rewards.length} reward(s) · ${rewards.filter(r=>r.active===true).length} active`;
+ if(!rewards.length){
+  $("rewardList").innerHTML='<div class="empty">No rewards yet. Add your first reward using the form.</div>';
+  return;
+ }
+ const sorted=[...rewards].sort((a,b)=>(a.title||"").localeCompare(b.title||""));
+ $("rewardList").innerHTML=sorted.map(r=>{
+  const image=safeImageUrl(r.imageUrl);
+  return `<article class="reward">
+   ${image?`<img src="${esc(image)}" alt="${esc(r.title||"Reward")}" loading="lazy" referrerpolicy="no-referrer">`:`<div style="aspect-ratio:16/10;display:grid;place-items:center;background:#242424;color:#ff5e00;font-size:30px"><i class="fa-solid fa-gift"></i></div>`}
+   <div class="reward-content">
+    <h3>${esc(r.title||"Untitled reward")}</h3>
+    <p>${esc(r.description||"No description")}</p>
+    <div class="reward-meta"><i class="fa-solid fa-coins"></i> ${Number(r.points)||0} points</div>
+    <div style="margin-bottom:10px"><span class="status ${r.active===true?"active":"inactive"}">${r.active===true?"ACTIVE":"INACTIVE"}</span></div>
+    <div class="reward-actions">
+     <button class="btn" data-edit="${esc(r.id)}" type="button"><i class="fa-solid fa-pen"></i> Edit</button>
+     <button class="btn" data-toggle="${esc(r.id)}" type="button">${r.active===true?"Deactivate":"Activate"}</button>
+     <button class="btn btn-danger" data-delete="${esc(r.id)}" type="button" aria-label="Delete ${esc(r.title)}"><i class="fa-solid fa-trash"></i></button>
+    </div>
+   </div>
+  </article>`;
+ }).join("");
+}
+function updatePreview(){
+ const url=safeImageUrl($("imageUrl").value.trim());
+ const preview=$("imagePreview");
+ if(!url){preview.hidden=true;preview.removeAttribute("src");return;}
+ preview.hidden=false;preview.src=url;
+ preview.onerror=()=>{preview.hidden=true;};
+}
+$("imageUrl").addEventListener("input",updatePreview);
+$("cancelEditBtn").addEventListener("click",()=>{resetForm();clearMessage();});
+
+$("rewardForm").addEventListener("submit",async event=>{
+ event.preventDefault();clearMessage();
+ const title=$("title").value.trim();
+ const description=$("description").value.trim();
+ const imageUrl=$("imageUrl").value.trim();
+ const points=Number($("points").value);
+ const active=$("active").checked;
+
+ if(!title)return message("Please enter a reward name.","error");
+ if(!Number.isSafeInteger(points)||points<1||points>1000000)return message("Points must be a whole number between 1 and 1,000,000.","error");
+ if(imageUrl&&!safeImageUrl(imageUrl))return message("Image URL must be a valid HTTPS URL.","error");
+
+ const payload={
+  title,description,imageUrl:safeImageUrl(imageUrl),
+  points,active,updatedAt:serverTimestamp()
+ };
+ const button=$("saveBtn");
+ button.disabled=true;
+ try{
+  if(editingId){
+   await updateDoc(doc(db,"rewardsCatalog",editingId),payload);
+   message("Reward updated successfully.");
+  }else{
+   payload.createdAt=serverTimestamp();
+   await addDoc(rewardsRef,payload);
+   message("Reward added successfully.");
+  }
+  resetForm();
+ }catch(error){
+  console.error("Save reward failed:",error);
+  message("Could not save reward. Check Firestore rules and admin access. "+(error.code||error.message||""),"error");
+ }finally{
+  button.disabled=false;
+ }
+});
+
+$("rewardList").addEventListener("click",async event=>{
+ const editButton=event.target.closest("[data-edit]");
+ const toggleButton=event.target.closest("[data-toggle]");
+ const deleteButton=event.target.closest("[data-delete]");
+
+ if(editButton){editReward(editButton.dataset.edit);return;}
+ if(toggleButton){
+  const r=rewards.find(item=>item.id===toggleButton.dataset.toggle);
+  if(!r)return;
+  try{
+   await updateDoc(doc(db,"rewardsCatalog",r.id),{
+    active:r.active!==true,updatedAt:serverTimestamp()
+   });
+   message(r.active===true?"Reward deactivated.":"Reward activated.");
+  }catch(error){
+   console.error(error);
+   message("Could not change reward status. Check Firestore permissions.","error");
+  }
+  return;
+ }
+ if(deleteButton){
+  const r=rewards.find(item=>item.id===deleteButton.dataset.delete);
+  if(!r)return;
+  if(!confirm(`Delete "${r.title||"this reward"}"? This cannot be undone.`))return;
+  try{
+   await deleteDoc(doc(db,"rewardsCatalog",r.id));
+   if(editingId===r.id)resetForm();
+   message("Reward deleted.");
+  }catch(error){
+   console.error(error);
+   message("Could not delete reward. Check Firestore permissions.","error");
+  }
+ }
+});
+
+$("refreshBtn").addEventListener("click",()=>{
+ if(unsubscribe)unsubscribe();
+ listenRewards();
+});
+
+function listenRewards(){
+ $("listSummary").textContent="Connecting to rewards catalog…";
+ unsubscribe=onSnapshot(rewardsRef,snapshot=>{
+  rewards=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+  render();
+ },error=>{
+  console.error("Rewards catalog listener failed:",error);
+  $("listSummary").textContent="Could not load rewards.";
+  $("rewardList").innerHTML='<div class="empty">Unable to read rewardsCatalog. Check your internet connection and Firestore rules.</div>';
+  message("Firebase error: "+(error.code||error.message||"Unable to read rewards."),"error");
+ });
+}
+listenRewards();
+window.addEventListener("beforeunload",()=>{if(unsubscribe)unsubscribe();});
+</script>
+</body>
+</html>
