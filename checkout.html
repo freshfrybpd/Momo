@@ -107,6 +107,41 @@ footer{text-align:center;color:var(--muted);font-size:10px;padding:22px 10px}
 .discount-row strong{color:var(--green)}
 @media(max-width:700px){.layout{grid-template-columns:1fr;gap:0}.summary-card{order:-1}.page-heading h1{font-size:27px}.card{padding:16px}}
 @media(max-width:380px){.coupon-entry{flex-wrap:wrap}.coupon-entry input{flex-basis:100%}.coupon-apply{width:100%;padding:13px}}
+
+
+
+
+
+.whatsapp-order-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border:0;
+  border-radius:12px;
+  background:#168b45;
+  color:white;
+  font-size:12px;
+  font-weight:900;
+  text-align:center;
+  transition:.2s;
+}
+.whatsapp-order-btn:hover{
+  background:#11763a;
+}
+.whatsapp-order-btn i{
+  font-size:19px;
+}
+.whatsapp-order-hint{
+  text-align:center;
+  color:#168b45;
+  font-size:10px;
+  font-weight:800;
+  margin:9px 0 14px;
+}
 </style>
 </head>
 
@@ -231,6 +266,14 @@ footer{text-align:center;color:var(--muted);font-size:10px;padding:22px 10px}
           <div class="row total"><span>Total</span><strong id="grand-total">₹0</strong></div>
           <div class="notice" id="minimum-notice">Minimum food order ₹100, excluding delivery.</div>
           <button class="primary" id="place-order" type="submit">PLACE ORDER <i class="fa-solid fa-arrow-right"></i></button>
+          <button type="button" class="whatsapp-order-btn" id="whatsapp-order-btn">
+  <i class="fa-brands fa-whatsapp"></i>
+  ORDER THROUGH WHATSAPP
+</button>
+
+<div class="whatsapp-order-hint">
+  For faster order choose WhatsApp
+</div>
           <p class="safe-note"><i class="fa-solid fa-lock"></i> Your order details are submitted to FreshFry.</p>
           <div id="result" class="result" role="status" aria-live="polite"></div>
           <a id="whatsapp-link" class="whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden>
@@ -770,6 +813,133 @@ function makeDeliveryPin() {
   crypto.getRandomValues(array);
   return String(array[0] % 9000 + 1000);
 }
+
+// WHATSAPP DIRECT ORDER
+const WHATSAPP_ORDER_NUMBER = "918984225311";
+
+function sendWhatsAppOrder() {
+
+  cart = readCart();
+
+  if (!cart.length) {
+    showResult("Your cart is empty. Please add items first.");
+    return;
+  }
+
+  const name = $("customer-name").value.trim();
+  const phone = $("customer-phone").value.replace(/\D/g, "");
+  const address = $("customer-address").value.trim();
+  const note = $("customer-note").value.trim();
+
+  if (name.length < 2) {
+    showResult("Please enter your full name.");
+    $("customer-name").focus();
+    return;
+  }
+
+  if (!validPhone(phone)) {
+    showResult("Please enter a valid 10-digit mobile number.");
+    $("customer-phone").focus();
+    return;
+  }
+
+  if (address.length < 8) {
+    showResult("Please enter your complete delivery address.");
+    $("customer-address").focus();
+    return;
+  }
+
+  const foodSubtotal = subtotal();
+
+  if (foodSubtotal < MINIMUM_ORDER) {
+    showResult(`Minimum food order is ${money(MINIMUM_ORDER)}.`);
+    return;
+  }
+
+  const discount = appliedCoupon
+    ? couponDiscount(appliedCoupon.data, foodSubtotal)
+    : 0;
+
+  const deliveryFee = DELIVERY_FEE;
+  const total = foodSubtotal - discount + deliveryFee;
+
+  const paymentMethod =
+    foodSubtotal > COD_MAX_SUBTOTAL
+      ? "UPI QR via WhatsApp"
+      : "Cash on Delivery";
+
+  const itemsText = cart.map((item, index) => {
+    return `${index + 1}. ${item.name}
+   Quantity: ${item.qty}
+   Price: ${money(item.price)} × ${item.qty}
+   Amount: ${money(item.price * item.qty)}`;
+  }).join("\n\n");
+
+  const message = `
+🍽️ *NEW ORDER - FRESHFRY MOMO*
+
+Hello FreshFry! I want to place an order.
+
+━━━━━━━━━━━━━━━━━━
+
+👤 *CUSTOMER DETAILS*
+
+Name: ${name}
+Mobile: ${phone}
+
+📍 *DELIVERY ADDRESS*
+
+${address}
+
+━━━━━━━━━━━━━━━━━━
+
+🛒 *ORDER ITEMS*
+
+${itemsText}
+
+━━━━━━━━━━━━━━━━━━
+
+💰 *BILL DETAILS*
+
+Food Subtotal: ${money(foodSubtotal)}
+Coupon: ${appliedCoupon ? appliedCoupon.data.couponCode : "Not applied"}
+Discount: ${money(discount)}
+Delivery Fee: ${money(deliveryFee)}
+
+*GRAND TOTAL: ${money(total)}*
+
+━━━━━━━━━━━━━━━━━━
+
+💳 *PAYMENT METHOD*
+
+${paymentMethod}
+
+📝 *ORDER NOTE*
+
+${note || "No special instructions"}
+
+━━━━━━━━━━━━━━━━━━
+
+Please confirm my order.
+
+Thank you!
+FreshFry Momo ❤️
+Baripada, Odisha
+  `.trim();
+
+  const whatsappURL =
+    "https://wa.me/" +
+    WHATSAPP_ORDER_NUMBER +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
+}
+
+$("whatsapp-order-btn").addEventListener(
+  "click",
+  sendWhatsAppOrder
+);
 
 async function placeOrder(event) {
   event.preventDefault();
