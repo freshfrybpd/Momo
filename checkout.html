@@ -864,9 +864,9 @@ function sendWhatsAppOrder() {
   const total = foodSubtotal - discount + deliveryFee;
 
   const paymentMethod =
-    foodSubtotal > COD_MAX_SUBTOTAL
-      ? "UPI QR via WhatsApp"
-      : "Cash on Delivery";
+  foodSubtotal > COD_MAX_SUBTOTAL
+    ? "ORDER THROUGH WHATSAPP (FOR FASTEST DELIVERY)"
+    : "Cash on Delivery";
 
   const itemsText = cart.map((item, index) => {
     return `${index + 1}. ${item.name}
